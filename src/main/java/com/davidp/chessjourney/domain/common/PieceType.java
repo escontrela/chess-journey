@@ -1,4 +1,4 @@
-package com.davidp.chessjourney.domain;
+package com.davidp.chessjourney.domain.common;
 
 public enum PieceType {
   KING,
