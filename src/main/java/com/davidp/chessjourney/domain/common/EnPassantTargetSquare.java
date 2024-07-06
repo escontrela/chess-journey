@@ -1,25 +1,29 @@
 package com.davidp.chessjourney.domain.common;
 
-
 public class EnPassantTargetSquare {
-    private final Pos position;
-    private final boolean isAvailable;
 
-    public EnPassantTargetSquare(Pos position, boolean isAvailable) {
-        this.position = position;
-        this.isAvailable = isAvailable;
-    }
+  private final Pos position;
+  private final boolean isAvailable;
 
-    public Pos getPosition() {
-        return position;
-    }
+  public EnPassantTargetSquare(final Pos position, final boolean isAvailable) {
 
-    public boolean isAvailable() {
-        return isAvailable;
-    }
+    this.position = position;
+    this.isAvailable = isAvailable;
+  }
 
-    @Override
-    public String toString() {
-        return isAvailable ? position.toString() : "-";
-    }
+  public Pos getPosition() {
+
+    return position;
+  }
+
+  public boolean isAvailable() {
+
+    return isAvailable;
+  }
+
+  @Override
+  public String toString() {
+
+    return isAvailable ? position.toString() : "-";
+  }
 }

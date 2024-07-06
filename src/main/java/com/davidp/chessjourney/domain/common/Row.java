@@ -28,5 +28,4 @@ public enum Row {
     }
     throw new IllegalArgumentException("Invalid value for Row: " + value);
   }
-
 }

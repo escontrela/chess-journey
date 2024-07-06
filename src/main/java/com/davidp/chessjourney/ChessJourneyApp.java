@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
 
+/** @see <a href="https://github.com/AlmasB/FXGL">FXGL framework</a> */
 public class ChessJourneyApp extends GameApplication {
 
   GridPane chessBoard = null;
