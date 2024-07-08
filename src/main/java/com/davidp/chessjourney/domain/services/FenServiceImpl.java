@@ -28,8 +28,8 @@ import java.util.List;
  * last capture or pawn advance, used for the fifty-move rule.[9] Fullmove number: The number of the
  * full moves. It starts at 1 and is incremented after Black's move.
  *
- * <p>http://www.ee.unb.ca/cgi-bin/tervo/fen.pl
- * https://en.wikipedia.org/wiki/Forsyth–Edwards_Notation
+ * <p><a href="http://www.ee.unb.ca/cgi-bin/tervo/fen.pl">...</a> <a
+ * href="https://en.wikipedia.org/wiki/Forsyth">...</a>–Edwards_Notation
  */
 public class FenServiceImpl implements FenService {
 
@@ -48,14 +48,21 @@ public class FenServiceImpl implements FenService {
 
   protected static final FenServiceImpl INSTANCE = new FenServiceImpl();
 
-  public static FenServiceImpl getInstance() {
+  private static class Holder {
 
-    return INSTANCE;
+    private static final FenServiceImpl INSTANCE = new FenServiceImpl();
   }
 
-  public FenService.FenParserResponse parseString(Fen fen) {
+  public static FenServiceImpl getInstance() {
 
-    final List<FenService.PiecePosition> pieces;
+    return Holder.INSTANCE;
+  }
+
+  private FenServiceImpl() {}
+
+  public GameState parseString(Fen fen) {
+
+    final List<PiecePosition> pieces;
     final PieceColor activeColor;
     final CastlingAvailability castlingAvailability;
     final EnPassantTargetSquare enPassantTargetSquare;
@@ -70,7 +77,7 @@ public class FenServiceImpl implements FenService {
     halfMoveClock = Integer.parseInt(parts[4]);
     fullMoveNumber = Integer.parseInt(parts[5]);
 
-    return new FenService.FenParserResponse(
+    return new GameState(
         pieces,
         activeColor,
         castlingAvailability,
@@ -80,15 +87,15 @@ public class FenServiceImpl implements FenService {
   }
 
   @Override
-  public Fen parseActualStatus(FenParserResponse fenParserResponse) {
+  public Fen parseActualStatus(GameState fenParserResponse) {
 
-    //TODO please, implement this method!
+    // TODO please, implement this method!
     throw new UnsupportedOperationException("Not yet implemented");
   }
 
-  private List<FenService.PiecePosition> parsePieces(final String positionPart) {
+  private List<PiecePosition> parsePieces(final String positionPart) {
 
-    List<FenService.PiecePosition> pieces = new ArrayList<>();
+    List<PiecePosition> pieces = new ArrayList<>();
     String[] rows = positionPart.split("/");
 
     for (int row = 0; row < rows.length; row++) {
@@ -105,7 +112,7 @@ public class FenServiceImpl implements FenService {
           PieceType type = charToPieceType(c);
           PieceColor color = Character.isUpperCase(c) ? PieceColor.WHITE : PieceColor.BLACK;
           pieces.add(
-              new FenService.PiecePosition(
+              new PiecePosition(
                   new Piece(type, color), new Pos(Row.values()[7 - row], Col.values()[col])));
           col++;
         }

@@ -29,4 +29,9 @@ public class Piece {
 
     return this.type == type;
   }
+
+  public String toString() {
+
+    return color.toString() + " " + type.toString();
+  }
 }

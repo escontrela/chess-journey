@@ -6,6 +6,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import java.util.List;
+import java.util.Set;
+
 import org.junit.jupiter.api.Test;
 
 public class FenTest {
@@ -15,7 +17,7 @@ public class FenTest {
   @Test
   public void testFenParsing() {
 
-    final FenParserResponse fenParserResponse =
+    final GameState fenParserResponse =
         fenService.parseString(
             Fen.createCustom("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1"));
 
@@ -58,7 +60,7 @@ public class FenTest {
   @Test
   public void testFenParsing2() {
 
-    final FenParserResponse fenParserResponse =
+    final GameState fenParserResponse =
         fenService.parseString(
             Fen.createCustom("rnbqkb1r/5ppp/pp2p2n/2pP4/2p5/5NP1/PP2PPBP/RNBQ1RK1 w kq c6 0 8"));
 
@@ -97,5 +99,27 @@ public class FenTest {
             () -> {
               Fen.createCustom("rnbqkbnr/pppppppp/");
             });
+  }
+
+  @Test()
+  public void piecesFenPositionsTest() {
+
+    final GameState fenParserResponse =
+            fenService.parseString(
+                    Fen.createCustom("4k3/6r1/8/1R6/8/8/8/4K3 w - - 0 1"));
+
+    List<PiecePosition> pieces = fenParserResponse.getPieces();
+    assertEquals(4, pieces.size());
+
+    Set<Pos> position = PiecePosition.findPiecePosition(PieceType.KING,PieceColor.WHITE, pieces);
+
+    assertEquals(position.size(), 1);
+    assertEquals(position.iterator().next(), Pos.of(Row.ONE,Col.E));
+
+    Set<Pos> positionRook = PiecePosition.findPiecePosition(PieceType.ROOK,PieceColor.BLACK, pieces);
+
+    assertEquals(positionRook.size(), 1);
+    assertEquals(positionRook.iterator().next(), Pos.of(Row.SEVEN,Col.G));
+
   }
 }
