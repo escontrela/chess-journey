@@ -147,6 +147,5 @@ public class FenTest {
     Fen reversedFen = fenService.parseActualStatus(gameState);
 
     assertEquals(fen.getStringValue(), reversedFen.getStringValue());
-
   }
 }

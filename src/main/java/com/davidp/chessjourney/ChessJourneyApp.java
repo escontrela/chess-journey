@@ -1,14 +1,21 @@
 package com.davidp.chessjourney;
 
+import com.davidp.chessjourney.domain.common.Fen;
+import com.davidp.chessjourney.domain.common.Piece;
+import com.davidp.chessjourney.domain.common.PiecePosition;
+import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import com.davidp.chessjourney.domain.common.GameState;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -52,6 +59,34 @@ public class ChessJourneyApp extends GameApplication {
   }
 
   protected void showChessPosition(GridPane chessBoard, String fenPos) {
+    List<ImageView> nodesToDelete = new ArrayList<>();
+    chessBoard.getChildren().forEach(node -> {
+      if (node instanceof ImageView) {
+        nodesToDelete.add((ImageView) node);
+      }
+    });
+    if (!nodesToDelete.isEmpty()) {
+      chessBoard.getChildren().removeAll(nodesToDelete);
+    }
+
+    Fen fen = new Fen(fenPos);
+    GameState gameState = FenServiceFactory.getFenService().parseString(fen);
+
+    for (PiecePosition piecePosition : gameState.getPieces()) {
+      ImageView imageView = createPieceImageView(piecePosition.getPiece());
+      chessBoard.add(imageView, piecePosition.getPosition().getCol().ordinal(), 7 - piecePosition.getPosition().getRow().ordinal());
+    }
+  }
+
+  private ImageView createPieceImageView(Piece piece) {
+
+    String pieceImageFile = "/images/" + piece.getColor().name().toLowerCase() + "-" + piece.getType().name().toLowerCase() + ".png";
+    ChessPiece chessPiece = new ChessPiece(pieceImageFile);
+
+    return chessPiece.getImageView();
+  }
+
+  protected void showChessPositionDeleteMe(GridPane chessBoard, String fenPos) {
 
     List<ImageView> nodesToDelete = new ArrayList<>();
     chessBoard
@@ -94,9 +129,6 @@ public class ChessJourneyApp extends GameApplication {
     root.setRight(controlPanel);
 
     FXGL.getGameScene().addUINode(root);
-
-    // Mostrar piezas por 5 segundos y luego ocultarlas
-    // FXGL.runOnce(() -> king.getImageView().setVisible(false), Duration.seconds(5));
   }
 
   private VBox createControlPanel() {
@@ -111,7 +143,13 @@ public class ChessJourneyApp extends GameApplication {
     stopButton.setOnAction(event -> stopExercise());
     Label statsLabel = new Label("Estadísticas");
 
-    vbox.getChildren().addAll(messageLabel, startButton, stopButton, statsLabel);
+    TextField fenInput = new TextField();
+    fenInput.setPromptText("Enter FEN string");
+    fenInput.setText("4k3/2p3r1/8/1R2P3/3P4/2P5/8/4K3 w - - 0 1");
+    Button fenButton = new Button("Load FEN");
+    fenButton.setOnAction(event -> showChessPosition(chessBoard, fenInput.getText()));
+
+    vbox.getChildren().addAll(messageLabel, startButton, stopButton, statsLabel,fenInput, fenButton);
     return vbox;
   }
 
