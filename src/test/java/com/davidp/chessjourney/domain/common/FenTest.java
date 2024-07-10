@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 
 public class FenTest {
@@ -15,7 +15,7 @@ public class FenTest {
   FenService fenService = FenServiceFactory.getFenService();
 
   @Test
-  public void testFenParsing() {
+  public void fenParsingTest() {
 
     final GameState fenParserResponse =
         fenService.parseString(
@@ -58,7 +58,7 @@ public class FenTest {
   }
 
   @Test
-  public void testFenParsing2() {
+  public void fenParsing2Test() {
 
     final GameState fenParserResponse =
         fenService.parseString(
@@ -91,7 +91,7 @@ public class FenTest {
   }
 
   @Test()
-  public void invalidFenObject() {
+  public void invalidFenObjectTest() {
 
     Exception exception =
         assertThrows(
@@ -105,21 +105,48 @@ public class FenTest {
   public void piecesFenPositionsTest() {
 
     final GameState fenParserResponse =
-            fenService.parseString(
-                    Fen.createCustom("4k3/6r1/8/1R6/8/8/8/4K3 w - - 0 1"));
+        fenService.parseString(Fen.createCustom("4k3/2p3r1/8/1R2P3/3P4/2P5/8/4K3 w - - 0 1"));
 
     List<PiecePosition> pieces = fenParserResponse.getPieces();
-    assertEquals(4, pieces.size());
+    assertEquals(8, pieces.size());
 
-    Set<Pos> position = PiecePosition.findPiecePosition(PieceType.KING,PieceColor.WHITE, pieces);
+    Set<Pos> position = PiecePosition.findPiecePosition(PieceType.KING, PieceColor.WHITE, pieces);
 
     assertEquals(position.size(), 1);
-    assertEquals(position.iterator().next(), Pos.of(Row.ONE,Col.E));
+    assertEquals(position.iterator().next(), Pos.of(Row.ONE, Col.E));
 
-    Set<Pos> positionRook = PiecePosition.findPiecePosition(PieceType.ROOK,PieceColor.BLACK, pieces);
+    Set<Pos> positionRook =
+        PiecePosition.findPiecePosition(PieceType.ROOK, PieceColor.BLACK, pieces);
 
     assertEquals(positionRook.size(), 1);
-    assertEquals(positionRook.iterator().next(), Pos.of(Row.SEVEN,Col.G));
+    assertEquals(positionRook.iterator().next(), Pos.of(Row.SEVEN, Col.G));
+
+    Set<Pos> positionWhitePawns =
+        PiecePosition.findPiecePosition(PieceType.PAWN, PieceColor.WHITE, pieces);
+
+    assertEquals(positionWhitePawns.size(), 3);
+
+    List<Pos> listOfPawns = new ArrayList<>(positionWhitePawns);
+
+    Pos positionPawn1 = Pos.of(Row.THREE, Col.C);
+    Pos positionPawn2 = Pos.of(Row.FOUR, Col.D);
+    Pos positionPawn3 = Pos.of(Row.FIVE, Col.E);
+
+    assertTrue(
+        listOfPawns.get(0).equals(positionPawn1)
+            || listOfPawns.get(1).equals(positionPawn2)
+            || listOfPawns.get(2).equals(positionPawn3));
+  }
+
+  @Test()
+  public void fenReverseParsingTest() {
+
+    Fen fen = Fen.createCustom("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq e3 0 1");
+    GameState gameState = fenService.parseString(fen);
+
+    Fen reversedFen = fenService.parseActualStatus(gameState);
+
+    assertEquals(fen.getStringValue(), reversedFen.getStringValue());
 
   }
 }

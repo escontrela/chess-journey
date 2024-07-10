@@ -7,13 +7,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
 import org.junit.jupiter.api.Test;
 
 public class PiecePositionTest {
 
   @Test
-  public void testPiecePositionSet() {
+  public void piecePositionSetTest() {
 
     Piece pieceKing = PieceFactory.createWhiteKing();
     Pos positionKing = new Pos(Row.ONE, Col.E);
@@ -38,7 +37,7 @@ public class PiecePositionTest {
   }
 
   @Test
-  public void testPiecePositionSetOfRooks() {
+  public void piecePositionSetOfRooksTest() {
 
     Piece pieceRook1 = PieceFactory.createWhiteRook();
     Pos positionRook1 = new Pos(Row.ONE, Col.H);
@@ -58,8 +57,9 @@ public class PiecePositionTest {
 
     assertEquals(2, pos.size());
 
-    assertTrue(listOfRooks.get(0).equals(positionRook1) || listOfRooks.get(0).equals(positionRook2));
-    assertTrue(listOfRooks.get(1).equals(positionRook1) || listOfRooks.get(1).equals(positionRook2));
+    assertTrue(
+        listOfRooks.get(0).equals(positionRook1) || listOfRooks.get(0).equals(positionRook2));
+    assertTrue(
+        listOfRooks.get(1).equals(positionRook1) || listOfRooks.get(1).equals(positionRook2));
   }
-
 }

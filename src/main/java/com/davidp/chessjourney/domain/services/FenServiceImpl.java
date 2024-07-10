@@ -87,10 +87,63 @@ public class FenServiceImpl implements FenService {
   }
 
   @Override
-  public Fen parseActualStatus(GameState fenParserResponse) {
+  public Fen parseActualStatus(GameState gameState) {
 
-    // TODO please, implement this method!
-    throw new UnsupportedOperationException("Not yet implemented");
+    StringBuilder fenBuilder = new StringBuilder();
+
+    PiecePosition[][] board = new PiecePosition[8][8];
+    for (PiecePosition piecePosition : gameState.getPieces()) {
+
+      Pos pos = piecePosition.getPosition();
+      board[pos.getRow().ordinal()][pos.getCol().ordinal()] = piecePosition;
+    }
+
+    for (int row = 7; row >= 0; row--) {
+      int emptyCount = 0;
+      for (int col = 0; col < 8; col++) {
+        if (board[row][col] == null) {
+          emptyCount++;
+        } else {
+          if (emptyCount > 0) {
+            fenBuilder.append(emptyCount);
+            emptyCount = 0;
+          }
+          Piece piece = board[row][col].getPiece();
+          fenBuilder.append(
+              piece.getColor() == PieceColor.WHITE
+                  ? String.valueOf(pieceTypeToChar(piece.getType())).toUpperCase()
+                  : String.valueOf(pieceTypeToChar(piece.getType())).toLowerCase());
+        }
+      }
+      if (emptyCount > 0) {
+        fenBuilder.append(emptyCount);
+      }
+      if (row > 0) {
+        fenBuilder.append('/');
+      }
+    }
+
+    // Add active color
+    fenBuilder.append(' ').append(gameState.getActiveColor() == PieceColor.WHITE ? 'w' : 'b');
+
+    // Add castling availability
+    fenBuilder.append(' ').append(gameState.getCastlingAvailability().toString());
+
+    // Add en passant target square
+    fenBuilder
+        .append(' ')
+        .append(
+            gameState.getEnPassantTargetSquare().isAvailable()
+                ? gameState.getEnPassantTargetSquare().getPosition().toString().toLowerCase()
+                : "-");
+
+    // Add count of half moves since last capture or pawn advance
+    fenBuilder.append(' ').append(gameState.getHalfMoveClock());
+
+    // Add count of full moves
+    fenBuilder.append(' ').append(gameState.getFullMoveNumber());
+
+    return new Fen(fenBuilder.toString());
   }
 
   private List<PiecePosition> parsePieces(final String positionPart) {
@@ -151,7 +204,7 @@ public class FenServiceImpl implements FenService {
     }
   }
 
-  private PieceType charToPieceType(char c) {
+  private PieceType charToPieceType(final char c) {
 
     switch (Character.toLowerCase(c)) {
       case KING_CHAR:
@@ -168,6 +221,26 @@ public class FenServiceImpl implements FenService {
         return PieceType.PAWN;
       default:
         throw new IllegalArgumentException("Invalid FEN character: " + c);
+    }
+  }
+
+  private char pieceTypeToChar(final PieceType pieceType) {
+
+    switch (pieceType) {
+      case KING:
+        return KING_CHAR;
+      case QUEEN:
+        return QUEEN_CHAR;
+      case ROOK:
+        return ROOK_CHAR;
+      case BISHOP:
+        return BISHOP_CHAR;
+      case KNIGHT:
+        return KNIGHT_CHAR;
+      case PAWN:
+        return PAWN_CHAR;
+      default:
+        throw new IllegalArgumentException("Invalid PieceType: " + pieceType);
     }
   }
 }
