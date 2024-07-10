@@ -42,10 +42,38 @@ To create a position for a piece on the board:
 
 ```java
 Pos kingPos = new Pos(Row.ONE, Col.E);
-Pos queenPos = new Pos(Row.EIGHT, Col.D);
+Pos queenPos = Pos.parseString("e4");
 
 PiecePosition whiteKingPosition = new PiecePosition(whiteKing, kingPos);
 PiecePosition blackQueenPosition = new PiecePosition(blackQueen, kingPos);
+
+```
+
+To find  position for any pieces on the board:
+
+```java
+Piece pieceRook1 = PieceFactory.createWhiteRook();
+Pos positionRook1 = new Pos(Row.ONE, Col.H);
+PiecePosition piecePositionRook1 = new PiecePosition(pieceRook1, positionRook1);
+
+Piece pieceRook2 = PieceFactory.createWhiteRook();
+Pos positionRook2 = new Pos(Row.ONE, Col.A);
+PiecePosition piecePositionRook2 = new PiecePosition(pieceRook2, positionRook2);
+
+Set<PiecePosition> pieces = new HashSet<>();
+pieces.add(piecePositionRook1);
+pieces.add(piecePositionRook2);
+
+Set<Pos> pos = PiecePosition.findPiecePosition(PieceType.ROOK, PieceColor.WHITE, pieces);
+
+List<Pos> listOfRooks = new ArrayList<>(pos);
+
+assertEquals(2, pos.size());
+
+assertTrue(
+    listOfRooks.get(0).equals(positionRook1) || listOfRooks.get(0).equals(positionRook2));
+assertTrue(
+    listOfRooks.get(1).equals(positionRook1) || listOfRooks.get(1).equals(positionRook2));
 ```
 
 ### Using FenService
