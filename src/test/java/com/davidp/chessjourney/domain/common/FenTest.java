@@ -1,6 +1,5 @@
 package com.davidp.chessjourney.domain.common;
 
-import static com.davidp.chessjourney.domain.services.FenService.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 import com.davidp.chessjourney.domain.services.FenService;

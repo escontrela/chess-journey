@@ -90,6 +90,25 @@ System.out.println("Active Color: " + gameState.getActiveColor());
 System.out.println("Castling Availability: " + gameState.getCastlingAvailability());
 System.out.println("En Passant Target Square: " + gameState.getEnPassantTargetSquare());
 ```
+
+### Using ChessBoard
+
+You can use the `ChessBoard` class to manage the positions of pieces on the chessboard. Below is an example of how to add, move, and remove pieces on the chessboard.
+
+```java
+
+ChessBoard chessBoard = ChesBoardFactory.createEmpty();
+    chessBoard.addPiece(PieceFactory.createWhiteQueen(), Pos.parseString("e2"));
+
+    assertTrue(chessBoard.isThereAnyPiece(Pos.parseString("e2")).isPresent());
+
+    assertEquals(
+        PieceFactory.createWhiteQueen(),
+        chessBoard.isThereAnyPiece(Pos.parseString("e2")).get().getPiece());
+
+
+```
+
 ## Contributing
 
 Feel free to fork this repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.

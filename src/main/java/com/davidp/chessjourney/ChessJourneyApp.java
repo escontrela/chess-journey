@@ -1,17 +1,16 @@
 package com.davidp.chessjourney;
 
-import com.davidp.chessjourney.domain.common.Fen;
-import com.davidp.chessjourney.domain.common.Piece;
-import com.davidp.chessjourney.domain.common.PiecePosition;
-import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
+import com.davidp.chessjourney.domain.common.Fen;
+import com.davidp.chessjourney.domain.common.GameState;
+import com.davidp.chessjourney.domain.common.Piece;
+import com.davidp.chessjourney.domain.common.PiecePosition;
+import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import com.davidp.chessjourney.domain.common.GameState;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -60,11 +59,14 @@ public class ChessJourneyApp extends GameApplication {
 
   protected void showChessPosition(GridPane chessBoard, String fenPos) {
     List<ImageView> nodesToDelete = new ArrayList<>();
-    chessBoard.getChildren().forEach(node -> {
-      if (node instanceof ImageView) {
-        nodesToDelete.add((ImageView) node);
-      }
-    });
+    chessBoard
+        .getChildren()
+        .forEach(
+            node -> {
+              if (node instanceof ImageView) {
+                nodesToDelete.add((ImageView) node);
+              }
+            });
     if (!nodesToDelete.isEmpty()) {
       chessBoard.getChildren().removeAll(nodesToDelete);
     }
@@ -74,13 +76,21 @@ public class ChessJourneyApp extends GameApplication {
 
     for (PiecePosition piecePosition : gameState.getPieces()) {
       ImageView imageView = createPieceImageView(piecePosition.getPiece());
-      chessBoard.add(imageView, piecePosition.getPosition().getCol().ordinal(), 7 - piecePosition.getPosition().getRow().ordinal());
+      chessBoard.add(
+          imageView,
+          piecePosition.getPosition().getCol().ordinal(),
+          7 - piecePosition.getPosition().getRow().ordinal());
     }
   }
 
   private ImageView createPieceImageView(Piece piece) {
 
-    String pieceImageFile = "/images/" + piece.getColor().name().toLowerCase() + "-" + piece.getType().name().toLowerCase() + ".png";
+    String pieceImageFile =
+        "/images/"
+            + piece.getColor().name().toLowerCase()
+            + "-"
+            + piece.getType().name().toLowerCase()
+            + ".png";
     ChessPiece chessPiece = new ChessPiece(pieceImageFile);
 
     return chessPiece.getImageView();
@@ -149,7 +159,8 @@ public class ChessJourneyApp extends GameApplication {
     Button fenButton = new Button("Load FEN");
     fenButton.setOnAction(event -> showChessPosition(chessBoard, fenInput.getText()));
 
-    vbox.getChildren().addAll(messageLabel, startButton, stopButton, statsLabel,fenInput, fenButton);
+    vbox.getChildren()
+        .addAll(messageLabel, startButton, stopButton, statsLabel, fenInput, fenButton);
     return vbox;
   }
 

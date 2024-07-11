@@ -1,5 +1,7 @@
 package com.davidp.chessjourney.domain.common;
 
+import java.util.Objects;
+
 public class Piece {
   private final PieceType type;
   private final PieceColor color;
@@ -28,6 +30,21 @@ public class Piece {
   public boolean is(PieceType type) {
 
     return this.type == type;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Piece piece = (Piece) o;
+    return type == piece.type && color == piece.color;
+  }
+
+  @Override
+  public int hashCode() {
+
+    return Objects.hash(type, color);
   }
 
   public String toString() {
