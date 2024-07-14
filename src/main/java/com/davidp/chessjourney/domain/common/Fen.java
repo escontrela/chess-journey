@@ -45,4 +45,7 @@ public class Fen {
 
     return new Fen(INITIAL);
   }
+
+  // TOO Fen createRuyLopezOpening() {
+
 }

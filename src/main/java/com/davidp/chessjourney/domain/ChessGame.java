@@ -8,6 +8,7 @@ public class ChessGame extends Game {
   private final Player blackPlayer;
   private final ChessRules chessRules;
   private final TimeControl timeControl;
+  private PieceColor currentTurnColor;
 
   public ChessGame(
       Player whitePlayer,
@@ -22,19 +23,20 @@ public class ChessGame extends Game {
     this.whitePlayer = whitePlayer;
     this.blackPlayer = blackPlayer;
     this.timeControl = timeControl;
+    this.currentTurnColor = PieceColor.WHITE;
   }
 
-  public boolean isCheck(PieceColor color) {
+  public boolean isCheck() {
     // Dummy implementation for check detection
     return false;
   }
 
-  public boolean isCheckmate(PieceColor color) {
+  public boolean isCheckmate() {
     // Dummy implementation for checkmate detection
     return false;
   }
 
-  public boolean isStalemate(PieceColor color) {
+  public boolean isStalemate() {
     // Dummy implementation for stalemate detection
     return false;
   }
@@ -51,17 +53,17 @@ public class ChessGame extends Game {
 
   // TODO: implement this method
   public PieceColor getCurrentTurnColor() {
-    return PieceColor.WHITE;
+    return currentTurnColor;
   }
 
+  public void move(final Pos from, final Pos to) throws IllegalMoveException {
 
-  public boolean move(final Player player, final Pos from, final Pos to) {
+    // TODO WEE NED TO USE THE CHESS RULES AND USE THE CHESSSPRESSO LIBRARY INTERNALLY!
 
     // Check if the move is valid
     if (!chessRules.isValidMove(from, to)) {
 
-      System.out.println("Invalid move!");
-      return false;
+      throw new IllegalMoveException("Invalid move from " + from + " to " + to);
     }
 
     if (chessBoard.isThereAnyPiece(from).isEmpty()) {
@@ -72,29 +74,34 @@ public class ChessGame extends Game {
     // Perform the move
     Piece piece = chessBoard.getPiece(from).getPiece();
 
-    if (piece != null && piece.getColor() == player.getColor()) {
+    if (piece != null && piece.getColor() == getCurrentTurnColor()) {
 
       chessBoard.movePiece(piece, from, to);
 
       // Check for check, checkmate, and stalemate
-      if (isCheck(player.getColor())) {
+      if (isCheck()) {
 
-        System.out.println(player.getName() + " is in check!");
+        System.out.println(getCurrentTurnColor() + " is in check!");
       }
-      if (isCheckmate(player.getColor())) {
+      if (isCheckmate()) {
 
-        System.out.println("Checkmate! " + player.getName() + " loses.");
+        System.out.println("Checkmate! " + getCurrentTurnColor() + " loses.");
       }
-      if (isStalemate(player.getColor())) {
+      if (isStalemate()) {
 
         System.out.println("Stalemate! It's a draw.");
       }
 
-      return true;
-    }
+      currentTurnColor =
+          getCurrentTurnColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
 
-    System.out.println("Move not allowed!");
-    return false;
+      //TODO ADD MOVE TO THE GAME HISTORY!
+
+    } else {
+
+      throw new IllegalMoveException(
+          "The piece " + piece + " is not the current turn color " + getCurrentTurnColor());
+    }
   }
 
   public void printBoard() {
@@ -103,8 +110,8 @@ public class ChessGame extends Game {
     System.out.println(chessBoard);
   }
 
-  public boolean isPromoted(PieceColor pieceColor) {
-    //TODO implement this method
+  public boolean isPromoted() {
+    // TODO implement this method
     return false;
   }
 }
