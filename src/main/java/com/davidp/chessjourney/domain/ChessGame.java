@@ -1,10 +1,110 @@
 package com.davidp.chessjourney.domain;
 
+import com.davidp.chessjourney.domain.common.*;
+
 public class ChessGame extends Game {
 
-  public ChessGame() {
+  private final Player whitePlayer;
+  private final Player blackPlayer;
+  private final ChessRules chessRules;
+  private final TimeControl timeControl;
+
+  public ChessGame(
+      Player whitePlayer,
+      Player blackPlayer,
+      ChessRules rules,
+      ChessBoard board,
+      TimeControl timeControl) {
+
     super();
+    this.chessRules = rules;
+    this.chessBoard = board;
+    this.whitePlayer = whitePlayer;
+    this.blackPlayer = blackPlayer;
+    this.timeControl = timeControl;
   }
 
-  // Additional methods specific to a standard chess game
+  public boolean isCheck(PieceColor color) {
+    // Dummy implementation for check detection
+    return false;
+  }
+
+  public boolean isCheckmate(PieceColor color) {
+    // Dummy implementation for checkmate detection
+    return false;
+  }
+
+  public boolean isStalemate(PieceColor color) {
+    // Dummy implementation for stalemate detection
+    return false;
+  }
+
+  public boolean offerDraw(Player player) {
+    // Dummy implementation for offering a draw
+    return true;
+  }
+
+  public boolean promotePawn(Piece piece, PieceType newType) {
+    // Dummy implementation for pawn promotion
+    return true;
+  }
+
+  // TODO: implement this method
+  public PieceColor getCurrentTurnColor() {
+    return PieceColor.WHITE;
+  }
+
+
+  public boolean move(final Player player, final Pos from, final Pos to) {
+
+    // Check if the move is valid
+    if (!chessRules.isValidMove(from, to)) {
+
+      System.out.println("Invalid move!");
+      return false;
+    }
+
+    if (chessBoard.isThereAnyPiece(from).isEmpty()) {
+
+      throw new RuntimeException("There is no piece in the position " + from);
+    }
+
+    // Perform the move
+    Piece piece = chessBoard.getPiece(from).getPiece();
+
+    if (piece != null && piece.getColor() == player.getColor()) {
+
+      chessBoard.movePiece(piece, from, to);
+
+      // Check for check, checkmate, and stalemate
+      if (isCheck(player.getColor())) {
+
+        System.out.println(player.getName() + " is in check!");
+      }
+      if (isCheckmate(player.getColor())) {
+
+        System.out.println("Checkmate! " + player.getName() + " loses.");
+      }
+      if (isStalemate(player.getColor())) {
+
+        System.out.println("Stalemate! It's a draw.");
+      }
+
+      return true;
+    }
+
+    System.out.println("Move not allowed!");
+    return false;
+  }
+
+  public void printBoard() {
+
+    // Dummy implementation for printing the board
+    System.out.println(chessBoard);
+  }
+
+  public boolean isPromoted(PieceColor pieceColor) {
+    //TODO implement this method
+    return false;
+  }
 }

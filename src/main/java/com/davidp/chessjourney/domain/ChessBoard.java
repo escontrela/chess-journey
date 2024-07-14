@@ -1,8 +1,6 @@
 package com.davidp.chessjourney.domain;
 
-import com.davidp.chessjourney.domain.common.Piece;
-import com.davidp.chessjourney.domain.common.PiecePosition;
-import com.davidp.chessjourney.domain.common.Pos;
+import com.davidp.chessjourney.domain.common.*;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,5 +80,33 @@ public class ChessBoard {
       throw new IllegalArgumentException(
           "There is already a piece in the position " + position.toString());
     }
+  }
+
+  @Override
+  public String toString() {
+    StringBuilder sb = new StringBuilder();
+    for (int row = 7; row >= 0; row--) {
+      for (int col = 0; col < 8; col++) {
+        Pos pos = new Pos(Row.values()[row], Col.values()[col]);
+        Piece piece = null;
+        if (isThereAnyPiece(pos).isPresent()) {
+
+          piece = board.get(pos).getPiece();
+        }
+        if (piece != null) {
+          char symbol = piece.getType().getSymbol();
+          if (piece.getColor() == PieceColor.WHITE) {
+            sb.append(Character.toUpperCase(symbol));
+          } else {
+            sb.append(Character.toLowerCase(symbol));
+          }
+        } else {
+          sb.append('.');
+        }
+        sb.append(' ');
+      }
+      sb.append('\n');
+    }
+    return sb.toString();
   }
 }
