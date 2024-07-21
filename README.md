@@ -41,7 +41,7 @@ Piece blackQueen = PieceFactory.createBlackQueen();
 To create a position for a piece on the board:
 
 ```java
-Pos kingPos = new Pos(Row.ONE, Col.E);
+Pos kingPos = new Pos(Col.E,Row.ONE);
 Pos queenPos = Pos.parseString("e4");
 
 PiecePosition whiteKingPosition = new PiecePosition(whiteKing, kingPos);
@@ -53,11 +53,11 @@ To find  position for any pieces on the board:
 
 ```java
 Piece pieceRook1 = PieceFactory.createWhiteRook();
-Pos positionRook1 = new Pos(Row.ONE, Col.H);
+Pos positionRook1 = new Pos(Col.H,Row.ONE);
 PiecePosition piecePositionRook1 = new PiecePosition(pieceRook1, positionRook1);
 
 Piece pieceRook2 = PieceFactory.createWhiteRook();
-Pos positionRook2 = new Pos(Row.ONE, Col.A);
+Pos positionRook2 = new Pos(Col.A,Row.ONE);
 PiecePosition piecePositionRook2 = new PiecePosition(pieceRook2, positionRook2);
 
 Set<PiecePosition> pieces = new HashSet<>();

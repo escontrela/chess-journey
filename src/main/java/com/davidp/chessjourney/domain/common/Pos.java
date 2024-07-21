@@ -8,10 +8,10 @@ public class Pos {
   private final Row row;
   private final Col col;
 
-  public Pos(final Row row, final Col col) {
+  public Pos(final Col col, final Row row) {
 
-    this.row = row;
     this.col = col;
+    this.row = row;
   }
 
   public Row getRow() {
@@ -24,12 +24,12 @@ public class Pos {
     return col;
   }
 
-  public static Pos of(Row row, Col col) {
+  public static Pos of(Col col, Row row) {
 
-    Objects.requireNonNull(row, "row cannot be null");
     Objects.requireNonNull(col, "col cannot be null");
+    Objects.requireNonNull(row, "row cannot be null");
 
-    return new Pos(row, col);
+    return new Pos(col, row);
   }
 
   public static Pos parseString(final String posString) {
@@ -42,7 +42,7 @@ public class Pos {
 
     Col col = Col.valueOf(posString.substring(0, 1).toUpperCase());
     Row row = Row.fromValue(Integer.parseInt(posString.substring(1, 2)));
-    return new Pos(row, col);
+    return new Pos(col, row);
   }
 
   @Override

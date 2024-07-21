@@ -8,7 +8,7 @@ public class ChessGameFactory {
   public static ChessGame createFrom(
       Fen fen, Player player1, Player player2, TimeControl timeControl) {
 
-    ChessBoard chessBoard = ChesBoardFactory.createFromFEN(Fen.createInitial());
+    ChessBoard chessBoard = ChesBoardFactory.createFromFEN(fen);
     ChessRules rules = new ChessRules();
 
     return new ChessGame(player1, player2, rules, chessBoard, timeControl);

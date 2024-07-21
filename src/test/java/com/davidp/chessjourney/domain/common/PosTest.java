@@ -9,7 +9,7 @@ public class PosTest {
   @Test
   public void posTest() {
 
-    Pos pos1 = Pos.of(Row.FOUR, Col.E);
+    Pos pos1 = Pos.of(Col.E, Row.FOUR);
     assertSame(pos1.getRow(), Row.FOUR);
     assertSame(pos1.getCol(), Col.E);
 

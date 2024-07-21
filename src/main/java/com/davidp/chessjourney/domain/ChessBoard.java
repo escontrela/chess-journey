@@ -1,10 +1,10 @@
 package com.davidp.chessjourney.domain;
 
 import com.davidp.chessjourney.domain.common.*;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import com.davidp.chessjourney.domain.services.FenService;
+import com.davidp.chessjourney.domain.services.FenServiceFactory;
+
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -13,11 +13,23 @@ import java.util.stream.Collectors;
  */
 public class ChessBoard {
 
+  private final FenService fenService = FenServiceFactory.getFenService();
   private final Map<Pos, PiecePosition> board;
+
+  final PieceColor activeColor = PieceColor.WHITE;
+  final CastlingAvailability castlingAvailability = new CastlingAvailability(true,true,true,true);
+  final EnPassantTargetSquare enPassantTargetSquare = new EnPassantTargetSquare(null,false);
+  final int halfMoveClock = 0;
+  final int fullMoveNumber=1;
 
   public ChessBoard() {
 
     this.board = new HashMap<>();
+  }
+
+  public List<PiecePosition> getAllPiecePositions() {
+    // Obtiene todos los valores del mapa y los convierte en una lista
+    return new ArrayList<>(board.values());
   }
 
   public Optional<PiecePosition> isThereAnyPiece(Pos position) {
@@ -87,7 +99,7 @@ public class ChessBoard {
     StringBuilder sb = new StringBuilder();
     for (int row = 7; row >= 0; row--) {
       for (int col = 0; col < 8; col++) {
-        Pos pos = new Pos(Row.values()[row], Col.values()[col]);
+        Pos pos = new Pos(Col.values()[col], Row.values()[row]);
         Piece piece = null;
         if (isThereAnyPiece(pos).isPresent()) {
 
@@ -108,5 +120,13 @@ public class ChessBoard {
       sb.append('\n');
     }
     return sb.toString();
+  }
+
+  public Fen getFen() {
+
+    // TODO: implement all the GameState, because we need to know the actual status of the board!
+    GameState gameState = new GameState(getAllPiecePositions(), activeColor, castlingAvailability, enPassantTargetSquare, halfMoveClock, fullMoveNumber);
+
+    return fenService.parseActualStatus(gameState);
   }
 }

@@ -15,11 +15,11 @@ public class PiecePositionTest {
   public void piecePositionSetTest() {
 
     Piece pieceKing = PieceFactory.createWhiteKing();
-    Pos positionKing = new Pos(Row.ONE, Col.E);
+    Pos positionKing = new Pos(Col.E, Row.ONE);
     PiecePosition piecePositionKing = new PiecePosition(pieceKing, positionKing);
 
     Piece pieceQueen = PieceFactory.createWhiteQueen();
-    Pos positionQueen = new Pos(Row.ONE, Col.D);
+    Pos positionQueen = new Pos(Col.D, Row.ONE);
     PiecePosition piecePositionQueen = new PiecePosition(pieceQueen, positionQueen);
 
     List<PiecePosition> pieces = new ArrayList<>();
@@ -40,11 +40,11 @@ public class PiecePositionTest {
   public void piecePositionSetOfRooksTest() {
 
     Piece pieceRook1 = PieceFactory.createWhiteRook();
-    Pos positionRook1 = new Pos(Row.ONE, Col.H);
+    Pos positionRook1 = new Pos(Col.H, Row.ONE);
     PiecePosition piecePositionRook1 = new PiecePosition(pieceRook1, positionRook1);
 
     Piece pieceRook2 = PieceFactory.createWhiteRook();
-    Pos positionRook2 = new Pos(Row.ONE, Col.A);
+    Pos positionRook2 = new Pos(Col.A, Row.ONE);
     PiecePosition piecePositionRook2 = new PiecePosition(pieceRook2, positionRook2);
 
     Set<PiecePosition> pieces = new HashSet<>();

@@ -92,12 +92,11 @@ public class FenTest {
   @Test()
   public void invalidFenObjectTest() {
 
-    Exception exception =
-        assertThrows(
-            IllegalArgumentException.class,
-            () -> {
-              Fen.createCustom("rnbqkbnr/pppppppp/");
-            });
+    assertThrows(
+        IllegalArgumentException.class,
+        () -> {
+          Fen.createCustom("rnbqkbnr/pppppppp/");
+        });
   }
 
   @Test()
@@ -112,13 +111,13 @@ public class FenTest {
     Set<Pos> position = PiecePosition.findPiecePosition(PieceType.KING, PieceColor.WHITE, pieces);
 
     assertEquals(position.size(), 1);
-    assertEquals(position.iterator().next(), Pos.of(Row.ONE, Col.E));
+    assertEquals(position.iterator().next(), Pos.of(Col.E, Row.ONE));
 
     Set<Pos> positionRook =
         PiecePosition.findPiecePosition(PieceType.ROOK, PieceColor.BLACK, pieces);
 
     assertEquals(positionRook.size(), 1);
-    assertEquals(positionRook.iterator().next(), Pos.of(Row.SEVEN, Col.G));
+    assertEquals(positionRook.iterator().next(), Pos.of(Col.G, Row.SEVEN));
 
     Set<Pos> positionWhitePawns =
         PiecePosition.findPiecePosition(PieceType.PAWN, PieceColor.WHITE, pieces);
@@ -127,9 +126,9 @@ public class FenTest {
 
     List<Pos> listOfPawns = new ArrayList<>(positionWhitePawns);
 
-    Pos positionPawn1 = Pos.of(Row.THREE, Col.C);
-    Pos positionPawn2 = Pos.of(Row.FOUR, Col.D);
-    Pos positionPawn3 = Pos.of(Row.FIVE, Col.E);
+    Pos positionPawn1 = Pos.of(Col.C, Row.THREE);
+    Pos positionPawn2 = Pos.of(Col.D, Row.FOUR);
+    Pos positionPawn3 = Pos.of(Col.E, Row.FIVE);
 
     assertTrue(
         listOfPawns.get(0).equals(positionPawn1)

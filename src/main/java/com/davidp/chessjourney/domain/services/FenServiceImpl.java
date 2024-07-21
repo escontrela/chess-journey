@@ -46,8 +46,6 @@ public class FenServiceImpl implements FenService {
   public static final char KNIGHT_CHAR = 'n';
   public static final char PAWN_CHAR = 'p';
 
-  protected static final FenServiceImpl INSTANCE = new FenServiceImpl();
-
   private static class Holder {
 
     private static final FenServiceImpl INSTANCE = new FenServiceImpl();
@@ -166,7 +164,7 @@ public class FenServiceImpl implements FenService {
           PieceColor color = Character.isUpperCase(c) ? PieceColor.WHITE : PieceColor.BLACK;
           pieces.add(
               new PiecePosition(
-                  new Piece(type, color), new Pos(Row.values()[7 - row], Col.values()[col])));
+                  new Piece(type, color), new Pos(Col.values()[col], Row.values()[7 - row])));
           col++;
         }
       }
@@ -199,7 +197,7 @@ public class FenServiceImpl implements FenService {
       String rowChar = String.valueOf(enPassantPart.charAt(1));
       Col col = Col.valueOf(colChar.toUpperCase());
       Row row = Row.fromValue(Integer.parseInt(rowChar));
-      Pos pos = Pos.of(row, col);
+      Pos pos = Pos.of(col, row);
       return new EnPassantTargetSquare(pos, true);
     }
   }

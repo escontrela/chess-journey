@@ -60,15 +60,15 @@ public class ChessGame extends Game {
 
     // TODO WEE NED TO USE THE CHESS RULES AND USE THE CHESSSPRESSO LIBRARY INTERNALLY!
 
-    // Check if the move is valid
-    if (!chessRules.isValidMove(from, to)) {
-
-      throw new IllegalMoveException("Invalid move from " + from + " to " + to);
-    }
-
     if (chessBoard.isThereAnyPiece(from).isEmpty()) {
 
       throw new RuntimeException("There is no piece in the position " + from);
+    }
+
+    // Check if the move is valid
+    if (!chessRules.isValidMove(from, to, chessBoard.getFen())) {
+
+      throw new IllegalMoveException("Invalid move from " + from + " to " + to);
     }
 
     // Perform the move
@@ -95,7 +95,7 @@ public class ChessGame extends Game {
       currentTurnColor =
           getCurrentTurnColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
 
-      //TODO ADD MOVE TO THE GAME HISTORY!
+      // TODO ADD MOVE TO THE GAME HISTORY!
 
     } else {
 

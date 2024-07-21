@@ -1,6 +1,6 @@
 package com.davidp.chessjourney.domain.common;
 
-public class IllegalMoveException extends Exception {
+public class IllegalMoveException extends RuntimeException {
   public IllegalMoveException() {
     super();
   }
