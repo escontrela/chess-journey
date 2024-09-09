@@ -1,7 +1,6 @@
 package com.davidp.chessjourney.domain;
 
 import chesspresso.Chess;
-import chesspresso.game.Game;
 import chesspresso.move.Move;
 import chesspresso.position.Position;
 import com.davidp.chessjourney.domain.common.Fen;
@@ -35,7 +34,7 @@ public class ChessRules {
       int toIndex = Chess.strToSqi(to.toString().toLowerCase());
 
       short move = Move.getRegularMove(fromIndex, toIndex, false);
-      //position.doMove(move);
+      // position.doMove(move);
 
       return isLegalMove(position, move);
 

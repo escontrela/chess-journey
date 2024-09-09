@@ -131,9 +131,9 @@ public class FenTest {
     Pos positionPawn3 = Pos.of(Col.E, Row.FIVE);
 
     assertTrue(
-        listOfPawns.get(0).equals(positionPawn1)
-            || listOfPawns.get(1).equals(positionPawn2)
-            || listOfPawns.get(2).equals(positionPawn3));
+        listOfPawns.contains(positionPawn1)
+            && listOfPawns.contains(positionPawn2)
+            && listOfPawns.contains(positionPawn3));
   }
 
   @Test()

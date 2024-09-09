@@ -3,7 +3,6 @@ package com.davidp.chessjourney.domain;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -17,10 +16,11 @@ public class ChessBoard {
   private final Map<Pos, PiecePosition> board;
 
   final PieceColor activeColor = PieceColor.WHITE;
-  final CastlingAvailability castlingAvailability = new CastlingAvailability(true,true,true,true);
-  final EnPassantTargetSquare enPassantTargetSquare = new EnPassantTargetSquare(null,false);
+  final CastlingAvailability castlingAvailability =
+      new CastlingAvailability(true, true, true, true);
+  final EnPassantTargetSquare enPassantTargetSquare = new EnPassantTargetSquare(null, false);
   final int halfMoveClock = 0;
-  final int fullMoveNumber=1;
+  final int fullMoveNumber = 1;
 
   public ChessBoard() {
 
@@ -125,7 +125,14 @@ public class ChessBoard {
   public Fen getFen() {
 
     // TODO: implement all the GameState, because we need to know the actual status of the board!
-    GameState gameState = new GameState(getAllPiecePositions(), activeColor, castlingAvailability, enPassantTargetSquare, halfMoveClock, fullMoveNumber);
+    GameState gameState =
+        new GameState(
+            getAllPiecePositions(),
+            activeColor,
+            castlingAvailability,
+            enPassantTargetSquare,
+            halfMoveClock,
+            fullMoveNumber);
 
     return fenService.parseActualStatus(gameState);
   }
