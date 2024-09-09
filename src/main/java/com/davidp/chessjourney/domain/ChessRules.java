@@ -25,7 +25,7 @@ public class ChessRules {
 
   public boolean isValidMove(Pos from, Pos to, Fen actualFen) {
 
-    Position position = new Position(actualFen.toString());
+    Position position = new Position(actualFen.getStringValue());
 
     try {
 

@@ -2,6 +2,10 @@ package com.davidp.chessjourney.domain;
 
 import com.davidp.chessjourney.domain.common.*;
 
+/**
+ * This class represents a chess game. It contains a chess board, a chess rules object, and a time.
+ * ChessGame is responsible for managing the overall game state.
+ */
 public class ChessGame extends Game {
 
   private final Player whitePlayer;
@@ -94,6 +98,8 @@ public class ChessGame extends Game {
 
       currentTurnColor =
           getCurrentTurnColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
+
+      chessBoard.setTurn(currentTurnColor);
 
       // TODO ADD MOVE TO THE GAME HISTORY!
 

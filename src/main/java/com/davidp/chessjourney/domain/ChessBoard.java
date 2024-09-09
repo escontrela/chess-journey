@@ -15,7 +15,7 @@ public class ChessBoard {
   private final FenService fenService = FenServiceFactory.getFenService();
   private final Map<Pos, PiecePosition> board;
 
-  final PieceColor activeColor = PieceColor.WHITE;
+  protected PieceColor activeColor = PieceColor.WHITE;
   final CastlingAvailability castlingAvailability =
       new CastlingAvailability(true, true, true, true);
   final EnPassantTargetSquare enPassantTargetSquare = new EnPassantTargetSquare(null, false);
@@ -71,6 +71,23 @@ public class ChessBoard {
         board.put(toPosition, new PiecePosition(piece, toPosition));
       }
     }
+  }
+
+  public void setTurn(final PieceColor activeColor) {
+
+    if (activeColor == null) {
+
+      throw new IllegalArgumentException("Active color cannot be null");
+    }
+
+    if (activeColor == PieceColor.WHITE) {
+
+      this.activeColor = PieceColor.WHITE;
+    }else{
+
+      this.activeColor = PieceColor.BLACK;
+    }
+
   }
 
   public PiecePosition getPiece(Pos position) {
