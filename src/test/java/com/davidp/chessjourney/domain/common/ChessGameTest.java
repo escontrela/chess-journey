@@ -38,7 +38,6 @@ public class ChessGameTest {
     try {
 
       // TODO algebraic notation is need too
-      // TODO invert pos y row first col , after row
 
       chessGame.move(new Pos(Col.E, Row.TWO), new Pos(Col.E, Row.FOUR));
       chessGame.printBoard();
@@ -74,9 +73,10 @@ public class ChessGameTest {
       chessGame.printBoard();
       verifyGameState(chessGame, PieceColor.BLACK, false, false, false, false);
 
-      // Move 8: F6 to F4
+      // Move 8: F6 to F4 (QxF4)
       chessGame.move(new Pos(Col.F, Row.SIX), new Pos(Col.F, Row.FOUR));
       chessGame.printBoard();
+
       // TODO VERIFY THE CAPTURE!
       verifyGameState(chessGame, PieceColor.WHITE, false, false, false, false);
 
@@ -94,6 +94,7 @@ public class ChessGameTest {
       boolean isCheckmate,
       boolean isStalemate,
       boolean isPromotion) {
+
     assertEquals(expectedCurrentPlayer, chessGame.getCurrentTurnColor());
     assertEquals(isCheck, chessGame.isCheck());
     assertEquals(isCheckmate, chessGame.isCheckmate());

@@ -32,8 +32,9 @@ public class ChessRules {
       // Convert Pos to ChessTempo format
       int fromIndex = Chess.strToSqi(from.toString().toLowerCase());
       int toIndex = Chess.strToSqi(to.toString().toLowerCase());
+      boolean isCapture = position.getStone(toIndex) != Chess.NO_STONE;
 
-      short move = Move.getRegularMove(fromIndex, toIndex, false);
+      short move = Move.getRegularMove(fromIndex, toIndex, isCapture);
       // position.doMove(move);
 
       return isLegalMove(position, move);
@@ -47,6 +48,7 @@ public class ChessRules {
 
   private static boolean isLegalMove(Position position, short move) {
     short[] legalMoves = position.getAllMoves();
+    //TODO improve this code with a hashmap!
     for (short legalMove : legalMoves) {
       if (move == legalMove) {
         return true;

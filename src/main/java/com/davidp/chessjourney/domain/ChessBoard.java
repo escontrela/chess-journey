@@ -58,20 +58,21 @@ public class ChessBoard {
 
   public void movePiece(Piece piece, Pos fromPosition, Pos toPosition) {
 
-    if (isThereAnyPiece(fromPosition).isPresent()) {
+    if (isThereAnyPiece(fromPosition).isEmpty()) {
 
-      if (isThereAnyPiece(toPosition).isPresent()) {
-
-        throw new IllegalArgumentException(
-            "There is already a piece in the position " + toPosition.toString());
-
-      } else {
-
-        board.remove(fromPosition);
-        board.put(toPosition, new PiecePosition(piece, toPosition));
-      }
+      throw new IllegalArgumentException(
+              "There is already a piece in the position " + toPosition.toString());
     }
+    board.remove(fromPosition);
+
+    if (isThereAnyPiece(toPosition).isPresent()) {
+
+      board.remove(toPosition);
+    }
+
+     board.put(toPosition, new PiecePosition(piece, toPosition));
   }
+
 
   public void setTurn(final PieceColor activeColor) {
 
