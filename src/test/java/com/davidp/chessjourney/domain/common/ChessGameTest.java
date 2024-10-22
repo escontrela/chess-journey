@@ -9,6 +9,11 @@ import org.junit.jupiter.api.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
+
 public class ChessGameTest {
 
   Logger logger = LoggerFactory.getLogger(ChessGameTest.class);
@@ -53,7 +58,7 @@ public class ChessGameTest {
       chessGame.printBoard();
       verifyGameState(chessGame, PieceColor.BLACK, false, false, false, false);
 
-      // Move 4: b8 to c6
+      // Move 4: b8 to d6
       chessGame.move(new Pos(Col.F, Row.EIGHT), new Pos(Col.D, Row.SIX));
       chessGame.printBoard();
       verifyGameState(chessGame, PieceColor.WHITE, false, false, false, false);
@@ -63,7 +68,7 @@ public class ChessGameTest {
       chessGame.printBoard();
       verifyGameState(chessGame, PieceColor.BLACK, false, false, false, false);
 
-      // Move 6: d7 to f6
+      // Move 6: d8 to f6
       chessGame.move(new Pos(Col.D, Row.EIGHT), new Pos(Col.F, Row.SIX));
       chessGame.printBoard();
       verifyGameState(chessGame, PieceColor.WHITE, false, false, false, false);
@@ -77,8 +82,17 @@ public class ChessGameTest {
       chessGame.move(new Pos(Col.F, Row.SIX), new Pos(Col.F, Row.FOUR));
       chessGame.printBoard();
 
-      // TODO VERIFY THE CAPTURE!
+      // Verify that the captured pieces are correct
+      Collection<PiecePosition> capturedPiecesForPlayer
+              =  chessGame.getCapturedPiecesForPlayer(chessGame.getOpponentPlayer());
+      Pos positionOfLastCapturedPawn = new Pos(Col.F, Row.FOUR);
+      Set<Pos> pos = PiecePosition.findPiecePosition(PieceType.PAWN, PieceColor.WHITE, capturedPiecesForPlayer);
+      List<Pos> listOfCaptures = new ArrayList<>(pos);
+
+      assertEquals(1, pos.size());
+      assertEquals(listOfCaptures.get(0), positionOfLastCapturedPawn);
       verifyGameState(chessGame, PieceColor.WHITE, false, false, false, false);
+
 
     } catch (IllegalMoveException e) {
 

@@ -1,6 +1,10 @@
 package com.davidp.chessjourney.domain;
 
 import com.davidp.chessjourney.domain.common.*;
+import com.davidp.chessjourney.domain.services.FenService;
+import com.davidp.chessjourney.domain.services.FenServiceFactory;
+
+import java.util.*;
 
 /**
  * This class represents a chess game. It contains a chess board, a chess rules object, and a time.
@@ -8,12 +12,22 @@ import com.davidp.chessjourney.domain.common.*;
  */
 public class ChessGame extends Game {
 
+  private final FenService fenService = FenServiceFactory.getFenService(); //TODO move to the constructor
   private final Player whitePlayer;
   private final Player blackPlayer;
   private final ChessRules chessRules;
   private final TimeControl timeControl;
   private PieceColor currentTurnColor;
+  private final Map<Player,Set<PiecePosition>> capturedPieces;
 
+  /**
+   * TOOD the game state and FEN should be part of the ChessGame class, not the ChessBoard class!!!. Please, do the refactoring.
+   * @param whitePlayer
+   * @param blackPlayer
+   * @param rules
+   * @param board
+   * @param timeControl
+   */
   public ChessGame(
       Player whitePlayer,
       Player blackPlayer,
@@ -27,7 +41,31 @@ public class ChessGame extends Game {
     this.whitePlayer = whitePlayer;
     this.blackPlayer = blackPlayer;
     this.timeControl = timeControl;
-    this.currentTurnColor = PieceColor.WHITE;
+
+    this.currentTurnColor = setInitialStateOfTurnColor(chessBoard.getFen());
+    this.capturedPieces = setInitialStateOfCapturedPieces(whitePlayer, blackPlayer,chessBoard.getFen());
+
+    //TODO set the rest of the initial state of the game
+  }
+
+  private Map<Player, Set<PiecePosition>> setInitialStateOfCapturedPieces(Player whitePlayer, Player blackPlayer,Fen fen) {
+
+     /*
+       TODO if the game is not in the initial position,
+       the capturedPieces should be initialized with the captured pieces from the initial position
+     */
+
+    final Map<Player, Set<PiecePosition>> capturedPieces = new HashMap<>();
+    capturedPieces.put(whitePlayer, new HashSet<>());
+    capturedPieces.put(blackPlayer, new HashSet<>());
+    return capturedPieces;
+
+  }
+
+  private PieceColor setInitialStateOfTurnColor(final Fen fen) {
+
+    GameState gameState = fenService.parseString(fen);
+    return gameState.getActiveColor();
   }
 
   public boolean isCheck() {
@@ -55,14 +93,25 @@ public class ChessGame extends Game {
     return true;
   }
 
-  // TODO: implement this method
   public PieceColor getCurrentTurnColor() {
     return currentTurnColor;
+  }
+
+  public Player getCurrentPlayer() {
+
+    return currentTurnColor == PieceColor.WHITE ? whitePlayer : blackPlayer;
+  }
+
+  public Player getOpponentPlayer() {
+
+    return currentTurnColor == PieceColor.WHITE ? blackPlayer : whitePlayer;
   }
 
   public void move(final Pos from, final Pos to) throws IllegalMoveException {
 
     // TODO WEE NED TO USE THE CHESS RULES AND USE THE CHESSSPRESSO LIBRARY INTERNALLY!
+
+    // TODO update the game status -> moves, captures, etc.
 
     if (chessBoard.isThereAnyPiece(from).isEmpty()) {
 
@@ -79,6 +128,16 @@ public class ChessGame extends Game {
     Piece piece = chessBoard.getPiece(from).getPiece();
 
     if (piece != null && piece.getColor() == getCurrentTurnColor()) {
+
+      /* The board is not the responsible for the move, it's the chess rules,
+       so we need to detect if there are any capture on this move! */
+
+      if (isCapture(to)){
+
+        PiecePosition capturedPiece = chessBoard.getPiece(to);
+        capturedPieces.get(getCurrentPlayer()).add(capturedPiece);
+
+      }
 
       chessBoard.movePiece(piece, from, to);
 
@@ -110,6 +169,11 @@ public class ChessGame extends Game {
     }
   }
 
+  public boolean isCapture(Pos to) {
+
+    return chessBoard.isThereAnyPiece(to).isPresent();
+  }
+
   public void printBoard() {
 
     // Dummy implementation for printing the board
@@ -119,5 +183,10 @@ public class ChessGame extends Game {
   public boolean isPromoted() {
     // TODO implement this method
     return false;
+  }
+
+  public Collection<PiecePosition> getCapturedPiecesForPlayer(Player player) {
+
+    return capturedPieces.get(player);
   }
 }

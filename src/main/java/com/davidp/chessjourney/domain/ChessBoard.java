@@ -74,6 +74,8 @@ public class ChessBoard {
   }
 
 
+
+
   public void setTurn(final PieceColor activeColor) {
 
     if (activeColor == null) {

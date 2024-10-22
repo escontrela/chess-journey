@@ -14,9 +14,9 @@ import org.slf4j.LoggerFactory;
  * This class is responsible for implementing the rules of chess.
  */
 public class ChessRules {
-  // Implement using chesstempo library (assumed)
+  // Implement using chess-tempo library (assumed)
 
-  private Logger logger = LoggerFactory.getLogger(ChessRules.class);
+  private final Logger logger = LoggerFactory.getLogger(ChessRules.class);
 
   public List<Pos> getAttackedPositions(Pos position) {
     // Dummy implementation
