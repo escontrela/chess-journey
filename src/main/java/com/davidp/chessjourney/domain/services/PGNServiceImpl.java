@@ -64,7 +64,8 @@ public class PGNServiceImpl implements PGNService {
     return moveNotation.toString();
   }
 
-  //TODO Fix this method, it's not working, we should use the chess rules and board to check the origin piece (from),
+  // TODO Fix this method, it's not working, we should use the chess rules and board to check the
+  // origin piece (from),
   // because the board can have more than one piece from the to position
   @Override
   public List<Pos> fromAlgebraic(String move, ChessBoard board) {

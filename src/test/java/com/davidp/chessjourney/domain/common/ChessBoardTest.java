@@ -3,8 +3,8 @@ package com.davidp.chessjourney.domain.common;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.davidp.chessjourney.domain.ChessBoardFactory;
 import com.davidp.chessjourney.domain.ChessBoard;
+import com.davidp.chessjourney.domain.ChessBoardFactory;
 import org.junit.jupiter.api.Test;
 
 public class ChessBoardTest {
