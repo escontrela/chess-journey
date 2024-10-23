@@ -10,7 +10,7 @@ import java.util.Collection;
  * This class is responsible for creating a ChessBoard object from a FEN string or from a collection
  * of PiecePosition objects.
  */
-public class ChesBoardFactory {
+public class ChessBoardFactory {
 
   public static ChessBoard createFrom(Collection<PiecePosition> piecePositions) {
 

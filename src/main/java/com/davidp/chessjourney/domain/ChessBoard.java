@@ -61,7 +61,7 @@ public class ChessBoard {
     if (isThereAnyPiece(fromPosition).isEmpty()) {
 
       throw new IllegalArgumentException(
-              "There is already a piece in the position " + toPosition.toString());
+          "There is already a piece in the position " + toPosition.toString());
     }
     board.remove(fromPosition);
 
@@ -70,11 +70,8 @@ public class ChessBoard {
       board.remove(toPosition);
     }
 
-     board.put(toPosition, new PiecePosition(piece, toPosition));
+    board.put(toPosition, new PiecePosition(piece, toPosition));
   }
-
-
-
 
   public void setTurn(final PieceColor activeColor) {
 
@@ -86,11 +83,10 @@ public class ChessBoard {
     if (activeColor == PieceColor.WHITE) {
 
       this.activeColor = PieceColor.WHITE;
-    }else{
+    } else {
 
       this.activeColor = PieceColor.BLACK;
     }
-
   }
 
   public PiecePosition getPiece(Pos position) {

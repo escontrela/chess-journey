@@ -3,7 +3,6 @@ package com.davidp.chessjourney.domain;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
-
 import java.util.*;
 
 /**
@@ -12,16 +11,19 @@ import java.util.*;
  */
 public class ChessGame extends Game {
 
-  private final FenService fenService = FenServiceFactory.getFenService(); //TODO move to the constructor
+  private final FenService fenService =
+      FenServiceFactory.getFenService(); // TODO move to the constructor
   private final Player whitePlayer;
   private final Player blackPlayer;
   private final ChessRules chessRules;
   private final TimeControl timeControl;
   private PieceColor currentTurnColor;
-  private final Map<Player,Set<PiecePosition>> capturedPieces;
+  private final Map<Player, Set<PiecePosition>> capturedPieces;
 
   /**
-   * TOOD the game state and FEN should be part of the ChessGame class, not the ChessBoard class!!!. Please, do the refactoring.
+   * TOOD the game state and FEN should be part of the ChessGame class, not the ChessBoard class!!!.
+   * Please, do the refactoring.
+   *
    * @param whitePlayer
    * @param blackPlayer
    * @param rules
@@ -43,23 +45,24 @@ public class ChessGame extends Game {
     this.timeControl = timeControl;
 
     this.currentTurnColor = setInitialStateOfTurnColor(chessBoard.getFen());
-    this.capturedPieces = setInitialStateOfCapturedPieces(whitePlayer, blackPlayer,chessBoard.getFen());
+    this.capturedPieces =
+        setInitialStateOfCapturedPieces(whitePlayer, blackPlayer, chessBoard.getFen());
 
-    //TODO set the rest of the initial state of the game
+    // TODO set the rest of the initial state of the game
   }
 
-  private Map<Player, Set<PiecePosition>> setInitialStateOfCapturedPieces(Player whitePlayer, Player blackPlayer,Fen fen) {
+  private Map<Player, Set<PiecePosition>> setInitialStateOfCapturedPieces(
+      Player whitePlayer, Player blackPlayer, Fen fen) {
 
-     /*
-       TODO if the game is not in the initial position,
-       the capturedPieces should be initialized with the captured pieces from the initial position
-     */
+    /*
+      TODO if the game is not in the initial position,
+      the capturedPieces should be initialized with the captured pieces from the initial position
+    */
 
     final Map<Player, Set<PiecePosition>> capturedPieces = new HashMap<>();
     capturedPieces.put(whitePlayer, new HashSet<>());
     capturedPieces.put(blackPlayer, new HashSet<>());
     return capturedPieces;
-
   }
 
   private PieceColor setInitialStateOfTurnColor(final Fen fen) {
@@ -130,13 +133,12 @@ public class ChessGame extends Game {
     if (piece != null && piece.getColor() == getCurrentTurnColor()) {
 
       /* The board is not the responsible for the move, it's the chess rules,
-       so we need to detect if there are any capture on this move! */
+      so we need to detect if there are any capture on this move! */
 
-      if (isCapture(to)){
+      if (isCapture(to)) {
 
         PiecePosition capturedPiece = chessBoard.getPiece(to);
         capturedPieces.get(getCurrentPlayer()).add(capturedPiece);
-
       }
 
       chessBoard.movePiece(piece, from, to);

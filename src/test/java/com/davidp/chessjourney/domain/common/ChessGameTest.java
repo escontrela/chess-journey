@@ -5,14 +5,13 @@ import static org.junit.jupiter.api.Assertions.*;
 import com.davidp.chessjourney.domain.ChessGame;
 import com.davidp.chessjourney.domain.ChessGameFactory;
 import com.davidp.chessjourney.domain.Player;
-import org.junit.jupiter.api.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import org.junit.jupiter.api.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ChessGameTest {
 
@@ -83,16 +82,17 @@ public class ChessGameTest {
       chessGame.printBoard();
 
       // Verify that the captured pieces are correct
-      Collection<PiecePosition> capturedPiecesForPlayer
-              =  chessGame.getCapturedPiecesForPlayer(chessGame.getOpponentPlayer());
+      Collection<PiecePosition> capturedPiecesForPlayer =
+          chessGame.getCapturedPiecesForPlayer(chessGame.getOpponentPlayer());
       Pos positionOfLastCapturedPawn = new Pos(Col.F, Row.FOUR);
-      Set<Pos> pos = PiecePosition.findPiecePosition(PieceType.PAWN, PieceColor.WHITE, capturedPiecesForPlayer);
+      Set<Pos> pos =
+          PiecePosition.findPiecePosition(
+              PieceType.PAWN, PieceColor.WHITE, capturedPiecesForPlayer);
       List<Pos> listOfCaptures = new ArrayList<>(pos);
 
       assertEquals(1, pos.size());
       assertEquals(listOfCaptures.get(0), positionOfLastCapturedPawn);
       verifyGameState(chessGame, PieceColor.WHITE, false, false, false, false);
-
 
     } catch (IllegalMoveException e) {
 

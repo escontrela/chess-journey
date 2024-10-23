@@ -48,7 +48,7 @@ public class ChessRules {
 
   private static boolean isLegalMove(Position position, short move) {
     short[] legalMoves = position.getAllMoves();
-    //TODO improve this code with a hashmap!
+    // TODO improve this code with a hashmap!
     for (short legalMove : legalMoves) {
       if (move == legalMove) {
         return true;
