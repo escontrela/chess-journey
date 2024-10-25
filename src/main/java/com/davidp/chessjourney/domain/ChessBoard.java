@@ -16,11 +16,11 @@ public class ChessBoard {
   private final Map<Pos, PiecePosition> board;
 
   protected PieceColor activeColor = PieceColor.WHITE;
-  final CastlingAvailability castlingAvailability =
+   CastlingAvailability castlingAvailability =
       new CastlingAvailability(true, true, true, true);
-  final EnPassantTargetSquare enPassantTargetSquare = new EnPassantTargetSquare(null, false);
-  final int halfMoveClock = 0;
-  final int fullMoveNumber = 1;
+  EnPassantTargetSquare enPassantTargetSquare = new EnPassantTargetSquare(null, false);
+  int halfMoveClock = 0;
+  int fullMoveNumber = 1;
 
   public ChessBoard() {
 
@@ -30,6 +30,31 @@ public class ChessBoard {
   public List<PiecePosition> getAllPiecePositions() {
     // Obtiene todos los valores del mapa y los convierte en una lista
     return new ArrayList<>(board.values());
+  }
+
+  public boolean isEnPassantTarget(Pos pos) {
+    // Comprobar si la posición actual es el objetivo de una captura al paso
+    // Aquí deberías tener la lógica que valide si un peón enemigo se movió
+    // dos filas adelante en el último turno y está disponible para ser capturado al paso.
+
+    return ( enPassantTargetSquare.isAvailable() &&
+            enPassantTargetSquare.getPosition().getRow() == pos.getRow() && enPassantTargetSquare.getPosition().getCol() == pos.getCol());
+
+  }
+
+  /**
+   * Returns all the positions of the pieces of a given type and color.
+   * @param type of the piece
+   * @param color of the piece
+   * @return a list of positions of the pieces of the given type and color.
+   */
+  public List<Pos> getAllPiecePositionsOfType(PieceType type, PieceColor color) {
+
+    return board.entrySet().stream()
+            .filter(entry -> entry.getValue().getPiece().getType() == type
+                    && entry.getValue().getPiece().getColor() == color)
+            .map(Map.Entry::getKey)
+            .collect(Collectors.toList());
   }
 
   public Optional<PiecePosition> isThereAnyPiece(Pos position) {
@@ -55,7 +80,24 @@ public class ChessBoard {
           "There is no piece in the position " + position.toString());
     }
   }
+/**
+  public List<Pos> getAllPossibleMovesForPieceType(PieceType type, Pos to) {
+    List<Pos> possibleMoves = new ArrayList<>();
 
+    // Iterar por todas las posiciones en el tablero y encontrar las piezas del mismo tipo
+    for (Map.Entry<Pos, PiecePosition> entry : board.entrySet()) {
+      Pos pos = entry.getKey();
+      PiecePosition piece = entry.getValue();
+
+      // Si la pieza es del mismo tipo y puede moverse a la posición 'to'
+      if (piece.getPiece().getType() == type && canMove(pos, to)) {
+        possibleMoves.add(pos);
+      }
+    }
+
+    return possibleMoves;
+  }
+*/
   public void movePiece(Piece piece, Pos fromPosition, Pos toPosition) {
 
     if (isThereAnyPiece(fromPosition).isEmpty()) {
@@ -151,5 +193,10 @@ public class ChessBoard {
             fullMoveNumber);
 
     return fenService.parseActualStatus(gameState);
+  }
+
+  public void setEnPassantTargetSquare(final EnPassantTargetSquare enPassantTargetSquare){
+
+    this.enPassantTargetSquare = enPassantTargetSquare;
   }
 }

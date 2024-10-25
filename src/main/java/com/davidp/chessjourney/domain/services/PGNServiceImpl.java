@@ -1,9 +1,11 @@
 package com.davidp.chessjourney.domain.services;
 
 import com.davidp.chessjourney.domain.ChessBoard;
+import com.davidp.chessjourney.domain.ChessRules;
 import com.davidp.chessjourney.domain.common.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * This class is responsible for implements the service for managing the PGN format.
@@ -22,9 +24,11 @@ public class PGNServiceImpl implements PGNService {
     return PGNServiceImpl.Holder.INSTANCE;
   }
 
+
+
   /* Example: c2 e5 : Ne5  */
   @Override
-  public String toAlgebraic(Pos from, Pos to, ChessBoard board) {
+  public String toAlgebraic(Pos from, Pos to, ChessBoard board, ChessRules chessRules) {
 
     PiecePosition movingPiece = board.getPiece(from);
     Optional<PiecePosition> capturedPiece = board.isThereAnyPiece(to);
@@ -39,18 +43,35 @@ public class PGNServiceImpl implements PGNService {
     // The pawn haven't initial letter, only the destination column
     if (movingPiece.getPiece().is(PieceType.PAWN)) {
 
-      if (capturedPiece.isPresent()) {
+      // Captura al paso
+      if (isEnPassantMove(from, to, movingPiece.getPiece(), board)) {
 
-        moveNotation.append(
-            from.getCol().name().toLowerCase()); // Column from which the pawn captured
-        moveNotation.append('x');
+        moveNotation.append(from.getCol().name().toLowerCase()); // Columna de origen
+        moveNotation.append('x'); // Indicador de captura
+        moveNotation.append(posToAlgebraic(to));
+        moveNotation.append(" e.p."); // Agregar la notación de captura al paso
       }
-      moveNotation.append(posToAlgebraic(to));
+      // Captura normal de peón
+      else if (capturedPiece.isPresent()) {
+
+        moveNotation.append(from.getCol().name().toLowerCase()); // Columna de origen
+        moveNotation.append('x'); // Indicador de captura
+        moveNotation.append(posToAlgebraic(to));
+      }
+      // Movimiento sin captura
+      else {
+
+        moveNotation.append(posToAlgebraic(to));
+      }
 
     } else {
 
       // Añadir la letra correspondiente a la pieza (ej: N para caballos)
       moveNotation.append(toPGNLetter(movingPiece.getPiece().getType()));
+
+      // Determinar si hay que desambiguar
+      String disambiguation = getDisambiguation(movingPiece.getPiece(), from, to, board, chessRules);
+      moveNotation.append(disambiguation);
 
       // Si es una captura
       if (capturedPiece.isPresent()) {
@@ -62,6 +83,56 @@ public class PGNServiceImpl implements PGNService {
     }
 
     return moveNotation.toString();
+  }
+
+  private String getDisambiguation(Piece piece, Pos from, Pos to,ChessBoard board, ChessRules rules) {
+
+    List<Pos> similarPiecePositions = board.getAllPiecePositionsOfType(piece.getType(), piece.getColor());
+
+    List<Pos> ambiguousMoves = similarPiecePositions.stream()
+            .filter(pos -> !pos.equals(from) && rules.isValidMove(pos, to, board.getFen()))
+            .collect(Collectors.toList());
+
+    if (ambiguousMoves.isEmpty()) {
+      return "";
+    }
+
+    // Si hay otras piezas que pueden moverse a "to", debemos desambiguar
+    boolean sameColumn = ambiguousMoves.stream().anyMatch(pos -> pos.getCol() == from.getCol());
+    boolean sameRow = ambiguousMoves.stream().anyMatch(pos -> pos.getRow() == from.getRow());
+
+    if (sameColumn && sameRow) {
+      // Si hay piezas en la misma fila y columna, desambiguamos usando fila y columna
+      return posToAlgebraic(from); // ej: Nd2
+    } else if (sameColumn) {
+      // Si están en la misma columna, desambiguamos con la fila
+      return String.valueOf(from.getRow().toString());
+    } else if (sameRow) {
+      // Si están en la misma fila, desambiguamos con la columna
+      return from.getCol().name().toLowerCase();
+    }
+
+    return "";
+  }
+
+  private boolean isEnPassantMove(Pos from, Pos to, Piece piece, ChessBoard board) {
+
+
+    if (piece.is(PieceType.PAWN)) {
+      // Verificar si el peón está intentando capturar al paso
+      Optional<PiecePosition> capturedPiece = board.isThereAnyPiece(to);
+      if (capturedPiece.isEmpty()) {
+        // El destino está vacío, comprobar si es una captura al paso
+        // Posición de destino debería estar en la fila correcta para captura al paso
+        if (Math.abs(from.getCol().ordinal() - to.getCol().ordinal()) == 1 &&
+                Math.abs(from.getRow().getValue() - to.getRow().getValue()) == 1) {
+          // Validar si es un movimiento válido según las reglas del en passant
+          // Por ejemplo, verificar si el peón oponente avanzó dos filas y está en la posición correcta.
+          return board.isEnPassantTarget(to); // Método que debes tener para determinar si es un en passant
+        }
+      }
+    }
+    return false;
   }
 
   // TODO Fix this method, it's not working, we should use the chess rules and board to check the

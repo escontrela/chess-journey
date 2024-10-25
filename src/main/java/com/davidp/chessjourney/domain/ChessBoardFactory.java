@@ -29,6 +29,10 @@ public class ChessBoardFactory {
 
     GameState gameState = FenServiceFactory.getFenService().parseString(fen);
     ChessBoard chessBoard = new ChessBoard();
+    chessBoard.setEnPassantTargetSquare(gameState.getEnPassantTargetSquare());
+
+    ///TODO: important to set the game state before adding the pieces to the board!!!.
+
     gameState.getPieces().forEach(pp -> chessBoard.addPiece(pp.getPiece(), pp.getPosition()));
     return chessBoard;
   }

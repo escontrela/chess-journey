@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.domain.services;
 
 import com.davidp.chessjourney.domain.ChessBoard;
+import com.davidp.chessjourney.domain.ChessRules;
 import com.davidp.chessjourney.domain.common.*;
 import java.util.List;
 
@@ -18,9 +19,10 @@ public interface PGNService {
    * @param from The starting position of the piece.
    * @param to The destination position of the piece.
    * @param board The current state of the chessboard.
+   * @param chessRules The current state of the chessboard.
    * @return The move in standard algebraic notation.
    */
-  String toAlgebraic(Pos from, Pos to, ChessBoard board);
+  String toAlgebraic(Pos from, Pos to, ChessBoard board, ChessRules chessRules);
 
   /**
    * Converts a move from standard algebraic notation (e.g., e4, Nf3) into algebraic coordinates
