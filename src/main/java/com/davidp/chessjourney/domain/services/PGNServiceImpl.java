@@ -28,7 +28,7 @@ public class PGNServiceImpl implements PGNService {
 
   /* Example: c2 e5 : Ne5  */
   @Override
-  public String toAlgebraic(Pos from, Pos to, ChessBoard board, ChessRules chessRules) {
+  public String toAlgebraic(Pos from, Pos to, ChessBoard board, ChessRules chessRules, PieceType promoteTo) {
 
     PiecePosition movingPiece = board.getPiece(from);
     Optional<PiecePosition> capturedPiece = board.isThereAnyPiece(to);
@@ -42,6 +42,19 @@ public class PGNServiceImpl implements PGNService {
 
     // The pawn haven't initial letter, only the destination column
     if (movingPiece.getPiece().is(PieceType.PAWN)) {
+
+      if (isPromotionMove(to, movingPiece.getPiece())) {
+        // Captura con promoción
+        if (capturedPiece.isPresent()) {
+          moveNotation.append(from.getCol().name().toLowerCase()); // Columna de origen
+          moveNotation.append('x'); // Indicador de captura
+        }
+
+        moveNotation.append(posToAlgebraic(to)); // Destino
+        moveNotation.append('=');
+        moveNotation.append(toPGNLetter(promoteTo)); // Letra de la pieza de promoción
+        return moveNotation.toString(); // Aquí evitamos agregar información extra
+      }
 
       // Captura al paso
       if (isEnPassantMove(from, to, movingPiece.getPiece(), board)) {
@@ -69,7 +82,7 @@ public class PGNServiceImpl implements PGNService {
       // Añadir la letra correspondiente a la pieza (ej: N para caballos)
       moveNotation.append(toPGNLetter(movingPiece.getPiece().getType()));
 
-      // Determinar si hay que desambiguar
+      // Determiner if we should to disambiguate
       String disambiguation = getDisambiguation(movingPiece.getPiece(), from, to, board, chessRules);
       moveNotation.append(disambiguation);
 
@@ -206,4 +219,12 @@ public class PGNServiceImpl implements PGNService {
 
     return pos.getCol().name().toLowerCase() + pos.getRow().getValue();
   }
+
+  private boolean isPromotionMove(Pos to, Piece piece) {
+    // Verificar si el movimiento es una promoción de peón
+    return piece.is(PieceType.PAWN) &&
+            (to.getRow() == Row.ONE || to.getRow() == Row.EIGHT);
+  }
+
+
 }

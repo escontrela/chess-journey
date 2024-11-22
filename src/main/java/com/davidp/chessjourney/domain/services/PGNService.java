@@ -22,7 +22,7 @@ public interface PGNService {
    * @param chessRules The current state of the chessboard.
    * @return The move in standard algebraic notation.
    */
-  String toAlgebraic(Pos from, Pos to, ChessBoard board, ChessRules chessRules);
+  String toAlgebraic(Pos from, Pos to, ChessBoard board, ChessRules chessRules,PieceType promoteTo);
 
   /**
    * Converts a move from standard algebraic notation (e.g., e4, Nf3) into algebraic coordinates
