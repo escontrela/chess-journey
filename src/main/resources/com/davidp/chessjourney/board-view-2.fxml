@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: #0d1321;" stylesheets="@chessboard.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.BoardViewController">
+   <children>
+      <Pane layoutX="10.0" layoutY="5.0" prefHeight="30.0" prefWidth="680.0" style="-fx-background-color: #1d2d44;">
+         <children>
+            <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="13.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@flags/es_gl.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="48.0" layoutY="3.0" text="Abraham Pereira" textFill="#f0ebd8">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="197.0" layoutY="7.0" text="1470" textFill="#f0ebd8">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Pane layoutX="600.0" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #f0ebd8;">
+               <children>
+                  <Label layoutX="17.0" layoutY="5.0" text="24:32" textFill="#1d2d44">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Pane layoutX="10.0" layoutY="47.0" prefHeight="701.0" prefWidth="680.0" style="-fx-background-color: #f0ebd8; -fx-border-color: #748cab; -fx-border-width: 1;">
+         <children>
+            <Label layoutX="15.0" layoutY="623.0" text="1" textFill="#0d1321">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="63.0" layoutY="674.0" prefHeight="18.0" prefWidth="13.0" text="A" textFill="#0d1321">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="144.0" layoutY="674.0" prefHeight="18.0" prefWidth="13.0" text="B" textFill="#0d1321">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Pane layoutX="32.0" layoutY="32.0" prefHeight="637.0" prefWidth="619.0" style="-fx-background-color: #f0ebd8; -fx-border-color: #748cab; -fx-border-width: 1;" />
+         </children>
+      </Pane>
+      <Pane layoutX="10.0" layoutY="756.0" prefHeight="30.0" prefWidth="680.0" style="-fx-background-color: #f0ebd8;">
+         <children>
+            <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="13.0" layoutY="7.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@flags/es_gl.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="48.0" layoutY="3.0" text="Martin Pereira" textFill="#1d2d44">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="197.0" layoutY="7.0" text="1440" textFill="#1d2d44">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Pane layoutX="600.0" prefHeight="30.0" prefWidth="80.0" style="-fx-background-color: #1d2d44;">
+               <children>
+                  <Label layoutX="17.0" layoutY="5.0" text="24:32" textFill="#f0ebd8">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+   </children>
+</Pane>

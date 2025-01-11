@@ -13,6 +13,7 @@ public class PGNTest {
 
   PGNService pgnService = PGNServiceFactory.getPGNService();
 
+  //TODO split this test on each case...
   @Test
   public void toAlgebraicTest() {
 
@@ -68,7 +69,7 @@ public class PGNTest {
     //TODO test para jaque mate///
 
     //TODO test para ... tablas??
-    
+
 
   }
 }

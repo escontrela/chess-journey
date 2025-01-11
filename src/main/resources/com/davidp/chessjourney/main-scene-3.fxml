@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<Pane fx:id="mainPane" prefHeight="900.0" prefWidth="1290.0" style="-fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 2; -fx-background-radius: 1; -fx-border-color: #686b75; -fx-background-color: #191b2b; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-image: url(&quot;file:///Users/davidpe/Desktop/reference-screen-chessjourney.pngg&quot;); -fx-background-size: 1345 793; -fx-background-repeat: no-repeat; -fx-background-opacity: 0.3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.MainSceneController">
+   <children>
+      <ImageView fx:id="imgLogo" fitHeight="49.0" fitWidth="237.0" layoutX="511.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@logo/chess-journey-logo-small.png" />
+         </image>
+      </ImageView>
+      <Text fill="#e55c45" layoutX="25.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-red-big" text="Chessboard">
+         <font>
+            <Font name="Alatsi Regular" size="42.0" />
+         </font>
+      </Text>
+      <StackPane layoutX="1235.0" layoutY="5.0" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container" stylesheets="@custom-styles.css">
+         <children>
+            <StackPane prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
+               <children>
+                  <Label text="AP">
+                     <font>
+                        <Font name="Alatsi Regular" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+         </children>
+      </StackPane>
+      <Pane fx:id="pnlTitleBar" layoutX="494.0" layoutY="16.0" opacity="0.21" prefHeight="17.0" prefWidth="240.0" style="-fx-background-color: #555467; -fx-border-color: #555467; -fx-background-radius: 40; -fx-border-radius: 40;" />
+      <Text fill="#686b75" layoutX="243.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-medium" text="for practice">
+         <font>
+            <Font name="Alatsi Regular" size="35.0" />
+         </font>
+      </Text>
+      <Pane fx:id="boardPane1" layoutX="23.0" layoutY="171.0" prefHeight="476.0" prefWidth="1218.0" styleClass="panel-gray" stylesheets="@custom-styles.css">
+         <children>
+            <Text fill="WHITE" layoutX="55.0" layoutY="84.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-white-big" text="Training day, choose your option:">
+               <font>
+                  <Font name="Alatsi Regular" size="29.0" />
+               </font>
+            </Text>
+            <Button fx:id="btAdd1" alignment="BASELINE_CENTER" layoutX="57.0" layoutY="141.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="145.0" styleClass="button-red" stylesheets="@custom-styles.css" text="Tactics" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
+            <Text fill="#686b75" layoutX="57.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-small" text="try some tactics to improve">
+               <font>
+                  <Font name="Alatsi Regular" size="16.0" />
+               </font>
+            </Text>
+            <Button fx:id="btAdd12" alignment="BASELINE_CENTER" layoutX="57.0" layoutY="205.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="145.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Share" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="btAdd121" alignment="BASELINE_CENTER" layoutX="221.0" layoutY="205.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="imgMinimize12" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-gray/close_18dp_gray.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Pane fx:id="pnlTitleBar1" layoutX="57.0" layoutY="272.0" opacity="0.21" prefHeight="39.0" prefWidth="424.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlTitleBar11" layoutX="57.0" layoutY="336.0" opacity="0.21" prefHeight="39.0" prefWidth="424.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
+               <children>
+                  <TextField layoutX="23.0" layoutY="7.0" prefHeight="26.0" prefWidth="380.0" promptText="this is a input text box" styleClass="text-field" stylesheets="@custom-styles.css" text="aaaa" />
+               </children>
+            </Pane>
+            <Text fill="#686b75" layoutX="279.0" layoutY="123.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="fancytext" text="try some tactics to improve">
+               <font>
+                  <Font name="Alatsi Regular" size="16.0" />
+               </font>
+            </Text>
+            <Pane layoutX="657.0" layoutY="41.0" prefHeight="165.0" prefWidth="524.0" styleClass="panel-black" stylesheets="@custom-styles.css">
+               <children>
+                  <Pane fx:id="pnlTitleBar111" layoutX="49.0" layoutY="44.0" opacity="0.21" prefHeight="39.0" prefWidth="424.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
+                     <children>
+                        <TextField layoutX="36.0" layoutY="7.0" prefHeight="26.0" prefWidth="271.0" promptText="this is a input text box" styleClass="text-field" stylesheets="@custom-styles.css" text="aaaa" />
+                        <Button fx:id="btAdd122" alignment="BASELINE_CENTER" layoutX="312.0" layoutY="3.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="108.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Search" textFill="WHITE">
+                           <font>
+                              <Font name="Alatsi Regular" size="18.0" />
+                           </font>
+                        </Button>
+                        <ImageView fx:id="imgMinimize121" fitHeight="27.0" fitWidth="31.0" layoutX="5.0" layoutY="6.0" preserveRatio="true">
+                           <image>
+                              <Image url="@img-gray/search_24dp_gray2.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <StackPane layoutX="49.0" layoutY="108.0" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
+                     <children>
+                        <Label text="AP">
+                           <font>
+                              <Font name="Alatsi Regular" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <Text fill="WHITE" layoutX="96.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-white-small" text="Abraham P" wrappingWidth="89.93701171875">
+                     <font>
+                        <Font name="Alatsi Regular" size="29.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#686b75" layoutX="96.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-super-small" text="Grand Master" wrappingWidth="144.99999999999994">
+                     <font>
+                        <Font name="Alatsi Regular" size="29.0" />
+                     </font>
+                  </Text>
+                  <Label layoutX="427.0" layoutY="123.0" styleClass="text-gray-ref-small" stylesheets="@chessboard.css" text="Copy Link" />
+                  <ImageView fx:id="imgMinimize1211" fitHeight="27.0" fitWidth="31.0" layoutX="393.0" layoutY="120.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-gray/link_24dp_gray2.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+            <Pane layoutX="667.0" layoutY="35.0" prefHeight="165.0" prefWidth="524.0" styleClass="panel-black" stylesheets="@custom-styles.css">
+               <children>
+                  <Pane fx:id="pnlTitleBar1111" layoutX="49.0" layoutY="44.0" opacity="0.21" prefHeight="39.0" prefWidth="424.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
+                     <children>
+                        <TextField layoutX="36.0" layoutY="7.0" prefHeight="26.0" prefWidth="271.0" promptText="this is a input text box" styleClass="text-field" stylesheets="@custom-styles.css" text="aaaa" />
+                        <Button fx:id="btAdd1221" alignment="BASELINE_CENTER" layoutX="312.0" layoutY="3.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="108.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Search" textFill="WHITE">
+                           <font>
+                              <Font name="Alatsi Regular" size="18.0" />
+                           </font>
+                        </Button>
+                        <ImageView fx:id="imgMinimize1211" fitHeight="27.0" fitWidth="31.0" layoutX="5.0" layoutY="6.0" preserveRatio="true">
+                           <image>
+                              <Image url="@img-gray/search_24dp_gray2.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+                  <StackPane layoutX="49.0" layoutY="108.0" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
+                     <children>
+                        <Label text="AP">
+                           <font>
+                              <Font name="Alatsi Regular" size="18.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </StackPane>
+                  <Text fill="WHITE" layoutX="96.0" layoutY="122.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-white-small" text="Abraham P" wrappingWidth="89.93701171875">
+                     <font>
+                        <Font name="Alatsi Regular" size="29.0" />
+                     </font>
+                  </Text>
+                  <Text fill="#686b75" layoutX="96.0" layoutY="138.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-super-small" text="Grand Master" wrappingWidth="144.99999999999994">
+                     <font>
+                        <Font name="Alatsi Regular" size="29.0" />
+                     </font>
+                  </Text>
+                  <Label layoutX="427.0" layoutY="123.0" styleClass="text-gray-ref-small" stylesheets="@chessboard.css" text="Copy Link" />
+                  <ImageView fx:id="imgMinimize12111" fitHeight="27.0" fitWidth="31.0" layoutX="393.0" layoutY="120.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-gray/link_24dp_gray2.png" />
+                     </image>
+                  </ImageView>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="10.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgMinimize1222" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/close_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btSettings" alignment="BASELINE_CENTER" layoutX="66.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgMinimize12221" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/settings_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btRight" alignment="BASELINE_CENTER" layoutX="130.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgMinimize12222" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/chevron_left_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btLeft" alignment="BASELINE_CENTER" layoutX="168.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgMinimize12223" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/chevron_right_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Pane fx:id="pnlMessage" layoutX="718.0" layoutY="670.0" prefHeight="75.0" prefWidth="502.0" styleClass="panel-purple" stylesheets="@custom-styles.css">
+         <children>
+            <Label layoutX="48.0" layoutY="28.0" styleClass=".text-purple-small" stylesheets="@chessboard.css" text="This is a note that you have to confirm, or not?" textFill="#848ae0">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <ImageView fx:id="imgMinimize12112" fitHeight="27.0" fitWidth="31.0" layoutX="15.0" layoutY="26.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/shield_question_24dp_purple.png" />
+               </image>
+            </ImageView>
+            <Button fx:id="btAdd1211" alignment="BASELINE_CENTER" layoutX="435.0" layoutY="19.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="imgMinimize122" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-gray/close_18dp_gray.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btAdd12111" alignment="BASELINE_CENTER" layoutX="384.0" layoutY="20.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="imgMinimize1221" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-gray/check_18dp_gray.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
+      <Button fx:id="btSettings1" alignment="BASELINE_CENTER" layoutX="25.0" layoutY="851.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-menu" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgMinimize122211" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/menu_24dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</Pane>

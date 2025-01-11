@@ -54,6 +54,21 @@
         <version>0.4.0</version>
     </dependency>
     <dependency>
+        <groupId>com.zaxxer</groupId>
+        <artifactId>HikariCP</artifactId>
+        <version>5.0.1</version>
+    </dependency>
+    <dependency>
+        <groupId>org.postgresql</groupId>
+        <artifactId>postgresql</artifactId>
+        <version>42.6.0</version>
+    </dependency>
+    <dependency>
+        <groupId>com.google.guava</groupId>
+        <artifactId>guava</artifactId>
+        <version>31.1-jre</version> <!-- o la más reciente -->
+    </dependency>
+    <dependency>
         <groupId>com.github.almasb</groupId>
         <artifactId>fxgl</artifactId>
         <version>17.3</version>

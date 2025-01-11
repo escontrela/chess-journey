@@ -1,0 +1,564 @@
+/******************************************/
+/** START: NEW SYSTEM DESIGN  10-01-2025 **/
+/******************************************/
+/*
+ Reads:
+   https://docs.oracle.com/javafx/2/text/jfxpub-text.htm
+*/
+@font-face {
+    font-family: "Alatsi";
+    src: url("fonts/Alatsi-Regular.ttf");
+    /* Opcionalmente: format("truetype"); */
+}
+
+.root {
+    /* All app will use this font by default */
+    -fx-font-family: "Alatsi";
+}
+
+
+
+/** Start: Rounded Avatar Container **/
+.avatar-container {
+    -fx-border-color: #686b75;       /* color del borde */
+    -fx-border-width: 2;         /* grosor del borde */
+    -fx-border-radius: 50;       /* borde redondeado */
+    -fx-background-radius: 50;   /* también redondeamos el fondo del contenedor */
+    -fx-padding: 2;              /* algo de espacio para que el borde no se “coma” la imagen */
+}
+
+.avatar-container:hover {
+    -fx-border-color: #686b75;       /* color del borde */
+    -fx-border-width: 2;         /* grosor del borde */
+    -fx-border-radius: 50;       /* borde redondeado */
+    -fx-background-radius: 50;   /* también redondeamos el fondo del contenedor */
+    -fx-padding: 2;              /* algo de espacio para que el borde no se “coma” la imagen */
+    -fx-background-color: #686b75;
+}
+
+.avatar-container-inside {
+    -fx-border-color: #e55c45;       /* color del borde */
+    -fx-background-color: #e55c45;
+    -fx-border-width: 2;         /* grosor del borde */
+    -fx-border-radius: 50;       /* borde redondeado */
+    -fx-background-radius: 50;   /* también redondeamos el fondo del contenedor */
+    -fx-padding: 2;              /* algo de espacio para que el borde no se “coma” la imagen */
+}
+
+
+/* start: system design - text */
+
+.text-gray-small{
+    -fx-text-fill: #686b75;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-gray-super-small{
+    -fx-text-fill: #686b75;
+    -fx-font-size: 12px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-gray-ref-small{
+    -fx-text-fill: #686b75;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+.text-gray-ref-small:hover{
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-white-big{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 29px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-white-extra-big{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 36px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-white-small{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 15px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-white-medium{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 18px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-red-big{
+    -fx-text-fill: #e55c45;
+    -fx-font-size: 42px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-gray-medium{
+    -fx-text-fill: #686b75;
+    -fx-font-size: 35px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-purple-small{
+    -fx-text-fill: #848AE0;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+/* end: system design - text */
+
+
+/* start: system design - panels */
+.panel-gray{
+    -fx-background-color: #232232;
+    -fx-border-color: gray;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}
+
+.panel-black{
+    -fx-background-color: #181823;
+    -fx-border-color: #181823;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}
+
+.panel-purple{
+    -fx-background-color: #2A293A;
+    -fx-border-color: #2A293A;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}
+
+
+
+.panel-gray-for-text{
+    -fx-background-color: #555467;
+    -fx-boarder-color:  #555467;
+    -fx-border-radius: 40;
+    -fx-background-radius: 40;
+}
+
+.text-field {
+    -fx-background-color: transparent;
+    -fx-foreground-color: white;
+    -fx-font-family: "Alatsi";
+    -fx-text-fill: white; /* Changes text color to white */
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-control-inner-background: transparent;
+
+}
+.text-field:focused {
+    -fx-background-color: transparent;
+    -fx-foreground-color: white;
+    -fx-font-family: "Alatsi";
+    -fx-font-size: 16px;
+    -fx-text-fill: white; /* Changes text color to white */
+    -fx-background-insets: 0;
+    -fx-background-radius: 0;
+    -fx-control-inner-background: transparent;
+}
+.fancytext {
+    -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
+    -fx-stroke: black;
+    -fx-stroke-width: 1;
+}
+
+/* end: system design - panels */
+
+/* start: system design - button red */
+.button-red{
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #e55c45;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+.button-red:hover{
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #e55c45;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+.button-red:pressed {
+    -fx-background-color: #303040;
+    -fx-border-width: 0;
+
+}
+/* end: system design - button red */
+
+/* start: system design - button 3 */
+.button-gray{
+    -fx-text-fill: #787787;
+    -fx-background-color: #303040;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+.button-gray:hover{
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #504F61;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+.button-gray:pressed {
+    -fx-background-color: #303040;
+    -fx-border-width: 0;
+
+}
+/* end: system design - button 3 */
+
+/* start: system design - button 3 */
+.button-menu{
+    -fx-text-fill: #787787;
+    -fx-background-color: #848AE0;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+.button-menu:hover{
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #504F61;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+.button-menu:pressed {
+    -fx-background-color: #303040;
+    -fx-border-width: 0;
+
+}
+/* end: system design - button 3 */
+
+
+/******************************************/
+/** END: NEW SYSTEM DESIGN  10-01-2025 **/
+/******************************************/
+
+
+
+combo-box .list-cell .text-input
+{
+    -fx-background-color:  #3c3f41;
+    -fx-background-insets: 0, 1;
+    -fx-text-fill:  #bbbbbb;
+}    
+ 
+combo-box-popup .list-view 
+{
+    -fx-background-color:  #3c3f41,#3c3f41;
+    -fx-background-insets: 0, 1;
+    -fx-text-fill:  #bbbbbb;
+}    
+
+.combo-box-popup .list-view .list-cell 
+{
+    -fx-padding: 4 0 4 5;
+    -fx-text-fill:  #bbbbbb;
+   
+    -fx-background-color:  #3c3f41;
+}
+
+.combo-box-popup .list-view .list-cell:filled:selected, .combo-box-popup .list-view .list-cell:filled:selected:hover 
+{
+    -fx-background: -fx-accent;
+    -fx-background-color: -fx-selection-bar;
+    -fx-text-fill:  #bbbbbb;
+}
+
+.combo-box-popup .list-view .list-cell:filled:hover 
+{
+    -fx-background-color:  #3c3f41;
+    -fx-text-fill:  #bbbbbb;
+}
+
+.combo-box-base  
+{
+    -fx-skin: "com.sun.javafx.scene.control.skin.ComboBoxBaseSkin";
+    -fx-background-color: white, white, white, white;
+    -fx-background-radius: 5, 5, 4, 3;
+    -fx-background-insets: 0 0 -1 0, 0, 1, 2;
+    -fx-text-fill:  #bbbbbb;
+    -fx-padding: 0;
+}
+
+.combo-box-base:hover
+{
+    -fx-color: -fx-hover-base;
+}
+
+.combo-box-base:showing 
+{
+    -fx-color: -fx-pressed-base;
+}
+
+.combo-box-base:focused {
+    -fx-background-color: -fx-focus-color, -fx-outer-border, -fx-inner-border, -fx-body-color;
+    -fx-background-radius: 6.4, 4, 5, 3;
+    -fx-background-insets: -1.4, 0, 1, 2;
+}
+
+.combo-box-base:disabled {
+    -fx-opacity: .4;
+}
+
+
+
+
+
+.button2{
+    -fx-text-fill: #006464;
+   /* -fx-background-color: #DFB951;*/
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+
+
+
+
+.button3:hover {
+       -fx-transform: 0.3s;
+}
+
+/*
+.button2:focused {
+    -fx-border-color: white;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+
+.button2:hover
+{
+	-fx-background-color:  #c9402c;
+    -fx-border-color: transparent, white;
+}
+*/
+
+
+/** Start: Borderless Button , maximize and minimize buttons **/
+.button_flat{
+
+    -fx-border-color: transparent;
+    -fx-border-width: 0;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+/*
+.button_flat:focused {
+    -fx-border-color: transparent, black;
+    -fx-border-width: 1, 1;
+    -fx-border-style: solid, segments(1, 1);
+    -fx-border-radius: 0, 0;
+    -fx-border-insets: 1 1 1 1, 0;
+}
+*/
+.button_flat:hover
+{
+	/** -fx-background-color:  #c9302c;**/
+    -fx-background-color: #555467;
+    -fx-border-color: transparent, white;
+}
+/** End: Borderless Button **/
+
+/** Start: Borderless Button  for options , maximize and minimize buttons **/
+.button_flat_option{
+    -fx-border-radius: 10;
+    -fx-border-color: #353535;
+    -fx-border-width: 1;
+    -fx-background-radius: 0;
+    -fx-background-color: transparent;
+}
+/**
+.button_flat_option:focused {
+    -fx-border-color: transparent, black;
+    -fx-border-width: 1;
+    -fx-border-style: solid, segments(1, 1);
+     -fx-border-radius: 0, 0;
+     -fx-border-insets: 1 1 1 1, 0;
+}
+**/
+.button_flat_option:hover
+{
+    -fx-border-radius: 10;
+    -fx-border-width: 1;
+    -fx-background-radius: 10;
+	-fx-background-color: #7f7f7f;
+	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 3, 3)
+}
+/** End: Borderless Button **/
+
+
+
+
+
+.chart {
+ 
+    -fx-padding: 10px;
+    -fx-background-color: #3c3f41;
+}
+
+.chart-plot-background {
+    -fx-background-color: #3c3f41;
+}
+
+.chart-vertical-grid-lines {
+    -fx-stroke: #808080;
+}
+.chart-horizontal-grid-lines {
+    -fx-stroke: #808080;
+}
+.chart-title {
+  -fx-text-fill: #4682b4;
+  -fx-font-size: 1.6em;
+}
+
+ 
+ 
+.chart-legend {
+   -fx-background-color:  transparent;
+   -fx-padding: 20px;
+} 
+ 
+.chart-legend-item{
+	
+    -fx-text-fill: #ffffff;
+    -fx-background-color: #3c3f41;
+}
+
+.axis {
+    -fx-font-size: 1.4em;    
+    -fx-tick-label-fill: #ffffff;
+    
+  
+}
+ 
+.axis-label {
+   -fx-text-fill: #462300; 
+}
+
+.myTree .tree-cell {
+    -fx-background-color:  #272727;
+    -fx-text-fill: #ffffff ;
+}
+
+.myTree .tree-cell:selected {
+  -fx-background-color: #3a82f7;
+}
+
+.myTree .tree-cell:child {
+    -fx-background-color: #5f85a4;
+}
+
+/* The main scrollbar CSS class of ListView */
+.scrollPane1 .scroll-bar:horizontal ,
+.scrollPane1  .scroll-bar:vertical{
+    -fx-background-color:transparent;
+
+}
+
+/* The increment and decrement button CSS class of scrollbar */
+.scrollPane1 .increment-button ,.scrollPane1 .decrement-button {
+    -fx-background-color:transparent;
+	-fx-border-color:derive(gray,80%);
+}
+
+/* The main scrollbar **track** CSS class  */
+.scrollPane1 .scroll-bar:horizontal .track ,
+.scrollPane1 .scroll-bar:vertical .track{
+     -fx-background-color: transparent;
+	 -fx-border-color:derive(gray,80%);
+	 -fx-background-radius: 0em;
+}
+
+/* The main scrollbar **thumb** CSS class which we drag every time (movable) */
+.scrollPane1 .scroll-bar:horizontal .thumb,
+.scrollPane1 .scroll-bar:vertical .thumb {
+    -fx-background-color:derive(black,90%);
+	-fx-background-insets: 0, 0, 0;
+	-fx-background-radius: 0em;
+
+}
+
+/*
+#3e3d3d
+-fx-font-family: Tahoma;
+    -fx-tick-length: 20;
+    -fx-minor-tick-length: 10;
+  
+   -fx-border-width: 1,1;
+   -fx-border-style: solid, segments(1, 2);
+   -fx-border-insets: 1 1 1 1, 0;
+   -fx-border-width: 1, 1;
+   -fx-border-radius: 0, 0;
+	 
+https://stackoverflow.com/questions/36566197/javafx-button-with-transparent-background
+  -fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
+    -fx-font-size: 1em; 
+    -fx-text-fill: #828282;
+    
+
+
+
+.button:pressed {
+    -fx-background-color: black;
+    -fx-text-fill: white;
+}
+*/
+
+
+
+/*
+https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html#combobox
+  
+.spinner .increment-arrow-button:hover,
+.spinner .decrement-arrow-button:hover {
+    -fx-body-color: ladder(#444, yellow 0%, red 100%);
+}
+
+.spinner .increment-arrow-button:hover:pressed,
+.spinner .decrement-arrow-button:hover:pressed,
+.spinner .increment-arrow-button:pressed,
+.spinner .decrement-arrow-button:pressed {
+    -fx-body-color: ladder(#AAA, yellow 0%, red 100%);
+}
+
+
+.button2{
+    -fx-text-fill: #006464;
+    -fx-background-color: #DFB951;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+    -fx-padding: 5;
+}
+*/

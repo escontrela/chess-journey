@@ -1,0 +1,70 @@
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="com.davidp.chessjourney.BoardViewController"
+            fx:id="rootPane"
+            stylesheets="@chessboard.css"
+            style="-fx-background-color: #2C2C2C;">
+
+    <!-- Barra superior: Información del jugador de arriba -->
+    <top>
+        <HBox spacing="20.0" style="-fx-background-color: #444; -fx-padding: 15; -fx-alignment: center-left;">
+            <children>
+                <!-- Bandera del jugador -->
+                <ImageView fx:id="topPlayerFlag" fitHeight="40" fitWidth="60" preserveRatio="true" styleClass="flags" />
+
+                <!-- Nombre y ELO del jugador -->
+                <VBox spacing="10">
+                    <children>
+                        <Label fx:id="topPlayerName" text="Ding Liren" style="-fx-text-fill: white; -fx-font-size: 18px;" />
+                        <Label fx:id="topPlayerRating" text="2728" style="-fx-text-fill: white; -fx-font-size: 14px;" />
+                    </children>
+                </VBox>
+
+                <!-- Espaciador flexible -->
+                <StackPane style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS" />
+
+                <!-- Tiempo del jugador -->
+                <Label fx:id="topPlayerClock" text="24:32" style="-fx-text-fill: white; -fx-font-size: 18px;" />
+            </children>
+        </HBox>
+    </top>
+
+    <!-- Centro: Espacio reservado para el tablero -->
+    <center>
+        <StackPane fx:id="boardContainer" style="-fx-background-color: #333; -fx-padding: 20; -fx-border-color: black; -fx-border-width: 2;">
+            <children>
+                <!-- Espacio para el tablero (dimensiones ajustables) -->
+                <GridPane fx:id="chessBoardPlaceholder" style="-fx-background-color: #555;"
+                          prefHeight="600" prefWidth="600">
+                </GridPane>
+            </children>
+        </StackPane>
+    </center>
+
+    <!-- Barra inferior: Información del jugador de abajo -->
+    <bottom>
+        <HBox spacing="20.0" style="-fx-background-color: #444; -fx-padding: 15; -fx-alignment: center-left;">
+            <children>
+                <!-- Bandera del rival -->
+                <ImageView fx:id="bottomPlayerFlag" fitHeight="40" fitWidth="60" preserveRatio="true" >
+                <image>
+                    <Image url="@flags/es_gl.png" />
+                </image>
+                </ImageView>
+
+                <!-- Nombre y ELO del rival -->
+                <VBox spacing="10">
+                    <children>
+                        <Label fx:id="bottomPlayerName" text="Gukesh Dommaraju" style="-fx-text-fill: white; -fx-font-size: 18px;" />
+                        <Label fx:id="bottomPlayerRating" text="2783" style="-fx-text-fill: white; -fx-font-size: 14px;" />
+                    </children>
+                </VBox>
+
+                <!-- Espaciador flexible -->
+                <StackPane style="-fx-background-color: transparent;" HBox.hgrow="ALWAYS" />
+
+                <!-- Tiempo del rival -->
+                <Label fx:id="bottomPlayerClock" text="14:58" style="-fx-text-fill: white; -fx-font-size: 18px;" />
+            </children>
+        </HBox>
+    </bottom>
+</BorderPane>

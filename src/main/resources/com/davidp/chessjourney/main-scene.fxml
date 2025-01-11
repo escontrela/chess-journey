@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" style="-fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 2; -fx-background-radius: 1; -fx-border-color: #000000; -fx-background-color: #272727; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-image: url('/background/background-2.png');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.MainSceneController">
+    <children>
+        <Button fx:id="btMinimize" layoutX="1174.0" layoutY="14.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="20.0" prefWidth="20.0" style="-fx-base: #2c313a;" styleClass="button_flat" stylesheets="@custom-styles.css" AnchorPane.rightAnchor="72.0">
+            <graphic>
+                <ImageView fx:id="imgMinimize" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img-white/baseline_minimize_white_18dp.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btMaximize" layoutX="1208.0" layoutY="14.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="20.0" prefWidth="20.0" style="-fx-base: #2c313a;" styleClass="button_flat" stylesheets="@custom-styles.css" AnchorPane.rightAnchor="38.0">
+            <graphic>
+                <ImageView fx:id="imgMaximize" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img-white/baseline_maximize_white_18dp.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+        <Button fx:id="btClose" layoutX="1242.0" layoutY="14.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="20.0" prefWidth="20.0" style="-fx-base: #2c313a;" styleClass="button_flat" stylesheets="@custom-styles.css" AnchorPane.rightAnchor="4.0">
+            <graphic>
+                <ImageView fx:id="imgClose" fitHeight="18.0" fitWidth="18.0" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@img-white/baseline_clear_white_24dp.png" />
+                    </image>
+                </ImageView>
+            </graphic>
+        </Button>
+
+
+        <!-- Un botón de login abajo a la izquierda (ejemplo) -->
+        <Button fx:id="exit11311" layoutX="27.0" layoutY="661.0" style="-fx-base: #4287f5;" styleClass="button2" stylesheets="@custom-styles.css" text="Login" AnchorPane.bottomAnchor="24.0" AnchorPane.leftAnchor="25.0" />
+
+        <!-- Pane izquierdo para el tablero -->
+        <AnchorPane fx:id="boardPane" AnchorPane.bottomAnchor="80.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="100.0" AnchorPane.topAnchor="80.0">
+         <children>
+            <ImageView fitHeight="216.0" fitWidth="433.0" layoutX="53.0" layoutY="92.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../../../../../../../../../Downloads/Captura_de_pantalla_2025-01-06_a_las_16.38.11-removebg-preview.png" />
+               </image>
+            </ImageView>
+         </children></AnchorPane>
+
+        <!-- Pane derecho con ancho fijo de 200, que contendrá tus botones "Play Game" y "Training" -->
+        <AnchorPane fx:id="rightPane" prefWidth="100.0" AnchorPane.bottomAnchor="80.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="80.0">
+
+            <children>
+                <Button fx:id="btAdd" alignment="BASELINE_CENTER" layoutX="15.0" layoutY="247.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="162.0" prefWidth="171.0" style="-fx-base: #4287f5;" styleClass="button2" stylesheets="@custom-styles.css" text="Play Game">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                    <graphic>
+                        <ImageView fx:id="imgMinimize1" fitHeight="32.0" fitWidth="32.0" preserveRatio="true">
+                            <image>
+                                <Image url="@img-white/knight_shield-48_45141.png" />
+                            </image>
+                        </ImageView>
+                    </graphic>
+                </Button>
+
+                <Button fx:id="exit1131" alignment="BASELINE_CENTER" layoutX="15.0" layoutY="429.0" mnemonicParsing="false" prefHeight="162.0" prefWidth="171.0" style="-fx-base: #4287f5;" text="Training">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Button>
+            </children>
+        </AnchorPane>
+
+
+
+
+    </children>
+</AnchorPane>

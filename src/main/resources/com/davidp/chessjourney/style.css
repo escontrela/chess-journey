@@ -1,0 +1,13 @@
+.top-bar {
+    -fx-background-color: #333;
+    -fx-padding: 5;
+    -fx-spacing: 10;
+}
+
+.chessboard-pane {
+    -fx-background-color: #f0f0f0;
+}
+
+.control-pane {
+    -fx-background-color: #e0e0e0;
+}

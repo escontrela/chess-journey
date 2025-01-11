@@ -3,6 +3,8 @@ package com.davidp.chessjourney;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
+import com.davidp.chessjourney.application.config.AppProperties;
+import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.domain.common.Fen;
 import com.davidp.chessjourney.domain.common.GameState;
 import com.davidp.chessjourney.domain.common.Piece;
@@ -11,31 +13,99 @@ import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+import com.davidp.chessjourney.application.usecases.*;
+import com.davidp.chessjourney.domain.User;
+
 /** @see <a href="https://github.com/AlmasB/FXGL">FXGL framework</a> */
+/** @see <a href="https://fonts.google.com/icons?selected=Material+Symbols+Outlined:close:FILL@0;wght@400;GRAD@0;opsz@20&icon.query=close&icon.size=18&icon.color=%23353535">Google Material design</a> */
+/** @see <a href="https://coolors.co/palettes/trending">Coolors</a> */
 public class ChessJourneyApp extends GameApplication {
 
   GridPane chessBoard = null;
   String fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
+  private static Stage primaryStage;
+
+
   @Override
   protected void initSettings(GameSettings settings) {
-    settings.setWidth(1000); // Ajustado para acomodar el panel
-    settings.setHeight(800);
+
+    settings.setWidth(1280); // Updated dimensions
+    settings.setHeight(900);
     settings.setTitle("Chess App");
-    settings.setVersion("1.0");
+    settings.setVersion("2.0");
+    settings.setStageStyle(StageStyle.TRANSPARENT);
+
   }
+
+
+
+  @Override
+  protected void initGame() {
+
+    try {
+
+      primaryStage = FXGL.getPrimaryStage();
+
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("main-scene-3.fxml"));
+      Pane root = loader.load();
+
+      MainSceneController mainController = loader.getController();
+      mainController.setStage(primaryStage);
+
+      // Cargar el FXML del tablero
+      FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("board-view.fxml"));
+
+      Pane boardRoot = boardLoader.load();
+      BoardViewController boardController = boardLoader.getController();
+
+      // Añadir el tablero a la zona izquierda
+    //  mainController.getBoardPane().getChildren().add(boardRoot);
+
+      Scene scene = new Scene(root);
+      getGameScene().addUINode(scene.getRoot());
+
+      loadUsers();
+
+      System.out.println(String.format("UserId: %s" , AppProperties.getInstance().getActiveUserId()));
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+    }
+  }
+
+  private void loadUsers() {
+
+    // Solicitas el caso de uso a la factoría
+    GetUsersUseCase getUsersUC = UseCaseFactory.createGetUsersUseCase();
+
+    // Ejecutas el caso de uso
+    List<User> userList = getUsersUC.execute();
+
+    // Muestras o procesas los usuarios
+    userList.forEach(System.out::println);
+
+  }
+
+
+  /** Old Code **/
 
   public static void main(String[] args) {
     launch(args);
@@ -126,6 +196,8 @@ public class ChessJourneyApp extends GameApplication {
     chessBoard.add(bRook.getImageView(), 5, 7);
   }
 
+
+  /**
   @Override
   protected void initGame() {
 
@@ -140,6 +212,7 @@ public class ChessJourneyApp extends GameApplication {
 
     FXGL.getGameScene().addUINode(root);
   }
+**/
 
   private VBox createControlPanel() {
     VBox vbox = new VBox();
