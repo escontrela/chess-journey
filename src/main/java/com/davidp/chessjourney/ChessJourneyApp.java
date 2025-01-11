@@ -4,7 +4,6 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
-import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.domain.common.Fen;
 import com.davidp.chessjourney.domain.common.GameState;
 import com.davidp.chessjourney.domain.common.Piece;
@@ -31,6 +30,8 @@ import javafx.util.Duration;
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.domain.User;
+
+import javax.security.auth.login.AppConfigurationEntry;
 
 /** @see <a href="https://github.com/AlmasB/FXGL">FXGL framework</a> */
 /** @see <a href="https://fonts.google.com/icons?selected=Material+Symbols+Outlined:close:FILL@0;wght@400;GRAD@0;opsz@20&icon.query=close&icon.size=18&icon.color=%23353535">Google Material design</a> */
@@ -81,7 +82,6 @@ public class ChessJourneyApp extends GameApplication {
       Scene scene = new Scene(root);
       getGameScene().addUINode(scene.getRoot());
 
-      loadUsers();
 
       System.out.println(String.format("UserId: %s" , AppProperties.getInstance().getActiveUserId()));
 
@@ -89,19 +89,6 @@ public class ChessJourneyApp extends GameApplication {
 
       e.printStackTrace();
     }
-  }
-
-  private void loadUsers() {
-
-    // Solicitas el caso de uso a la factoría
-    GetUsersUseCase getUsersUC = UseCaseFactory.createGetUsersUseCase();
-
-    // Ejecutas el caso de uso
-    List<User> userList = getUsersUC.execute();
-
-    // Muestras o procesas los usuarios
-    userList.forEach(System.out::println);
-
   }
 
 

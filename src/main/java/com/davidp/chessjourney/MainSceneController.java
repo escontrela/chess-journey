@@ -1,23 +1,31 @@
 package com.davidp.chessjourney;
 
+import com.almasb.fxgl.animation.Interpolators;
+import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
+import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewData;
+import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
+import com.davidp.chessjourney.domain.User;
 import com.google.common.eventbus.Subscribe;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Point2D;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class MainSceneController {
 
@@ -94,6 +102,8 @@ public class MainSceneController {
     @FXML
     private ImageView avatarView;
 
+    @FXML
+    private Label lbUserInitials;
 
     @FXML
     private Button btLeft;
@@ -165,13 +175,10 @@ public class MainSceneController {
         Platform.runLater(() -> {
 
             System.out.println("Se guardó el usuario: " + event.getUserId());
-            reloadUserData(event.getUserId());
+            reloadUserInitials(event.getUserId());
         });
     }
 
-    private void reloadUserData(long userId) {
-        // Lógica para refrescar tu pantalla principal
-    }
 
     public MainSceneController() {
 
@@ -202,6 +209,24 @@ public class MainSceneController {
             stage.setX(event.getScreenX() - xOffset);
             stage.setY(event.getScreenY() - yOffset);
         });
+
+        reloadUserInitials(AppProperties.getInstance().getActiveUserId());
+    }
+
+    private void reloadUserInitials(long userId) {
+
+        //TODO move createGetUserByUseCase to the constructor... to minimize dependencies
+        GetUserByIdUseCase getUserByIdUseCase = UseCaseFactory.createGetUserByIdUseCase();
+        User loggedUser =  getUserByIdUseCase.execute(userId);
+        lbUserInitials.setText(loggedUser.getInitials());
+
+        FXGL.animationBuilder()
+                .duration(Duration.seconds(0.1))
+                .repeat(2)
+                .autoReverse(true)
+                .fadeOut(lbUserInitials)
+                .buildAndPlay();
+
 
     }
 

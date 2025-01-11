@@ -26,7 +26,7 @@
          <children>
             <StackPane prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
                <children>
-                  <Label text="AP">
+                  <Label fx:id="lbUserInitials" text="AP">
                      <font>
                         <Font name="Alatsi Regular" size="18.0" />
                      </font>

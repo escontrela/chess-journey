@@ -76,6 +76,7 @@ public class UserRepositoryImpl implements UserRepository {
         }
 
         // Si no se encontró ningún registro con ese ID, retornamos null
+        //TODO Fix it, sino se encuentra no deberíamos devolver null, valorar una exception o un Optional
         return null;
     }
 
