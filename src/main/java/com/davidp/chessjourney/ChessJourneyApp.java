@@ -1,9 +1,12 @@
 package com.davidp.chessjourney;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
+
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
+import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.domain.common.Fen;
 import com.davidp.chessjourney.domain.common.GameState;
 import com.davidp.chessjourney.domain.common.Piece;
@@ -12,7 +15,6 @@ import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -27,14 +29,12 @@ import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
-import com.davidp.chessjourney.application.usecases.*;
-import com.davidp.chessjourney.domain.User;
-
-import javax.security.auth.login.AppConfigurationEntry;
-
 /** @see <a href="https://github.com/AlmasB/FXGL">FXGL framework</a> */
-/** @see <a href="https://fonts.google.com/icons?selected=Material+Symbols+Outlined:close:FILL@0;wght@400;GRAD@0;opsz@20&icon.query=close&icon.size=18&icon.color=%23353535">Google Material design</a> */
+/**
+ * @see <a
+ *     href="https://fonts.google.com/icons?selected=Material+Symbols+Outlined:close:FILL@0;wght@400;GRAD@0;opsz@20&icon.query=close&icon.size=18&icon.color=%23353535">Google
+ *     Material design</a>
+ */
 /** @see <a href="https://coolors.co/palettes/trending">Coolors</a> */
 public class ChessJourneyApp extends GameApplication {
 
@@ -42,7 +42,6 @@ public class ChessJourneyApp extends GameApplication {
   String fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
   private static Stage primaryStage;
-
 
   @Override
   protected void initSettings(GameSettings settings) {
@@ -52,10 +51,7 @@ public class ChessJourneyApp extends GameApplication {
     settings.setTitle("Chess App");
     settings.setVersion("2.0");
     settings.setStageStyle(StageStyle.TRANSPARENT);
-
   }
-
-
 
   @Override
   protected void initGame() {
@@ -77,13 +73,13 @@ public class ChessJourneyApp extends GameApplication {
       BoardViewController boardController = boardLoader.getController();
 
       // Añadir el tablero a la zona izquierda
-    //  mainController.getBoardPane().getChildren().add(boardRoot);
+      //  mainController.getBoardPane().getChildren().add(boardRoot);
 
       Scene scene = new Scene(root);
       getGameScene().addUINode(scene.getRoot());
 
-
-      System.out.println(String.format("UserId: %s" , AppProperties.getInstance().getActiveUserId()));
+      System.out.println(
+          String.format("UserId: %s", AppProperties.getInstance().getActiveUserId()));
 
     } catch (Exception e) {
 
@@ -91,9 +87,7 @@ public class ChessJourneyApp extends GameApplication {
     }
   }
 
-
-  /** Old Code **/
-
+  /** Old Code * */
   public static void main(String[] args) {
     launch(args);
   }
@@ -183,24 +177,18 @@ public class ChessJourneyApp extends GameApplication {
     chessBoard.add(bRook.getImageView(), 5, 7);
   }
 
-
   /**
-  @Override
-  protected void initGame() {
-
-    this.chessBoard = createChessBoard();
-
-    VBox controlPanel = createControlPanel();
-    controlPanel.setPrefWidth(200); // Ajusta el ancho del panel de control
-
-    BorderPane root = new BorderPane();
-    root.setCenter(chessBoard);
-    root.setRight(controlPanel);
-
-    FXGL.getGameScene().addUINode(root);
-  }
-**/
-
+   * @Override protected void initGame() {
+   *
+   * <p>this.chessBoard = createChessBoard();
+   *
+   * <p>VBox controlPanel = createControlPanel(); controlPanel.setPrefWidth(200); // Ajusta el ancho
+   * del panel de control
+   *
+   * <p>BorderPane root = new BorderPane(); root.setCenter(chessBoard); root.setRight(controlPanel);
+   *
+   * <p>FXGL.getGameScene().addUINode(root); }
+   */
   private VBox createControlPanel() {
     VBox vbox = new VBox();
     vbox.setSpacing(10);

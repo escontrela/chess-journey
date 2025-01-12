@@ -24,11 +24,10 @@ public class PGNServiceImpl implements PGNService {
     return PGNServiceImpl.Holder.INSTANCE;
   }
 
-
-
   /* Example: c2 e5 : Ne5  */
   @Override
-  public String toAlgebraic(Pos from, Pos to, ChessBoard board, ChessRules chessRules, PieceType promoteTo) {
+  public String toAlgebraic(
+      Pos from, Pos to, ChessBoard board, ChessRules chessRules, PieceType promoteTo) {
 
     PiecePosition movingPiece = board.getPiece(from);
     Optional<PiecePosition> capturedPiece = board.isThereAnyPiece(to);
@@ -83,7 +82,8 @@ public class PGNServiceImpl implements PGNService {
       moveNotation.append(toPGNLetter(movingPiece.getPiece().getType()));
 
       // Determiner if we should to disambiguate
-      String disambiguation = getDisambiguation(movingPiece.getPiece(), from, to, board, chessRules);
+      String disambiguation =
+          getDisambiguation(movingPiece.getPiece(), from, to, board, chessRules);
       moveNotation.append(disambiguation);
 
       // Si es una captura
@@ -98,11 +98,14 @@ public class PGNServiceImpl implements PGNService {
     return moveNotation.toString();
   }
 
-  private String getDisambiguation(Piece piece, Pos from, Pos to,ChessBoard board, ChessRules rules) {
+  private String getDisambiguation(
+      Piece piece, Pos from, Pos to, ChessBoard board, ChessRules rules) {
 
-    List<Pos> similarPiecePositions = board.getAllPiecePositionsOfType(piece.getType(), piece.getColor());
+    List<Pos> similarPiecePositions =
+        board.getAllPiecePositionsOfType(piece.getType(), piece.getColor());
 
-    List<Pos> ambiguousMoves = similarPiecePositions.stream()
+    List<Pos> ambiguousMoves =
+        similarPiecePositions.stream()
             .filter(pos -> !pos.equals(from) && rules.isValidMove(pos, to, board.getFen()))
             .collect(Collectors.toList());
 
@@ -130,18 +133,19 @@ public class PGNServiceImpl implements PGNService {
 
   private boolean isEnPassantMove(Pos from, Pos to, Piece piece, ChessBoard board) {
 
-
     if (piece.is(PieceType.PAWN)) {
       // Verificar si el peón está intentando capturar al paso
       Optional<PiecePosition> capturedPiece = board.isThereAnyPiece(to);
       if (capturedPiece.isEmpty()) {
         // El destino está vacío, comprobar si es una captura al paso
         // Posición de destino debería estar en la fila correcta para captura al paso
-        if (Math.abs(from.getCol().ordinal() - to.getCol().ordinal()) == 1 &&
-                Math.abs(from.getRow().getValue() - to.getRow().getValue()) == 1) {
+        if (Math.abs(from.getCol().ordinal() - to.getCol().ordinal()) == 1
+            && Math.abs(from.getRow().getValue() - to.getRow().getValue()) == 1) {
           // Validar si es un movimiento válido según las reglas del en passant
-          // Por ejemplo, verificar si el peón oponente avanzó dos filas y está en la posición correcta.
-          return board.isEnPassantTarget(to); // Método que debes tener para determinar si es un en passant
+          // Por ejemplo, verificar si el peón oponente avanzó dos filas y está en la posición
+          // correcta.
+          return board.isEnPassantTarget(
+              to); // Método que debes tener para determinar si es un en passant
         }
       }
     }
@@ -222,9 +226,6 @@ public class PGNServiceImpl implements PGNService {
 
   private boolean isPromotionMove(Pos to, Piece piece) {
     // Verificar si el movimiento es una promoción de peón
-    return piece.is(PieceType.PAWN) &&
-            (to.getRow() == Row.ONE || to.getRow() == Row.EIGHT);
+    return piece.is(PieceType.PAWN) && (to.getRow() == Row.ONE || to.getRow() == Row.EIGHT);
   }
-
-
 }

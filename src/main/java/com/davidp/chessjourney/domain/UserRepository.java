@@ -4,11 +4,9 @@ import java.util.List;
 
 public interface UserRepository {
 
-    List<User> getAll();
+  List<User> getAll();
 
-    User getUserById(long id);
+  User getUserById(long id);
 
-    boolean update(User user);
-
-
+  boolean update(User user);
 }

@@ -1,90 +1,136 @@
 package com.davidp.chessjourney.application.factories;
 
-import com.davidp.chessjourney.application.ui.settings.InputData;
-import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
-import com.davidp.chessjourney.application.ui.settings.SettingsViewData;
+import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
+import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
+import java.io.IOException;
+import java.net.URL;
 import javafx.fxml.FXMLLoader;
-
+import javafx.scene.Parent;
 import javafx.scene.layout.Pane;
 
-import java.io.IOException;
-
-
+/**
+ * This class is responsible for creating the screens that will be added to the main panel on the
+ * main STAGE.
+ */
 public class ScreenFactory {
 
-    public enum Screens {
-        SETTINGS,
-        BOARD
+  /** This is the set of screen that can be added to the main panel on the main STAGE. */
+  public enum Screens {
+    SETTINGS("/com/davidp/chessjourney/setting-view.fxml"),
+    BOARD("/com/davidp/chessjourney/board-view.fxml");
+
+    private final String resourcePath;
+
+    Screens(final String resourcePath) {
+
+      this.resourcePath = resourcePath;
     }
 
-    private static volatile ScreenFactory instance;
+    public String resourceName() {
 
-    private ScreenFactory() {
-        // Constructor privado para evitar instancias
+      return this.resourcePath;
     }
+  }
 
-    public static ScreenFactory getInstance() {
+  private static volatile ScreenFactory instance;
 
+  private ScreenFactory() {}
+
+  public static ScreenFactory getInstance() {
+
+    if (instance == null) {
+      synchronized (ScreenFactory.class) {
         if (instance == null) {
-            synchronized (ScreenFactory.class) {
-
-                if (instance == null) {
-                    instance = new ScreenFactory();
-                }
-            }
+          instance = new ScreenFactory();
         }
-        return instance;
+      }
+    }
+    return instance;
+  }
+
+  /**
+   * Carga la pantalla solicitada (FXML) y devuelve un ScreenPanel que contiene el root + controller
+   * + datos (opcional).
+   */
+  public <C, D> ScreenPanel<C, D> createScreen(Screens screen, InputScreenData inputScreenData)
+      throws IOException {
+    switch (screen) {
+      case SETTINGS:
+        return (ScreenPanel<C, D>)
+            createSettingsScreen((SettingsViewInputScreenData) inputScreenData);
+
+      case BOARD:
+        throw new RuntimeException("Not implemented yet!.");
+
+      default:
+        throw new IllegalArgumentException("Screen not supported: " + screen);
+    }
+  }
+
+  protected ScreenPanel<SettingsViewController, SettingsViewInputScreenData> createSettingsScreen(
+      SettingsViewInputScreenData inputData) throws IOException {
+
+    FxmlBundle<SettingsViewController> objectFxmlBundle = loadFxml(Screens.SETTINGS.resourceName());
+    SettingsViewController controller = objectFxmlBundle.getController();
+    Pane root = (Pane) objectFxmlBundle.getRoot();
+
+    controller.setSettingsViewData(inputData);
+    controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
+    controller.setSaveUserUseCase(UseCaseFactory.createSaveUserUseCase());
+
+    root.setLayoutX(inputData.getLayoutX());
+    root.setLayoutY(inputData.getLayoutY());
+    controller.refreshUserInfo();
+
+    return new ScreenPanel<>(root, controller);
+  }
+
+  /**
+   * Carga un archivo FXML y devuelve un objeto FxmlBundle que contiene el controlador y el nodo
+   * raíz.
+   *
+   * @param fxmlPath
+   * @return
+   * @param <T>
+   */
+  protected static <T> FxmlBundle<T> loadFxml(String fxmlPath) {
+    try {
+
+      URL resource = ScreenFactory.class.getResource(fxmlPath);
+      FXMLLoader loader = new FXMLLoader(resource);
+      Parent root = loader.load();
+
+      @SuppressWarnings("unchecked")
+      T controller = loader.getController();
+
+      return new FxmlBundle<>(controller, root);
+
+    } catch (IOException e) {
+      throw new RuntimeException("No se pudo cargar el FXML: " + fxmlPath, e);
+    }
+  }
+
+  public static class FxmlBundle<T> {
+
+    private final T controller;
+    private final Parent root;
+
+    public FxmlBundle(T controller, Parent root) {
+
+      this.controller = controller;
+      this.root = root;
     }
 
-    /**
-     * Carga la pantalla solicitada (FXML) y devuelve un ScreenPanel
-     * que contiene el root + controller + datos (opcional).
-     */
-    public <C,D> ScreenPanel<C, D> createScreen(Screens screen, InputData inputData) throws IOException {
-        switch (screen) {
-            case SETTINGS:
-                return (ScreenPanel<C, D>) createSettingsScreen((SettingsViewData) inputData);
+    public T getController() {
 
-            case BOARD:
-                // Aún no implementado
-                throw new RuntimeException("Not implemented yet!.");
-
-            default:
-                throw new IllegalArgumentException("Screen not supported: " + screen);
-        }
+      return controller;
     }
 
+    public Parent getRoot() {
 
-
-    // Método privado para encapsular la creación de la pantalla SETTINGS
-    private ScreenPanel<SettingsViewController, SettingsViewData> createSettingsScreen(SettingsViewData inputData) throws IOException {
-
-        //TODO al controler habrá que pasarle varias cosas:
-            // - El objeto de entrada Settings View Data con los parémtros de entrada.
-            // - La posición en la que queremos mostrar la pantalla
-            // - Los casos de uso instanciados para que su contoller resuelva los casos de uso de la aplicación
-
-
-
-        // Asume que setting-view.fxml está en el mismo package que esta clase
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/com/davidp/chessjourney/setting-view.fxml"));
-        Pane root = loader.load();
-        SettingsViewController controller = loader.getController();
-
-        // Creamos el ScreenPanel con controlador + root
-        ScreenPanel<SettingsViewController, SettingsViewData> screenPanel = new ScreenPanel<>(root, controller);
-
-        controller.setSettingsViewData(inputData);
-        controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
-        controller.setSaveUserUseCase(UseCaseFactory.createSaveUserUseCase());
-        root.setLayoutX(inputData.getLayoutX());
-        root.setLayoutY(inputData.getLayoutY());
-        controller.refreshUserInfo();
-
-        return screenPanel;
+      return root;
     }
-
-
-
+  }
 }

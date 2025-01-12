@@ -15,92 +15,83 @@ import javafx.scene.layout.Pane;
 
 public class SettingsViewController {
 
-    @FXML
-    private Button btClose;
+  @FXML private Button btClose;
 
+  @FXML private Button btOption1;
 
-    @FXML
-    private Button btOption1;
+  @FXML private Button btSave;
 
-    @FXML
-    private Button btSave;
+  @FXML private ImageView imgClose;
 
-    @FXML
-    private ImageView imgClose;
+  @FXML private TextField inEmail;
 
-    @FXML
-    private TextField inEmail;
+  @FXML private TextField inLastName;
 
-    @FXML
-    private TextField inLastName;
+  @FXML private TextField inName;
 
-    @FXML
-    private TextField inName;
+  @FXML private Label lbUser;
 
-    @FXML
-    private Label lbUser;
+  @FXML private Pane pnlTitleBar1111;
 
-    @FXML
-    private Pane pnlTitleBar1111;
+  @FXML private Pane pnlTitleBar11111;
 
-    @FXML
-    private Pane pnlTitleBar11111;
+  @FXML private Pane pnlTitleBar11112;
 
-    @FXML
-    private Pane pnlTitleBar11112;
+  @FXML private Pane rootPane;
 
-    @FXML
-    private Pane rootPane;
+  private GetUserByIdUseCase getUserByIdUseCase;
+  private SaveUserUseCase saveUserUseCase;
+  private SettingsViewInputScreenData settingsViewData;
 
-    private GetUserByIdUseCase getUserByIdUseCase;
-    private SaveUserUseCase saveUserUseCase;
-    private SettingsViewData settingsViewData;
+  public void setGetUserByIdUseCase(GetUserByIdUseCase getUserByIdUseCase) {
 
-    public void setGetUserByIdUseCase(GetUserByIdUseCase getUserByIdUseCase) {
-
-        this.getUserByIdUseCase = getUserByIdUseCase;
-    }
-
-    public void setSaveUserUseCase(SaveUserUseCase saveUserUseCase) {
-
-        this.saveUserUseCase = saveUserUseCase;
-    }
-
-    public void setSettingsViewData(SettingsViewData settingsViewData) {
-
-        this.settingsViewData = settingsViewData;
-    }
-
-    public void refreshUserInfo() {
-
-        User user = getUserByIdUseCase.execute(settingsViewData.getUserId());
-        inName.setText(user.getFirstname());
-        inLastName.setText(user.getLastname());
-        inEmail.setText(user.getEmail());
-    }
-
-  public void initialize() {
-    // Puedes agregar lógica inicial aquí si es necesario
+    this.getUserByIdUseCase = getUserByIdUseCase;
   }
 
-    @FXML
-    void buttonAction(ActionEvent event) {
+  public void setSaveUserUseCase(SaveUserUseCase saveUserUseCase) {
 
-         User user = buildUserFromForm();
+    this.saveUserUseCase = saveUserUseCase;
+  }
 
-        saveUserUseCase.execute(user);
+  public void setSettingsViewData(SettingsViewInputScreenData settingsViewData) {
 
-        // 3) Publicar el evento en el bus
-        GlobalEventBus.get().post(new UserSavedAppEvent(settingsViewData.getUserId()));
-        rootPane.setVisible(false);
+    this.settingsViewData = settingsViewData;
+  }
+
+  public void refreshUserInfo() {
+
+    User user = getUserByIdUseCase.execute(settingsViewData.getUserId());
+    inName.setText(user.getFirstname());
+    inLastName.setText(user.getLastname());
+    inEmail.setText(user.getEmail());
+    lbUser.setText(user.getInitials());
+  }
+
+  public void initialize() {}
+
+  @FXML
+  void buttonAction(ActionEvent event) {
+
+    if (event.getSource() == btSave) {
+
+      User user = buildUserFromForm();
+      saveUserUseCase.execute(user);
+      GlobalEventBus.get().post(new UserSavedAppEvent(settingsViewData.getUserId()));
     }
 
-    private User buildUserFromForm() {
+    rootPane.setVisible(false);
+  }
 
-        //TODO validate user data..
-        //long id, String email, String firstname, String lastname
-        User user = new User(settingsViewData.getUserId(),inEmail.getText(),inName.getText(),inLastName.getText());
-        return user;
-    }
+  private User buildUserFromForm() {
 
+    // TODO validate user data..
+    // long id, String email, String firstname, String lastname
+    User user =
+        new User(
+            settingsViewData.getUserId(),
+            inEmail.getText(),
+            inName.getText(),
+            inLastName.getText());
+    return user;
+  }
 }

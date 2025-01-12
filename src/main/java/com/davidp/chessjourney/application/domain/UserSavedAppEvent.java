@@ -1,16 +1,15 @@
 package com.davidp.chessjourney.application.domain;
 
-
 public class UserSavedAppEvent {
 
-    private final long userId;
+  private final long userId;
 
-    public UserSavedAppEvent(final long userId) {
+  public UserSavedAppEvent(final long userId) {
 
-        this.userId = userId;
-    }
+    this.userId = userId;
+  }
 
-    public long getUserId() {
-        return userId;
-    }
+  public long getUserId() {
+    return userId;
+  }
 }
