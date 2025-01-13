@@ -6,7 +6,6 @@ import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
-import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.domain.common.Fen;
 import com.davidp.chessjourney.domain.common.GameState;
 import com.davidp.chessjourney.domain.common.Piece;

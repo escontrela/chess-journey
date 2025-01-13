@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.ui.ScreenPanel;
+import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
@@ -19,6 +20,7 @@ public class ScreenFactory {
   /** This is the set of screen that can be added to the main panel on the main STAGE. */
   public enum Screens {
     SETTINGS("/com/davidp/chessjourney/setting-view.fxml"),
+    MENU("/com/davidp/chessjourney/menu-view.fxml"),
     BOARD("/com/davidp/chessjourney/board-view.fxml");
 
     private final String resourcePath;
@@ -60,7 +62,8 @@ public class ScreenFactory {
       case SETTINGS:
         return (ScreenPanel<C, D>)
             createSettingsScreen((SettingsViewInputScreenData) inputScreenData);
-
+      case MENU:
+        return (ScreenPanel<C, D>) createMenuScreen((InputScreenData) inputScreenData);
       case BOARD:
         throw new RuntimeException("Not implemented yet!.");
 
@@ -84,6 +87,18 @@ public class ScreenFactory {
     root.setLayoutY(inputData.getLayoutY());
     controller.refreshUserInfo();
 
+    return new ScreenPanel<>(root, controller);
+  }
+
+  protected ScreenPanel<MenuViewController, InputScreenData> createMenuScreen(
+      InputScreenData inputData) throws IOException {
+
+    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
+    MenuViewController controller = objectFxmlBundle.getController();
+
+    Pane root = (Pane) objectFxmlBundle.getRoot();
+    root.setLayoutX(inputData.getLayoutX());
+    root.setLayoutY(inputData.getLayoutY());
     return new ScreenPanel<>(root, controller);
   }
 

@@ -7,83 +7,50 @@ import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
+import com.davidp.chessjourney.application.ui.menu.MenuViewController;
+import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.domain.User;
 import com.google.common.eventbus.Subscribe;
+import java.util.HashMap;
+import java.util.Map;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
 public class MainSceneController {
 
-  @FXML private Pane pnlTitleBar;
-
-  @FXML private Pane pnlMessage;
-
-  @FXML private Pane mainPane;
-
-  @FXML private Pane boardPane;
-
-  @FXML private Button btAdd;
-
   @FXML private Button btClose;
-
-  @FXML private Button btSettings;
-
-  @FXML private Button btMaximize;
-
-  @FXML private Button btMinimize;
-
-  @FXML private Button btTopOption1;
-
-  @FXML private Button btTopOption2;
-
-  @FXML private Button btTopOption3;
-
-  @FXML private Button exit1131;
-
-  @FXML private Button exit11311;
-
-  @FXML private ImageView imgAvatarView;
-
-  @FXML private ImageView imgClose;
-
-  @FXML private ImageView imgLogo;
-
-  @FXML private ImageView imgMaximize;
-
-  @FXML private ImageView imgMinimize;
-
-  @FXML private ImageView imgMinimize1;
-
-  @FXML private TextField txtInSearch;
-
-  @FXML private Text txtLogonId;
-
-  @FXML private Text txtLogonTitle;
-
-  @FXML private ImageView avatarView;
-
-  @FXML private Label lbUserInitials;
 
   @FXML private Button btLeft;
 
   @FXML private Button btRight;
 
+  @FXML private Button btSettings;
+
+  @FXML private Label lbUserInitials;
+
+  @FXML private Pane mainPane;
+
+  @FXML private Pane pnlMessage;
+
+  @FXML private Pane pnlTitleBar;
+
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
+
+  // Mapa para cachear pantallas (según tu enum Screens)
+  private final Map<ScreenFactory.Screens, ScreenPanel<?, ?>> screenCache = new HashMap<>();
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -93,18 +60,6 @@ public class MainSceneController {
       hide();
     }
 
-    if (event.getSource() == btMaximize) {
-
-      maximize();
-    }
-
-    if (event.getSource() == btMinimize) {
-
-      minimize();
-    }
-
-    if (event.getSource() == btAdd) {}
-
     if (event.getSource() == btLeft || event.getSource() == btRight) {
 
       showInfoPanel(pnlMessage);
@@ -113,21 +68,89 @@ public class MainSceneController {
 
       try {
 
+        ScreenPanel<SettingsViewController, SettingsViewInputScreenData> settingsScreenPanel;
+
         SettingsViewInputScreenData inputData =
             new SettingsViewInputScreenData(
                 AppProperties.getInstance().getActiveUserId(), 250, 250);
-        ScreenPanel<SettingsViewController, SettingsViewInputScreenData> settingsScreenPanel =
-            ScreenFactory.getInstance().createScreen(ScreenFactory.Screens.SETTINGS, inputData);
 
-        Pane settingsPane = settingsScreenPanel.getRoot();
-        mainPane.getChildren().add(settingsPane);
-        settingsPane.setLayoutX(250);
-        settingsPane.setLayoutY(200);
+
+        if (!screenCache.containsKey(ScreenFactory.Screens.SETTINGS)) {
+          settingsScreenPanel =
+              ScreenFactory.getInstance().createScreen(ScreenFactory.Screens.SETTINGS, inputData);
+          screenCache.put(ScreenFactory.Screens.SETTINGS, settingsScreenPanel);
+          mainPane.getChildren().add(settingsScreenPanel.getRoot());
+
+        } else {
+
+          @SuppressWarnings("unchecked")
+          ScreenPanel<SettingsViewController, SettingsViewInputScreenData> temp =
+              (ScreenPanel<SettingsViewController, SettingsViewInputScreenData>)
+                  screenCache.get(ScreenFactory.Screens.SETTINGS);
+
+          settingsScreenPanel = temp;
+
+        }
+
+
+
+        settingsScreenPanel.setData(inputData);
+        settingsScreenPanel.getController().setSettingsViewData(inputData);
+        settingsScreenPanel.getRoot().setVisible(true);
+        settingsScreenPanel.getRoot().toFront();
 
       } catch (Exception ex) {
         System.out.println("Error al cargar el FXML del tablero: " + ex.getMessage());
         ex.printStackTrace();
       }
+    }
+  }
+
+  @FXML
+  void handleButtonClick(MouseEvent event) {
+
+
+    try {
+      boolean shouldHide = false;
+
+      InputScreenData inputData = new InputScreenData(20, 465);
+
+      // Revisa si ya existe la pantalla en el mapa
+      ScreenPanel<MenuViewController, InputScreenData> menuScreenPanel;
+
+      if (!screenCache.containsKey(ScreenFactory.Screens.MENU)) {
+
+        menuScreenPanel =
+            ScreenFactory.getInstance().createScreen(ScreenFactory.Screens.MENU, inputData);
+        screenCache.put(ScreenFactory.Screens.MENU, menuScreenPanel);
+        mainPane.getChildren().add(menuScreenPanel.getRoot());
+
+      } else {
+
+        @SuppressWarnings("unchecked")
+        ScreenPanel<MenuViewController, InputScreenData> temp =
+            (ScreenPanel<MenuViewController, InputScreenData>)
+                screenCache.get(ScreenFactory.Screens.MENU);
+        menuScreenPanel = temp;
+
+        shouldHide = menuScreenPanel.getRoot().isVisible();
+      }
+
+
+      if (shouldHide){
+
+        menuScreenPanel.getRoot().setVisible(false);
+        return;
+      }
+
+      menuScreenPanel.setData(inputData);
+      menuScreenPanel.getRoot().setVisible(true);
+      menuScreenPanel.getRoot().toFront();
+
+    } catch (Exception ex) {
+
+      System.out.println("Error al cargar el FXML: " + ex.getMessage());
+      ex.printStackTrace();
     }
   }
 
@@ -224,9 +247,5 @@ public class MainSceneController {
   public void minimize() {
 
     stage.setIconified(true);
-  }
-
-  public Pane getBoardPane() {
-    return boardPane;
   }
 }

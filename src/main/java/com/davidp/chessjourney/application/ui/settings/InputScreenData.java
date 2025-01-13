@@ -5,7 +5,7 @@ public class InputScreenData {
   protected double layoutX;
   protected double layoutY;
 
-  InputScreenData(double layoutX, double layoutY) {
+  public InputScreenData(double layoutX, double layoutY) {
 
     this.layoutX = layoutX;
     this.layoutY = layoutY;

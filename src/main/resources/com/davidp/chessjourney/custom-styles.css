@@ -135,6 +135,15 @@
     -fx-background-radius: 20;
 }
 
+.panel-menu{
+    -fx-background-color: #161620;
+    -fx-border-color: #161620;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}
+
+
+
 .panel-black{
     -fx-background-color: #181823;
     -fx-border-color: #181823;
@@ -265,7 +274,7 @@
 
 
 
-combo-box .list-cell .text-input
+combo-box .list-cell
 {
     -fx-background-color:  #3c3f41;
     -fx-background-insets: 0, 1;
@@ -331,9 +340,6 @@ combo-box-popup .list-view
 }
 
 
-
-
-
 .button2{
     -fx-text-fill: #006464;
    /* -fx-background-color: #DFB951;*/
@@ -341,9 +347,6 @@ combo-box-popup .list-view
     -fx-background-radius: 20;
     -fx-padding: 5;
 }
-
-
-
 
 .button3:hover {
        -fx-transform: 0.3s;
@@ -417,10 +420,6 @@ combo-box-popup .list-view
 	-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.3), 10, 0, 3, 3)
 }
 /** End: Borderless Button **/
-
-
-
-
 
 .chart {
  
@@ -509,56 +508,3 @@ combo-box-popup .list-view
 	-fx-background-radius: 0em;
 
 }
-
-/*
-#3e3d3d
--fx-font-family: Tahoma;
-    -fx-tick-length: 20;
-    -fx-minor-tick-length: 10;
-  
-   -fx-border-width: 1,1;
-   -fx-border-style: solid, segments(1, 2);
-   -fx-border-insets: 1 1 1 1, 0;
-   -fx-border-width: 1, 1;
-   -fx-border-radius: 0, 0;
-	 
-https://stackoverflow.com/questions/36566197/javafx-button-with-transparent-background
-  -fx-font-family:"Segoe UI", Helvetica, Arial, sans-serif;
-    -fx-font-size: 1em; 
-    -fx-text-fill: #828282;
-    
-
-
-
-.button:pressed {
-    -fx-background-color: black;
-    -fx-text-fill: white;
-}
-*/
-
-
-
-/*
-https://docs.oracle.com/javase/8/javafx/api/javafx/scene/doc-files/cssref.html#combobox
-  
-.spinner .increment-arrow-button:hover,
-.spinner .decrement-arrow-button:hover {
-    -fx-body-color: ladder(#444, yellow 0%, red 100%);
-}
-
-.spinner .increment-arrow-button:hover:pressed,
-.spinner .decrement-arrow-button:hover:pressed,
-.spinner .increment-arrow-button:pressed,
-.spinner .decrement-arrow-button:pressed {
-    -fx-body-color: ladder(#AAA, yellow 0%, red 100%);
-}
-
-
-.button2{
-    -fx-text-fill: #006464;
-    -fx-background-color: #DFB951;
-    -fx-border-radius: 20;
-    -fx-background-radius: 20;
-    -fx-padding: 5;
-}
-*/
