@@ -65,15 +65,6 @@ public class ChessJourneyApp extends GameApplication {
       MainSceneController mainController = loader.getController();
       mainController.setStage(primaryStage);
 
-      // Cargar el FXML del tablero
-      FXMLLoader boardLoader = new FXMLLoader(getClass().getResource("board-view.fxml"));
-
-      Pane boardRoot = boardLoader.load();
-      BoardViewController boardController = boardLoader.getController();
-
-      // Añadir el tablero a la zona izquierda
-      //  mainController.getBoardPane().getChildren().add(boardRoot);
-
       Scene scene = new Scene(root);
       getGameScene().addUINode(scene.getRoot());
 
