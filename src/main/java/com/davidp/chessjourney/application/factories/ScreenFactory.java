@@ -1,5 +1,6 @@
 package com.davidp.chessjourney.application.factories;
 
+import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
@@ -72,6 +73,21 @@ public class ScreenFactory {
     }
   }
 
+  public ScreenController createScreen2(Screens screen)
+          throws IOException {
+    switch (screen) {
+        case MENU:
+
+        return getMenuScreen();
+      case BOARD:
+
+        throw new RuntimeException("Not implemented yet!.");
+
+        default:
+        throw new IllegalArgumentException("Screen not supported: " + screen);
+    }
+  }
+
   protected ScreenPanel<SettingsViewController, SettingsViewInputScreenData> createSettingsScreen(
       SettingsViewInputScreenData inputData) throws IOException {
 
@@ -88,6 +104,12 @@ public class ScreenFactory {
     controller.refreshUserInfo();
 
     return new ScreenPanel<>(root, controller);
+  }
+
+  protected ScreenController getMenuScreen() {
+
+      FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
+      return objectFxmlBundle.getController();
   }
 
   protected ScreenPanel<MenuViewController, InputScreenData> createMenuScreen(

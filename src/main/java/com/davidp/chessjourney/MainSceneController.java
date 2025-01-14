@@ -6,6 +6,7 @@ import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
+import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
@@ -14,6 +15,8 @@ import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenDa
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.domain.User;
 import com.google.common.eventbus.Subscribe;
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 import javafx.application.Platform;
@@ -51,6 +54,8 @@ public class MainSceneController {
 
   // Mapa para cachear pantallas (según tu enum Screens)
   private final Map<ScreenFactory.Screens, ScreenPanel<?, ?>> screenCache = new HashMap<>();
+
+  private  ScreenController screenMenuController = null;
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -107,7 +112,23 @@ public class MainSceneController {
   }
 
   @FXML
-  void handleButtonClick(MouseEvent event) {
+  public void handleButtonClick(MouseEvent event) {
+
+    if (screenMenuController != null) {
+
+      if (screenMenuController.isVisible()){
+
+        screenMenuController.hide();
+        return;
+      }
+
+      screenMenuController.show();
+    }
+
+  }
+
+
+  void handleButtonClickdd(MouseEvent event) {
 
 
     try {
@@ -198,6 +219,21 @@ public class MainSceneController {
         });
 
     reloadUserInitials(AppProperties.getInstance().getActiveUserId());
+
+    //Create the menu
+
+
+      try {
+
+        screenMenuController = ScreenFactory.getInstance().createScreen2(ScreenFactory.Screens.MENU);
+        screenMenuController.setData( new InputScreenData(20, 465));
+        screenMenuController.hide();
+        mainPane.getChildren().add(screenMenuController.getRootPane());
+
+      } catch (IOException e) {
+          throw new RuntimeException(e);
+      }
+
   }
 
   private void reloadUserInitials(long userId) {

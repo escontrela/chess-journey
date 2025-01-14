@@ -20,4 +20,9 @@ public class InputScreenData {
 
     return layoutY;
   }
+
+  public boolean isLayoutInfoValid() {
+
+    return layoutX != 0 && layoutY != 0;
+  }
 }
