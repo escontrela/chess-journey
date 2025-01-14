@@ -181,7 +181,7 @@
             <Font name="Alatsi Regular" size="18.0" />
          </font>
          <graphic>
-            <ImageView fx:id="imgMinimize1222" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+            <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                <image>
                   <Image url="@img-gray/close_18dp_gray.png" />
                </image>
@@ -193,7 +193,7 @@
             <Font name="Alatsi Regular" size="18.0" />
          </font>
          <graphic>
-            <ImageView fx:id="imgMinimize12221" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+            <ImageView fx:id="imgSettings" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                <image>
                   <Image url="@img-gray/settings_18dp_gray.png" />
                </image>

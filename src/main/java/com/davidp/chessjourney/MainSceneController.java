@@ -7,15 +7,14 @@ import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
-import com.davidp.chessjourney.application.ui.ScreenPanel;
-import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
-import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
+import com.davidp.chessjourney.application.factories.ScreenFactory.Screens;
 import com.davidp.chessjourney.domain.User;
 import com.google.common.eventbus.Subscribe;
 
+import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,11 +24,19 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
+
+/**
+ * This class is responsible for managing the main scene of the application,
+ * the main scene controls all the features and windows dynamics of the application
+ * It is responsible for managing the main menu, the settings menu, the board, and the game.
+ */
 public class MainSceneController {
 
   @FXML private Button btClose;
@@ -48,132 +55,110 @@ public class MainSceneController {
 
   @FXML private Pane pnlTitleBar;
 
+  @FXML
+  private StackPane pnlMenu;
+
+  @FXML
+  private ImageView imgClose;
+
+  @FXML
+  private ImageView imgSettings;
+
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
 
-  // Mapa para cachear pantallas (según tu enum Screens)
-  private final Map<ScreenFactory.Screens, ScreenPanel<?, ?>> screenCache = new HashMap<>();
+
+  // This map is used to cache the screens that are created.
+  private final Map<Screens,ScreenController > screenManager = new HashMap<>();
+  private static final Point MENU_POSITION = new Point(20, 465);
+  private static final Point SETTINGS_POSITION = new Point(250, 250);
 
   private  ScreenController screenMenuController = null;
 
   @FXML
   void buttonAction(ActionEvent event) {
 
-    if (event.getSource() == btClose) {
+    if (isButtonCloseClicked(event)) {
 
       hide();
+      return;
+    }
+
+    if (isButtonSettingsClicked(event)) {
+
+      manageSettingsMenuVisibility();
+      return;
     }
 
     if (event.getSource() == btLeft || event.getSource() == btRight) {
 
       showInfoPanel(pnlMessage);
     }
-    if (event.getSource() == btSettings) {
 
-      try {
-
-        ScreenPanel<SettingsViewController, SettingsViewInputScreenData> settingsScreenPanel;
-
-        SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                AppProperties.getInstance().getActiveUserId(), 250, 250);
-
-
-        if (!screenCache.containsKey(ScreenFactory.Screens.SETTINGS)) {
-          settingsScreenPanel =
-              ScreenFactory.getInstance().createScreen(ScreenFactory.Screens.SETTINGS, inputData);
-          screenCache.put(ScreenFactory.Screens.SETTINGS, settingsScreenPanel);
-          mainPane.getChildren().add(settingsScreenPanel.getRoot());
-
-        } else {
-
-          @SuppressWarnings("unchecked")
-          ScreenPanel<SettingsViewController, SettingsViewInputScreenData> temp =
-              (ScreenPanel<SettingsViewController, SettingsViewInputScreenData>)
-                  screenCache.get(ScreenFactory.Screens.SETTINGS);
-
-          settingsScreenPanel = temp;
-
-        }
-
-
-
-        settingsScreenPanel.setData(inputData);
-        settingsScreenPanel.getController().setSettingsViewData(inputData);
-        settingsScreenPanel.getRoot().setVisible(true);
-        settingsScreenPanel.getRoot().toFront();
-
-      } catch (Exception ex) {
-        System.out.println("Error al cargar el FXML del tablero: " + ex.getMessage());
-        ex.printStackTrace();
-      }
-    }
   }
+
+
 
   @FXML
   public void handleButtonClick(MouseEvent event) {
 
-    if (screenMenuController != null) {
+    if (isContextMenuClicked(event)){
 
-      if (screenMenuController.isVisible()){
-
-        screenMenuController.hide();
+        manageContextMenuVisibility();
         return;
-      }
-
-      screenMenuController.show();
     }
+  }
+
+  /**
+   * This method is called when the user clicks on the logger user icon.
+   */
+  private void manageContextMenuVisibility() {
+
+    ScreenController contextMenuController = getScreen(Screens.MENU);
+
+    if (contextMenuController.isVisible() && !contextMenuController.isInitialized()) {
+      contextMenuController.hide();
+      return;
+    }
+
+    contextMenuController
+            .show(InputScreenData.fromPosition(MENU_POSITION));
+  }
+
+  private void manageSettingsMenuVisibility() {
+
+    ScreenController settingMenuController = getScreen(Screens.SETTINGS);
+    if (settingMenuController.isVisible() && !settingMenuController.isInitialized()) {
+
+      settingMenuController.hide();
+      return;
+    }
+
+    SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    AppProperties.getInstance().getActiveUserId(), SETTINGS_POSITION);
+
+    settingMenuController
+            .show(inputData);
+  }
+
+  protected boolean isContextMenuClicked(MouseEvent event) {
+
+      return event.getSource() == lbUserInitials || event.getSource() == pnlMenu;
+  }
+
+  private boolean isButtonCloseClicked(ActionEvent event) {
+
+    return event.getSource() == btClose  || event.getSource() == imgClose;
 
   }
 
+  private boolean isButtonSettingsClicked(ActionEvent event) {
 
-  void handleButtonClickdd(MouseEvent event) {
-
-
-    try {
-      boolean shouldHide = false;
-
-      InputScreenData inputData = new InputScreenData(20, 465);
-
-      // Revisa si ya existe la pantalla en el mapa
-      ScreenPanel<MenuViewController, InputScreenData> menuScreenPanel;
-
-      if (!screenCache.containsKey(ScreenFactory.Screens.MENU)) {
-
-        menuScreenPanel =
-            ScreenFactory.getInstance().createScreen(ScreenFactory.Screens.MENU, inputData);
-        screenCache.put(ScreenFactory.Screens.MENU, menuScreenPanel);
-        mainPane.getChildren().add(menuScreenPanel.getRoot());
-
-      } else {
-
-        @SuppressWarnings("unchecked")
-        ScreenPanel<MenuViewController, InputScreenData> temp =
-            (ScreenPanel<MenuViewController, InputScreenData>)
-                screenCache.get(ScreenFactory.Screens.MENU);
-        menuScreenPanel = temp;
-
-        shouldHide = menuScreenPanel.getRoot().isVisible();
-      }
-
-
-      if (shouldHide){
-
-        menuScreenPanel.getRoot().setVisible(false);
-        return;
-      }
-
-      menuScreenPanel.setData(inputData);
-      menuScreenPanel.getRoot().setVisible(true);
-      menuScreenPanel.getRoot().toFront();
-
-    } catch (Exception ex) {
-
-      System.out.println("Error al cargar el FXML: " + ex.getMessage());
-      ex.printStackTrace();
-    }
+    return event.getSource() == btSettings || event.getSource() == imgSettings;
   }
+
 
   private void showInfoPanel(Pane panel) {
 
@@ -219,21 +204,27 @@ public class MainSceneController {
         });
 
     reloadUserInitials(AppProperties.getInstance().getActiveUserId());
+  }
 
-    //Create the menu
+  /**
+   * Get or initialize the screen controller for the given screen
+   * @param screen Screen to get
+   * @return ScreenController for the given screen
+   */
+  protected ScreenController getScreen(Screens screen) {
 
+     return screenManager.computeIfAbsent(screen,s-> {
 
-      try {
+          try {
 
-        screenMenuController = ScreenFactory.getInstance().createScreen2(ScreenFactory.Screens.MENU);
-        screenMenuController.setData( new InputScreenData(20, 465));
-        screenMenuController.hide();
-        mainPane.getChildren().add(screenMenuController.getRootPane());
+            var cachedScreen =  ScreenFactory.getInstance().createScreen(s);
+            mainPane.getChildren().add(cachedScreen.getRootPane());
+            return cachedScreen;
+          } catch (IOException e) {
 
-      } catch (IOException e) {
-          throw new RuntimeException(e);
-      }
-
+              throw new RuntimeException(e);
+          }
+      });
   }
 
   private void reloadUserInitials(long userId) {
@@ -285,3 +276,5 @@ public class MainSceneController {
     stage.setIconified(true);
   }
 }
+
+

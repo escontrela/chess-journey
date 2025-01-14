@@ -78,14 +78,14 @@ public class UserRepositoryImpl implements UserRepository {
 
   @Override
   public boolean update(User user) {
-    String sql = "UPDATE users SET email = ?, firstname = ?, lastname = ? WHERE id = ?";
+    String sql = "UPDATE users SET firstname = ?, lastname = ? WHERE id = ?";
 
     try (Connection conn = dataSource.getConnection();
         PreparedStatement ps = conn.prepareStatement(sql)) {
-      ps.setString(1, user.getEmail());
-      ps.setString(2, user.getFirstname());
-      ps.setString(3, user.getLastname());
-      ps.setLong(4, user.getId());
+
+      ps.setString(1, user.getFirstname());
+      ps.setString(2, user.getLastname());
+      ps.setLong(3, user.getId());
 
       int rowsAffected = ps.executeUpdate();
       // Si rowsAffected > 0, significa que al menos una fila fue actualizada
@@ -94,6 +94,7 @@ public class UserRepositoryImpl implements UserRepository {
     } catch (Exception e) {
       e.printStackTrace();
       // Manejar excepción según tus necesidades (log, rethrow, etc.)
+      //TODO fix IT!!!
       return false;
     }
   }
