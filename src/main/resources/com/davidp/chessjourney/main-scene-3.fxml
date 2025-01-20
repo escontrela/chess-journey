@@ -10,13 +10,8 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="mainPane" prefHeight="900.0" prefWidth="1290.0" style="-fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 2; -fx-background-radius: 1; -fx-border-color: #686b75; -fx-background-color: #191b2b; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-size: 1345 793; -fx-background-repeat: no-repeat; -fx-background-opacity: 0.3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.MainSceneController">
+<Pane fx:id="mainPane" prefHeight="900.0" prefWidth="1290.0" style="-fx-border-width: 1; -fx-border-insets: 1; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-color: #686b75; -fx-background-color: #191b2b; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-size: 1345 793; -fx-background-repeat: no-repeat; -fx-background-opacity: 0.3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.MainSceneController">
    <children>
-      <ImageView fitHeight="49.0" fitWidth="237.0" layoutX="511.0" layoutY="-3.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@logo/chess-journey-logo-small.png" />
-         </image>
-      </ImageView>
       <Text fill="#e55c45" layoutX="25.0" layoutY="150.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-red-big" text="Chessboard">
          <font>
             <Font name="Alatsi Regular" size="42.0" />
@@ -35,7 +30,6 @@
             </StackPane>
          </children>
       </StackPane>
-      <Pane fx:id="pnlTitleBar" layoutX="494.0" layoutY="16.0" opacity="0.21" prefHeight="17.0" prefWidth="240.0" style="-fx-background-color: #555467; -fx-border-color: #555467; -fx-background-radius: 40; -fx-border-radius: 40;" />
       <Text fill="#686b75" layoutX="243.0" layoutY="149.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-medium" text="for practice">
          <font>
             <Font name="Alatsi Regular" size="35.0" />
@@ -262,5 +256,10 @@
             </Button>
          </children>
       </Pane>
+      <ImageView fx:id="imgLogo" fitHeight="49.0" fitWidth="237.0" layoutX="511.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@logo/chess-journey-logo-small.png" />
+         </image>
+      </ImageView>
    </children>
 </Pane>

@@ -1,16 +1,35 @@
 package com.davidp.chessjourney.application.ui.menu;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.davidp.chessjourney.application.config.GlobalEventBus;
+import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
+import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import javafx.fxml.FXML;
+import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class MenuViewController implements ScreenController {
 
   @FXML private Pane rootPane;
+
+  @FXML
+  private ImageView imgSettings;
+
+  @FXML
+  private Pane pnlOptionAnalysisBoard;
+
+  @FXML
+  private Pane pnlOptionSettings;
+
   private ScreenController.ScreenStatus status;
+
+  @FXML
+  private Text txtSettings;
 
   public void initialize() {
 
@@ -92,4 +111,20 @@ public class MenuViewController implements ScreenController {
 
     return status == ScreenController.ScreenStatus.INITIALIZED;
   }
+
+
+  @FXML
+  void optionClicked(MouseEvent event) {
+
+    if (isSettingMenuClicked(event)) {
+
+      GlobalEventBus.get().post(new OpenSettingsFromMenuEvent());
+    }
+  }
+
+  protected boolean isSettingMenuClicked(MouseEvent event) {
+
+    return event.getSource() == pnlOptionSettings || event.getSource() == txtSettings;
+  }
+
 }

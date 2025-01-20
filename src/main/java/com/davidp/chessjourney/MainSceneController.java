@@ -3,6 +3,7 @@ package com.davidp.chessjourney;
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
+import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
@@ -53,8 +54,6 @@ public class MainSceneController {
 
   @FXML private Pane pnlMessage;
 
-  @FXML private Pane pnlTitleBar;
-
   @FXML
   private StackPane pnlMenu;
 
@@ -64,6 +63,10 @@ public class MainSceneController {
   @FXML
   private ImageView imgSettings;
 
+  @FXML
+  private ImageView imgLogo;
+
+
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
@@ -71,7 +74,7 @@ public class MainSceneController {
 
   // This map is used to cache the screens that are created.
   private final Map<Screens,ScreenController > screenManager = new HashMap<>();
-  private static final Point MENU_POSITION = new Point(20, 465);
+  private static final Point MENU_POSITION = new Point(20, 535);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
 
   private  ScreenController screenMenuController = null;
@@ -175,6 +178,13 @@ public class MainSceneController {
         });
   }
 
+  @Subscribe
+  public void onMenuSettingsClicked(OpenSettingsFromMenuEvent event){
+
+    manageContextMenuVisibility();
+    manageSettingsMenuVisibility();
+  }
+
   public MainSceneController() {
 
     GlobalEventBus.get().register(this);
@@ -184,26 +194,27 @@ public class MainSceneController {
   @FXML
   public void initialize() {
 
-    // Cuando se pulsa el ratón sobre titleBar:
-    pnlTitleBar.setOnMousePressed(
+    moveMainWindowsSetUp();
+    reloadUserInitials(AppProperties.getInstance().getActiveUserId());
+
+  }
+
+
+  private void moveMainWindowsSetUp() {
+    imgLogo.setOnMousePressed(
         event -> {
-          // Guardamos la posición del ratón relativa a la ventana
+
           xOffset = event.getSceneX();
           yOffset = event.getSceneY();
         });
 
-    // Cuando se arrastra el ratón sobre titleBar:
-    pnlTitleBar.setOnMouseDragged(
+    imgLogo.setOnMouseDragged(
         event -> {
-          // Obtenemos la ventana (Stage) actual a través del "scene"
           Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-          // Actualizamos la posición del Stage restando los offsets
           stage.setX(event.getScreenX() - xOffset);
           stage.setY(event.getScreenY() - yOffset);
         });
-
-    reloadUserInitials(AppProperties.getInstance().getActiveUserId());
   }
 
   /**
@@ -235,7 +246,7 @@ public class MainSceneController {
     lbUserInitials.setText(loggedUser.getInitials());
 
     FXGL.animationBuilder()
-        .duration(Duration.seconds(0.1))
+        .duration(Duration.seconds(0.5))
         .repeat(2)
         .autoReverse(true)
         .fadeOut(lbUserInitials)
