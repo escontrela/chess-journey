@@ -37,7 +37,7 @@
       <Line endX="171.5" layoutX="5.0" layoutY="99.0" stroke="#2a293a" />
       <Pane fx:id="pnlOptionAnalysisBoard" layoutY="53.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
-            <Text fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Analysis Board">
+            <Text fx:id="txtAnalysisBoard" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Analysis Board">
                <font>
                   <Font name="Alatsi Regular" size="16.0" />
                </font>

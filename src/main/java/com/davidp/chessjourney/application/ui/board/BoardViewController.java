@@ -1,4 +1,4 @@
-package com.davidp.chessjourney.application.ui.menu;
+package com.davidp.chessjourney.application.ui.board;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
@@ -7,39 +7,18 @@ import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import javafx.fxml.FXML;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
-public class MenuViewController implements ScreenController {
+public class BoardViewController implements ScreenController{
 
   @FXML private Pane rootPane;
-
-  @FXML
-  private ImageView imgSettings;
-
-  @FXML
-  private Pane pnlOptionAnalysisBoard;
-
-  @FXML
-  private Pane pnlOptionSettings;
-
   private ScreenController.ScreenStatus status;
 
-  @FXML
-  private Text txtSettings;
-
-  @FXML
-  private Text txtAnalysisBoard;
-
   public void initialize() {
-
     status = ScreenController.ScreenStatus.INITIALIZED;
   }
-
-
   @Override
   public void setData(InputScreenData inputData) {
 
@@ -101,7 +80,7 @@ public class MenuViewController implements ScreenController {
 
   @Override
   public Pane getRootPane() {
-      return rootPane;
+    return rootPane;
   }
 
   @Override
@@ -119,24 +98,9 @@ public class MenuViewController implements ScreenController {
   @FXML
   void optionClicked(MouseEvent event) {
 
-    if (isSettingMenuClicked(event)) {
 
-      GlobalEventBus.get().post(new OpenSettingsFromMenuEvent());
-    }
-    if (isAnalysisBoardClicked(event)) {
-
-      GlobalEventBus.get().post(new OpenAnalysisBoardEvent());
-    }
   }
 
-  private boolean isAnalysisBoardClicked(MouseEvent event) {
 
-    return event.getSource() == pnlOptionAnalysisBoard || event.getSource() == txtAnalysisBoard;
-  }
-
-  protected boolean isSettingMenuClicked(MouseEvent event) {
-
-    return event.getSource() == pnlOptionSettings || event.getSource() == txtSettings;
-  }
 
 }

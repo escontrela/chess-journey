@@ -3,6 +3,7 @@ package com.davidp.chessjourney;
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
+import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
@@ -76,8 +77,8 @@ public class MainSceneController {
   private final Map<Screens,ScreenController > screenManager = new HashMap<>();
   private static final Point MENU_POSITION = new Point(20, 535);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
+  private static final Point BOARD_POSITION = new Point(120, 40);
 
-  private  ScreenController screenMenuController = null;
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -185,6 +186,30 @@ public class MainSceneController {
     manageSettingsMenuVisibility();
   }
 
+  @Subscribe
+  public void onAnalysisBoardClicked(OpenAnalysisBoardEvent event) {
+
+    manageContextMenuVisibility();
+    manageAnalysisBoardVisibility();
+  }
+
+  private void manageAnalysisBoardVisibility() {
+
+    ScreenController boardController = getScreen(Screens.BOARD);
+    if (boardController.isVisible() && !boardController.isInitialized()) {
+
+      boardController.hide();
+      return;
+    }
+
+    SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    AppProperties.getInstance().getActiveUserId(), BOARD_POSITION);
+    //TODO SET THE POSITION OF THE BOARD
+    boardController
+            .show(inputData);
+  }
+
   public MainSceneController() {
 
     GlobalEventBus.get().register(this);
@@ -287,5 +312,3 @@ public class MainSceneController {
     stage.setIconified(true);
   }
 }
-
-

@@ -56,7 +56,7 @@ public class ScreenFactory {
   public ScreenController createScreen(Screens screen)
           throws IOException {
     switch (screen) {
-        case MENU:
+      case MENU:
 
         return getMenuScreen();
       case SETTINGS:
@@ -64,9 +64,8 @@ public class ScreenFactory {
         return getSettingsScreen();
       case BOARD:
 
-        throw new RuntimeException("Not implemented yet!.");
-
-        default:
+        return getBoardScreen();
+      default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
   }
@@ -86,6 +85,13 @@ public class ScreenFactory {
 
       FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
       return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getBoardScreen() {
+
+    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.BOARD.resourceName());
+    //TODO: set the use cases here
+    return objectFxmlBundle.getController();
   }
 
   protected ScreenPanel<MenuViewController, InputScreenData> createMenuScreen(
