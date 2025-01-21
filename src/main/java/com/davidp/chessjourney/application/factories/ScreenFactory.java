@@ -5,7 +5,6 @@ import com.davidp.chessjourney.application.ui.ScreenPanel;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
-import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import java.io.IOException;
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
@@ -53,32 +52,16 @@ public class ScreenFactory {
     return instance;
   }
 
-  /**
-   * Carga la pantalla solicitada (FXML) y devuelve un ScreenPanel que contiene el root + controller
-   * + datos (opcional).
-   */
-  public <C, D> ScreenPanel<C, D> createScreen(Screens screen, InputScreenData inputScreenData)
-      throws IOException {
-    switch (screen) {
-      case SETTINGS:
-        return (ScreenPanel<C, D>)
-            createSettingsScreen((SettingsViewInputScreenData) inputScreenData);
-      case MENU:
-        return (ScreenPanel<C, D>) createMenuScreen((InputScreenData) inputScreenData);
-      case BOARD:
-        throw new RuntimeException("Not implemented yet!.");
 
-      default:
-        throw new IllegalArgumentException("Screen not supported: " + screen);
-    }
-  }
-
-  public ScreenController createScreen2(Screens screen)
+  public ScreenController createScreen(Screens screen)
           throws IOException {
     switch (screen) {
         case MENU:
 
         return getMenuScreen();
+      case SETTINGS:
+
+        return getSettingsScreen();
       case BOARD:
 
         throw new RuntimeException("Not implemented yet!.");
@@ -88,23 +71,16 @@ public class ScreenFactory {
     }
   }
 
-  protected ScreenPanel<SettingsViewController, SettingsViewInputScreenData> createSettingsScreen(
-      SettingsViewInputScreenData inputData) throws IOException {
+  private ScreenController getSettingsScreen() {
 
     FxmlBundle<SettingsViewController> objectFxmlBundle = loadFxml(Screens.SETTINGS.resourceName());
-    SettingsViewController controller = objectFxmlBundle.getController();
-    Pane root = (Pane) objectFxmlBundle.getRoot();
-
-    controller.setSettingsViewData(inputData);
+    var controller = objectFxmlBundle.getController();
     controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
     controller.setSaveUserUseCase(UseCaseFactory.createSaveUserUseCase());
 
-    root.setLayoutX(inputData.getLayoutX());
-    root.setLayoutY(inputData.getLayoutY());
-    controller.refreshUserInfo();
-
-    return new ScreenPanel<>(root, controller);
+    return controller;
   }
+
 
   protected ScreenController getMenuScreen() {
 
@@ -127,11 +103,7 @@ public class ScreenFactory {
   /**
    * Carga un archivo FXML y devuelve un objeto FxmlBundle que contiene el controlador y el nodo
    * raíz.
-   *
-   * @param fxmlPath
-   * @return
-   * @param <T>
-   */
+   **/
   protected static <T> FxmlBundle<T> loadFxml(String fxmlPath) {
     try {
 

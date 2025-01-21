@@ -109,6 +109,42 @@ ChessBoard chessBoard = ChesBoardFactory.createEmpty();
 
 ```
 
+### Using Interface assets
+
+The different interfaces are used to display the different parts of the application. The way to instance them is follows using the ScreenFactory:
+
+```java
+
+   ScreenController settingMenuController =  ScreenFactory.getInstance().createScreen(Screens.SETTINGS); 
+   SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    AppProperties.getInstance().getActiveUserId(), SETTINGS_POSITION);
+    settingMenuController.show(inputData);
+
+```
+
+The MainSceneController manage the response of the different screens using events like the following:
+
+```java
+ @Subscribe
+  public void onUserSaved(UserSavedAppEvent event) {
+
+    Platform.runLater(
+        () -> {
+          reloadUserInitials(event.getUserId());
+        });
+  }
+```
+
+The way to send message from the different screens is using the following:
+
+```java
+ GlobalEventBus.get().post(new OpenSettingsFromMenuEvent());
+
+```
+
+
+
 ## Contributing
 
 Feel free to fork this repository and submit pull requests. For major changes, please open an issue first to discuss what you would like to change.

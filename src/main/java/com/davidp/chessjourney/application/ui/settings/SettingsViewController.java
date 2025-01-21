@@ -2,6 +2,7 @@ package com.davidp.chessjourney.application.ui.settings;
 
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
+import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.SaveUserUseCase;
 import com.davidp.chessjourney.domain.User;
@@ -13,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public class SettingsViewController {
+public class SettingsViewController  implements ScreenController {
 
   @FXML private Button btClose;
 
@@ -43,6 +44,9 @@ public class SettingsViewController {
   private SaveUserUseCase saveUserUseCase;
   private SettingsViewInputScreenData settingsViewData;
 
+
+  private ScreenController.ScreenStatus status;
+
   public void setGetUserByIdUseCase(GetUserByIdUseCase getUserByIdUseCase) {
 
     this.getUserByIdUseCase = getUserByIdUseCase;
@@ -67,7 +71,11 @@ public class SettingsViewController {
     lbUser.setText(user.getInitials());
   }
 
-  public void initialize() {}
+  public void initialize() {
+
+
+    status = ScreenController.ScreenStatus.INITIALIZED;
+  }
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -93,5 +101,71 @@ public class SettingsViewController {
             inName.getText(),
             inLastName.getText());
     return user;
+  }
+
+
+
+
+
+  public void setData(InputScreenData inputData) {
+
+    setSettingsViewData( (SettingsViewInputScreenData) inputData);
+
+    if (inputData.isLayoutInfoValid()){
+
+      setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+    }
+  }
+
+  @Override
+  public void setLayout(double layoutX, double layoutY) {
+
+    rootPane.setLayoutX(layoutX);
+    rootPane.setLayoutY(layoutY);
+
+  }
+
+  @Override
+  public void show() {
+    rootPane.setVisible(true);
+  }
+
+  public void show(InputScreenData inputData){
+
+    setData(inputData);
+    status = ScreenController.ScreenStatus.VISIBLE;
+    show();
+  }
+
+  @Override
+  public void hide() {
+    status = ScreenController.ScreenStatus.HIDDEN;
+    rootPane.setVisible(false);
+  }
+
+  @Override
+  public boolean isVisible() {
+    return rootPane.isVisible();
+  }
+
+  @Override
+  public boolean isHidden() {
+    return !rootPane.isVisible();
+  }
+
+  @Override
+  public Pane getRootPane() {
+    return rootPane;
+  }
+
+  @Override
+  public ScreenStatus getStatus() {
+    return null;
+  }
+
+  @Override
+  public boolean isInitialized() {
+
+    return status == ScreenController.ScreenStatus.INITIALIZED;
   }
 }

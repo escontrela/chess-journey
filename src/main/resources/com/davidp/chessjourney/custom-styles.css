@@ -124,6 +124,21 @@
     -fx-font-smoothing-type: gray;
 }
 
+.text-menu-purple{
+    -fx-text-fill: #8578F4;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+.text-menu-white{
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+}
+
+
 /* end: system design - text */
 
 
@@ -158,6 +173,12 @@
     -fx-background-radius: 20;
 }
 
+.panel-gray-for-menu{
+    -fx-background-color: transparent;
+}
+.panel-gray-for-menu:hover{
+    -fx-background-color:  #22222C;
+}
 
 
 .panel-gray-for-text{

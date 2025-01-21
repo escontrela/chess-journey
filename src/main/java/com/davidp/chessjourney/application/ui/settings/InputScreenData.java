@@ -1,5 +1,7 @@
 package com.davidp.chessjourney.application.ui.settings;
 
+import java.awt.*;
+
 public class InputScreenData {
 
   protected double layoutX;
@@ -24,5 +26,15 @@ public class InputScreenData {
   public boolean isLayoutInfoValid() {
 
     return layoutX != 0 && layoutY != 0;
+  }
+
+  public static InputScreenData fromPosition(double layoutX, double layoutY) {
+
+    return new InputScreenData(layoutX, layoutY);
+  }
+
+  public static InputScreenData fromPosition(Point point) {
+
+    return new InputScreenData(point.getX(), point.getY());
   }
 }

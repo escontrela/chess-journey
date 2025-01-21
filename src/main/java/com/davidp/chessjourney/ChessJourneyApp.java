@@ -45,7 +45,7 @@ public class ChessJourneyApp extends GameApplication {
   @Override
   protected void initSettings(GameSettings settings) {
 
-    settings.setWidth(1280); // Updated dimensions
+    settings.setWidth(1290); // Updated dimensions
     settings.setHeight(900);
     settings.setTitle("Chess App");
     settings.setVersion("2.0");
