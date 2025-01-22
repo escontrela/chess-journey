@@ -7,13 +7,30 @@ import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
+import java.awt.event.ActionEvent;
+
 public class BoardViewController implements ScreenController{
 
-  @FXML private Pane rootPane;
+  @FXML
+  private Button btClose;
+
+  @FXML
+  private ImageView imgClose;
+
+  @FXML
+  private Pane rootPane;
+
+  @FXML
+  void buttonAction(ActionEvent event) {
+
+  }
+
   private ScreenController.ScreenStatus status;
 
   public void initialize() {
@@ -93,14 +110,6 @@ public class BoardViewController implements ScreenController{
 
     return status == ScreenController.ScreenStatus.INITIALIZED;
   }
-
-
-  @FXML
-  void optionClicked(MouseEvent event) {
-
-
-  }
-
 
 
 }

@@ -286,6 +286,13 @@
     -fx-border-width: 0;
 
 }
+
+.chessboard-square-white {
+    -fx-background-color: #D0E0EB;
+}
+.chessboard-square-black {
+    -fx-background-color: #618AB3;
+}
 /* end: system design - button 3 */
 
 

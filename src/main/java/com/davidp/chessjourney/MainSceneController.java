@@ -77,7 +77,7 @@ public class MainSceneController {
   private final Map<Screens,ScreenController > screenManager = new HashMap<>();
   private static final Point MENU_POSITION = new Point(20, 535);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
-  private static final Point BOARD_POSITION = new Point(120, 40);
+  private static final Point BOARD_POSITION = new Point(140, 60);
 
 
   @FXML
