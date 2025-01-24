@@ -63,7 +63,10 @@ public class MenuViewController implements ScreenController {
     // Fade in animation when showing
     FXGL.animationBuilder()
             .duration(Duration.seconds(0.2))
-            .onFinished( ()-> rootPane.setVisible(true))
+            .onFinished( ()-> {
+              rootPane.setVisible(true);
+              rootPane.toFront();
+            })
             .fadeIn(rootPane)
             .buildAndPlay();
   }

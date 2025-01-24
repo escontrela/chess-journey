@@ -77,6 +77,7 @@ public class SettingsViewController  implements ScreenController {
     status = ScreenController.ScreenStatus.INITIALIZED;
   }
 
+
   @FXML
   void buttonAction(ActionEvent event) {
 
@@ -127,7 +128,9 @@ public class SettingsViewController  implements ScreenController {
 
   @Override
   public void show() {
+
     rootPane.setVisible(true);
+    rootPane.toFront();
   }
 
   public void show(InputScreenData inputData){
