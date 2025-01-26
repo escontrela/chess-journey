@@ -1,5 +1,6 @@
 package com.davidp.chessjourney.application.ui.chess;
 
+import com.davidp.chessjourney.domain.common.Piece;
 import javafx.event.EventHandler;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -10,6 +11,18 @@ public class PieceView extends ImageView {
     String type;
     String color;
     int posX, posY;
+
+    public void setDomainPiece(Piece domainPiece) {
+
+        this.domainPiece = domainPiece;
+    }
+
+    public Piece getDomainPiece() {
+
+        return this.domainPiece;
+    }
+
+  Piece domainPiece;
 
     public PieceView(String color) {
         this.color = color;
@@ -30,13 +43,13 @@ public class PieceView extends ImageView {
     }
 
     private void addEventHandler() {
+
         this.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent event) {
-
+                System.out.println("Piece clicked: " + PieceView.this.toString());
             }
         });
-
 
     }
 
