@@ -1,5 +1,6 @@
 package com.davidp.chessjourney.application.factories;
 
+import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
@@ -19,6 +20,7 @@ public class ScreenFactory {
 
   /** This is the set of screen that can be added to the main panel on the main STAGE. */
   public enum Screens {
+    MAIN_STAGE("/com/davidp/chessjourney/main-scene-3.fxml"),
     SETTINGS("/com/davidp/chessjourney/setting-view.fxml"),
     MENU("/com/davidp/chessjourney/menu-view.fxml"),
     BOARD("/com/davidp/chessjourney/board-view-2.fxml");
@@ -65,6 +67,9 @@ public class ScreenFactory {
       case BOARD:
 
         return getBoardScreen();
+      case MAIN_STAGE:
+
+        return getMainScreen();
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
@@ -90,6 +95,13 @@ public class ScreenFactory {
   protected ScreenController getBoardScreen() {
 
     FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.BOARD.resourceName());
+    //TODO: set the use cases here
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getMainScreen() {
+
+    FxmlBundle<MainSceneController> objectFxmlBundle = loadFxml(Screens.MAIN_STAGE.resourceName());
     //TODO: set the use cases here
     return objectFxmlBundle.getController();
   }

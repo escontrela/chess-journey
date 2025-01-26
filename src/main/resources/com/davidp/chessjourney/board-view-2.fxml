@@ -233,7 +233,6 @@
       </Button>
    </children>
    <stylesheets>
-      <URL value="@chessboard.css" />
       <URL value="@custom-styles.css" />
    </stylesheets>
 </Pane>

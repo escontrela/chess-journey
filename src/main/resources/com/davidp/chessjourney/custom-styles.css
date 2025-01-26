@@ -187,7 +187,7 @@
     -fx-border-radius: 40;
     -fx-background-radius: 40;
 }
-/*
+
 .text-field {
     -fx-background-color: transparent;
     -fx-foreground-color: white;
@@ -208,7 +208,7 @@
     -fx-background-radius: 0;
     -fx-control-inner-background: transparent;
 }
-*/
+
 .fancytext {
     -fx-fill: linear-gradient(from 0% 0% to 100% 200%, repeat, aqua 0%, red 50%);
     -fx-stroke: black;

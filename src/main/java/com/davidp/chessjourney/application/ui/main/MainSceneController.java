@@ -1,4 +1,4 @@
-package com.davidp.chessjourney;
+package com.davidp.chessjourney.application.ui.main;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
@@ -39,7 +39,7 @@ import javafx.util.Duration;
  * the main scene controls all the features and windows dynamics of the application
  * It is responsible for managing the main menu, the settings menu, the board, and the game.
  */
-public class MainSceneController {
+public class MainSceneController implements ScreenController {
 
   @FXML private Button btClose;
 
@@ -205,7 +205,6 @@ public class MainSceneController {
     SettingsViewInputScreenData inputData =
             new SettingsViewInputScreenData(
                     AppProperties.getInstance().getActiveUserId(), BOARD_POSITION);
-    //TODO SET THE POSITION OF THE BOARD
     boardController
             .show(inputData);
   }
@@ -270,15 +269,12 @@ public class MainSceneController {
     User loggedUser = getUserByIdUseCase.execute(userId);
     lbUserInitials.setText(loggedUser.getInitials());
 
-    /*
     FXGL.animationBuilder()
         .duration(Duration.seconds(0.5))
         .repeat(2)
         .autoReverse(true)
         .fadeOut(lbUserInitials)
         .buildAndPlay();
-
-     */
   }
 
   private Stage stage;
@@ -293,9 +289,54 @@ public class MainSceneController {
     return this.stage;
   }
 
+  @Override
+  public void setData(InputScreenData inputData) {
+
+  }
+
+  @Override
+  public void setLayout(double layoutX, double layoutY) {
+
+  }
+
+  @Override
+  public void show() {
+
+  }
+
+  @Override
+  public void show(InputScreenData inputData) {
+
+  }
+
   public void hide() {
 
     stage.hide();
+  }
+
+  @Override
+  public Pane getRootPane() {
+    return mainPane;
+  }
+
+  @Override
+  public ScreenStatus getStatus() {
+    return null;
+  }
+
+  @Override
+  public boolean isInitialized() {
+    return false;
+  }
+
+  @Override
+  public boolean isVisible() {
+    return false;
+  }
+
+  @Override
+  public boolean isHidden() {
+    return false;
   }
 
   public void maximize() {

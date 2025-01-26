@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 
 
-<Pane fx:id="rootPane" stylesheets="@chessboard.css"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: #0d1321;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.BoardViewController">
+<Pane fx:id="rootPane"  maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="700.0" style="-fx-background-color: #0d1321;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.BoardViewController">
    <children>
       <Pane layoutX="10.0" layoutY="5.0" prefHeight="30.0" prefWidth="680.0" style="-fx-background-color: #1d2d44;">
          <children>
