@@ -8,55 +8,54 @@ import javafx.scene.input.MouseEvent;
 
 public class PieceView extends ImageView {
 
-    String type;
-    String color;
-    int posX, posY;
+  String type;
+  String color;
+  int posX, posY;
 
-    public void setDomainPiece(Piece domainPiece) {
+  public void setDomainPiece(Piece domainPiece) {
 
-        this.domainPiece = domainPiece;
-    }
+    this.domainPiece = domainPiece;
+  }
 
-    public Piece getDomainPiece() {
+  public Piece getDomainPiece() {
 
-        return this.domainPiece;
-    }
+    return this.domainPiece;
+  }
 
   Piece domainPiece;
 
-    public PieceView(String color) {
-        this.color = color;
-        addEventHandler();
-    }
+  public PieceView(String color) {
+    this.color = color;
+    addEventHandler();
+  }
 
-    public String getColor() {
-        return this.color;
-    }
+  public String getColor() {
+    return this.color;
+  }
 
-    public void setPiece(Image image) {
-        this.setImage(image);
-    }
+  public void setPiece(Image image) {
+    this.setImage(image);
+  }
 
-    public void setImage() {
-        System.out.println("setting image:" + "sample/pieces/" + this.color +  this.type + ".png");
-        this.setPiece(new Image("com/davidp/chessjourney/sample/pieces/" + this.color +  this.type + ".png"));
-    }
+  public void setImage() {
+    System.out.println("setting image:" + "sample/pieces/" + this.color + this.type + ".png");
+    this.setPiece(
+        new Image("com/davidp/chessjourney/sample/pieces/" + this.color + this.type + ".png"));
+  }
 
-    private void addEventHandler() {
+  private void addEventHandler() {
 
-        this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                System.out.println("Piece clicked: " + PieceView.this.toString());
-            }
+    this.setOnMouseClicked(
+        new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            System.out.println("Piece clicked: " + PieceView.this.toString());
+          }
         });
+  }
 
-    }
-
-
-    @Override
-    public String toString() {
-        return this.color + " " + this.type;
-    }
-
+  @Override
+  public String toString() {
+    return this.color + " " + this.type;
+  }
 }

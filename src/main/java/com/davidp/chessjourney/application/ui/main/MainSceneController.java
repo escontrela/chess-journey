@@ -1,21 +1,26 @@
 package com.davidp.chessjourney.application.ui.main;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+
 import com.almasb.fxgl.dsl.FXGL;
+import com.almasb.fxgl.entity.Entity;
+import com.almasb.fxgl.particle.ParticleComponent;
+import com.almasb.fxgl.particle.ParticleEmitter;
+import com.almasb.fxgl.particle.ParticleEmitters;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
+import com.davidp.chessjourney.application.factories.ScreenFactory.Screens;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
-import com.davidp.chessjourney.application.factories.ScreenFactory.Screens;
 import com.davidp.chessjourney.domain.User;
 import com.google.common.eventbus.Subscribe;
-
 import java.awt.*;
 import java.io.IOException;
 import java.util.HashMap;
@@ -30,14 +35,14 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
-
 /**
- * This class is responsible for managing the main scene of the application,
- * the main scene controls all the features and windows dynamics of the application
- * It is responsible for managing the main menu, the settings menu, the board, and the game.
+ * This class is responsible for managing the main scene of the application, the main scene controls
+ * all the features and windows dynamics of the application It is responsible for managing the main
+ * menu, the settings menu, the board, and the game.
  */
 public class MainSceneController implements ScreenController {
 
@@ -55,30 +60,23 @@ public class MainSceneController implements ScreenController {
 
   @FXML private Pane pnlMessage;
 
-  @FXML
-  private StackPane pnlMenu;
+  @FXML private StackPane pnlMenu;
 
-  @FXML
-  private ImageView imgClose;
+  @FXML private ImageView imgClose;
 
-  @FXML
-  private ImageView imgSettings;
+  @FXML private ImageView imgSettings;
 
-  @FXML
-  private ImageView imgLogo;
-
+  @FXML private ImageView imgLogo;
 
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
 
-
   // This map is used to cache the screens that are created.
-  private final Map<Screens,ScreenController > screenManager = new HashMap<>();
+  private final Map<Screens, ScreenController> screenManager = new HashMap<>();
   private static final Point MENU_POSITION = new Point(20, 535);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
   private static final Point BOARD_POSITION = new Point(140, 60);
-
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -98,25 +96,42 @@ public class MainSceneController implements ScreenController {
     if (event.getSource() == btLeft || event.getSource() == btRight) {
 
       showInfoPanel(pnlMessage);
+
+      // TODO test code, remove it asap
+      ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
+      emitter.setNumParticles(10); // Número de partículas
+      emitter.setSize(5, 10); // Tamaño de las partículas
+
+      // Opcional: Personalizar el emisor
+      emitter.setStartColor(javafx.scene.paint.Color.ORANGE);
+      emitter.setEndColor(Color.RED);
+      emitter.setSize(5, 10);
+
+      // Crear la entidad con el emisor de partículas
+      Entity fire =
+          entityBuilder()
+              .at(200, 200) // Posición inicial
+              .with(new ParticleComponent(emitter)) // Agregar el componente de partículas
+              .buildAndAttach();
+
+      if (!getGameWorld().getEntities().contains(fire)) {
+        // Añadir al mundo del juego
+        getGameWorld().addEntity(fire);
+      }
     }
-
   }
-
-
 
   @FXML
   public void handleButtonClick(MouseEvent event) {
 
-    if (isContextMenuClicked(event)){
+    if (isContextMenuClicked(event)) {
 
-        manageContextMenuVisibility();
-        return;
+      manageContextMenuVisibility();
+      return;
     }
   }
 
-  /**
-   * This method is called when the user clicks on the logger user icon.
-   */
+  /** This method is called when the user clicks on the logger user icon. */
   private void manageContextMenuVisibility() {
 
     ScreenController contextMenuController = getScreen(Screens.MENU);
@@ -126,8 +141,7 @@ public class MainSceneController implements ScreenController {
       return;
     }
 
-    contextMenuController
-            .show(InputScreenData.fromPosition(MENU_POSITION));
+    contextMenuController.show(InputScreenData.fromPosition(MENU_POSITION));
   }
 
   private void manageSettingsMenuVisibility() {
@@ -140,29 +154,26 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    AppProperties.getInstance().getActiveUserId(), SETTINGS_POSITION);
+        new SettingsViewInputScreenData(
+            AppProperties.getInstance().getActiveUserId(), SETTINGS_POSITION);
 
-    settingMenuController
-            .show(inputData);
+    settingMenuController.show(inputData);
   }
 
   protected boolean isContextMenuClicked(MouseEvent event) {
 
-      return event.getSource() == lbUserInitials || event.getSource() == pnlMenu;
+    return event.getSource() == lbUserInitials || event.getSource() == pnlMenu;
   }
 
   private boolean isButtonCloseClicked(ActionEvent event) {
 
-    return event.getSource() == btClose  || event.getSource() == imgClose;
-
+    return event.getSource() == btClose || event.getSource() == imgClose;
   }
 
   private boolean isButtonSettingsClicked(ActionEvent event) {
 
     return event.getSource() == btSettings || event.getSource() == imgSettings;
   }
-
 
   private void showInfoPanel(Pane panel) {
 
@@ -180,7 +191,7 @@ public class MainSceneController implements ScreenController {
   }
 
   @Subscribe
-  public void onMenuSettingsClicked(OpenSettingsFromMenuEvent event){
+  public void onMenuSettingsClicked(OpenSettingsFromMenuEvent event) {
 
     manageContextMenuVisibility();
     manageSettingsMenuVisibility();
@@ -203,10 +214,9 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    AppProperties.getInstance().getActiveUserId(), BOARD_POSITION);
-    boardController
-            .show(inputData);
+        new SettingsViewInputScreenData(
+            AppProperties.getInstance().getActiveUserId(), BOARD_POSITION);
+    boardController.show(inputData);
   }
 
   public MainSceneController() {
@@ -220,14 +230,11 @@ public class MainSceneController implements ScreenController {
 
     moveMainWindowsSetUp();
     reloadUserInitials(AppProperties.getInstance().getActiveUserId());
-
   }
-
 
   private void moveMainWindowsSetUp() {
     imgLogo.setOnMousePressed(
         event -> {
-
           xOffset = event.getSceneX();
           yOffset = event.getSceneY();
         });
@@ -243,23 +250,25 @@ public class MainSceneController implements ScreenController {
 
   /**
    * Get or initialize the screen controller for the given screen
+   *
    * @param screen Screen to get
    * @return ScreenController for the given screen
    */
   protected ScreenController getScreen(Screens screen) {
 
-     return screenManager.computeIfAbsent(screen,s-> {
-
+    return screenManager.computeIfAbsent(
+        screen,
+        s -> {
           try {
 
-            var cachedScreen =  ScreenFactory.getInstance().createScreen(s);
+            var cachedScreen = ScreenFactory.getInstance().createScreen(s);
             mainPane.getChildren().add(cachedScreen.getRootPane());
             return cachedScreen;
           } catch (IOException e) {
 
-              throw new RuntimeException(e);
+            throw new RuntimeException(e);
           }
-      });
+        });
   }
 
   private void reloadUserInitials(long userId) {
@@ -290,24 +299,16 @@ public class MainSceneController implements ScreenController {
   }
 
   @Override
-  public void setData(InputScreenData inputData) {
-
-  }
+  public void setData(InputScreenData inputData) {}
 
   @Override
-  public void setLayout(double layoutX, double layoutY) {
-
-  }
+  public void setLayout(double layoutX, double layoutY) {}
 
   @Override
-  public void show() {
-
-  }
+  public void show() {}
 
   @Override
-  public void show(InputScreenData inputData) {
-
-  }
+  public void show(InputScreenData inputData) {}
 
   public void hide() {
 

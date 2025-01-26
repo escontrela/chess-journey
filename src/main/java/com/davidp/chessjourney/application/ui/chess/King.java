@@ -1,12 +1,11 @@
 package com.davidp.chessjourney.application.ui.chess;
 
-
 public class King extends PieceView {
 
-    public King(String color) {
+  public King(String color) {
 
-        super(color);
-        this.type = "King";
-        setImage();
-    }
+    super(color);
+    this.type = "King";
+    setImage();
+  }
 }

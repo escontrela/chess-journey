@@ -24,28 +24,20 @@ public class ChessJourneyAppJavaFx extends Application {
 
   private static Stage primaryStage;
 
-
   /** Old Code * */
   public static void main(String[] args) {
 
     launch(args);
   }
 
-
-
-
-
-
   @Override
   public void start(Stage stage) throws Exception {
 
     try {
 
-
       primaryStage = stage;
       primaryStage.setTitle("Chess Journey");
       primaryStage.initStyle(StageStyle.TRANSPARENT);
-
 
       FXMLLoader loader = new FXMLLoader(getClass().getResource("main-scene-3.fxml"));
       Pane root = loader.load();
@@ -57,15 +49,12 @@ public class ChessJourneyAppJavaFx extends Application {
       primaryStage.setScene(scene);
       primaryStage.show();
 
-
       System.out.println(
-              String.format("UserId: %s", AppProperties.getInstance().getActiveUserId()));
+          String.format("UserId: %s", AppProperties.getInstance().getActiveUserId()));
 
     } catch (Exception e) {
 
       e.printStackTrace();
     }
-
   }
-
 }

@@ -1,14 +1,11 @@
 package com.davidp.chessjourney.application.ui.menu;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FadeInAnimation;
-import com.davidp.chessjourney.application.ui.util.FadeOutAnimation;
-import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -20,33 +17,27 @@ public class MenuViewController implements ScreenController {
 
   @FXML private Pane rootPane;
 
-  @FXML
-  private ImageView imgSettings;
+  @FXML private ImageView imgSettings;
 
-  @FXML
-  private Pane pnlOptionAnalysisBoard;
+  @FXML private Pane pnlOptionAnalysisBoard;
 
-  @FXML
-  private Pane pnlOptionSettings;
+  @FXML private Pane pnlOptionSettings;
 
   private ScreenController.ScreenStatus status;
 
-  @FXML
-  private Text txtSettings;
+  @FXML private Text txtSettings;
 
-  @FXML
-  private Text txtAnalysisBoard;
+  @FXML private Text txtAnalysisBoard;
 
   public void initialize() {
 
     status = ScreenController.ScreenStatus.INITIALIZED;
   }
 
-
   @Override
   public void setData(InputScreenData inputData) {
 
-    if (inputData.isLayoutInfoValid()){
+    if (inputData.isLayoutInfoValid()) {
 
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
@@ -57,21 +48,20 @@ public class MenuViewController implements ScreenController {
 
     rootPane.setLayoutX(layoutX);
     rootPane.setLayoutY(layoutY);
-
   }
 
   @Override
   public void show() {
 
-
     rootPane.setVisible(false);
 
- //   Platform.runLater(() -> {
+    //   Platform.runLater(() -> {
     FadeInAnimation fadeIn = new FadeInAnimation(rootPane, Duration.seconds(0.4));
-    fadeIn.onFinished(() -> {
-      rootPane.setVisible(true);
-      rootPane.toFront();
-    });
+    fadeIn.onFinished(
+        () -> {
+          rootPane.setVisible(true);
+          rootPane.toFront();
+        });
     fadeIn.play();
 
     /*
@@ -88,7 +78,7 @@ public class MenuViewController implements ScreenController {
 
   }
 
-  public void show(InputScreenData inputData){
+  public void show(InputScreenData inputData) {
 
     setData(inputData);
     status = ScreenController.ScreenStatus.VISIBLE;
@@ -98,16 +88,16 @@ public class MenuViewController implements ScreenController {
   @Override
   public void hide() {
     /*
-    FXGL.animationBuilder()
-            .duration(Duration.seconds(0.2))
-            .onFinished( ()-> {
-              rootPane.setVisible(false);
+      FXGL.animationBuilder()
+              .duration(Duration.seconds(0.2))
+              .onFinished( ()-> {
+                rootPane.setVisible(false);
 
-              status = ScreenStatus.HIDDEN;
-            })
-            .fadeOut(rootPane)
-            .buildAndPlay();
-  */
+                status = ScreenStatus.HIDDEN;
+              })
+              .fadeOut(rootPane)
+              .buildAndPlay();
+    */
     rootPane.setVisible(false);
 
     status = ScreenStatus.HIDDEN;
@@ -125,7 +115,7 @@ public class MenuViewController implements ScreenController {
 
   @Override
   public Pane getRootPane() {
-      return rootPane;
+    return rootPane;
   }
 
   @Override
@@ -138,7 +128,6 @@ public class MenuViewController implements ScreenController {
 
     return status == ScreenController.ScreenStatus.INITIALIZED;
   }
-
 
   @FXML
   void optionClicked(MouseEvent event) {
@@ -162,5 +151,4 @@ public class MenuViewController implements ScreenController {
 
     return event.getSource() == pnlOptionSettings || event.getSource() == txtSettings;
   }
-
 }
