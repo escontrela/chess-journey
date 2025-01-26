@@ -270,12 +270,15 @@ public class MainSceneController {
     User loggedUser = getUserByIdUseCase.execute(userId);
     lbUserInitials.setText(loggedUser.getInitials());
 
+    /*
     FXGL.animationBuilder()
         .duration(Duration.seconds(0.5))
         .repeat(2)
         .autoReverse(true)
         .fadeOut(lbUserInitials)
         .buildAndPlay();
+
+     */
   }
 
   private Stage stage;

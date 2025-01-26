@@ -6,6 +6,9 @@ import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.ui.util.FadeInAnimation;
+import com.davidp.chessjourney.application.ui.util.FadeOutAnimation;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -60,6 +63,25 @@ public class MenuViewController implements ScreenController {
   @Override
   public void show() {
 
+   // rootPane.setVisible(true);
+    //rootPane.toFront();
+
+    rootPane.setVisible(false);
+
+    Platform.runLater(() -> {
+    FadeInAnimation fadeIn = new FadeInAnimation(rootPane, Duration.seconds(0.4));
+
+// Configurar una acción al finalizar la animación
+    fadeIn.onFinished(() -> {
+      System.out.println("Animación de fade-in terminada.");
+      rootPane.setVisible(true);
+      rootPane.toFront();
+    });
+
+// Reproducir la animación
+    fadeIn.play();
+});
+    /*
     // Fade in animation when showing
     FXGL.animationBuilder()
             .duration(Duration.seconds(0.2))
@@ -69,6 +91,8 @@ public class MenuViewController implements ScreenController {
             })
             .fadeIn(rootPane)
             .buildAndPlay();
+            */
+
   }
 
   public void show(InputScreenData inputData){
@@ -80,6 +104,7 @@ public class MenuViewController implements ScreenController {
 
   @Override
   public void hide() {
+    /*
     FXGL.animationBuilder()
             .duration(Duration.seconds(0.2))
             .onFinished( ()-> {
@@ -89,7 +114,10 @@ public class MenuViewController implements ScreenController {
             })
             .fadeOut(rootPane)
             .buildAndPlay();
+  */
+    rootPane.setVisible(false);
 
+    status = ScreenStatus.HIDDEN;
   }
 
   @Override

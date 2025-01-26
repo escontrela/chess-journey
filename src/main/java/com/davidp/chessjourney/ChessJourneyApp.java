@@ -14,6 +14,8 @@ import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Scene;
@@ -35,14 +37,13 @@ import javafx.util.Duration;
  *     Material design</a>
  */
 /** @see <a href="https://coolors.co/palettes/trending">Coolors</a> */
-public class ChessJourneyApp extends GameApplication {
+public class ChessJourneyApp extends Application {
 
   GridPane chessBoard = null;
   String fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
   private static Stage primaryStage;
 
-  @Override
   protected void initSettings(GameSettings settings) {
 
     settings.setWidth(1290); // Updated dimensions
@@ -52,7 +53,6 @@ public class ChessJourneyApp extends GameApplication {
     settings.setStageStyle(StageStyle.TRANSPARENT);
   }
 
-  @Override
   protected void initGame() {
 
     try {
@@ -79,6 +79,7 @@ public class ChessJourneyApp extends GameApplication {
 
   /** Old Code * */
   public static void main(String[] args) {
+
     launch(args);
   }
 
@@ -228,4 +229,36 @@ public class ChessJourneyApp extends GameApplication {
 
     showChessPosition(this.chessBoard, fenPosition);
   }
+
+  @Override
+  public void start(Stage stage) throws Exception {
+
+    try {
+
+
+      primaryStage = stage;
+      primaryStage.setTitle("Chess Journey");
+      primaryStage.initStyle(StageStyle.TRANSPARENT);
+
+      FXMLLoader loader = new FXMLLoader(getClass().getResource("main-scene-3.fxml"));
+      Pane root = loader.load();
+
+      MainSceneController mainController = loader.getController();
+      mainController.setStage(primaryStage);
+
+      Scene scene = new Scene(root);
+      primaryStage.setScene(scene);
+      primaryStage.show();
+
+
+      System.out.println(
+              String.format("UserId: %s", AppProperties.getInstance().getActiveUserId()));
+
+    } catch (Exception e) {
+
+      e.printStackTrace();
+    }
+
+  }
+
 }

@@ -1,7 +1,6 @@
 package com.davidp.chessjourney.application.ui.board;
 
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
@@ -14,9 +13,10 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.util.Duration;
+import javafx.scene.layout.StackPane;
 import javafx.scene.Node;
 
 import java.util.HashMap;
@@ -41,28 +41,7 @@ public class BoardViewController implements ScreenController{
   private Pane rootPane;
 
   @FXML
-  private Pane a1;
-
-  @FXML
-  private Pane a2;
-
-  @FXML
-  private Pane a3;
-
-  @FXML
-  private Pane a4;
-
-  @FXML
-  private Pane a5;
-
-  @FXML
-  private Pane a6;
-
-  @FXML
-  private Pane a7;
-
-  @FXML
-  private Pane a8;
+  private Pane pnlTime;
 
   private final HashMap<Pos, Pane> boardPanes = new HashMap<>();
 
@@ -73,21 +52,23 @@ public class BoardViewController implements ScreenController{
     status = ScreenController.ScreenStatus.INITIALIZED;
     initializeBoardPanes();
 
-    /*
+
     pnlBoard.setOnMousePressed(event -> {
 
       Optional<Pane> selectedSquare = getSquareViewFromMouseEvent(event);
 
         selectedSquare.ifPresent(
                 pane ->
-                        pane.setStyle("-fx-border-color: #FF0000; -fx-border-width: 2px; -fx-border-inset: -2px;")
+                        pane.setStyle("-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;")
         );
     });
-*/
+
   }
 
   //TODO improve
   private void initializeBoardPanes() {
+
+
 
     for (Node node : pnlBoard.getChildren()) {
 
@@ -95,18 +76,6 @@ public class BoardViewController implements ScreenController{
 
         Pane square = (Pane) node;
 
-        node.setOnDragDetected((MouseEvent event) -> {
-
-          System.out.println("Start Drag and Drop detected for position: " + square.getId());
-          Dragboard db = square.startDragAndDrop(TransferMode.ANY);
-/*
-          Map<DataFormat, Object> var1 = new HashMap<>();
-          var1.put(DataFormat.IMAGE, square.getId());
-          db.setContent(var1);
-
- */
-          event.consume();
-        });
 
         node.setOnDragOver(new EventHandler<DragEvent>() {
 
@@ -135,6 +104,8 @@ public class BoardViewController implements ScreenController{
           }
         });
 
+
+
         node.setOnDragDropped(new EventHandler<DragEvent>() {
           public void handle(DragEvent event) {
 
@@ -142,7 +113,17 @@ public class BoardViewController implements ScreenController{
             Dragboard db = event.getDragboard();
             boolean success = false;
             if (db.hasString()) {
-              System.out.println(db.getString());
+              String droppedPos = db.getString();  // esto sí existirá
+              System.out.println("Recibido: " + droppedPos);
+
+              // Lógica para mover la pieza
+              Pane toPane = (Pane) event.getGestureTarget();
+              PieceView pieceView = (PieceView) event.getGestureSource();
+              // Quita la pieza del panel original y muévela al nuevo panel
+              Pane fromPane = (Pane) pieceView.getParent();
+              fromPane.getChildren().remove(pieceView);
+              toPane.getChildren().add(pieceView);
+
               success = true;
             }
             event.setDropCompleted(success);
@@ -156,10 +137,6 @@ public class BoardViewController implements ScreenController{
 
           var pos = Pos.parseString(squareId);
           square.setUserData(Pos.parseString(squareId));
-          //square.setOnDragDropped(getDragDropManager(square,pos));
-
-
-
           boardPanes.put(pos, square);
 
         }
@@ -169,11 +146,23 @@ public class BoardViewController implements ScreenController{
 
   private Optional<Pane> getSquareViewFromMouseEvent(MouseEvent event) {
 
-    Optional<Pane> isSquare = Optional.ofNullable(event.getTarget()).filter(t -> t.toString().equals("Pane")).map
-            (t -> (Pane) t).or(() ->
-            Optional.ofNullable(event.getTarget()).map(t -> (PieceView) t).map(t -> (Pane) t.getParent()));
+    Object target = event.getTarget();
 
-    return isSquare;
+    if (target instanceof Pane) {
+      return Optional.of((Pane) target);
+
+    } else if (target instanceof PieceView) {
+
+      Node parent = ((PieceView) target).getParent();
+
+      if (parent instanceof Pane) {
+
+        return Optional.of((Pane) parent);
+      }
+    }
+
+    // Si no se cumple ninguna de las condiciones, devolvemos un Optional vacío
+    return Optional.empty();
   }
 
   /*
@@ -226,12 +215,16 @@ public class BoardViewController implements ScreenController{
   @Override
   public void show() {
 
+    rootPane.setVisible(true);
+/*
     // Fade in animation when showing
     FXGL.animationBuilder()
             .duration(Duration.seconds(0.2))
             .onFinished( ()-> rootPane.setVisible(true))
             .fadeIn(rootPane)
             .buildAndPlay();
+
+ */
   }
 
   public void show(InputScreenData inputData){
@@ -244,6 +237,9 @@ public class BoardViewController implements ScreenController{
   @Override
   public void hide() {
 
+    rootPane.setVisible(false);
+    status = ScreenStatus.HIDDEN;
+    /*
     FXGL.animationBuilder()
             .duration(Duration.seconds(0.2))
             .onFinished( ()-> {
@@ -253,7 +249,7 @@ public class BoardViewController implements ScreenController{
             })
             .fadeOut(rootPane)
             .buildAndPlay();
-
+    */
   }
 
   @Override
@@ -302,7 +298,7 @@ public class BoardViewController implements ScreenController{
 
       if (event.getCode() == KeyCode.ENTER) {
 
-         cleanPieces();
+        cleanPieces();
 
         //TODO validate fen
         final GameState fenParserResponse =
@@ -336,16 +332,24 @@ public class BoardViewController implements ScreenController{
 
     pane.getChildren().add(pieceView);
 
-    pieceView.setOnDragDetected((MouseEvent event) -> {
+    pieceView.setOnDragDetected(event -> {
 
-       System.out.println("Start Drag and Drop detected for position: " + position);
-       Dragboard db = pieceView.startDragAndDrop(TransferMode.ANY);
 
-       Map<DataFormat, Object> var1 = new HashMap<>();
-       var1.put(DataFormat.IMAGE, position);
-       db.setContent(var1);
-       event.consume();
-   });
+     Dragboard db = pieceView.startDragAndDrop(TransferMode.ANY);
+
+      pieceView.setStyle("-fx-background-color: transparent;");
+      // Configura la imagen que aparecerá bajo el puntero del ratón durante el arrastre
+      db.setDragView(pieceView.snapshot(null, null));
+
+     // Convierte a string
+     String posStr = position.toString();
+
+     Map<DataFormat, Object> var1 = new HashMap<>();
+     var1.put(DataFormat.PLAIN_TEXT, posStr);
+     db.setContent(var1);
+     event.consume();
+
+    });
 
 }
 
