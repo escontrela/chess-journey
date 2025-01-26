@@ -14,7 +14,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-public class SettingsViewController  implements ScreenController {
+public class SettingsViewController implements ScreenController {
 
   @FXML private Button btClose;
 
@@ -44,7 +44,6 @@ public class SettingsViewController  implements ScreenController {
   private SaveUserUseCase saveUserUseCase;
   private SettingsViewInputScreenData settingsViewData;
 
-
   private ScreenController.ScreenStatus status;
 
   public void setGetUserByIdUseCase(GetUserByIdUseCase getUserByIdUseCase) {
@@ -72,7 +71,6 @@ public class SettingsViewController  implements ScreenController {
   }
 
   public void initialize() {
-
 
     status = ScreenController.ScreenStatus.INITIALIZED;
   }
@@ -103,15 +101,11 @@ public class SettingsViewController  implements ScreenController {
     return user;
   }
 
-
-
-
-
   public void setData(InputScreenData inputData) {
 
-    setSettingsViewData( (SettingsViewInputScreenData) inputData);
+    setSettingsViewData((SettingsViewInputScreenData) inputData);
 
-    if (inputData.isLayoutInfoValid()){
+    if (inputData.isLayoutInfoValid()) {
 
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
@@ -122,15 +116,16 @@ public class SettingsViewController  implements ScreenController {
 
     rootPane.setLayoutX(layoutX);
     rootPane.setLayoutY(layoutY);
-
   }
 
   @Override
   public void show() {
+
     rootPane.setVisible(true);
+    rootPane.toFront();
   }
 
-  public void show(InputScreenData inputData){
+  public void show(InputScreenData inputData) {
 
     setData(inputData);
     status = ScreenController.ScreenStatus.VISIBLE;

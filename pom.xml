@@ -16,6 +16,7 @@
             <id>clojars.org</id>
             <url>https://repo.clojars.org/</url>
         </repository>
+
     </repositories>
 
 <dependencies>
@@ -68,10 +69,11 @@
         <artifactId>guava</artifactId>
         <version>31.1-jre</version> <!-- o la más reciente -->
     </dependency>
+
     <dependency>
         <groupId>com.github.almasb</groupId>
         <artifactId>fxgl</artifactId>
-        <version>17.3</version>
+        <version>21.1</version>
         <exclusions>
             <exclusion>
                 <groupId>org.openjfx</groupId>

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" style="-fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 2; -fx-background-radius: 1; -fx-border-color: #000000; -fx-background-color: #272727; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-image: url('/background/background-2.png');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.MainSceneController">
+<AnchorPane fx:id="main" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="900.0" prefWidth="1280.0" style="-fx-border-width: 2; -fx-border-insets: 0; -fx-border-radius: 2; -fx-background-radius: 1; -fx-border-color: #000000; -fx-background-color: #272727; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-image: url('/background/background-2.png');" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.main.MainSceneController">
     <children>
         <Button fx:id="btMinimize" layoutX="1174.0" layoutY="14.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="20.0" prefWidth="20.0" style="-fx-base: #2c313a;" styleClass="button_flat" stylesheets="@custom-styles.css" AnchorPane.rightAnchor="72.0">
             <graphic>

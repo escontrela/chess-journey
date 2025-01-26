@@ -2,6 +2,7 @@ package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
+import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
@@ -19,9 +20,10 @@ public class ScreenFactory {
 
   /** This is the set of screen that can be added to the main panel on the main STAGE. */
   public enum Screens {
+    MAIN_STAGE("/com/davidp/chessjourney/main-scene-3.fxml"),
     SETTINGS("/com/davidp/chessjourney/setting-view.fxml"),
     MENU("/com/davidp/chessjourney/menu-view.fxml"),
-    BOARD("/com/davidp/chessjourney/board-view.fxml");
+    BOARD("/com/davidp/chessjourney/board-view-2.fxml");
 
     private final String resourcePath;
 
@@ -52,21 +54,17 @@ public class ScreenFactory {
     return instance;
   }
 
-
-  public ScreenController createScreen(Screens screen)
-          throws IOException {
+  public ScreenController createScreen(Screens screen) throws IOException {
     switch (screen) {
-        case MENU:
-
+      case MENU:
         return getMenuScreen();
       case SETTINGS:
-
         return getSettingsScreen();
       case BOARD:
-
-        throw new RuntimeException("Not implemented yet!.");
-
-        default:
+        return getBoardScreen();
+      case MAIN_STAGE:
+        return getMainScreen();
+      default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
   }
@@ -81,11 +79,24 @@ public class ScreenFactory {
     return controller;
   }
 
-
   protected ScreenController getMenuScreen() {
 
-      FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
-      return objectFxmlBundle.getController();
+    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getBoardScreen() {
+
+    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.BOARD.resourceName());
+    // TODO: set the use cases here
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getMainScreen() {
+
+    FxmlBundle<MainSceneController> objectFxmlBundle = loadFxml(Screens.MAIN_STAGE.resourceName());
+    // TODO: set the use cases here
+    return objectFxmlBundle.getController();
   }
 
   protected ScreenPanel<MenuViewController, InputScreenData> createMenuScreen(
@@ -103,7 +114,7 @@ public class ScreenFactory {
   /**
    * Carga un archivo FXML y devuelve un objeto FxmlBundle que contiene el controlador y el nodo
    * raíz.
-   **/
+   */
   protected static <T> FxmlBundle<T> loadFxml(String fxmlPath) {
     try {
 
