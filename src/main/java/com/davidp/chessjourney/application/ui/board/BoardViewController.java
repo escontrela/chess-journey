@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.application.ui.board;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
@@ -8,6 +9,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
@@ -20,6 +22,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
@@ -40,9 +43,13 @@ public class BoardViewController implements ScreenController {
 
   @FXML private Pane pnlTime;
 
+  @FXML private Label lblBoardType;
+
   private final HashMap<Pos, Pane> boardPanes = new HashMap<>();
 
   private ScreenController.ScreenStatus status;
+
+  protected MemoryGameUseCase memoryGameUseCase;
 
   public void initialize() {
 
@@ -112,9 +119,10 @@ public class BoardViewController implements ScreenController {
                 if (db.hasString()) {
                   String droppedPos = db.getString(); // esto sí existirá
 
-                  System.out.println("Recibido: " + droppedPos);
+                  runLater(
+                      () -> soundService.playSound(SoundServiceFactory.SoundType.PIECE_PLACEMENT));
 
-                  soundService.playSound(SoundServiceFactory.SoundType.PIECE_PLACEMENT);
+                  System.out.println("Recibido: " + droppedPos);
 
                   // Lógica para mover la pieza
                   Pane toPane = (Pane) event.getGestureTarget();
@@ -162,30 +170,6 @@ public class BoardViewController implements ScreenController {
 
     // Si no se cumple ninguna de las condiciones, devolvemos un Optional vacío
     return Optional.empty();
-  }
-
-  /*
-   * Move a piece with drag and drop
-   */
-  private EventHandler<? super DragEvent> getDragDropManager(final Pane toSquare, Pos pos) {
-
-    System.out.println("The piece  was dropped on " + toSquare);
-
-    return (DragEvent event) -> {
-      System.out.println("Dropped");
-
-      PieceView fromPiece = (PieceView) event.getGestureSource();
-      Pane fromSquare = (Pane) fromPiece.getParent();
-
-      // if movement is allowed
-      freeSquare(fromSquare);
-      addPieceFromPosition(toSquare, fromPiece.getDomainPiece(), pos);
-
-      //  soundService.play(EAT_PIECE);
-      //  soundService.play(MOVE_ERR);
-
-      event.consume();
-    };
   }
 
   private void freeSquare(Pane pane) {
@@ -349,5 +333,11 @@ public class BoardViewController implements ScreenController {
   private boolean isFenInputField(KeyEvent event) {
 
     return event.getSource() == inFen;
+  }
+
+  public void setMemoryGameUseCase(MemoryGameUseCase memoryGameUseCase) {
+
+    this.memoryGameUseCase = memoryGameUseCase;
+    lblBoardType.setText("The memory game!");
   }
 }

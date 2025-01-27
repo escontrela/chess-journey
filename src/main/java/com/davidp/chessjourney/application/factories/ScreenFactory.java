@@ -2,6 +2,7 @@ package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.ScreenPanel;
+import com.davidp.chessjourney.application.ui.board.BoardViewController;
 import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
@@ -23,7 +24,8 @@ public class ScreenFactory {
     MAIN_STAGE("/com/davidp/chessjourney/main-scene-3.fxml"),
     SETTINGS("/com/davidp/chessjourney/setting-view.fxml"),
     MENU("/com/davidp/chessjourney/menu-view.fxml"),
-    BOARD("/com/davidp/chessjourney/board-view-2.fxml");
+    BOARD("/com/davidp/chessjourney/board-view-2.fxml"),
+    MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml");
 
     private final String resourcePath;
 
@@ -64,6 +66,8 @@ public class ScreenFactory {
         return getBoardScreen();
       case MAIN_STAGE:
         return getMainScreen();
+      case MEMORY_GAME:
+        return getMemoryGameScreen();
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
@@ -87,8 +91,16 @@ public class ScreenFactory {
 
   protected ScreenController getBoardScreen() {
 
-    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.BOARD.resourceName());
+    FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.BOARD.resourceName());
     // TODO: set the use cases here
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getMemoryGameScreen() {
+
+    FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.MEMORY_GAME.resourceName());
+    var controller = objectFxmlBundle.getController();
+    controller.setMemoryGameUseCase(UseCaseFactory.createMemoryGameUseCase());
     return objectFxmlBundle.getController();
   }
 

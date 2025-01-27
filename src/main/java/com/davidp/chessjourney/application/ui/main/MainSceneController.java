@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.application.ui.main;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -78,6 +79,7 @@ public class MainSceneController implements ScreenController {
   private static final Point MENU_POSITION = new Point(20, 535);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
   private static final Point BOARD_POSITION = new Point(140, 60);
+  private static final Point MEMORY_GAME_POSITION = new Point(140, 60);
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -98,27 +100,28 @@ public class MainSceneController implements ScreenController {
 
       showInfoPanel(pnlMessage);
 
-      // TODO test code, remove it asap
-      ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
-      emitter.setNumParticles(10); // Número de partículas
-      emitter.setSize(5, 10); // Tamaño de las partículas
+      runLater(
+          () -> {
+            // TODO test code, remove it asap
+            ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
+            emitter.setNumParticles(10); // Número de partículas
+            emitter.setSize(5, 10); // Tamaño de las partículas
 
-      // Opcional: Personalizar el emisor
-      emitter.setStartColor(javafx.scene.paint.Color.ORANGE);
-      emitter.setEndColor(Color.RED);
-      emitter.setSize(5, 10);
+            emitter.setStartColor(javafx.scene.paint.Color.ORANGE);
+            emitter.setEndColor(Color.RED);
+            emitter.setSize(5, 10);
 
-      // Crear la entidad con el emisor de partículas
-      Entity fire =
-          entityBuilder()
-              .at(200, 200) // Posición inicial
-              .with(new ParticleComponent(emitter)) // Agregar el componente de partículas
-              .buildAndAttach();
+            Entity fire =
+                entityBuilder()
+                    .at(200, 200) // Posición inicial
+                    .with(new ParticleComponent(emitter)) // Agregar el componente de partículas
+                    .buildAndAttach();
 
-      if (!getGameWorld().getEntities().contains(fire)) {
-        // Añadir al mundo del juego
-        getGameWorld().addEntity(fire);
-      }
+            if (!getGameWorld().getEntities().contains(fire)) {
+            
+              getGameWorld().addEntity(fire);
+            }
+          });
     }
   }
 
@@ -214,18 +217,17 @@ public class MainSceneController implements ScreenController {
 
   private void manageMemoryGameVisibility() {
 
-    ScreenController boardController = getScreen(Screens.BOARD);
-    if (boardController.isVisible() && !boardController.isInitialized()) {
+    ScreenController memoryGameController = getScreen(Screens.MEMORY_GAME);
+    if (memoryGameController.isVisible() && !memoryGameController.isInitialized()) {
 
-      boardController.hide();
+      memoryGameController.hide();
       return;
     }
 
-    //TODO Setting the use case of memory game!!!
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    AppProperties.getInstance().getActiveUserId(), BOARD_POSITION);
-    boardController.show(inputData);
+        new SettingsViewInputScreenData(
+            AppProperties.getInstance().getActiveUserId(), MEMORY_GAME_POSITION);
+    memoryGameController.show(inputData);
   }
 
   private void manageAnalysisBoardVisibility() {

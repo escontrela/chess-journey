@@ -30,11 +30,9 @@ public class MenuViewController implements ScreenController {
 
   @FXML private Text txtAnalysisBoard;
 
-  @FXML
-  private Text txtMemoryGame;
+  @FXML private Text txtMemoryGame;
 
-  @FXML
-  private Pane pnlOptionMemoryGame;
+  @FXML private Pane pnlOptionMemoryGame;
 
   public void initialize() {
 
@@ -63,26 +61,25 @@ public class MenuViewController implements ScreenController {
     rootPane.setVisible(false);
 
     //   Platform.runLater(() -> {
-/*
-    FadeInAnimation fadeIn = new FadeInAnimation(rootPane, Duration.seconds(0.4));
-    fadeIn.onFinished(
-        () -> {
-          rootPane.setVisible(true);
-          rootPane.toFront();
-        });
-    fadeIn.play();
- */
+    /*
+       FadeInAnimation fadeIn = new FadeInAnimation(rootPane, Duration.seconds(0.4));
+       fadeIn.onFinished(
+           () -> {
+             rootPane.setVisible(true);
+             rootPane.toFront();
+           });
+       fadeIn.play();
+    */
     // Fade in animation when showing
     FXGL.animationBuilder()
-            .duration(Duration.seconds(0.2))
-            .onFinished( ()-> {
+        .duration(Duration.seconds(0.2))
+        .onFinished(
+            () -> {
               rootPane.setVisible(true);
               rootPane.toFront();
             })
-            .fadeIn(rootPane)
-            .buildAndPlay();
-
-
+        .fadeIn(rootPane)
+        .buildAndPlay();
   }
 
   public void show(InputScreenData inputData) {
@@ -95,16 +92,15 @@ public class MenuViewController implements ScreenController {
   @Override
   public void hide() {
 
-      FXGL.animationBuilder()
-              .duration(Duration.seconds(0.2))
-              .onFinished( ()-> {
-
-                rootPane.setVisible(false);
-                status = ScreenStatus.HIDDEN;
-              })
-              .fadeOut(rootPane)
-              .buildAndPlay();
-
+    FXGL.animationBuilder()
+        .duration(Duration.seconds(0.2))
+        .onFinished(
+            () -> {
+              rootPane.setVisible(false);
+              status = ScreenStatus.HIDDEN;
+            })
+        .fadeOut(rootPane)
+        .buildAndPlay();
   }
 
   @Override

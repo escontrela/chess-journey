@@ -205,7 +205,10 @@
       </Label>
       <Circle fill="WHITE" layoutX="283.0" layoutY="774.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
       <Circle fill="#030303" layoutX="283.0" layoutY="25.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
-      <Pane fx:id="pnlTime" layoutX="709.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="panel-menu" />
+      <Pane fx:id="pnlTime" layoutX="709.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="panel-menu">
+         <children>
+            <Label fx:id="lblBoardType" layoutX="14.0" layoutY="14.0" styleClass="text-white-medium" text="board" />
+         </children></Pane>
       <Pane layoutX="709.0" layoutY="279.0" prefHeight="468.0" prefWidth="230.0" styleClass="panel-menu">
          <children>
             <Pane fx:id="pnlTitleBar1111" layoutX="1.0" layoutY="387.0" opacity="0.21" prefHeight="39.0" prefWidth="224.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
