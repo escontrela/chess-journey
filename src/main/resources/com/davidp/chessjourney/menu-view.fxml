@@ -44,11 +44,25 @@
             </Text>
             <ImageView fx:id="imgSettings1" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/search_18dp_gray.png" />
+                  <Image url="@img-gray/chess_pawn_18dp.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
       <Line endX="171.5" layoutX="7.0" layoutY="158.0" stroke="#2a293a" />
+      <Pane fx:id="pnlOptionMemoryGame" layoutY="175.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+         <children>
+            <Text fx:id="txtMemoryGame" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Memory Game">
+               <font>
+                  <Font name="Alatsi Regular" size="16.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="imgSettings11" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/chess_pawn_18dp.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
    </children>
 </Pane>

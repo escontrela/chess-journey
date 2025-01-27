@@ -10,6 +10,7 @@ import com.almasb.fxgl.particle.ParticleEmitters;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
+import com.davidp.chessjourney.application.domain.OpenMemoryGameEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
@@ -202,6 +203,29 @@ public class MainSceneController implements ScreenController {
 
     manageContextMenuVisibility();
     manageAnalysisBoardVisibility();
+  }
+
+  @Subscribe
+  public void onMemoryGameClicked(OpenMemoryGameEvent event) {
+
+    manageContextMenuVisibility();
+    manageMemoryGameVisibility();
+  }
+
+  private void manageMemoryGameVisibility() {
+
+    ScreenController boardController = getScreen(Screens.BOARD);
+    if (boardController.isVisible() && !boardController.isInitialized()) {
+
+      boardController.hide();
+      return;
+    }
+
+    //TODO Setting the use case of memory game!!!
+    SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    AppProperties.getInstance().getActiveUserId(), BOARD_POSITION);
+    boardController.show(inputData);
   }
 
   private void manageAnalysisBoardVisibility() {
