@@ -38,6 +38,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -69,6 +70,14 @@ public class MainSceneController implements ScreenController {
   @FXML private ImageView imgSettings;
 
   @FXML private ImageView imgLogo;
+
+
+  @FXML
+  private Text lblPractice;
+
+  @FXML
+  private Text lblChessboard;
+
 
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
@@ -118,7 +127,7 @@ public class MainSceneController implements ScreenController {
                     .buildAndAttach();
 
             if (!getGameWorld().getEntities().contains(fire)) {
-            
+
               getGameWorld().addEntity(fire);
             }
           });
@@ -256,6 +265,14 @@ public class MainSceneController implements ScreenController {
 
     moveMainWindowsSetUp();
     reloadUserInitials(AppProperties.getInstance().getActiveUserId());
+    showTextAnimation();
+  }
+
+  private void showTextAnimation() {
+
+    playTypeWriterEffect(lblChessboard.getText(), lblChessboard,0.1);
+    playTypeWriterEffect(lblPractice.getText(), lblPractice,0.1);
+
   }
 
   private void moveMainWindowsSetUp() {
@@ -381,5 +398,20 @@ public class MainSceneController implements ScreenController {
   public void minimize() {
 
     stage.setIconified(true);
+  }
+
+
+  private void playTypeWriterEffect(String text, Text textNode, double charInterval) {
+    textNode.setText(""); // Asegurarse de que el Text esté vacío al iniciar
+    StringBuilder currentText = new StringBuilder();
+
+    for (int i = 0; i < text.length(); i++) {
+      int index = i;
+      runOnce(() -> {
+        currentText.append(text.charAt(index)); // Añadir la siguiente letra
+        textNode.setText(currentText.toString());
+          return null;
+      }, javafx.util.Duration.seconds(i * charInterval));
+    }
   }
 }
