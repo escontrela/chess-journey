@@ -60,7 +60,8 @@ public class BoardViewController implements ScreenController {
   @FXML
   private Label lblBlackTime;
 
-
+  private boolean piecesHided = false;
+  private int matchedPieces = 0;
 
   private final HashMap<Pos, Pane> boardPanes = new HashMap<>();
 
@@ -149,6 +150,7 @@ public class BoardViewController implements ScreenController {
                   fromPane.getChildren().remove(pieceView);
                   toPane.getChildren().add(pieceView);
 
+                  matchedPieces++;
                   success = true;
                 }
                 event.setDropCompleted(success);
@@ -173,6 +175,7 @@ public class BoardViewController implements ScreenController {
     Object target = event.getTarget();
 
     if (target instanceof Pane) {
+
       return Optional.of((Pane) target);
 
     } else if (target instanceof PieceView) {
@@ -244,16 +247,19 @@ public class BoardViewController implements ScreenController {
 
   @Override
   public boolean isVisible() {
+
     return rootPane.isVisible();
   }
 
   @Override
   public boolean isHidden() {
+
     return !rootPane.isVisible();
   }
 
   @Override
   public Pane getRootPane() {
+
     return rootPane;
   }
 
@@ -281,6 +287,7 @@ public class BoardViewController implements ScreenController {
     if (isButtonStartClicked(event)) {
 
       if (boardType == BoardType.MEMORY) {
+
         btStart.setDisable(true);
         activeMemoryGame = memoryGameUseCase.execute( AppProperties.getInstance().getActiveUserId() );
         startMemoryGame();
@@ -293,16 +300,19 @@ public class BoardViewController implements ScreenController {
 
   private void startMemoryGame() {
 
+    cleanBoard();
 
     GameState gameState = fenService.parseString(activeMemoryGame.getFen());
 
     showPiecesOnBoard(gameState);
 
+    piecesHided = false;
+    matchedPieces = 0;
     activeMemoryGame.startGame();
     lblBoardType.setText("Estado: Jugando...");
-    // Iniciar el bucle de juego en FXGL
-    FXGL.run(this::gameLoop, Duration.millis(0.1)); // Se ejecuta cada 0.1 segundos (10 veces por segundo)
 
+    // Iniciar el bucle de juego en FXGL
+    FXGL.run(this::gameLoop, Duration.millis(0.1));
   }
 
 
@@ -314,6 +324,11 @@ public class BoardViewController implements ScreenController {
       var pane = boardPanes.get(piece.getPosition());
       addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
     });
+  }
+
+  private void cleanBoard() {
+
+    boardPanes.forEach((pos, pane) -> freeSquare(pane));
   }
 
   private void hidePiecesOnBoard(List<PiecePosition> pieces) {
@@ -329,15 +344,28 @@ public class BoardViewController implements ScreenController {
 private void gameLoop() {
   if (!activeMemoryGame.hasMoreExercises()) {
     lblBoardType.setText("¡Juego Terminado!");
+    btStart.setDisable(false);
     return; // Detener el bucle cuando se terminen los ejercicios
   }
 
-  // Si es el momento de ocultar las piezas, las ocultamos
-  if (activeMemoryGame.isTimeToHidePiecesOnTheCurrentExercise()) {
+  if (matchedPieces == activeMemoryGame.getHiddenPiecePositions().size()){
+    matchedPieces = 0;
+    piecesHided = false;
+    activeMemoryGame.nextExercise();
+    GameState gameState = fenService.parseString(activeMemoryGame.getFen());
+    cleanBoard();
+    showPiecesOnBoard(gameState);
 
-    hidePiecesOnBoard(activeMemoryGame.hideAleatoryPieces());
+  }
+
+  // Si es el momento de ocultar las piezas, las ocultamos
+  if (!piecesHided && activeMemoryGame.isTimeToHidePiecesOnTheCurrentExercise()) {
+
+    hidePiecesOnBoard(activeMemoryGame.getHiddenPiecePositions());
+    piecesHided = true;
     lblBoardType.setText("Piezas ocultas. Adivina la posición.");
   }
+
   lblBlackTime.setText(activeMemoryGame.getFormatedElapsedTime());
 }
 
@@ -418,6 +446,6 @@ private boolean isButtonStartClicked(ActionEvent event) {
     this.memoryGameUseCase = memoryGameUseCase;
     this.boardType = BoardType.MEMORY;
     this.btStart.setVisible(true);
-    lblBoardType.setText("The memory game!");
+    this.lblBoardType.setText("The memory game!");
   }
 }

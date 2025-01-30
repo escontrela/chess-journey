@@ -22,6 +22,7 @@ public class MemoryGame extends Game {
   private List<PiecePosition> hiddenPiecePositions;
   private final long timeToShowPiecesOnTheCurrentExerciseInSeconds = 5;
   private List <MemoryGamePartialStat> stats = new ArrayList<>();
+  private boolean wasHided = false;
 
   public MemoryGame(Player player, ChessBoard board, TimeControl timeControl, List<Fen> positions) {
 
@@ -123,6 +124,7 @@ public class MemoryGame extends Game {
 
     List<PiecePosition> hiddenPositions = allPositions.subList(0, piecesToHide);
 
+
     return new ArrayList<>(hiddenPositions); // Devolver copia para evitar modificaciones externas
   }
 
@@ -140,12 +142,17 @@ public class MemoryGame extends Game {
     }
   }
 
+  public List<PiecePosition> getHiddenPiecePositions() {
+    return hiddenPiecePositions;
+  }
+  
+  /*
   public List<PiecePosition> hideAleatoryPieces() {
 
     hiddenPiecePositions = hidePieces(hiddenPiecesCount);
     return hiddenPiecePositions;
   }
-
+*/
   /**
    * Verifica si quedan más ejercicios.
    */
