@@ -1,6 +1,5 @@
 package com.davidp.chessjourney.application.ui.board;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -56,6 +55,11 @@ public class BoardViewController implements ScreenController {
   @FXML private Label lblBoardType;
 
   @FXML private Button btStart;
+
+
+  @FXML
+  private Label lblBlackTime;
+
 
 
   private final HashMap<Pos, Pane> boardPanes = new HashMap<>();
@@ -289,18 +293,56 @@ public class BoardViewController implements ScreenController {
 
   private void startMemoryGame() {
 
+
     GameState gameState = fenService.parseString(activeMemoryGame.getFen());
+
+    showPiecesOnBoard(gameState);
+
+    activeMemoryGame.startGame();
+    lblBoardType.setText("Estado: Jugando...");
+    // Iniciar el bucle de juego en FXGL
+    FXGL.run(this::gameLoop, Duration.millis(0.1)); // Se ejecuta cada 0.1 segundos (10 veces por segundo)
+
+  }
+
+
+  private void showPiecesOnBoard(GameState gameState) {
+
     List<PiecePosition> pieces = gameState.getPieces();
 
     pieces.forEach(piece -> {
       var pane = boardPanes.get(piece.getPosition());
       addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
     });
-  
-    //TODO final countdown and start the game
   }
 
-  private boolean isButtonStartClicked(ActionEvent event) {
+  private void hidePiecesOnBoard(List<PiecePosition> pieces) {
+    pieces.forEach(piece -> {
+      var pane = boardPanes.get(piece.getPosition());
+      freeSquare(pane);
+    });
+  }
+
+  /**
+ * Bucle de juego que controla la lógica del MemoryGame.
+ */
+private void gameLoop() {
+  if (!activeMemoryGame.hasMoreExercises()) {
+    lblBoardType.setText("¡Juego Terminado!");
+    return; // Detener el bucle cuando se terminen los ejercicios
+  }
+
+  // Si es el momento de ocultar las piezas, las ocultamos
+  if (activeMemoryGame.isTimeToHidePiecesOnTheCurrentExercise()) {
+
+    hidePiecesOnBoard(activeMemoryGame.hideAleatoryPieces());
+    lblBoardType.setText("Piezas ocultas. Adivina la posición.");
+  }
+  lblBlackTime.setText(activeMemoryGame.getFormatedElapsedTime());
+}
+
+
+private boolean isButtonStartClicked(ActionEvent event) {
 
     return event.getSource() == btStart;
   }
@@ -318,13 +360,7 @@ public class BoardViewController implements ScreenController {
         final GameState fenParserResponse =
             fenService.parseString(Fen.createCustom(inFen.getText()));
 
-        List<PiecePosition> pieces = fenParserResponse.getPieces();
-
-        pieces.forEach(
-            piece -> {
-              var pane = boardPanes.get(piece.getPosition());
-              addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
-            });
+        showPiecesOnBoard(fenParserResponse);
       }
     }
   }
