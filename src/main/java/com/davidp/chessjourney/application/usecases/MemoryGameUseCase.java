@@ -1,8 +1,9 @@
 package com.davidp.chessjourney.application.usecases;
 
 import com.davidp.chessjourney.domain.ChessGame;
+import com.davidp.chessjourney.domain.MemoryGame;
 
 public interface MemoryGameUseCase {
 
-  ChessGame execute(long userId);
+  MemoryGame execute(long userId);
 }

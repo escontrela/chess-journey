@@ -4,12 +4,14 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
 import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
+import com.davidp.chessjourney.domain.MemoryGame;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
@@ -30,8 +32,16 @@ import javafx.util.Duration;
 
 public class BoardViewController implements ScreenController {
 
+  private enum BoardType {
+    CHESS,
+    MEMORY
+  }
+
+  protected BoardType boardType = BoardType.CHESS;
+  protected MemoryGame activeMemoryGame;
   private final FenService fenService = FenServiceFactory.getFenService();
   private final SoundServiceFactory soundService = SoundServiceFactory.getInstance();
+
 
   @FXML private Button btClose;
 
@@ -44,6 +54,9 @@ public class BoardViewController implements ScreenController {
   @FXML private Pane pnlTime;
 
   @FXML private Label lblBoardType;
+
+  @FXML private Button btStart;
+
 
   private final HashMap<Pos, Pane> boardPanes = new HashMap<>();
 
@@ -261,6 +274,35 @@ public class BoardViewController implements ScreenController {
       // advert box message.
       // GlobalEventBus.get().post(new UserSavedAppEvent(settingsViewData.getUserId()));
     }
+    if (isButtonStartClicked(event)) {
+
+      if (boardType == BoardType.MEMORY) {
+        btStart.setDisable(true);
+        activeMemoryGame = memoryGameUseCase.execute( AppProperties.getInstance().getActiveUserId() );
+        startMemoryGame();
+      }
+      // TODO start the game
+      // TODO execute the use Case
+      // TODO show the next screen
+    }
+  }
+
+  private void startMemoryGame() {
+
+    GameState gameState = fenService.parseString(activeMemoryGame.getFen());
+    List<PiecePosition> pieces = gameState.getPieces();
+
+    pieces.forEach(piece -> {
+      var pane = boardPanes.get(piece.getPosition());
+      addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
+    });
+  
+    //TODO final countdown and start the game
+  }
+
+  private boolean isButtonStartClicked(ActionEvent event) {
+
+    return event.getSource() == btStart;
   }
 
   @FXML
@@ -338,6 +380,8 @@ public class BoardViewController implements ScreenController {
   public void setMemoryGameUseCase(MemoryGameUseCase memoryGameUseCase) {
 
     this.memoryGameUseCase = memoryGameUseCase;
+    this.boardType = BoardType.MEMORY;
+    this.btStart.setVisible(true);
     lblBoardType.setText("The memory game!");
   }
 }

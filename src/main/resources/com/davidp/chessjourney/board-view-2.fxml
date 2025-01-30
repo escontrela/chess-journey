@@ -208,6 +208,11 @@
       <Pane fx:id="pnlTime" layoutX="709.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="panel-menu">
          <children>
             <Label fx:id="lblBoardType" layoutX="14.0" layoutY="14.0" styleClass="text-white-medium" text="board" />
+            <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="43.0" layoutY="131.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="145.0" styleClass="button-red" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
          </children></Pane>
       <Pane layoutX="709.0" layoutY="279.0" prefHeight="468.0" prefWidth="230.0" styleClass="panel-menu">
          <children>

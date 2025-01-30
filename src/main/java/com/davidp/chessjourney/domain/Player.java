@@ -5,14 +5,21 @@ import java.util.Objects;
 public class Player {
 
   private final String name;
+  private final Long userId;
 
-  public Player(final String name) {
+  public Player(final String name,final Long userId) {
     this.name = name;
+    this.userId = userId;
   }
 
   public String getName() {
 
     return name;
+  }
+
+  public Long getUserId(){
+
+    return userId;
   }
 
   @Override
@@ -25,11 +32,13 @@ public class Player {
 
   @Override
   public int hashCode() {
+
     return Objects.hash(name);
   }
 
   @Override
   public String toString() {
-    return "Player{" + "name='" + name + '}';
+
+    return "Player{" + "name='" + name + "', userId=" + userId + "}'";
   }
 }

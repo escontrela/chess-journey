@@ -26,8 +26,8 @@ public class ChessGameTest {
   @Test
   public void gameTest() {
 
-    Player whitePlayer = new Player("Alice");
-    Player blackPlayer = new Player("Bob");
+    Player whitePlayer = new Player("Alice",1L);
+    Player blackPlayer = new Player("Bob",2L);
 
     ChessGame chessGame =
         ChessGameFactory.createFrom(
