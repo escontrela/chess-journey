@@ -1,6 +1,11 @@
-package com.davidp.chessjourney.domain;
+package com.davidp.chessjourney.domain.games.memory;
 
+import com.davidp.chessjourney.domain.ChessBoard;
+import com.davidp.chessjourney.domain.ChessBoardFactory;
+import com.davidp.chessjourney.domain.Game;
+import com.davidp.chessjourney.domain.Player;
 import com.davidp.chessjourney.domain.common.Fen;
+import com.davidp.chessjourney.domain.common.GameState;
 import com.davidp.chessjourney.domain.common.PiecePosition;
 import com.davidp.chessjourney.domain.common.TimeControl;
 
@@ -8,6 +13,7 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 
 /** Clase base para un juego de ajedrez de memoria. */
 public class MemoryGame extends Game {
@@ -24,6 +30,8 @@ public class MemoryGame extends Game {
   private List <MemoryGamePartialStat> stats = new ArrayList<>();
   private boolean wasHided = false;
 
+  private GameState gameState;
+
   public MemoryGame(Player player, ChessBoard board, TimeControl timeControl, List<Fen> positions) {
 
     super();
@@ -33,6 +41,7 @@ public class MemoryGame extends Game {
     this.positions = positions;
     this.currentExerciseIndex = 0;
     this.hiddenPiecesCount = 1;
+    this.gameState = GameState.WAITING_TO_START;
   }
 
 
@@ -41,20 +50,34 @@ public class MemoryGame extends Game {
    */
   public void submitAnswer(boolean correct) {
 
+    if (gameState != GameState.GUESSING_PIECES) {
 
-    stats.add(new MemoryGamePartialStat(hiddenPiecesCount,correct,getElapsedTimeOfCurrentPosInSeconds() ));// Ajustar tiempo de control con incremento
-    //TODO adjust the time control timeControl.adjustTime(solvedExercises);
+      throw new IllegalStateException("No se puede enviar respuesta en este estado.");
+    }
+
+    stats.add(new MemoryGamePartialStat(hiddenPiecesCount, correct, getElapsedTimeOfCurrentPosInSeconds()));
     nextExercise();
+    //TODO adjust the time control timeControl.adjustTime(solvedExercises);
   }
 
+
+  /**
+   * Devuelve el tiempo transcurrido en la posición actual.
+   */
   private long getElapsedTimeOfCurrentPosInSeconds() {
-     return java.time.Duration.between(partialTime, Instant.now()).getSeconds();
+    return java.time.Duration.between(partialTime, Instant.now()).getSeconds();
   }
 
   /**
    * Permite omitir un ejercicio y registrarlo como fallo.
    */
   public void skipExercise() {
+
+    if (gameState != GameState.GUESSING_PIECES) {
+
+      throw new IllegalStateException("No se puede omitir un ejercicio en este estado.");
+    }
+
     submitAnswer(false);
   }
 
@@ -63,18 +86,25 @@ public class MemoryGame extends Game {
    */
   public void startGame() {
 
+    if (gameState != GameState.WAITING_TO_START && gameState != GameState.GAME_OVER) {
+
+      throw new IllegalStateException("The game is already started!.");
+    }
+
     startTime = Instant.now();
+    gameState = GameState.SHOWING_PIECES;  // Cambia de estado
     loadExercise();
   }
 
-  public long getElapsedTimeInSeconds(){
-
-    if (startTime != null) {
-      Instant currentTime = Instant.now();
-      return java.time.Duration.between(startTime, currentTime).getSeconds();
-    }
-    return 0;
+  /**
+   * Devuelve el tiempo transcurrido desde que se inició el juego.
+   */
+  public long getElapsedTimeInSeconds() {
+    if (startTime == null) return 0;
+    return java.time.Duration.between(startTime, Instant.now()).getSeconds();
   }
+
+
 
   public String getFormatedElapsedTime(){
 
@@ -86,8 +116,21 @@ public class MemoryGame extends Game {
 
   public boolean isTimeToHidePiecesOnTheCurrentExercise() {
 
+    if (gameState != GameState.SHOWING_PIECES) {
+
+      return false;
+    }
+
     Instant currentTime = Instant.now();
-    return java.time.Duration.between(partialTime, currentTime).getSeconds() > timeToShowPiecesOnTheCurrentExerciseInSeconds;
+    boolean timeToHide = java.time.Duration.between(partialTime, currentTime).getSeconds()
+            > timeToShowPiecesOnTheCurrentExerciseInSeconds;
+
+    if (timeToHide) {
+
+      gameState = GameState.GUESSING_PIECES; // Cambiamos al estado de adivinanza
+    }
+
+    return timeToHide;
   }
 
   /**
@@ -95,17 +138,17 @@ public class MemoryGame extends Game {
    */
   private void loadExercise() {
 
-    if (currentExerciseIndex < positions.size()) {
-
-      Fen currentFen = positions.get(currentExerciseIndex);
-      chessBoard = ChessBoardFactory.createFromFEN(currentFen);
-      hiddenPiecePositions = hidePieces(hiddenPiecesCount);
-      partialTime = Instant.now();
-
-    }else{
-
+    if (currentExerciseIndex >= positions.size()) {
+      gameState = GameState.GAME_OVER;
       throw new IllegalStateException("No more exercises available.");
     }
+
+    Fen currentFen = positions.get(currentExerciseIndex);
+    chessBoard = ChessBoardFactory.createFromFEN(currentFen);
+    hiddenPiecePositions = hidePieces(hiddenPiecesCount);
+    partialTime = Instant.now();
+
+    gameState = GameState.SHOWING_PIECES;
   }
 
 
@@ -134,25 +177,21 @@ public class MemoryGame extends Game {
    */
   public void nextExercise() {
 
-    if (hasMoreExercises()) {
+    if (!hasMoreExercises()) {
 
-      currentExerciseIndex++;
-      increaseDifficulty();
-      loadExercise();
+      gameState = GameState.GAME_OVER;
+      return;
     }
+
+    currentExerciseIndex++;
+    increaseDifficulty();
+    loadExercise();
   }
 
   public List<PiecePosition> getHiddenPiecePositions() {
     return hiddenPiecePositions;
   }
-  
-  /*
-  public List<PiecePosition> hideAleatoryPieces() {
 
-    hiddenPiecePositions = hidePieces(hiddenPiecesCount);
-    return hiddenPiecePositions;
-  }
-*/
   /**
    * Verifica si quedan más ejercicios.
    */
@@ -161,6 +200,14 @@ public class MemoryGame extends Game {
     return currentExerciseIndex < positions.size() - 1;
   }
 
+  /**
+   * Return the game status for the controller
+   * @return GameState game status
+   */
+  public GameState getGameState(){
+
+    return gameState;
+  }
 
 
   /**
@@ -192,6 +239,17 @@ public class MemoryGame extends Game {
   public Fen getFen() {
 
     return chessBoard.getFen();
+  }
+
+
+  /**
+   * These states are using to control the game status
+   */
+  public enum GameState {
+    WAITING_TO_START,
+    SHOWING_PIECES,
+    GUESSING_PIECES,
+    GAME_OVER
   }
 
   public static class MemoryGamePartialStat{

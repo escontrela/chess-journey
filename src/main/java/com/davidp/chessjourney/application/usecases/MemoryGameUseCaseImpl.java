@@ -3,6 +3,7 @@ package com.davidp.chessjourney.application.usecases;
 import com.davidp.chessjourney.domain.*;
 import com.davidp.chessjourney.domain.common.Fen;
 import com.davidp.chessjourney.domain.common.TimeControl;
+import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 
 import java.util.List;
 

@@ -213,6 +213,7 @@
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
             </Button>
+            <Label fx:id="lblStatus" layoutX="20.0" layoutY="161.0" styleClass="text-gray-small" text="FEN" />
          </children></Pane>
       <Pane layoutX="709.0" layoutY="279.0" prefHeight="468.0" prefWidth="230.0" styleClass="panel-menu">
          <children>

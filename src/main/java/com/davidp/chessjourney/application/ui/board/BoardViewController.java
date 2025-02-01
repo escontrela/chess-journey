@@ -10,7 +10,7 @@ import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
-import com.davidp.chessjourney.domain.MemoryGame;
+import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
@@ -55,6 +55,11 @@ public class BoardViewController implements ScreenController {
   @FXML private Label lblBoardType;
 
   @FXML private Button btStart;
+
+
+  @FXML
+  private Label lblStatus;
+
 
 
   @FXML
@@ -342,6 +347,10 @@ public class BoardViewController implements ScreenController {
  * Bucle de juego que controla la lógica del MemoryGame.
  */
 private void gameLoop() {
+
+
+   lblStatus.setText(activeMemoryGame.getGameState().toString());
+
   if (!activeMemoryGame.hasMoreExercises()) {
     lblBoardType.setText("¡Juego Terminado!");
     btStart.setDisable(false);

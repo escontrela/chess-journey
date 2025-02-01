@@ -1,7 +1,6 @@
 package com.davidp.chessjourney.application.usecases;
 
-import com.davidp.chessjourney.domain.ChessGame;
-import com.davidp.chessjourney.domain.MemoryGame;
+import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 
 public interface MemoryGameUseCase {
 
