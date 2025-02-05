@@ -4,6 +4,7 @@ import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
+import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
@@ -14,6 +15,9 @@ import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
+
+import java.awt.*;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -40,7 +44,7 @@ public class BoardViewController implements ScreenController {
   protected MemoryGame activeMemoryGame;
   private final FenService fenService = FenServiceFactory.getFenService();
   private final SoundServiceFactory soundService = SoundServiceFactory.getInstance();
-
+  private final Map<ScreenFactory.Screens, ScreenController> screenManager = new HashMap<>();
 
   @FXML private Button btClose;
 
@@ -59,6 +63,9 @@ public class BoardViewController implements ScreenController {
 
   @FXML
   private Label lblStatus;
+
+  @FXML
+  private Label lblExerciseNum;
 
 
 
@@ -84,9 +91,11 @@ public class BoardViewController implements ScreenController {
           Optional<Pane> selectedSquare = getSquareViewFromMouseEvent(event);
 
           selectedSquare.ifPresent(
-              pane ->
+              pane ->{
                   pane.setStyle(
-                      "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;"));
+                      "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
+                  managePromotePanelVisibility();
+              });
         });
   }
 
@@ -155,7 +164,11 @@ public class BoardViewController implements ScreenController {
                   fromPane.getChildren().remove(pieceView);
                   toPane.getChildren().add(pieceView);
 
+                  // TODO fix it!
+                  activeMemoryGame.guessPiece(new PiecePosition(PieceFactory.createWhiteQueen(), Pos.parseString("e4")));
+                  //matchedPieces = activeMemoryGame.getGuessPiecesCount();
                   matchedPieces++;
+
                   success = true;
                 }
                 event.setDropCompleted(success);
@@ -315,7 +328,11 @@ public class BoardViewController implements ScreenController {
     matchedPieces = 0;
     activeMemoryGame.startGame();
     lblBoardType.setText("Estado: Jugando...");
-
+    lblExerciseNum.setText(
+                    String.valueOf(activeMemoryGame.getCurrentExerciseNumber())
+                    + " - " +
+                    String.valueOf(activeMemoryGame.totalHiddenPieces())
+                    );
     // Iniciar el bucle de juego en FXGL
     FXGL.run(this::gameLoop, Duration.millis(0.1));
   }
@@ -351,28 +368,37 @@ private void gameLoop() {
 
    lblStatus.setText(activeMemoryGame.getGameState().toString());
 
-  if (!activeMemoryGame.hasMoreExercises()) {
+  if (activeMemoryGame.getGameState() == MemoryGame.GameState.GAME_OVER) {
     lblBoardType.setText("¡Juego Terminado!");
     btStart.setDisable(false);
-    return; // Detener el bucle cuando se terminen los ejercicios
+    return;
   }
 
-  if (matchedPieces == activeMemoryGame.getHiddenPiecePositions().size()){
-    matchedPieces = 0;
-    piecesHided = false;
-    activeMemoryGame.nextExercise();
-    GameState gameState = fenService.parseString(activeMemoryGame.getFen());
-    cleanBoard();
-    showPiecesOnBoard(gameState);
 
+    if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
+
+      if (matchedPieces == activeMemoryGame.getHiddenPiecePositions().size()) {
+
+        matchedPieces = 0;
+        piecesHided = false;
+        activeMemoryGame.nextExercise();
+        GameState gameState = fenService.parseString(activeMemoryGame.getFen());
+        cleanBoard();
+        showPiecesOnBoard(gameState);
+        lblExerciseNum.setText(
+                String.valueOf(activeMemoryGame.getCurrentExerciseNumber())
+                        + " - " +
+                        String.valueOf(activeMemoryGame.totalHiddenPieces())
+        );
+      }
   }
 
-  // Si es el momento de ocultar las piezas, las ocultamos
-  if (!piecesHided && activeMemoryGame.isTimeToHidePiecesOnTheCurrentExercise()) {
+  if (activeMemoryGame.getGameState() == MemoryGame.GameState.SHOWING_PIECES
+          && activeMemoryGame.isTimeToHidePiecesOnTheCurrentExercise()) {
 
-    hidePiecesOnBoard(activeMemoryGame.getHiddenPiecePositions());
-    piecesHided = true;
-    lblBoardType.setText("Piezas ocultas. Adivina la posición.");
+      hidePiecesOnBoard(activeMemoryGame.getHiddenPiecePositions());
+      piecesHided = true;
+      lblBoardType.setText("Piezas ocultas. Adivina la posición.");
   }
 
   lblBlackTime.setText(activeMemoryGame.getFormatedElapsedTime());
@@ -401,6 +427,46 @@ private boolean isButtonStartClicked(ActionEvent event) {
       }
     }
   }
+
+  /**
+   * Get or initialize the screen controller for the given screen
+   *
+   * @param screen Screen to get
+   * @return ScreenController for the given screen
+   */
+  protected ScreenController getScreen(ScreenFactory.Screens screen) {
+
+    return screenManager.computeIfAbsent(
+            screen,
+            s -> {
+              try {
+
+                var cachedScreen = ScreenFactory.getInstance().createScreen(s);
+                pnlBoard.getChildren().add(cachedScreen.getRootPane());
+                return cachedScreen;
+              } catch (IOException e) {
+
+                throw new RuntimeException(e);
+              }
+            });
+  }
+
+
+  /** This method is called when the user clicks on the logger user icon. */
+  private void managePromotePanelVisibility() {
+
+    ScreenController contextMenuController = getScreen(ScreenFactory.Screens.PROMOTE_PANEL);
+
+    if (contextMenuController.isVisible() && !contextMenuController.isInitialized()) {
+
+      contextMenuController.hide();
+    }
+
+    Point POSITION = new Point(20, 535);
+
+    contextMenuController.show(InputScreenData.fromPosition(POSITION));
+  }
+
 
   /** Add a piece to the chessboard view position. */
   private void addPieceFromPosition(final Pane e, final Piece piece, final Pos position) {

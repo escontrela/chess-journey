@@ -23,6 +23,7 @@ public class MemoryGame extends Game {
   private final List<Fen> positions;
   private int currentExerciseIndex;
   private int hiddenPiecesCount;
+  private int guessPiecesCounts;
   private Instant startTime;
   private Instant partialTime;
   private List<PiecePosition> hiddenPiecePositions;
@@ -151,6 +152,26 @@ public class MemoryGame extends Game {
     gameState = GameState.SHOWING_PIECES;
   }
 
+  public int totalHiddenPieces(){
+
+    return hiddenPiecePositions.size();
+  }
+
+  public int getGuessPiecesCount(){
+
+    return guessPiecesCounts;
+  }
+
+  public boolean guessPiece(final PiecePosition piecePosition){
+
+    if (hiddenPiecePositions.contains(piecePosition)){
+
+      guessPiecesCounts++;
+      return true;
+
+    }
+    return false;
+  }
 
   private List<PiecePosition> hidePieces(int count) {
 
@@ -167,7 +188,7 @@ public class MemoryGame extends Game {
 
     List<PiecePosition> hiddenPositions = allPositions.subList(0, piecesToHide);
 
-
+    guessPiecesCounts = 0;
     return new ArrayList<>(hiddenPositions); // Devolver copia para evitar modificaciones externas
   }
 
@@ -186,6 +207,11 @@ public class MemoryGame extends Game {
     currentExerciseIndex++;
     increaseDifficulty();
     loadExercise();
+  }
+
+  public int getCurrentExerciseNumber(){
+
+    return  currentExerciseIndex + 1;
   }
 
   public List<PiecePosition> getHiddenPiecePositions() {

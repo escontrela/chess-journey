@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.layout.Pane?>
+
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="436.0" prefWidth="114.0" styleClass="panel-menu" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.PromoteViewController">
+   <children>
+      <Pane fx:id="pnlPromote" layoutX="11.0" layoutY="13.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="410.0" prefWidth="92.0" style="-fx-border-color: #303040; -fx-border-width: 1; -fx-border-insets: -3;">
+         <children>
+            <Pane fx:id="pnlQueen" layoutX="5.0" layoutY="5.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlknight" layoutX="5.0" layoutY="85.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlRook" layoutX="5.0" layoutY="165.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlBishop" layoutX="5.0" layoutY="245.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlPawn" layoutX="5.0" layoutY="325.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+         </children>
+      </Pane>
+   </children>
+   <stylesheets>
+      <URL value="@custom-styles.css" />
+   </stylesheets>
+</Pane>

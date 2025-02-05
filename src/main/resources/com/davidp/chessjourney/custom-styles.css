@@ -288,6 +288,12 @@
 
 }
 
+.chessboard-square-promote {
+    -fx-background-color: #FFFFFF;
+    -fx-boarder-color: #000000;
+    -fx-border-radius: 20;
+    -fx-border-width: 1;
+}
 .chessboard-square-white {
     -fx-background-color: #D0E0EB;
 }

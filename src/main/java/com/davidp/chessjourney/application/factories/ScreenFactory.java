@@ -25,7 +25,8 @@ public class ScreenFactory {
     SETTINGS("/com/davidp/chessjourney/setting-view.fxml"),
     MENU("/com/davidp/chessjourney/menu-view.fxml"),
     BOARD("/com/davidp/chessjourney/board-view-2.fxml"),
-    MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml");
+    MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
+    PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml");
 
     private final String resourcePath;
 
@@ -68,6 +69,8 @@ public class ScreenFactory {
         return getMainScreen();
       case MEMORY_GAME:
         return getMemoryGameScreen();
+      case PROMOTE_PANEL:
+        return getPromotePanelScreen();
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
@@ -101,6 +104,13 @@ public class ScreenFactory {
     FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.MEMORY_GAME.resourceName());
     var controller = objectFxmlBundle.getController();
     controller.setMemoryGameUseCase(UseCaseFactory.createMemoryGameUseCase());
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getPromotePanelScreen() {
+
+    FxmlBundle<MainSceneController> objectFxmlBundle = loadFxml(Screens.PROMOTE_PANEL.resourceName());
+
     return objectFxmlBundle.getController();
   }
 
