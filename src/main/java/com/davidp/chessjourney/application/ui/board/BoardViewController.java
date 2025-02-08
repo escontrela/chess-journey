@@ -4,12 +4,16 @@ import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
+import com.davidp.chessjourney.application.config.GlobalEventBus;
+import com.davidp.chessjourney.application.domain.OpenMemoryGameEvent;
+import com.davidp.chessjourney.application.domain.PromoteSelectedPieceEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 import com.davidp.chessjourney.domain.common.*;
@@ -22,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import com.google.common.eventbus.Subscribe;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -83,19 +89,27 @@ public class BoardViewController implements ScreenController {
 
   public void initialize() {
 
+
+    GlobalEventBus.get().register(this);
+
     status = ScreenController.ScreenStatus.INITIALIZED;
     initializeBoardPanes();
 
-    pnlBoard.setOnMousePressed(
-        event -> {
-          Optional<Pane> selectedSquare = getSquareViewFromMouseEvent(event);
+    pnlBoard.setOnMousePressed(this::onMousePressed);
 
-          selectedSquare.ifPresent(
-              pane ->{
-                  pane.setStyle(
-                      "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
-                  managePromotePanelVisibility();
-              });
+  }
+
+  private void onMousePressed(MouseEvent event) {
+
+    Optional<Pane> selectedSquare = getSquareViewFromMouseEvent(event);
+
+    selectedSquare.ifPresent(
+        pane ->{
+            pane.setStyle(
+                "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
+            Point screenPos = new Point((int) event.getX(), (int) event.getY());
+
+            managePromotePanelVisibility(screenPos,PieceColor.BLACK);
         });
   }
 
@@ -453,7 +467,7 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
 
   /** This method is called when the user clicks on the logger user icon. */
-  private void managePromotePanelVisibility() {
+  private void managePromotePanelVisibility(final Point screenPos,final PieceColor pieceColor) {
 
     ScreenController contextMenuController = getScreen(ScreenFactory.Screens.PROMOTE_PANEL);
 
@@ -462,9 +476,7 @@ private boolean isButtonStartClicked(ActionEvent event) {
       contextMenuController.hide();
     }
 
-    Point POSITION = new Point(20, 535);
-
-    contextMenuController.show(InputScreenData.fromPosition(POSITION));
+    contextMenuController.show(PromoteViewInputScreenData.from(screenPos,pieceColor));
   }
 
 
@@ -522,5 +534,12 @@ private boolean isButtonStartClicked(ActionEvent event) {
     this.boardType = BoardType.MEMORY;
     this.btStart.setVisible(true);
     this.lblBoardType.setText("The memory game!");
+  }
+
+
+  @Subscribe
+  public void onMemoryGameClicked(PromoteSelectedPieceEvent event) {
+
+    System.out.println("MemoryGameClicked:" + event.getSelectedPiece());
   }
 }

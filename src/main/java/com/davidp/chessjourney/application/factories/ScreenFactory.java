@@ -121,18 +121,6 @@ public class ScreenFactory {
     return objectFxmlBundle.getController();
   }
 
-  protected ScreenPanel<MenuViewController, InputScreenData> createMenuScreen(
-      InputScreenData inputData) throws IOException {
-
-    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
-    MenuViewController controller = objectFxmlBundle.getController();
-
-    Pane root = (Pane) objectFxmlBundle.getRoot();
-    root.setLayoutX(inputData.getLayoutX());
-    root.setLayoutY(inputData.getLayoutY());
-    return new ScreenPanel<>(root, controller);
-  }
-
   /**
    * Carga un archivo FXML y devuelve un objeto FxmlBundle que contiene el controlador y el nodo
    * raíz.
