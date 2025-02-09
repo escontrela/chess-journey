@@ -228,6 +228,16 @@
                </children>
             </Pane>
             <Label layoutX="6.0" layoutY="357.0" styleClass="text-gray-small" text="FEN" />
+            <ImageView fitHeight="64.0" fitWidth="61.0" layoutX="8.0" layoutY="49.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@sample/other/ghost-bot.png" />
+               </image>
+            </ImageView>
+            <Pane layoutX="69.0" layoutY="36.0" prefHeight="52.0" prefWidth="145.0" style="-fx-background-color: white; -fx-border-radius: 40; -fx-background-radius: 10;">
+               <children>
+                  <Label layoutX="20.0" layoutY="18.0" text="Hola, preparado?" />
+               </children>
+            </Pane>
          </children></Pane>
       <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="931.0" layoutY="8.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>

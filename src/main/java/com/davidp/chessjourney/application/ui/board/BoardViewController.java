@@ -109,12 +109,13 @@ public class BoardViewController implements ScreenController {
         pane ->{
             pane.setStyle(
                 "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
-            Point screenPos = new Point((int) event.getX(), (int) event.getY());
+
+            Point screenPos = new Point( event.getX() > 80 ?
+                    (int)event.getX() : 80 , event.getY() < 160 ? (int)event.getY() : 160);
 
           if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES){
 
-            String squareId = selectedSquare.get().getId();
-
+              String squareId = selectedSquare.get().getId();
               var pos = Pos.parseString(squareId);
 
               PieceColor pieceColor = getPieceColorFromFENPosition(activeMemoryGame.getFen());
