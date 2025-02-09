@@ -553,13 +553,30 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
     boolean result = activeMemoryGame.guessPiece(new PiecePosition(event.getSelectedPiece(), event.getPos()));
     if (result) {
-      lblBoardType.setText("¡Correcto!");
-      boardPanes.get(event.getPos()).getChildren().add(imgOk);
+
+
+      FXGL.animationBuilder()
+              .duration(Duration.seconds(0.2))
+              .onFinished(
+                      () -> {
+                        lblBoardType.setText("¡Correcto!");
+                        boardPanes.get(event.getPos()).getChildren().add(imgOk);
+                      })
+              .fadeIn(boardPanes.get(event.getPos()))
+              .buildAndPlay();
 
     } else {
-      //TODO add correct bitmap
-      lblBoardType.setText("Incorrecto");
-      boardPanes.get(event.getPos()).getChildren().add(imgFail);
+
+      FXGL.animationBuilder()
+              .duration(Duration.seconds(0.2))
+              .onFinished(
+                      () -> {
+                        lblBoardType.setText("Incorrecto");
+                        boardPanes.get(event.getPos()).getChildren().add(imgFail);
+                      })
+              .fadeIn(boardPanes.get(event.getPos()))
+              .buildAndPlay();
+
     }
     //matchedPieces = activeMemoryGame.getGuessPiecesCount();
     matchedPieces++;
