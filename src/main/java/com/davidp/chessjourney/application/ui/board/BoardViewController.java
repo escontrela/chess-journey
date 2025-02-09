@@ -560,6 +560,7 @@ private boolean isButtonStartClicked(ActionEvent event) {
               .onFinished(
                       () -> {
                         lblBoardType.setText("¡Correcto!");
+                        //TODO play sound
                         boardPanes.get(event.getPos()).getChildren().add(imgOk);
                       })
               .fadeIn(boardPanes.get(event.getPos()))
@@ -572,6 +573,7 @@ private boolean isButtonStartClicked(ActionEvent event) {
               .onFinished(
                       () -> {
                         lblBoardType.setText("Incorrecto");
+                        //TODO play sound
                         boardPanes.get(event.getPos()).getChildren().add(imgFail);
                       })
               .fadeIn(boardPanes.get(event.getPos()))

@@ -10,8 +10,10 @@ import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.domain.common.Piece;
 import com.davidp.chessjourney.domain.common.PieceColor;
 import com.davidp.chessjourney.domain.common.PieceFactory;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -23,6 +25,8 @@ public class PromoteViewController implements ScreenController {
   private ScreenController.ScreenStatus status;
 
   private PromoteViewInputScreenData promoteViewInputScreenData;
+
+  private PieceColor selectedPieceColor;
 
   @FXML
   private Pane pnlBishop;
@@ -46,6 +50,12 @@ public class PromoteViewController implements ScreenController {
   private Pane rootPane;
 
   @FXML
+  private Button btChange;
+
+  @FXML
+  private Pane pnlKing;
+
+  @FXML
   void keyPressed(KeyEvent event) {
 
   }
@@ -64,10 +74,11 @@ public class PromoteViewController implements ScreenController {
     pnlPawn.setOnMousePressed(this::onPanelPiecePressed);
     pnlRook.setOnMousePressed(this::onPanelPiecePressed);
     pnlknight.setOnMousePressed(this::onPanelPiecePressed);
-    //TODO miss the King!!!
+    pnlKing.setOnMousePressed(this::onPanelPiecePressed);
   }
 
   private void onPanelPiecePressed(MouseEvent event) {
+
     event.consume(); // This will stop event propagation
     Optional<Pane> selectedSquare = getSquareViewFromMouseEvent(event);
 
@@ -112,27 +123,39 @@ public class PromoteViewController implements ScreenController {
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
 
-    setPieces(getPromoteViewInputScreenData());
+    setPieces(getPromoteViewInputScreenData().getPieceColor());
+    selectedPieceColor = getPromoteViewInputScreenData().getPieceColor();
   }
 
-  private void setPieces(PromoteViewInputScreenData promoteViewInputScreenData) {
+  private void cleanPieces() {
 
-    addPieceToPane(pnlQueen, promoteViewInputScreenData.getPieceColor() == PieceColor.WHITE
+    pnlBishop.getChildren().clear();
+    pnlPawn.getChildren().clear();
+    pnlQueen.getChildren().clear();
+    pnlRook.getChildren().clear();
+    pnlknight.getChildren().clear();
+    pnlKing.getChildren().clear();
+  }
+
+  private void setPieces(PieceColor pieceColor) {
+
+    addPieceToPane(pnlQueen, pieceColor == PieceColor.WHITE
             ? PieceFactory.createWhiteQueen(): PieceFactory.createBlackQueen());
 
-    addPieceToPane(pnlknight,promoteViewInputScreenData.getPieceColor() == PieceColor.WHITE
+    addPieceToPane(pnlknight,pieceColor == PieceColor.WHITE
             ? PieceFactory.createWhiteKnight(): PieceFactory.createBlackKnight());
 
-    addPieceToPane(pnlBishop,promoteViewInputScreenData.getPieceColor() == PieceColor.WHITE
+    addPieceToPane(pnlBishop,pieceColor == PieceColor.WHITE
             ? PieceFactory.createWhiteBishop(): PieceFactory.createBlackBishop());
 
-    addPieceToPane(pnlRook,promoteViewInputScreenData.getPieceColor() == PieceColor.WHITE
+    addPieceToPane(pnlRook,pieceColor == PieceColor.WHITE
             ? PieceFactory.createWhiteRook(): PieceFactory.createBlackRook());
 
-    addPieceToPane(pnlPawn,promoteViewInputScreenData.getPieceColor() == PieceColor.WHITE
+    addPieceToPane(pnlPawn,pieceColor == PieceColor.WHITE
             ? PieceFactory.createWhitePawn(): PieceFactory.createBlackPawn());
 
-    //TODO left the King!!!
+    addPieceToPane(pnlKing,pieceColor == PieceColor.WHITE
+            ? PieceFactory.createWhiteKing(): PieceFactory.createBlackKing());
 
   }
 
@@ -230,5 +253,19 @@ public class PromoteViewController implements ScreenController {
   protected PromoteViewInputScreenData getPromoteViewInputScreenData() {
 
     return promoteViewInputScreenData;
+  }
+
+  @FXML
+  void buttonAction(ActionEvent event) {
+
+    if (event.getSource() == btChange) {
+
+      cleanPieces();
+      selectedPieceColor = (selectedPieceColor == PieceColor.WHITE
+              ? PieceColor.BLACK : PieceColor.WHITE);
+
+      setPieces(selectedPieceColor);
+    }
+
   }
 }

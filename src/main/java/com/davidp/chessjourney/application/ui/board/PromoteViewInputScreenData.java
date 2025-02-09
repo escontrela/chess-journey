@@ -2,7 +2,6 @@ package com.davidp.chessjourney.application.ui.board;
 
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.domain.common.PieceColor;
-import com.davidp.chessjourney.domain.common.PiecePosition;
 import com.davidp.chessjourney.domain.common.Pos;
 
 import java.awt.*;
