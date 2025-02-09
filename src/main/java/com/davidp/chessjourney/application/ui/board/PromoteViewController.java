@@ -75,7 +75,8 @@ public class PromoteViewController implements ScreenController {
         pane -> {
           pane.setStyle(
               "-fx-border-color: #219ebc; -fx-border-width: 2px; -fx-border-inset: -2px;");
-          GlobalEventBus.get().post(new PromoteSelectedPieceEvent((Piece) pane.getChildren().get(0).getUserData()));
+          GlobalEventBus.get().post(new PromoteSelectedPieceEvent( getPromoteViewInputScreenData().getPiecePos(),
+                  (Piece) pane.getChildren().get(0).getUserData()));
           this.hide();
         });
   }
@@ -130,7 +131,7 @@ public class PromoteViewController implements ScreenController {
 
     addPieceToPane(pnlPawn,promoteViewInputScreenData.getPieceColor() == PieceColor.WHITE
             ? PieceFactory.createWhitePawn(): PieceFactory.createBlackPawn());
-    
+
     //TODO left the King!!!
 
   }

@@ -35,6 +35,7 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
@@ -73,10 +74,11 @@ public class BoardViewController implements ScreenController {
   @FXML
   private Label lblExerciseNum;
 
-
-
   @FXML
   private Label lblBlackTime;
+
+  private ImageView imgOk =   new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
+  private ImageView imgFail = new ImageView("com/davidp/chessjourney/img-white/baseline_clear_white_24dp.png");
 
   private boolean piecesHided = false;
   private int matchedPieces = 0;
@@ -109,10 +111,23 @@ public class BoardViewController implements ScreenController {
                 "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
             Point screenPos = new Point((int) event.getX(), (int) event.getY());
 
-            managePromotePanelVisibility(screenPos,PieceColor.BLACK);
+          if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES){
+
+            String squareId = selectedSquare.get().getId();
+
+              var pos = Pos.parseString(squareId);
+
+              PieceColor pieceColor = getPieceColorFromFENPosition(activeMemoryGame.getFen());
+              managePromotePanelVisibility(screenPos,pos,pieceColor);
+          }
         });
   }
 
+  private PieceColor getPieceColorFromFENPosition(Fen fen) {
+
+      GameState gameState = fenService.parseString(fen);
+      return gameState.getActiveColor();
+  }
   // TODO improve
   private void initializeBoardPanes() {
 
@@ -177,11 +192,6 @@ public class BoardViewController implements ScreenController {
                   Pane fromPane = (Pane) pieceView.getParent();
                   fromPane.getChildren().remove(pieceView);
                   toPane.getChildren().add(pieceView);
-
-                  // TODO fix it!
-                  activeMemoryGame.guessPiece(new PiecePosition(PieceFactory.createWhiteQueen(), Pos.parseString("e4")));
-                  //matchedPieces = activeMemoryGame.getGuessPiecesCount();
-                  matchedPieces++;
 
                   success = true;
                 }
@@ -324,9 +334,6 @@ public class BoardViewController implements ScreenController {
         activeMemoryGame = memoryGameUseCase.execute( AppProperties.getInstance().getActiveUserId() );
         startMemoryGame();
       }
-      // TODO start the game
-      // TODO execute the use Case
-      // TODO show the next screen
     }
   }
 
@@ -467,7 +474,7 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
 
   /** This method is called when the user clicks on the logger user icon. */
-  private void managePromotePanelVisibility(final Point screenPos,final PieceColor pieceColor) {
+  private void managePromotePanelVisibility(final Point screenPos,final Pos pos, final PieceColor pieceColor) {
 
     ScreenController contextMenuController = getScreen(ScreenFactory.Screens.PROMOTE_PANEL);
 
@@ -476,7 +483,7 @@ private boolean isButtonStartClicked(ActionEvent event) {
       contextMenuController.hide();
     }
 
-    contextMenuController.show(PromoteViewInputScreenData.from(screenPos,pieceColor));
+    contextMenuController.show(PromoteViewInputScreenData.from(screenPos,pos,pieceColor));
   }
 
 
@@ -541,5 +548,20 @@ private boolean isButtonStartClicked(ActionEvent event) {
   public void onMemoryGameClicked(PromoteSelectedPieceEvent event) {
 
     System.out.println("MemoryGameClicked:" + event.getSelectedPiece());
+    System.out.println("MemoryGameClicked pos:" + event.getPos());
+    // TODO fix it!
+
+    boolean result = activeMemoryGame.guessPiece(new PiecePosition(event.getSelectedPiece(), event.getPos()));
+    if (result) {
+      lblBoardType.setText("¡Correcto!");
+      boardPanes.get(event.getPos()).getChildren().add(imgOk);
+
+    } else {
+      //TODO add correct bitmap
+      lblBoardType.setText("Incorrecto");
+      boardPanes.get(event.getPos()).getChildren().add(imgFail);
+    }
+    //matchedPieces = activeMemoryGame.getGuessPiecesCount();
+    matchedPieces++;
   }
 }
