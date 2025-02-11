@@ -1,5 +1,6 @@
 package com.davidp.chessjourney.application.ui.board;
 
+import static com.almasb.fxgl.dsl.FXGLForKtKt.runOnce;
 import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
@@ -38,6 +39,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class BoardViewController implements ScreenController {
@@ -77,6 +79,9 @@ public class BoardViewController implements ScreenController {
   @FXML
   private Label lblBlackTime;
 
+  @FXML
+  private Label lblGhostMsg;
+
   private ImageView imgOk =   new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
   private ImageView imgFail = new ImageView("com/davidp/chessjourney/img-white/baseline_clear_white_24dp.png");
 
@@ -110,8 +115,20 @@ public class BoardViewController implements ScreenController {
             pane.setStyle(
                 "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
 
-            Point screenPos = new Point( event.getX() > 80 ?
-                    (int)event.getX() : 80 , event.getY() < 160 ? (int)event.getY() : 160);
+            int x = (int) event.getX();
+
+            if (event.getX()< 80){
+              x = 80;
+            }
+            if (event.getX()>480){
+              x = 480;
+            }
+            int y = (int) event.getY();
+            if (event.getY()> 80){
+              y = 80;
+            }
+
+            Point screenPos = new Point( x, y);
 
           if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES){
 
@@ -143,7 +160,6 @@ public class BoardViewController implements ScreenController {
 
               public void handle(DragEvent event) {
 
-                System.out.println("Entered");
                 event.acceptTransferModes(TransferMode.ANY);
                 event.consume();
               }
@@ -153,7 +169,6 @@ public class BoardViewController implements ScreenController {
             new EventHandler<DragEvent>() {
               public void handle(DragEvent event) {
 
-                System.out.println("Entered");
                 square.setStyle(
                     "-fx-border-color: #FF0000; -fx-border-width: 2px; -fx-border-inset: -2px;");
                 event.consume();
@@ -164,7 +179,6 @@ public class BoardViewController implements ScreenController {
             new EventHandler<DragEvent>() {
               public void handle(DragEvent event) {
 
-                System.out.println("Exited");
                 square.setStyle(
                     "-fx-border-color: #000000; -fx-border-width: 0px; -fx-border-inset: -2px;");
                 event.consume();
@@ -175,7 +189,6 @@ public class BoardViewController implements ScreenController {
             new EventHandler<DragEvent>() {
               public void handle(DragEvent event) {
 
-                System.out.println("Dropped");
                 Dragboard db = event.getDragboard();
                 boolean success = false;
                 if (db.hasString()) {
@@ -184,7 +197,6 @@ public class BoardViewController implements ScreenController {
                   runLater(
                       () -> soundService.playSound(SoundServiceFactory.SoundType.PIECE_PLACEMENT));
 
-                  System.out.println("Recibido: " + droppedPos);
 
                   // Lógica para mover la pieza
                   Pane toPane = (Pane) event.getGestureTarget();
@@ -340,7 +352,7 @@ public class BoardViewController implements ScreenController {
 
   private void startMemoryGame() {
 
-    cleanBoard();
+    cleanPieces();
 
     GameState gameState = fenService.parseString(activeMemoryGame.getFen());
 
@@ -350,6 +362,10 @@ public class BoardViewController implements ScreenController {
     matchedPieces = 0;
     activeMemoryGame.startGame();
     lblBoardType.setText("Estado: Jugando...");
+    playTypeWriterEffect(
+            "Memoriza la posición...",
+            lblGhostMsg,
+            0.02);
     lblExerciseNum.setText(
                     String.valueOf(activeMemoryGame.getCurrentExerciseNumber())
                     + " - " +
@@ -370,10 +386,7 @@ public class BoardViewController implements ScreenController {
     });
   }
 
-  private void cleanBoard() {
 
-    boardPanes.forEach((pos, pane) -> freeSquare(pane));
-  }
 
   private void hidePiecesOnBoard(List<PiecePosition> pieces) {
     pieces.forEach(piece -> {
@@ -392,6 +405,7 @@ private void gameLoop() {
 
   if (activeMemoryGame.getGameState() == MemoryGame.GameState.GAME_OVER) {
     lblBoardType.setText("¡Juego Terminado!");
+    lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
     btStart.setDisable(false);
     return;
   }
@@ -399,13 +413,14 @@ private void gameLoop() {
 
     if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
 
+      //TODO: Improve this logic, the activeMemoryGame should be responsible to manage the game state
       if (matchedPieces == activeMemoryGame.getHiddenPiecePositions().size()) {
 
         matchedPieces = 0;
         piecesHided = false;
         activeMemoryGame.nextExercise();
         GameState gameState = fenService.parseString(activeMemoryGame.getFen());
-        cleanBoard();
+        cleanPieces();
         showPiecesOnBoard(gameState);
         lblExerciseNum.setText(
                 String.valueOf(activeMemoryGame.getCurrentExerciseNumber())
@@ -421,10 +436,28 @@ private void gameLoop() {
       hidePiecesOnBoard(activeMemoryGame.getHiddenPiecePositions());
       piecesHided = true;
       lblBoardType.setText("Piezas ocultas. Adivina la posición.");
+      playTypeWriterEffect(
+              "Adivina la posición de las piezas ocultas.",
+              lblGhostMsg,
+              0.02);
   }
 
   lblBlackTime.setText(activeMemoryGame.getFormatedElapsedTime());
 }
+
+  private void playTypeWriterEffect(String text, Label textNode, double charInterval) {
+    textNode.setText(""); // Asegurarse de que el Text esté vacío al iniciar
+    StringBuilder currentText = new StringBuilder();
+
+    for (int i = 0; i < text.length(); i++) {
+      int index = i;
+      runOnce(() -> {
+        currentText.append(text.charAt(index)); // Añadir la siguiente letra
+        textNode.setText(currentText.toString());
+        return null;
+      }, javafx.util.Duration.seconds(i * charInterval));
+    }
+  }
 
 
 private boolean isButtonStartClicked(ActionEvent event) {
@@ -520,11 +553,9 @@ private boolean isButtonStartClicked(ActionEvent event) {
   /** Clean the chessboard view. */
   private void cleanPieces() {
 
-    boardPanes.forEach(
-        (pos, pane) -> {
-          pane.getChildren().clear();
-        });
+    boardPanes.forEach((pos, pane) -> freeSquare(pane));
   }
+
 
   private boolean isCloseButtonClicked(ActionEvent event) {
 
@@ -542,6 +573,10 @@ private boolean isButtonStartClicked(ActionEvent event) {
     this.boardType = BoardType.MEMORY;
     this.btStart.setVisible(true);
     this.lblBoardType.setText("The memory game!");
+    playTypeWriterEffect(
+            "¿Preparado?, pulsa en el botón de inicio.",
+            lblGhostMsg,
+            0.02);
   }
 
 
@@ -561,8 +596,13 @@ private boolean isButtonStartClicked(ActionEvent event) {
               .onFinished(
                       () -> {
                         lblBoardType.setText("¡Correcto!");
-                        //TODO play sound
                         boardPanes.get(event.getPos()).getChildren().add(imgOk);
+                        playTypeWriterEffect(
+                                "Bien hecho!",
+                                lblGhostMsg,
+                                0.02);
+                        //TODO play sound
+                        matchedPieces++;
                       })
               .fadeIn(boardPanes.get(event.getPos()))
               .buildAndPlay();
@@ -574,14 +614,18 @@ private boolean isButtonStartClicked(ActionEvent event) {
               .onFinished(
                       () -> {
                         lblBoardType.setText("Incorrecto");
-                        //TODO play sound
                         boardPanes.get(event.getPos()).getChildren().add(imgFail);
+                        playTypeWriterEffect(
+                                "Más suerte para la próxima!",
+                                lblGhostMsg,
+                                0.02);
+                        //TODO play sound
+                        matchedPieces++;
                       })
               .fadeIn(boardPanes.get(event.getPos()))
               .buildAndPlay();
 
     }
     //matchedPieces = activeMemoryGame.getGuessPiecesCount();
-    matchedPieces++;
   }
 }

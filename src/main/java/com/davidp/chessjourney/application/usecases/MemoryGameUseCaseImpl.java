@@ -32,12 +32,20 @@ public class MemoryGameUseCaseImpl implements MemoryGameUseCase {
   private List<Fen> getPositionsForMemoryGame(long userId){
 
     List<Fen> positions = List.of(
+            Fen.createCustom("7k/5np1/8/8/8/8/3Q3P/1K6 w - - 0 1"),
+            Fen.createCustom("1k2q3/1pp5/8/8/8/8/PPP5/1KR1R3 w - - 0 1"),
+            Fen.createCustom("3r4/6k1/5p2/8/8/2B5/8/4K3 w - - 0 1"),
+            Fen.createCustom("3k4/8/2r5/8/8/3KR3/8/8 w - - 0 1"),
+            Fen.createCustom("8/8/1k6/p7/4P3/3K4/8/8 w - - 0 1")
+    );
+    /*
+    List<Fen> positions = List.of(
             Fen.createCustom("r3n1k1/pp1bR1q1/5pNp/3p1P1Q/P2B4/2PP4/1P4PP/6K1 b - - 5 26"),
             Fen.createCustom("r1bqk2r/ppp2pp1/7p/2bnN3/2Bn4/3PB3/PPP2PPP/RN1Q1RK1 w kq - 0 9"),
             Fen.createCustom("3k4/4r3/1n4p1/8/4PP2/2Q4P/5R2/1K6 w - - 0 1"),
             Fen.createCustom("1k1r4/7p/3b4/8/3P4/8/6B1/1K1R4 w - - 0 1"),
             Fen.createCustom("6k1/ppp5/6P1/5PK1/1P6/2r5/8/5q2 w - - 2 42")
-            );
+            );*/
     return positions;
   }
 

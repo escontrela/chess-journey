@@ -235,11 +235,24 @@ public class MemoryGame extends Game {
     return gameState;
   }
 
-
   /**
    * Ajusta la dificultad aumentando el número de piezas ocultas a medida que el jugador avanza.
    */
   private void increaseDifficulty() {
+
+    int totalExercises = positions.size();
+
+    if (totalExercises == 0) {
+      return; // Evitar división por cero
+    }
+
+    return;
+  }
+
+  /**
+   * Ajusta la dificultad aumentando el número de piezas ocultas a medida que el jugador avanza.
+   */
+  private void increaseDifficultyOld() {
 
     int totalExercises = positions.size();
 
