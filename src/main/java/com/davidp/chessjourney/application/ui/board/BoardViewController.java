@@ -426,6 +426,8 @@ private void gameLoop() {
         matchedPieces = 0;
         piecesHided = false;
         activeMemoryGame.nextExercise();
+        runLater(
+                  () -> soundService.playSound(SoundServiceFactory.SoundType.NEW_GAME));
         GameState gameState = fenService.parseString(activeMemoryGame.getFen());
         cleanPieces();
         showPiecesOnBoard(gameState);
