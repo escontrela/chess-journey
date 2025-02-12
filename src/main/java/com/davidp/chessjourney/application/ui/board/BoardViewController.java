@@ -94,6 +94,8 @@ public class BoardViewController implements ScreenController {
 
   protected MemoryGameUseCase memoryGameUseCase;
 
+  protected  boolean pauseLoopGame = false;
+
   public void initialize() {
 
 
@@ -403,6 +405,11 @@ private void gameLoop() {
 
    lblStatus.setText(activeMemoryGame.getGameState().toString());
 
+   if (pauseLoopGame){
+
+     return;
+   }
+
   if (activeMemoryGame.getGameState() == MemoryGame.GameState.GAME_OVER) {
     lblBoardType.setText("¡Juego Terminado!");
     lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
@@ -585,11 +592,10 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
     System.out.println("MemoryGameClicked:" + event.getSelectedPiece());
     System.out.println("MemoryGameClicked pos:" + event.getPos());
-    // TODO fix it!
+    pauseLoopGame = true;
 
     boolean result = activeMemoryGame.guessPiece(new PiecePosition(event.getSelectedPiece(), event.getPos()));
     if (result) {
-
 
       FXGL.animationBuilder()
               .duration(Duration.seconds(0.2))
@@ -603,6 +609,10 @@ private boolean isButtonStartClicked(ActionEvent event) {
                                 0.02);
                         //TODO play sound
                         matchedPieces++;
+                        showHiddenPieces();
+                        FXGL.animationBuilder().duration(Duration.seconds(2))
+                                .onFinished(()->{ pauseLoopGame = false;}).fadeIn(lblBoardType).buildAndPlay();
+
                       })
               .fadeIn(boardPanes.get(event.getPos()))
               .buildAndPlay();
@@ -621,11 +631,27 @@ private boolean isButtonStartClicked(ActionEvent event) {
                                 0.02);
                         //TODO play sound
                         matchedPieces++;
+                        showHiddenPieces();
+                        FXGL.animationBuilder().duration(Duration.seconds(2))
+                                .onFinished(()->{ pauseLoopGame = false;}).fadeIn(lblBoardType).buildAndPlay();
                       })
               .fadeIn(boardPanes.get(event.getPos()))
               .buildAndPlay();
 
     }
     //matchedPieces = activeMemoryGame.getGuessPiecesCount();
+  }
+
+  private void showHiddenPieces() {
+
+    if (matchedPieces == activeMemoryGame.getHiddenPiecePositions().size()) {
+
+      List<PiecePosition> hiddenPieces = activeMemoryGame.getHiddenPiecePositions();
+      hiddenPieces.forEach(
+          piece -> {
+            var pane = boardPanes.get(piece.getPosition());
+            addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
+          });
+    }
   }
 }

@@ -86,6 +86,7 @@ public class PromoteViewController implements ScreenController {
         pane -> {
           pane.setStyle(
               "-fx-border-color: #219ebc; -fx-border-width: 2px; -fx-border-inset: -2px;");
+          System.out.println("Selected piece (promote view controller) : " + pane.getChildren().get(0).getUserData());
           GlobalEventBus.get().post(new PromoteSelectedPieceEvent( getPromoteViewInputScreenData().getPiecePos(),
                   (Piece) pane.getChildren().get(0).getUserData()));
           this.hide();
@@ -123,6 +124,7 @@ public class PromoteViewController implements ScreenController {
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
 
+    cleanPieces();
     setPieces(getPromoteViewInputScreenData().getPieceColor());
     selectedPieceColor = getPromoteViewInputScreenData().getPieceColor();
   }
@@ -137,7 +139,7 @@ public class PromoteViewController implements ScreenController {
     pnlKing.getChildren().clear();
   }
 
-  private void setPieces(PieceColor pieceColor) {
+  private void setPieces(final PieceColor pieceColor) {
 
     addPieceToPane(pnlQueen, pieceColor == PieceColor.WHITE
             ? PieceFactory.createWhiteQueen(): PieceFactory.createBlackQueen());
