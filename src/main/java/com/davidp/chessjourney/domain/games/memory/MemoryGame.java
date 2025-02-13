@@ -164,9 +164,11 @@ public class MemoryGame extends Game {
 
   public boolean guessPiece(final PiecePosition piecePosition){
 
+    guessPiecesCounts++;
+
     if (hiddenPiecePositions.contains(piecePosition)){
 
-      guessPiecesCounts++;
+
       return true;
 
     }
@@ -205,6 +207,7 @@ public class MemoryGame extends Game {
     }
 
     currentExerciseIndex++;
+    guessPiecesCounts = 0;
     increaseDifficulty();
     loadExercise();
   }

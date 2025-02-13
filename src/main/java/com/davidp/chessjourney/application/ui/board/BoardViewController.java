@@ -422,7 +422,7 @@ private void gameLoop() {
     if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
 
       //TODO: Improve this logic, the activeMemoryGame should be responsible to manage the game state
-      if (matchedPieces == activeMemoryGame.getHiddenPiecePositions().size()) {
+      if (activeMemoryGame.getGuessPiecesCount() == activeMemoryGame.getHiddenPiecePositions().size()) {
 
         matchedPieces = 0;
         piecesHided = false;
