@@ -252,6 +252,7 @@ public class BoardViewController implements ScreenController {
   private void freeSquare(Pane pane) {
 
     pane.getChildren().clear();
+    pane.setStyle("");
   }
 
   @Override
@@ -604,7 +605,10 @@ private boolean isButtonStartClicked(ActionEvent event) {
               .onFinished(
                       () -> {
                         lblBoardType.setText("¡Correcto!");
-                        boardPanes.get(event.getPos()).getChildren().add(imgOk);
+                        //boardPanes.get(event.getPos()).getChildren().add(imgOk);
+                        boardPanes.get(event.getPos()).setStyle(
+                                  "-fx-background-color: #00E680;");
+
                         playTypeWriterEffect(
                                 "Bien hecho!",
                                 lblGhostMsg,
@@ -626,7 +630,9 @@ private boolean isButtonStartClicked(ActionEvent event) {
               .onFinished(
                       () -> {
                         lblBoardType.setText("Incorrecto");
-                        boardPanes.get(event.getPos()).getChildren().add(imgFail);
+                        //boardPanes.get(event.getPos()).getChildren().add(imgFail);
+                        boardPanes.get(event.getPos()).setStyle(
+                                  "-fx-background-color: #FF0071;");
                         playTypeWriterEffect(
                                 "Más suerte para la próxima!",
                                 lblGhostMsg,
