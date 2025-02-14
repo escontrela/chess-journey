@@ -14,6 +14,8 @@ public class SoundServiceFactory {
   public enum SoundType {
     PIECE_PLACEMENT("piece-placement.wav"),
     PIECE_PLACEMENT_ERROR("piece-placement-error.wav"),
+    FAIL_EXERCISE("move-fail.wav"),
+    SUCCEED_EXERCISE("move-success.wav"),
     NEW_GAME("new-game.wav");
 
     private final String resourcePath;

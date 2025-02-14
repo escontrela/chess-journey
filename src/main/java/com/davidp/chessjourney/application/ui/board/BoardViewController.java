@@ -613,7 +613,9 @@ private boolean isButtonStartClicked(ActionEvent event) {
                                 "Bien hecho!",
                                 lblGhostMsg,
                                 0.02);
-                        //TODO play sound
+                          runLater(
+                                  () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
+                          //FXGL.play("correct.wav");
                         matchedPieces++;
                         showHiddenPieces();
                         FXGL.animationBuilder().duration(Duration.seconds(2))
@@ -637,7 +639,8 @@ private boolean isButtonStartClicked(ActionEvent event) {
                                 "Más suerte para la próxima!",
                                 lblGhostMsg,
                                 0.02);
-                        //TODO play sound
+                          runLater(
+                                  () -> soundService.playSound(SoundServiceFactory.SoundType.FAIL_EXERCISE));
                         matchedPieces++;
                         showHiddenPieces();
                         FXGL.animationBuilder().duration(Duration.seconds(2))
