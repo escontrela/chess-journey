@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="pnlMessage" prefHeight="75.0" prefWidth="502.0" styleClass="panel-purple" stylesheets="@../custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.ExerciseResultViewController">
+   <children>
+      <Label layoutX="361.0" layoutY="30.0" prefHeight="20.0" prefWidth="70.0" styleClass=".text-purple-small" text="90% !!!" textAlignment="RIGHT" textFill="#848ae0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imgMinimize12112" fitHeight="27.0" fitWidth="31.0" layoutX="15.0" layoutY="26.0" preserveRatio="true">
+         <image>
+            <Image url="@../img-gray/shield_question_24dp_purple.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="btAdd12111" alignment="BASELINE_CENTER" layoutX="448.0" layoutY="20.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@../custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgMinimize1221" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@../img-gray/check_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <ImageView fx:id="imgMinimize12211" fitHeight="39.0" fitWidth="41.0" layoutX="66.0" layoutY="18.0" preserveRatio="true">
+         <image>
+            <Image url="@yellow-star.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgMinimize122111" fitHeight="39.0" fitWidth="41.0" layoutX="112.0" layoutY="18.0" preserveRatio="true">
+         <image>
+            <Image url="@yellow-star.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgMinimize122112" fitHeight="39.0" fitWidth="41.0" layoutX="158.0" layoutY="18.0" preserveRatio="true">
+         <image>
+            <Image url="@yellow-star.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgMinimize122113" fitHeight="39.0" fitWidth="41.0" layoutX="203.0" layoutY="18.0" preserveRatio="true">
+         <image>
+            <Image url="@yellow-star.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgMinimize122114" fitHeight="39.0" fitWidth="41.0" layoutX="249.0" layoutY="18.0" preserveRatio="true">
+         <image>
+            <Image url="@yellow-star.png" />
+         </image>
+      </ImageView>
+      <ImageView fx:id="imgMinimize122115" fitHeight="39.0" fitWidth="41.0" layoutX="294.0" layoutY="18.0" preserveRatio="true">
+         <image>
+            <Image url="@yellow-star.png" />
+         </image>
+      </ImageView>
+   </children>
+</Pane>

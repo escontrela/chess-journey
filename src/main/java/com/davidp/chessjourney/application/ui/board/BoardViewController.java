@@ -415,6 +415,9 @@ private void gameLoop() {
     lblBoardType.setText("¡Juego Terminado! " + activeMemoryGame.getSuccessPercentage() + "% conseguido.");
     lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
     btStart.setDisable(false);
+    Point screenPos = new Point(300,300);
+      runLater(
+              () ->  manageExerciseResultPanelVisibility(screenPos,activeMemoryGame.getSuccessPercentage()));
     return;
   }
 
@@ -529,6 +532,19 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
     contextMenuController.show(PromoteViewInputScreenData.from(screenPos,pos,pieceColor));
   }
+
+    /** This method is called when the user clicks on the logger user icon. */
+    private void manageExerciseResultPanelVisibility(final Point screenPos,final int percentage) {
+
+        ScreenController contextMenuController = getScreen(ScreenFactory.Screens.EXERCISE_RESULTS_PANEL);
+
+        if (contextMenuController.isVisible() && !contextMenuController.isInitialized()) {
+
+            contextMenuController.hide();
+        }
+
+        contextMenuController.show(ExerciseResultViewInputScreenData.from(screenPos,percentage));
+    }
 
 
   /** Add a piece to the chessboard view position. */
