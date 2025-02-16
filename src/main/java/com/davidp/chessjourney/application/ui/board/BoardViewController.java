@@ -412,7 +412,7 @@ private void gameLoop() {
    }
 
   if (activeMemoryGame.getGameState() == MemoryGame.GameState.GAME_OVER) {
-    lblBoardType.setText("¡Juego Terminado!");
+    lblBoardType.setText("¡Juego Terminado! " + activeMemoryGame.getSuccessPercentage() + "% conseguido.");
     lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
     btStart.setDisable(false);
     return;

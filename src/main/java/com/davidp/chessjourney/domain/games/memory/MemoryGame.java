@@ -24,6 +24,8 @@ public class MemoryGame extends Game {
   private int currentExerciseIndex;
   private int hiddenPiecesCount;
   private int guessPiecesCounts;
+  private int successPiecesCount;
+  private int totalGuessPiecesCounts;
   private Instant startTime;
   private Instant partialTime;
   private List<PiecePosition> hiddenPiecePositions;
@@ -165,14 +167,27 @@ public class MemoryGame extends Game {
   public boolean guessPiece(final PiecePosition piecePosition){
 
     guessPiecesCounts++;
+    totalGuessPiecesCounts++;
+    System.out.println("total guess pieces: " + totalGuessPiecesCounts);
 
     if (hiddenPiecePositions.contains(piecePosition)){
 
 
+      successPiecesCount++;
+      System.out.println("successPiecesCount: " + successPiecesCount);
       return true;
 
     }
     return false;
+  }
+
+  public int getSuccessPercentage() {
+
+    if (totalGuessPiecesCounts == 0) {
+
+      return 0;
+    }
+    return Math.round((float) successPiecesCount / totalGuessPiecesCounts * 100);
   }
 
   private List<PiecePosition> hidePieces(int count) {
