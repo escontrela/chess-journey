@@ -361,6 +361,7 @@ public class BoardViewController implements ScreenController {
 
     showPiecesOnBoard(gameState);
 
+    pauseLoopGame=false;
     piecesHided = false;
     matchedPieces = 0;
     activeMemoryGame.startGame();
@@ -375,6 +376,7 @@ public class BoardViewController implements ScreenController {
                     String.valueOf(activeMemoryGame.totalHiddenPieces())
                     );
     // Iniciar el bucle de juego en FXGL
+      //TODO ojo, porque esto podría ya estar iniciado!!
     FXGL.run(this::gameLoop, Duration.millis(0.1));
   }
 
@@ -412,12 +414,15 @@ private void gameLoop() {
    }
 
   if (activeMemoryGame.getGameState() == MemoryGame.GameState.GAME_OVER) {
+      pauseLoopGame = true;
     lblBoardType.setText("¡Juego Terminado! " + activeMemoryGame.getSuccessPercentage() + "% conseguido.");
     lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
     btStart.setDisable(false);
     Point screenPos = new Point(300,300);
       runLater(
               () ->  manageExerciseResultPanelVisibility(screenPos,activeMemoryGame.getSuccessPercentage()));
+
+      //TODO hay que deterner el loop! parece que el juego siempre sigue...
     return;
   }
 
