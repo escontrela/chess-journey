@@ -1,10 +1,12 @@
 package com.davidp.chessjourney.application.ui.board;
 
 import com.almasb.fxgl.dsl.FXGL;
+import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
@@ -13,11 +15,18 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 
+import java.util.Arrays;
+import java.util.List;
+
+import static javafx.application.Platform.runLater;
+
 public class ExerciseResultViewController implements ScreenController {
 
     private ScreenController.ScreenStatus status;
 
     private ExerciseResultViewInputScreenData exerciseResultViewInputScreenData;
+
+    private final SoundServiceFactory soundService = SoundServiceFactory.getInstance();
 
     @FXML
     private Button btOk;
@@ -66,18 +75,25 @@ public class ExerciseResultViewController implements ScreenController {
 
         status = ScreenController.ScreenStatus.INITIALIZED;
 
-
     }
 
     @Override
     public void setData(InputScreenData inputData) {
 
-        lblPercent.setText("...");
-        if (inputData != null) {
-
-          this.exerciseResultViewInputScreenData = (ExerciseResultViewInputScreenData) inputData;
-          lblPercent.setText(this.exerciseResultViewInputScreenData.toString());
+        if (inputData == null) {
+            return;
         }
+
+
+        lblPercent.setText("...");
+
+        if (inputData.isLayoutInfoValid()) {
+
+                setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+        }
+        this.exerciseResultViewInputScreenData = (ExerciseResultViewInputScreenData) inputData;
+        lblPercent.setText(this.exerciseResultViewInputScreenData.getPercentage() + " %!");
+        showStarsProgressively(this.exerciseResultViewInputScreenData.getPercentage());
     }
 
     @Override
@@ -168,8 +184,34 @@ public class ExerciseResultViewController implements ScreenController {
 
         if (event.getSource() == btOk) {
 
-           hide();
+            hide();
         }
 
+    }
+
+    /**
+     * Show stars progressively based on the percentage
+     * @param percent percentage of stars to show
+     */
+    private void showStarsProgressively(double percent) {
+
+        int starsToShow = (int) Math.round((percent / 100.0) * 6);
+        List<ImageView> stars = Arrays.asList(imgStar1, imgStar2, imgStar3, imgStar4, imgStar5, imgStar6);
+        stars.forEach(star -> star.setImage(new Image("com/davidp/chessjourney/img-gray/stars_48dp_gray.png")));
+
+        // Show stars progressively
+        for (int i = 0; i < starsToShow; i++) {
+
+            int starIndex = i;
+            FXGL.runOnce(
+                    () ->{
+                        stars.get(starIndex).setImage(new Image("com/davidp/chessjourney/img-gray/stars_48dp_purple.png"));
+                        runLater(
+                                () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
+                    },
+                    Duration.millis(400 * (i + 1))
+
+            );
+        }
     }
 }

@@ -14,12 +14,12 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <ImageView fx:id="imgNotice" fitHeight="27.0" fitWidth="31.0" layoutX="15.0" layoutY="26.0" preserveRatio="true">
+      <ImageView fx:id="imgNotice" fitHeight="27.0" fitWidth="31.0" layoutX="15.0" layoutY="26.0" onMouseClicked="#mouseClicked" preserveRatio="true">
          <image>
             <Image url="@img-gray/shield_question_24dp_purple.png" />
          </image>
       </ImageView>
-      <Button fx:id="btOk" alignment="BASELINE_CENTER" layoutX="448.0" layoutY="20.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btOk" alignment="BASELINE_CENTER" layoutX="448.0" layoutY="20.0" mnemonicParsing="false" onAction="#buttonAction" onKeyPressed="#keyPressed" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
@@ -33,32 +33,32 @@
       </Button>
       <ImageView fx:id="imgStar1" fitHeight="39.0" fitWidth="41.0" layoutX="66.0" layoutY="18.0" preserveRatio="true">
          <image>
-            <Image url="@images/yellow-star.png" />
+            <Image url="@img-gray/stars_48dp_gray.png" />
          </image>
       </ImageView>
       <ImageView fx:id="imgStar2" fitHeight="39.0" fitWidth="41.0" layoutX="112.0" layoutY="18.0" preserveRatio="true">
          <image>
-            <Image url="@images/yellow-star.png" />
+            <Image url="@img-gray/stars_48dp_gray.png" />
          </image>
       </ImageView>
       <ImageView fx:id="imgStar3" fitHeight="39.0" fitWidth="41.0" layoutX="158.0" layoutY="18.0" preserveRatio="true">
          <image>
-            <Image url="@images/yellow-star.png" />
+            <Image url="@img-gray/stars_48dp_gray.png" />
          </image>
       </ImageView>
       <ImageView fx:id="imgStar4" fitHeight="39.0" fitWidth="41.0" layoutX="203.0" layoutY="18.0" preserveRatio="true">
          <image>
-            <Image url="@images/yellow-star.png" />
+            <Image url="@img-gray/stars_48dp_gray.png" />
          </image>
       </ImageView>
       <ImageView fx:id="imgStar5" fitHeight="39.0" fitWidth="41.0" layoutX="249.0" layoutY="18.0" preserveRatio="true">
          <image>
-            <Image url="@images/yellow-star.png" />
+            <Image url="@img-gray/stars_48dp_gray.png" />
          </image>
       </ImageView>
       <ImageView fx:id="imgStar6" fitHeight="39.0" fitWidth="41.0" layoutX="294.0" layoutY="18.0" preserveRatio="true">
          <image>
-            <Image url="@images/yellow-star.png" />
+            <Image url="@img-gray/stars_48dp_gray.png" />
          </image>
       </ImageView>
    </children>

@@ -356,6 +356,8 @@ public class BoardViewController implements ScreenController {
   private void startMemoryGame() {
 
     cleanPieces();
+    FXGL.getGameTimer().clear();
+    //TODO, if the results game is shown, then we need to hide it.
 
     GameState gameState = fenService.parseString(activeMemoryGame.getFen());
 
@@ -414,11 +416,13 @@ private void gameLoop() {
    }
 
   if (activeMemoryGame.getGameState() == MemoryGame.GameState.GAME_OVER) {
-      pauseLoopGame = true;
+
+    pauseLoopGame = true;
+    FXGL.getGameTimer().clear();
     lblBoardType.setText("¡Juego Terminado! " + activeMemoryGame.getSuccessPercentage() + "% conseguido.");
     lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
     btStart.setDisable(false);
-    Point screenPos = new Point(300,300);
+    Point screenPos = new Point(80,240);
       runLater(
               () ->  manageExerciseResultPanelVisibility(screenPos,activeMemoryGame.getSuccessPercentage()));
 
@@ -541,14 +545,14 @@ private boolean isButtonStartClicked(ActionEvent event) {
     /** This method is called when the user clicks on the logger user icon. */
     private void manageExerciseResultPanelVisibility(final Point screenPos,final int percentage) {
 
-        ScreenController contextMenuController = getScreen(ScreenFactory.Screens.EXERCISE_RESULTS_PANEL);
+        ScreenController exerciseResultsController = getScreen(ScreenFactory.Screens.EXERCISE_RESULTS_PANEL);
 
-        if (contextMenuController.isVisible() && !contextMenuController.isInitialized()) {
+        if (exerciseResultsController.isVisible() && !exerciseResultsController.isInitialized()) {
 
-            contextMenuController.hide();
+            exerciseResultsController.hide();
         }
 
-        contextMenuController.show(ExerciseResultViewInputScreenData.from(screenPos,percentage));
+        exerciseResultsController.show(ExerciseResultViewInputScreenData.from(screenPos,percentage));
     }
 
 
