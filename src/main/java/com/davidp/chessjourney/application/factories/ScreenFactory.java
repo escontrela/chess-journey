@@ -89,6 +89,7 @@ public class ScreenFactory {
     var controller = objectFxmlBundle.getController();
     controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
     controller.setSaveUserUseCase(UseCaseFactory.createSaveUserUseCase());
+    controller.setGetAllTagsUseCase(UseCaseFactory.createGetAllTagsUseCase());
 
     return controller;
   }

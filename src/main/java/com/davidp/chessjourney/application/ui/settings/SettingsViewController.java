@@ -1,8 +1,10 @@
 package com.davidp.chessjourney.application.ui.settings;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
+import com.davidp.chessjourney.application.usecases.GetAllTagsUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.SaveUserUseCase;
 import com.davidp.chessjourney.domain.User;
@@ -13,12 +15,19 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
+import javafx.util.Duration;
+
+import java.awt.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SettingsViewController implements ScreenController {
 
   @FXML private Button btClose;
 
-  @FXML private Button btOption1;
+
+  @FXML
+  private Button btProfile;
+
 
   @FXML private Button btSave;
 
@@ -40,6 +49,27 @@ public class SettingsViewController implements ScreenController {
 
   @FXML private Pane rootPane;
 
+
+  @FXML
+  private Pane pnlProfile;
+
+
+  @FXML
+  private Pane pnlTags;
+
+
+  @FXML
+  private TextField inTag;
+
+  @FXML
+  private Button btOptionTags;
+
+
+  @FXML
+  private Button btAddTag;
+
+
+  private GetAllTagsUseCase getAllTagsUseCase;
   private GetUserByIdUseCase getUserByIdUseCase;
   private SaveUserUseCase saveUserUseCase;
   private SettingsViewInputScreenData settingsViewData;
@@ -56,6 +86,11 @@ public class SettingsViewController implements ScreenController {
     this.saveUserUseCase = saveUserUseCase;
   }
 
+  public void setGetAllTagsUseCase(GetAllTagsUseCase getAllTagsUseCase) {
+
+    this.getAllTagsUseCase = getAllTagsUseCase;
+  }
+
   public void setSettingsViewData(SettingsViewInputScreenData settingsViewData) {
 
     this.settingsViewData = settingsViewData;
@@ -68,6 +103,26 @@ public class SettingsViewController implements ScreenController {
     inLastName.setText(user.getLastname());
     inEmail.setText(user.getEmail());
     lbUser.setText(user.getInitials());
+  }
+
+  public void refreshTags() {
+
+    // pnlTags.getChildren().filtered(p-> "tag".equalsIgnoreCase(p.getId())).clear();
+
+    AtomicInteger pos = new AtomicInteger(10);
+    getAllTagsUseCase
+            .execute()
+            .forEach(
+                    tag -> {
+                      Label label = new Label(tag.getName());
+                      label.setId("tag");
+                      label.getStyleClass().add("text-white-medium");
+                      label.setText(tag.getName());
+                      label.setLayoutX(10);
+                      label.setLayoutY(pos.get());
+                      pos.set(pos.get() + 25);
+                      pnlTags.getChildren().add(label);
+                    });
   }
 
   public void initialize() {
@@ -83,9 +138,35 @@ public class SettingsViewController implements ScreenController {
       User user = buildUserFromForm();
       saveUserUseCase.execute(user);
       GlobalEventBus.get().post(new UserSavedAppEvent(settingsViewData.getUserId()));
+      rootPane.setVisible(false);
     }
 
-    rootPane.setVisible(false);
+    if (event.getSource() == btClose) {
+
+      rootPane.setVisible(false);
+    }
+
+    if (event.getSource() == btOptionTags) {
+
+      pnlProfile.setVisible(false);
+      FXGL.animationBuilder()
+              .duration(Duration.seconds(0.2))
+              .onFinished(
+                      () -> {
+                        refreshTags();
+                        pnlTags.setVisible(true);
+                        //TODO set status = ....
+                      })
+              .fadeIn(pnlTags)
+              .buildAndPlay();
+    }
+
+    if (event.getSource() == btProfile) {
+      pnlTags.setVisible(false);
+      pnlProfile.setVisible(true);
+    }
+
+
   }
 
   private User buildUserFromForm() {
