@@ -36,7 +36,9 @@ public class MemoryGameUseCaseImpl implements MemoryGameUseCase {
             Fen.createCustom("1k2q3/1pp5/8/8/8/8/PPP5/1KR1R3 w - - 0 1"),
             Fen.createCustom("3r4/6k1/5p2/8/8/2B5/8/4K3 w - - 0 1"),
             Fen.createCustom("3k4/8/2r5/8/8/3KR3/8/8 w - - 0 1"),
-            Fen.createCustom("8/8/1k6/p7/4P3/3K4/8/8 w - - 0 1")
+            Fen.createCustom("8/8/1k6/p7/4P3/3K4/8/8 w - - 0 1"),
+            Fen.createCustom("3r2k1/pp3pp1/2p4p/8/P2r4/1P3PP1/4R1BP/4R1K1 b - - 1 27"),
+            Fen.createCustom("r2q1rk1/1b1nppb1/p2p2p1/1pp3Nn/3PP2P/2N1BP2/PPPQ4/2KR1B1R w - - 0 13")
     );
     /*
     List<Fen> positions = List.of(
