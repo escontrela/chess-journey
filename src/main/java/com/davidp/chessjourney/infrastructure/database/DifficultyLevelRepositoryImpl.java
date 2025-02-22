@@ -67,4 +67,31 @@ public class DifficultyLevelRepositoryImpl implements DifficultyLevelRepository 
         }
         return null;
     }
+
+    @Override
+    public DifficultyLevel getByDifficulty(String difficulty) {
+        String sql = "SELECT id, level_name, description FROM difficulty_levels WHERE level_name = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            // Configurar el parámetro de búsqueda
+            ps.setString(1, difficulty);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new DifficultyLevel(
+                            UUID.fromString(rs.getString("id")),
+                            rs.getString("level_name"),
+                            rs.getString("description")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching difficulty level by name: " + difficulty, e);
+        }
+
+        // Si no se encuentra el nivel de dificultad, devolver null o lanzar una excepción
+        return null;
+    }
 }

@@ -69,6 +69,8 @@ public class BoardViewController implements ScreenController {
 
   @FXML private Button btStart;
 
+  protected String difficulty = "easy";
+
 
   @FXML
   private Label lblStatus;
@@ -82,7 +84,14 @@ public class BoardViewController implements ScreenController {
   @FXML
   private Label lblGhostMsg;
 
-  private ImageView imgOk =   new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
+    @FXML
+    private Button btOptEasy;
+
+    @FXML
+    private Button btOptionMid;
+
+
+    private ImageView imgOk =   new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
   private ImageView imgFail = new ImageView("com/davidp/chessjourney/img-white/baseline_clear_white_24dp.png");
 
   private boolean piecesHided = false;
@@ -347,10 +356,21 @@ public class BoardViewController implements ScreenController {
       if (boardType == BoardType.MEMORY) {
 
         btStart.setDisable(true);
-        activeMemoryGame = memoryGameUseCase.execute( AppProperties.getInstance().getActiveUserId() );
+        System.out.println("Start Memory Game:" + difficulty);
+        activeMemoryGame = memoryGameUseCase.execute( AppProperties.getInstance().getActiveUserId() ,difficulty);
         startMemoryGame();
       }
+
     }
+      if (event.getSource() == btOptEasy){
+
+          difficulty = "easy";
+          System.out.println("Difficulty set at:" + difficulty);
+      }
+      if (event.getSource() == btOptionMid){
+          difficulty = "medium";
+          System.out.println("Difficulty set at:" + difficulty);
+      }
   }
 
   private void startMemoryGame() {

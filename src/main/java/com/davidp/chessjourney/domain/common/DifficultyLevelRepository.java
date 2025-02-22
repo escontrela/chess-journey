@@ -8,4 +8,5 @@ public interface DifficultyLevelRepository {
 
     List<DifficultyLevel> getAll();
     DifficultyLevel getById(UUID id);
+    DifficultyLevel getByDifficulty(String difficulty);
 }

@@ -1,45 +1,53 @@
 package com.davidp.chessjourney.application.usecases;
 
 import com.davidp.chessjourney.domain.*;
-import com.davidp.chessjourney.domain.common.Fen;
-import com.davidp.chessjourney.domain.common.TimeControl;
+import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /** Implementación concreta del caso de uso para guardar (insertar/actualizar) un usuario. */
 public class MemoryGameUseCaseImpl implements MemoryGameUseCase {
 
   private final UserRepository userRepository;
+  private final ExerciseRepository exerciseRepository;
+  private final DifficultyLevelRepository difficultyLevelRepository;
 
-  public MemoryGameUseCaseImpl(UserRepository userRepository) {
+  public MemoryGameUseCaseImpl(UserRepository userRepository,
+                               ExerciseRepository exerciseRepository,
+                               DifficultyLevelRepository difficultyLevelRepository) {
 
     this.userRepository = userRepository;
+    this.exerciseRepository = exerciseRepository;
+    this.difficultyLevelRepository = difficultyLevelRepository;
   }
 
   @Override
-  public MemoryGame execute(long userId) {
+  public MemoryGame execute(long userId,String difficulty) {
 
     // TODO Recover from database 10 FEN positions of MemoryGame tagged as memory exercise
     User user = userRepository.getUserById(userId);
     Player player = new Player(user.getInitials(),userId);
-    List<Fen> positions = getPositionsForMemoryGame(userId);
+    List<Fen> positions = getPositionsForMemoryGame(userId,difficulty);
     TimeControl timeControl = TimeControl.fivePlusThree();
 
     return  ChessGameFactory.createMemoryGameFrom(player,timeControl,positions);
   }
 
-  private List<Fen> getPositionsForMemoryGame(long userId){
+  private List<Fen> getPositionsForMemoryGame(long userId, String difficulty){
 
-    List<Fen> positions = List.of(
-            Fen.createCustom("7k/5np1/8/8/8/8/3Q3P/1K6 w - - 0 1"),
-            Fen.createCustom("1k2q3/1pp5/8/8/8/8/PPP5/1KR1R3 w - - 0 1"),
-            Fen.createCustom("3r4/6k1/5p2/8/8/2B5/8/4K3 w - - 0 1"),
-            Fen.createCustom("3k4/8/2r5/8/8/3KR3/8/8 w - - 0 1"),
-            Fen.createCustom("8/8/1k6/p7/4P3/3K4/8/8 w - - 0 1"),
-            Fen.createCustom("3r2k1/pp3pp1/2p4p/8/P2r4/1P3PP1/4R1BP/4R1K1 b - - 1 27"),
-            Fen.createCustom("r2q1rk1/1b1nppb1/p2p2p1/1pp3Nn/3PP2P/2N1BP2/PPPQ4/2KR1B1R w - - 0 13")
-    );
+    //TODO made a cache with difficulty levels
+    DifficultyLevel level = difficultyLevelRepository.getByDifficulty(difficulty);
+
+    List<Fen> positions = new ArrayList<>();
+
+     exerciseRepository.getExercisesByDifficulty(level.getId(),10)
+             .forEach(exercise -> {
+               positions.add(Fen.createCustom(exercise.getFen()));
+
+    });
+
     /*
     List<Fen> positions = List.of(
             Fen.createCustom("r3n1k1/pp1bR1q1/5pNp/3p1P1Q/P2B4/2PP4/1P4PP/6K1 b - - 5 26"),

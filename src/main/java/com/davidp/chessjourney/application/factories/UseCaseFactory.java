@@ -2,6 +2,8 @@ package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.domain.UserRepository;
+import com.davidp.chessjourney.domain.common.DifficultyLevelRepository;
+import com.davidp.chessjourney.domain.common.ExerciseRepository;
 import com.davidp.chessjourney.domain.common.TagRepository;
 
 /** Factoría para instanciar casos de uso (UseCases). */
@@ -35,7 +37,9 @@ public class UseCaseFactory {
   public static MemoryGameUseCase createMemoryGameUseCase() {
 
     UserRepository userRepo = RepositoryFactory.createUserRepository();
-    return new MemoryGameUseCaseImpl(userRepo);
+    ExerciseRepository exerciseRepository = RepositoryFactory.createExerciseRepository();
+    DifficultyLevelRepository difficultyLevelRepository = RepositoryFactory.createDifficultyLevelRepository();
+    return new MemoryGameUseCaseImpl(userRepo,exerciseRepository,difficultyLevelRepository);
   }
 
   public static GetAllTagsUseCase createGetAllTagsUseCase() {
