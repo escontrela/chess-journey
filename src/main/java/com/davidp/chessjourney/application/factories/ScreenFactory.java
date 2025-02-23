@@ -1,16 +1,15 @@
 package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.ui.ScreenController;
-import com.davidp.chessjourney.application.ui.ScreenPanel;
+import com.davidp.chessjourney.application.ui.board.BoardViewController;
+import com.davidp.chessjourney.application.ui.board.ExerciseResultViewController;
 import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
-import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
 import java.io.IOException;
 import java.net.URL;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
-import javafx.scene.layout.Pane;
 
 /**
  * This class is responsible for creating the screens that will be added to the main panel on the
@@ -23,7 +22,10 @@ public class ScreenFactory {
     MAIN_STAGE("/com/davidp/chessjourney/main-scene-3.fxml"),
     SETTINGS("/com/davidp/chessjourney/setting-view.fxml"),
     MENU("/com/davidp/chessjourney/menu-view.fxml"),
-    BOARD("/com/davidp/chessjourney/board-view-2.fxml");
+    BOARD("/com/davidp/chessjourney/board-view-2.fxml"),
+    MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
+    EXERCISE_RESULTS_PANEL("/com/davidp/chessjourney/exercise-result-view.fxml"),
+    PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml");
 
     private final String resourcePath;
 
@@ -64,9 +66,21 @@ public class ScreenFactory {
         return getBoardScreen();
       case MAIN_STAGE:
         return getMainScreen();
+      case MEMORY_GAME:
+        return getMemoryGameScreen();
+      case PROMOTE_PANEL:
+        return getPromotePanelScreen();
+      case EXERCISE_RESULTS_PANEL:
+        return getExerciseResultPanelScreen();
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
+  }
+
+  private ScreenController getExerciseResultPanelScreen() {
+
+    FxmlBundle<ExerciseResultViewController> objectFxmlBundle = loadFxml(Screens.EXERCISE_RESULTS_PANEL.resourceName());
+    return objectFxmlBundle.getController();
   }
 
   private ScreenController getSettingsScreen() {
@@ -75,6 +89,7 @@ public class ScreenFactory {
     var controller = objectFxmlBundle.getController();
     controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
     controller.setSaveUserUseCase(UseCaseFactory.createSaveUserUseCase());
+    controller.setGetAllTagsUseCase(UseCaseFactory.createGetAllTagsUseCase());
 
     return controller;
   }
@@ -87,8 +102,23 @@ public class ScreenFactory {
 
   protected ScreenController getBoardScreen() {
 
-    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.BOARD.resourceName());
+    FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.BOARD.resourceName());
     // TODO: set the use cases here
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getMemoryGameScreen() {
+
+    FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.MEMORY_GAME.resourceName());
+    var controller = objectFxmlBundle.getController();
+    controller.setMemoryGameUseCase(UseCaseFactory.createMemoryGameUseCase());
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getPromotePanelScreen() {
+
+    FxmlBundle<MainSceneController> objectFxmlBundle = loadFxml(Screens.PROMOTE_PANEL.resourceName());
+
     return objectFxmlBundle.getController();
   }
 
@@ -97,18 +127,6 @@ public class ScreenFactory {
     FxmlBundle<MainSceneController> objectFxmlBundle = loadFxml(Screens.MAIN_STAGE.resourceName());
     // TODO: set the use cases here
     return objectFxmlBundle.getController();
-  }
-
-  protected ScreenPanel<MenuViewController, InputScreenData> createMenuScreen(
-      InputScreenData inputData) throws IOException {
-
-    FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
-    MenuViewController controller = objectFxmlBundle.getController();
-
-    Pane root = (Pane) objectFxmlBundle.getRoot();
-    root.setLayoutX(inputData.getLayoutX());
-    root.setLayoutY(inputData.getLayoutY());
-    return new ScreenPanel<>(root, controller);
   }
 
   /**

@@ -47,4 +47,11 @@ public class PiecePosition {
         .map(PiecePosition::getPosition)
         .collect(Collectors.toSet());
   }
+
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    PiecePosition that = (PiecePosition) o;
+    return piece.equals(that.piece) && position.equals(that.position);
+  }
 }

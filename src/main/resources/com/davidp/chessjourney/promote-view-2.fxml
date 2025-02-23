@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="570.0" prefWidth="114.0" styleClass="panel-menu" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.PromoteViewController">
+   <children>
+      <Pane fx:id="pnlPromote" layoutX="11.0" layoutY="13.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="492.0" prefWidth="92.0" style="-fx-border-color: #303040; -fx-border-width: 1; -fx-border-insets: -3;">
+         <children>
+            <Pane fx:id="pnlQueen" layoutX="5.0" layoutY="5.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlknight" layoutX="5.0" layoutY="85.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlRook" layoutX="5.0" layoutY="165.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlBishop" layoutX="5.0" layoutY="245.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlPawn" layoutX="5.0" layoutY="325.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+            <Pane fx:id="pnlKing" layoutX="5.0" layoutY="405.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-promote" stylesheets="@custom-styles.css" />
+         </children>
+      </Pane>
+      <Button fx:id="btChange" alignment="BASELINE_CENTER" layoutX="40.0" layoutY="525.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/sync_alt_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+   <stylesheets>
+      <URL value="@custom-styles.css" />
+   </stylesheets>
+</Pane>

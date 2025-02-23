@@ -196,4 +196,5 @@ public class ChessBoard {
 
     this.enPassantTargetSquare = enPassantTargetSquare;
   }
+
 }

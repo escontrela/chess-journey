@@ -1,11 +1,12 @@
 package com.davidp.chessjourney.application.ui.menu;
 
+import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
+import com.davidp.chessjourney.application.domain.OpenMemoryGameEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
-import com.davidp.chessjourney.application.ui.util.FadeInAnimation;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -28,6 +29,10 @@ public class MenuViewController implements ScreenController {
   @FXML private Text txtSettings;
 
   @FXML private Text txtAnalysisBoard;
+
+  @FXML private Text txtMemoryGame;
+
+  @FXML private Pane pnlOptionMemoryGame;
 
   public void initialize() {
 
@@ -56,26 +61,25 @@ public class MenuViewController implements ScreenController {
     rootPane.setVisible(false);
 
     //   Platform.runLater(() -> {
-    FadeInAnimation fadeIn = new FadeInAnimation(rootPane, Duration.seconds(0.4));
-    fadeIn.onFinished(
-        () -> {
-          rootPane.setVisible(true);
-          rootPane.toFront();
-        });
-    fadeIn.play();
-
     /*
+       FadeInAnimation fadeIn = new FadeInAnimation(rootPane, Duration.seconds(0.4));
+       fadeIn.onFinished(
+           () -> {
+             rootPane.setVisible(true);
+             rootPane.toFront();
+           });
+       fadeIn.play();
+    */
     // Fade in animation when showing
     FXGL.animationBuilder()
-            .duration(Duration.seconds(0.2))
-            .onFinished( ()-> {
+        .duration(Duration.seconds(0.2))
+        .onFinished(
+            () -> {
               rootPane.setVisible(true);
               rootPane.toFront();
             })
-            .fadeIn(rootPane)
-            .buildAndPlay();
-            */
-
+        .fadeIn(rootPane)
+        .buildAndPlay();
   }
 
   public void show(InputScreenData inputData) {
@@ -87,20 +91,16 @@ public class MenuViewController implements ScreenController {
 
   @Override
   public void hide() {
-    /*
-      FXGL.animationBuilder()
-              .duration(Duration.seconds(0.2))
-              .onFinished( ()-> {
-                rootPane.setVisible(false);
 
-                status = ScreenStatus.HIDDEN;
-              })
-              .fadeOut(rootPane)
-              .buildAndPlay();
-    */
-    rootPane.setVisible(false);
-
-    status = ScreenStatus.HIDDEN;
+    FXGL.animationBuilder()
+        .duration(Duration.seconds(0.2))
+        .onFinished(
+            () -> {
+              rootPane.setVisible(false);
+              status = ScreenStatus.HIDDEN;
+            })
+        .fadeOut(rootPane)
+        .buildAndPlay();
   }
 
   @Override
@@ -140,6 +140,15 @@ public class MenuViewController implements ScreenController {
 
       GlobalEventBus.get().post(new OpenAnalysisBoardEvent());
     }
+
+    if (isMemoryGameClicked(event)) {
+      GlobalEventBus.get().post(new OpenMemoryGameEvent());
+    }
+  }
+
+  private boolean isMemoryGameClicked(MouseEvent event) {
+
+    return event.getSource() == pnlOptionMemoryGame || event.getSource() == txtMemoryGame;
   }
 
   private boolean isAnalysisBoardClicked(MouseEvent event) {

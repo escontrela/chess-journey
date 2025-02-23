@@ -178,7 +178,7 @@
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="609.0" layoutY="13.0" styleClass="text-white-medium" text="24:32" textFill="#1d2d44">
+      <Label fx:id="lblBlackTime" layoutX="609.0" layoutY="13.0" styleClass="text-white-medium" text="24:32" textFill="#1d2d44">
          <font>
             <Font size="18.0" />
          </font>
@@ -205,7 +205,27 @@
       </Label>
       <Circle fill="WHITE" layoutX="283.0" layoutY="774.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
       <Circle fill="#030303" layoutX="283.0" layoutY="25.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
-      <Pane fx:id="pnlTime" layoutX="709.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="panel-menu" />
+      <Pane fx:id="pnlTime" layoutX="709.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="panel-menu">
+         <children>
+            <Label fx:id="lblBoardType" layoutX="14.0" layoutY="14.0" styleClass="text-white-medium" text="board" />
+            <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="43.0" layoutY="95.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="145.0" styleClass="button-red" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
+            <Label fx:id="lblStatus" layoutX="89.0" layoutY="50.0" styleClass="text-gray-small" text="..." />
+            <Label fx:id="lblExerciseNum" layoutX="202.0" layoutY="171.0" styleClass="text-gray-small" text="..." />
+            <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="61.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="easy" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
+            <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="109.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="61.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="mid" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
+         </children></Pane>
       <Pane layoutX="709.0" layoutY="279.0" prefHeight="468.0" prefWidth="230.0" styleClass="panel-menu">
          <children>
             <Pane fx:id="pnlTitleBar1111" layoutX="1.0" layoutY="387.0" opacity="0.21" prefHeight="39.0" prefWidth="224.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
@@ -218,6 +238,19 @@
                </children>
             </Pane>
             <Label layoutX="6.0" layoutY="357.0" styleClass="text-gray-small" text="FEN" />
+            <ImageView fitHeight="64.0" fitWidth="61.0" layoutX="6.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@sample/other/ghost-bot.png" />
+               </image>
+            </ImageView>
+            <Pane layoutX="69.0" layoutY="36.0" prefHeight="69.0" prefWidth="151.0" style="-fx-background-color: white; -fx-border-radius: 40; -fx-background-radius: 10;">
+               <children>
+                  <Label fx:id="lblGhostMsg" layoutX="20.0" layoutY="7.0" prefHeight="55.0" prefWidth="121.0" text="Hola, preparado?" wrapText="true">
+                     <font>
+                        <Font size="12.0" />
+                     </font></Label>
+               </children>
+            </Pane>
          </children></Pane>
       <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="931.0" layoutY="8.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>

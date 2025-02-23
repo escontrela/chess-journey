@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.application.ui.main;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
+import static javafx.application.Platform.runLater;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.almasb.fxgl.entity.Entity;
@@ -10,6 +11,7 @@ import com.almasb.fxgl.particle.ParticleEmitters;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
+import com.davidp.chessjourney.application.domain.OpenMemoryGameEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
@@ -18,10 +20,13 @@ import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
+import com.davidp.chessjourney.application.usecases.GetAllTagsUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.domain.User;
+import com.davidp.chessjourney.domain.common.Tag;
 import com.google.common.eventbus.Subscribe;
 import java.awt.*;
+import java.util.List;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -36,6 +41,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.util.Duration;
 
@@ -68,6 +74,14 @@ public class MainSceneController implements ScreenController {
 
   @FXML private ImageView imgLogo;
 
+
+  @FXML
+  private Text lblPractice;
+
+  @FXML
+  private Text lblChessboard;
+
+
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
@@ -77,6 +91,7 @@ public class MainSceneController implements ScreenController {
   private static final Point MENU_POSITION = new Point(20, 535);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
   private static final Point BOARD_POSITION = new Point(140, 60);
+  private static final Point MEMORY_GAME_POSITION = new Point(140, 60);
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -97,27 +112,28 @@ public class MainSceneController implements ScreenController {
 
       showInfoPanel(pnlMessage);
 
-      // TODO test code, remove it asap
-      ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
-      emitter.setNumParticles(10); // Número de partículas
-      emitter.setSize(5, 10); // Tamaño de las partículas
+      runLater(
+          () -> {
+            // TODO test code, remove it asap
+            ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
+            emitter.setNumParticles(10); // Número de partículas
+            emitter.setSize(5, 10); // Tamaño de las partículas
 
-      // Opcional: Personalizar el emisor
-      emitter.setStartColor(javafx.scene.paint.Color.ORANGE);
-      emitter.setEndColor(Color.RED);
-      emitter.setSize(5, 10);
+            emitter.setStartColor(javafx.scene.paint.Color.ORANGE);
+            emitter.setEndColor(Color.RED);
+            emitter.setSize(5, 10);
 
-      // Crear la entidad con el emisor de partículas
-      Entity fire =
-          entityBuilder()
-              .at(200, 200) // Posición inicial
-              .with(new ParticleComponent(emitter)) // Agregar el componente de partículas
-              .buildAndAttach();
+            Entity fire =
+                entityBuilder()
+                    .at(200, 200) // Posición inicial
+                    .with(new ParticleComponent(emitter)) // Agregar el componente de partículas
+                    .buildAndAttach();
 
-      if (!getGameWorld().getEntities().contains(fire)) {
-        // Añadir al mundo del juego
-        getGameWorld().addEntity(fire);
-      }
+            if (!getGameWorld().getEntities().contains(fire)) {
+
+              getGameWorld().addEntity(fire);
+            }
+          });
     }
   }
 
@@ -204,6 +220,28 @@ public class MainSceneController implements ScreenController {
     manageAnalysisBoardVisibility();
   }
 
+  @Subscribe
+  public void onMemoryGameClicked(OpenMemoryGameEvent event) {
+
+    manageContextMenuVisibility();
+    manageMemoryGameVisibility();
+  }
+
+  private void manageMemoryGameVisibility() {
+
+    ScreenController memoryGameController = getScreen(Screens.MEMORY_GAME);
+    if (memoryGameController.isVisible() && !memoryGameController.isInitialized()) {
+
+      memoryGameController.hide();
+      return;
+    }
+
+    SettingsViewInputScreenData inputData =
+        new SettingsViewInputScreenData(
+            AppProperties.getInstance().getActiveUserId(), MEMORY_GAME_POSITION);
+    memoryGameController.show(inputData);
+  }
+
   private void manageAnalysisBoardVisibility() {
 
     ScreenController boardController = getScreen(Screens.BOARD);
@@ -230,6 +268,14 @@ public class MainSceneController implements ScreenController {
 
     moveMainWindowsSetUp();
     reloadUserInitials(AppProperties.getInstance().getActiveUserId());
+    showTextAnimation();
+  }
+
+  private void showTextAnimation() {
+
+    playTypeWriterEffect(lblChessboard.getText(), lblChessboard,0.1);
+    playTypeWriterEffect(lblPractice.getText(), lblPractice,0.1);
+
   }
 
   private void moveMainWindowsSetUp() {
@@ -355,5 +401,20 @@ public class MainSceneController implements ScreenController {
   public void minimize() {
 
     stage.setIconified(true);
+  }
+
+
+  private void playTypeWriterEffect(String text, Text textNode, double charInterval) {
+    textNode.setText(""); // Asegurarse de que el Text esté vacío al iniciar
+    StringBuilder currentText = new StringBuilder();
+
+    for (int i = 0; i < text.length(); i++) {
+      int index = i;
+      runOnce(() -> {
+        currentText.append(text.charAt(index)); // Añadir la siguiente letra
+        textNode.setText(currentText.toString());
+          return null;
+      }, javafx.util.Duration.seconds(i * charInterval));
+    }
   }
 }

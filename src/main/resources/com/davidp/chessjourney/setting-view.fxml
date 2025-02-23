@@ -11,7 +11,7 @@
 
 <Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="panel-gray" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.settings.SettingsViewController">
    <children>
-      <Pane layoutX="50.0" layoutY="129.0" prefHeight="285.0" prefWidth="610.0" styleClass="panel-purple" stylesheets="@custom-styles.css">
+      <Pane fx:id="pnlProfile" layoutX="50.0" layoutY="129.0" prefHeight="285.0" prefWidth="610.0" styleClass="panel-purple" stylesheets="@custom-styles.css">
          <children>
             <StackPane layoutX="543.0" layoutY="34.0" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
                <children>
@@ -53,7 +53,7 @@
             <Label layoutX="34.0" layoutY="53.0" styleClass="text-gray-small" text="Update your personal details here." />
          </children>
       </Pane>
-      <Button fx:id="btOption1" alignment="BASELINE_CENTER" layoutX="50.0" layoutY="78.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="105.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Profile" textFill="WHITE">
+      <Button fx:id="btProfile" alignment="BASELINE_CENTER" layoutX="50.0" layoutY="78.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="105.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Profile" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
@@ -76,5 +76,29 @@
          </font>
       </Button>
       <Label layoutX="37.0" layoutY="17.0" styleClass="text-white-extra-big" text="Settings" />
+      <Button fx:id="btOptionTags" alignment="BASELINE_CENTER" layoutX="167.0" layoutY="78.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="105.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Tags" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
+      <Pane fx:id="pnlTags" layoutX="50.0" layoutY="129.0" prefHeight="285.0" prefWidth="610.0" styleClass="panel-purple" stylesheets="@custom-styles.css" visible="false">
+         <children>
+            <Pane fx:id="pnlTitleBar111121" layoutX="31.0" layoutY="210.0" opacity="0.21" prefHeight="39.0" prefWidth="182.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
+               <children>
+                  <TextField fx:id="inTag" layoutX="15.0" layoutY="2.0" prefHeight="35.0" prefWidth="155.0" promptText="this is a input text box" text="escontrela@live.com">
+                     <font>
+                        <Font name="Alatsi Regular" size="18.0" />
+                     </font>
+                  </TextField>
+               </children>
+            </Pane>
+            <Label layoutX="34.0" layoutY="179.0" styleClass="text-white-medium" text="New" />
+            <Button fx:id="btAddTag" alignment="BASELINE_CENTER" layoutX="228.0" layoutY="213.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="55.0" styleClass="button-red" stylesheets="@custom-styles.css" text="add" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
+         </children>
+      </Pane>
    </children>
 </Pane>
