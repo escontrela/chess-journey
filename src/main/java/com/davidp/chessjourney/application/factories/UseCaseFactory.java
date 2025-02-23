@@ -47,4 +47,10 @@ public class UseCaseFactory {
     TagRepository tagRepository = RepositoryFactory.createTagRepository();
     return new GetAllTagsUseCaseImpl(tagRepository);
   }
+
+  public static SaveUserExerciseStatsUseCase createSaveUserExerciseStatsUseCase() {
+
+    UserRepository userRepo = RepositoryFactory.createUserRepository();
+    return new SaveUserExerciseStatsUseCaseImpl(userRepo);
+  }
 }

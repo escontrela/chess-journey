@@ -1,5 +1,7 @@
 package com.davidp.chessjourney.domain;
 
+import com.davidp.chessjourney.domain.common.DifficultyLevel;
+import com.davidp.chessjourney.domain.common.Exercise;
 import com.davidp.chessjourney.domain.common.Fen;
 import com.davidp.chessjourney.domain.common.TimeControl;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
@@ -18,14 +20,14 @@ public class ChessGameFactory {
   }
 
   public static MemoryGame createMemoryGameFrom(final Player player, final TimeControl timeControl
-          , final List<Fen> positions){
+          ,  DifficultyLevel difficultyLevel, List<Exercise> exercises) {
 
-      if (positions == null || positions.isEmpty()) {
+      if (exercises == null || exercises.isEmpty()) {
 
           throw new IllegalArgumentException("Positions list cannot be null or empty");
       }
-      ChessBoard chessBoard = ChessBoardFactory.createFromFEN(positions.get(0));
-      return new MemoryGame(player,chessBoard,timeControl,positions);
+      ChessBoard chessBoard = ChessBoardFactory.createFromFEN(Fen.createCustom(exercises.get(0).getFen()));
+      return new MemoryGame(player,chessBoard,timeControl,difficultyLevel,exercises);
 
   }
 }

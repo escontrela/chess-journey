@@ -4,15 +4,13 @@ import com.davidp.chessjourney.domain.ChessBoard;
 import com.davidp.chessjourney.domain.ChessBoardFactory;
 import com.davidp.chessjourney.domain.Game;
 import com.davidp.chessjourney.domain.Player;
-import com.davidp.chessjourney.domain.common.Fen;
-import com.davidp.chessjourney.domain.common.GameState;
-import com.davidp.chessjourney.domain.common.PiecePosition;
-import com.davidp.chessjourney.domain.common.TimeControl;
+import com.davidp.chessjourney.domain.common.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 
 /** Clase base para un juego de ajedrez de memoria. */
@@ -32,19 +30,29 @@ public class MemoryGame extends Game {
   private final long timeToShowPiecesOnTheCurrentExerciseInSeconds = 5;
   private List <MemoryGamePartialStat> stats = new ArrayList<>();
   private boolean wasHided = false;
+  private DifficultyLevel difficultyLevel;
+  private  List<Exercise> exercises;
+  protected UUID currentExerciseId;
 
   private GameState gameState;
 
-  public MemoryGame(Player player, ChessBoard board, TimeControl timeControl, List<Fen> positions) {
+  public MemoryGame(Player player, ChessBoard board, TimeControl timeControl,  DifficultyLevel difficultyLevel, List<Exercise> exercises) {
 
     super();
     this.player = player;
     this.chessBoard = board;
     this.timeControl = timeControl;
-    this.positions = positions;
     this.currentExerciseIndex = 0;
     this.hiddenPiecesCount = 1;
     this.gameState = GameState.WAITING_TO_START;
+    this.exercises = exercises;
+    this.difficultyLevel = difficultyLevel;
+    this.positions = new ArrayList<>();
+
+    exercises.forEach(exercise -> {
+
+      positions.add(Fen.createCustom(exercise.getFen()));
+    });
   }
 
 
@@ -147,6 +155,8 @@ public class MemoryGame extends Game {
     }
 
     Fen currentFen = positions.get(currentExerciseIndex);
+    currentExerciseId = exercises.get(currentExerciseIndex).getId();
+
     chessBoard = ChessBoardFactory.createFromFEN(currentFen);
     hiddenPiecePositions = hidePieces(hiddenPiecesCount);
     partialTime = Instant.now();
@@ -209,6 +219,10 @@ public class MemoryGame extends Game {
     return new ArrayList<>(hiddenPositions); // Devolver copia para evitar modificaciones externas
   }
 
+  public DifficultyLevel getDifficultyLevel() {
+
+    return difficultyLevel;
+  }
 
   /**
    * Mueve al siguiente ejercicio.
@@ -298,6 +312,10 @@ public class MemoryGame extends Game {
     return chessBoard.getFen();
   }
 
+  public UUID getCurrentExerciseId(){
+
+    return currentExerciseId;
+  }
 
   /**
    * These states are using to control the game status

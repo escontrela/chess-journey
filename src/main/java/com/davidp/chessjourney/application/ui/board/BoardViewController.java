@@ -6,7 +6,6 @@ import static javafx.application.Platform.runLater;
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
-import com.davidp.chessjourney.application.domain.OpenMemoryGameEvent;
 import com.davidp.chessjourney.application.domain.PromoteSelectedPieceEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
@@ -14,8 +13,8 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
-import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
+import com.davidp.chessjourney.application.usecases.SaveUserExerciseStatsUseCase;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
@@ -23,10 +22,9 @@ import com.davidp.chessjourney.domain.services.FenServiceFactory;
 
 import java.awt.*;
 import java.io.IOException;
-import java.util.HashMap;
+import java.time.LocalDateTime;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
 
 import com.google.common.eventbus.Subscribe;
 import javafx.event.ActionEvent;
@@ -39,7 +37,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 import javafx.util.Duration;
 
 public class BoardViewController implements ScreenController {
@@ -102,8 +99,11 @@ public class BoardViewController implements ScreenController {
   private ScreenController.ScreenStatus status;
 
   protected MemoryGameUseCase memoryGameUseCase;
+  protected SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase;
 
-  protected  boolean pauseLoopGame = false;
+    protected  boolean pauseLoopGame = false;
+
+  protected boolean idValidForELO = true;
 
   public void initialize() {
 
@@ -634,6 +634,10 @@ private boolean isButtonStartClicked(ActionEvent event) {
             0.02);
   }
 
+  public void setSaveUserExerciseStatsUseCase(SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase) {
+      this.saveUserExerciseStatsUseCase = saveUserExerciseStatsUseCase;
+  }
+
 
   @Subscribe
   public void onMemoryGameClicked(PromoteSelectedPieceEvent event) {
@@ -661,6 +665,12 @@ private boolean isButtonStartClicked(ActionEvent event) {
                           runLater(
                                   () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
                           //FXGL.play("correct.wav");
+
+                          if (this.idValidForELO){
+
+                            insertUserStatsForThisExercise(result);
+                          }
+
                         matchedPieces++;
                         showHiddenPieces();
                         FXGL.animationBuilder().duration(Duration.seconds(2))
@@ -686,6 +696,10 @@ private boolean isButtonStartClicked(ActionEvent event) {
                                 0.02);
                           runLater(
                                   () -> soundService.playSound(SoundServiceFactory.SoundType.FAIL_EXERCISE));
+                        if (this.idValidForELO){
+
+                          insertUserStatsForThisExercise(result);
+                        }
                         matchedPieces++;
                         showHiddenPieces();
                         FXGL.animationBuilder().duration(Duration.seconds(2))
@@ -695,7 +709,21 @@ private boolean isButtonStartClicked(ActionEvent event) {
               .buildAndPlay();
 
     }
-    //matchedPieces = activeMemoryGame.getGuessPiecesCount();
+  }
+
+  protected void insertUserStatsForThisExercise(boolean result) {
+
+    UserExerciseStats userExerciseStats
+            = new UserExerciseStats(UUID.randomUUID(),
+            AppProperties.getInstance().getActiveUserId(),
+            activeMemoryGame.getCurrentExerciseId(),
+            LocalDateTime.now(),
+            result,
+            1,// //TODO get the partial time taken!
+            1, //Attempts
+            activeMemoryGame.getDifficultyLevel().getId() ); //TODO exercise difficulty level!
+
+    saveUserExerciseStatsUseCase.execute(userExerciseStats);
   }
 
   private void showHiddenPieces() {

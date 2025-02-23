@@ -2,9 +2,12 @@ package com.davidp.chessjourney.infrastructure.database;
 
 import com.davidp.chessjourney.domain.User;
 import com.davidp.chessjourney.domain.UserRepository;
+import com.davidp.chessjourney.domain.common.UserExerciseStats;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import javax.sql.DataSource;
@@ -96,6 +99,32 @@ public class UserRepositoryImpl implements UserRepository {
       // Manejar excepción según tus necesidades (log, rethrow, etc.)
       // TODO fix IT!!!
       return false;
+    }
+  }
+
+  @Override
+  public boolean insertExerciseStats(UserExerciseStats stats) {
+
+    String sql = "INSERT INTO user_exercise_stats " +
+            "(user_id, exercise_id, attempt_date, successful, time_taken_seconds, attempts, difficulty_id) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+
+      ps.setLong(1, stats.getUserId());
+      ps.setObject(2, stats.getExerciseId());
+      ps.setTimestamp(3, Timestamp.valueOf(stats.getAttemptDate()));
+      ps.setBoolean(4, stats.wasSuccessful());
+      ps.setInt(5, stats.getTimeTakenSeconds());
+      ps.setInt(6, stats.getAttempts());
+      ps.setObject(7, stats.getDifficultyId());
+
+      int rowsInserted = ps.executeUpdate();
+      return rowsInserted > 0;
+
+    } catch (Exception e) {
+      throw new RuntimeException("Error inserting exercise stats", e);
     }
   }
 }

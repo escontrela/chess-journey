@@ -211,13 +211,13 @@ VALUES (
 
 CREATE TABLE user_exercise_stats (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    user_id INT8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     exercise_id UUID NOT NULL REFERENCES exercises(id) ON DELETE CASCADE,
     attempt_date TIMESTAMP DEFAULT NOW(),  -- Fecha y hora del intento
     successful BOOLEAN NOT NULL,           -- Indica si el intento fue exitoso
     time_taken_seconds INT NOT NULL,      -- Tiempo en segundos que tardó en resolverlo
     attempts INT DEFAULT 1,               -- Número de intentos hasta resolverlo
-    difficulty_id UUID NOT NULL REFERENCES difficulty_levels(id) ON DELETE CASCADE  -- Dificultad del ejercicio en ese momento
+    difficulty_id UUID NOT NULL REFERENCES difficulty_levels(id) ON DELETE CASCADE  -- Dificultad del ejercicio
 );
 
 CREATE TABLE elo_types (

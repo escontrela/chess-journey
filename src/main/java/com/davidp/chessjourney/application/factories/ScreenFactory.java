@@ -112,6 +112,7 @@ public class ScreenFactory {
     FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.MEMORY_GAME.resourceName());
     var controller = objectFxmlBundle.getController();
     controller.setMemoryGameUseCase(UseCaseFactory.createMemoryGameUseCase());
+    controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
     return objectFxmlBundle.getController();
   }
 
