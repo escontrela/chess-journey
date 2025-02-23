@@ -59,4 +59,45 @@ public class User {
         + '\''
         + '}';
   }
+
+  public static int calculateNewElo(int currentElo, int opponentElo, boolean successful, int kFactor) {
+
+    double expectation = 1.0 / (1.0 + Math.pow(10, (opponentElo - currentElo) / 400.0));
+    int result = successful ? 1 : 0;
+    return currentElo + (int) (kFactor * (result - expectation));
+  }
+
+  /**
+   * Calcula el nuevo ELO después de resolver un ejercicio.
+   *
+   * @param currentElo          ELO actual del jugador
+   * @param exerciseDifficultyElo ELO asignado al ejercicio
+   * @param successful           Si el ejercicio fue resuelto correctamente
+   * @param timeTakenSeconds     Tiempo que tardó el jugador en resolver el ejercicio
+   * @param expectedTimeSeconds  Tiempo esperado para resolver el ejercicio
+   * @param kFactor              Factor K de actualización
+   * @return El nuevo ELO actualizado
+   */
+  public static int calculateNewEloForExercise(int currentElo, int exerciseDifficultyElo, boolean successful,
+                                    int timeTakenSeconds, int expectedTimeSeconds, int kFactor) {
+
+    // Calcula la expectativa del resultado
+    double expectation = 1.0 / (1.0 + Math.pow(10, (exerciseDifficultyElo - currentElo) / 400.0));
+
+    // Resultado: 1 si resuelto correctamente, 0 si fallido
+    int result = successful ? 1 : 0;
+
+    // Factor de penalización o recompensa basado en el tiempo
+    double timeFactor = 1.0;
+    if (successful) {
+      timeFactor = Math.max(0, 1 - ((double) timeTakenSeconds / expectedTimeSeconds));
+    }
+
+    // Cálculo del nuevo ELO
+    int newElo = (int) (currentElo + kFactor * ((result + timeFactor) - expectation));
+
+    // El ELO nunca puede ser menor a 100
+    return Math.max(newElo, 100);
+  }
+
 }

@@ -1,5 +1,5 @@
 package com.davidp.chessjourney.domain.common;
- 
+
 
 import java.time.LocalDateTime;
 import java.util.UUID;
