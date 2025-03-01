@@ -2,6 +2,7 @@ package com.davidp.chessjourney.application.ui.menu;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
+import com.davidp.chessjourney.application.domain.ChangeUserEvent;
 import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
 import com.davidp.chessjourney.application.domain.OpenMemoryGameEvent;
 import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
@@ -33,6 +34,17 @@ public class MenuViewController implements ScreenController {
   @FXML private Text txtMemoryGame;
 
   @FXML private Pane pnlOptionMemoryGame;
+
+  @FXML
+  private Pane pnlOptionUser;
+
+  @FXML
+  private ImageView imgUser;
+
+
+  @FXML
+  private Text txtUser;
+
 
   public void initialize() {
 
@@ -144,6 +156,10 @@ public class MenuViewController implements ScreenController {
     if (isMemoryGameClicked(event)) {
       GlobalEventBus.get().post(new OpenMemoryGameEvent());
     }
+
+    if (isUserChangedClicked(event)){
+      GlobalEventBus.get().post(new ChangeUserEvent());
+    }
   }
 
   private boolean isMemoryGameClicked(MouseEvent event) {
@@ -159,5 +175,10 @@ public class MenuViewController implements ScreenController {
   protected boolean isSettingMenuClicked(MouseEvent event) {
 
     return event.getSource() == pnlOptionSettings || event.getSource() == txtSettings;
+  }
+
+  protected boolean isUserChangedClicked(MouseEvent event) {
+
+    return event.getSource() == pnlOptionUser || event.getSource() == txtUser;
   }
 }

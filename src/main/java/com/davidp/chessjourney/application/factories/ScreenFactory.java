@@ -8,6 +8,8 @@ import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
 import java.io.IOException;
 import java.net.URL;
+
+import com.davidp.chessjourney.application.ui.user.UserViewController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -25,7 +27,8 @@ public class ScreenFactory {
     BOARD("/com/davidp/chessjourney/board-view-2.fxml"),
     MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
     EXERCISE_RESULTS_PANEL("/com/davidp/chessjourney/exercise-result-view.fxml"),
-    PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml");
+    PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml"),
+    CHANGE_USER("/com/davidp/chessjourney/user-change.fxml");;
 
     private final String resourcePath;
 
@@ -72,9 +75,16 @@ public class ScreenFactory {
         return getPromotePanelScreen();
       case EXERCISE_RESULTS_PANEL:
         return getExerciseResultPanelScreen();
+      case CHANGE_USER:
+        return getChangeUserScreen();
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
+  }
+
+  private ScreenController getChangeUserScreen() {
+    FxmlBundle<UserViewController> objectFxmlBundle = loadFxml(Screens.CHANGE_USER.resourceName());
+    return objectFxmlBundle.getController();
   }
 
   private ScreenController getExerciseResultPanelScreen() {

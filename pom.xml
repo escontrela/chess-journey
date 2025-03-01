@@ -167,7 +167,7 @@
                     </googleJavaFormat>
                 </java>
             </configuration>
-        </plugin>
+        </plugin>f
     </plugins>
 </build>
 
