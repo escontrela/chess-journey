@@ -7,20 +7,19 @@ public class AppProperties {
 
   private static volatile AppProperties instance = null;
 
-  // Ruta en el classpath para LEER las propiedades (dentro de resources)
-  private static final String RESOURCE_FILE = "/application.properties";
+  //Path to edited file
+  private static final String EXTERNAL_CONFIG_FILE = "config/application.properties";
 
-  // Archivo de SALIDA para ESCRIBIR los cambios (fuera del .jar)
-  private static final String OUTPUT_FILE = "application.properties";
+  // Pat to resources file (read-only)
+  private static final String CLASSPATH_CONFIG_FILE = "/application.properties";
 
   private final Properties props = new Properties();
 
-  // Constructor privado
   private AppProperties() {
+
     loadProperties();
   }
 
-  /** Patrón Singleton con double-checked locking. */
   public static AppProperties getInstance() {
     if (instance == null) {
       synchronized (AppProperties.class) {
@@ -32,39 +31,64 @@ public class AppProperties {
     return instance;
   }
 
-  /** Carga las propiedades desde el archivo en resources. */
+  /**
+   * 📥 Carga las propiedades desde `config/application.properties` si existe. Si no, las carga
+   * desde `resources/application.properties` (solo lectura).
+   */
   private void loadProperties() {
-    try (InputStream in = getClass().getResourceAsStream(RESOURCE_FILE)) {
-      if (in != null) {
+    File configFile = new File(EXTERNAL_CONFIG_FILE);
+
+    if (configFile.exists()) {
+      // Si hay un archivo externo, cargar desde ahí (permite edición)
+      try (InputStream in = new FileInputStream(configFile)) {
         props.load(in);
-      } else {
-        System.err.println("No se encontró " + RESOURCE_FILE + " en el classpath.");
+        System.out.println(
+            "✅ Configuración cargada desde archivo externo: " + configFile.getAbsolutePath());
+      } catch (IOException e) {
+        e.printStackTrace();
       }
-    } catch (IOException e) {
-      e.printStackTrace();
+    } else {
+      // Si no hay archivo externo, cargar desde resources (solo lectura)
+      try (InputStream in = getClass().getResourceAsStream(CLASSPATH_CONFIG_FILE)) {
+        if (in != null) {
+          props.load(in);
+          System.out.println("📂 Configuración cargada desde resources.");
+        } else {
+          System.err.println("⚠️ No se encontró el archivo de configuración en resources.");
+        }
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 
-  /** Devuelve el valor de la propiedad con la clave indicada, o null si no existe. */
   public String getProperty(String key) {
     return props.getProperty(key);
   }
 
-  /** Asigna o sobreescribe una propiedad en memoria. */
   public void setProperty(String key, String value) {
     props.setProperty(key, value);
   }
 
-  /** Guarda en disco (archivo externo) todos los cambios que haya en memoria. */
   public void saveProperties() {
-    try (OutputStream out = new FileOutputStream(OUTPUT_FILE)) {
-      props.store(out, "Aplicación actualizada");
+
+    File configFile = new File(EXTERNAL_CONFIG_FILE);
+
+   if ( !configFile.getParentFile().mkdirs()){
+
+     System.err.println("⚠️ No se pudo crear el directorio de configuración.");
+   }
+
+    try (OutputStream out = new FileOutputStream(configFile)) {
+
+      props.store(out, "Configuración actualizada");
+      System.out.println("✅ Configuración guardada en: " + configFile.getAbsolutePath());
+
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
-  /** Obtiene el ID del usuario activo. Si no existe o no es numérico, retorna 0. */
   public long getActiveUserId() {
     String val = getProperty("myapp.user.active.id");
     if (val == null) {
@@ -78,7 +102,6 @@ public class AppProperties {
     }
   }
 
-  /** Actualiza el ID del usuario activo en las propiedades. */
   public void setActiveUserId(long userId) {
     setProperty("myapp.user.active.id", String.valueOf(userId));
   }

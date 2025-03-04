@@ -23,7 +23,7 @@
                <children>
                   <Label fx:id="lbUserInitials" text="AP">
                      <font>
-                        <Font name="Alatsi Regular" size="18.0" />
+                        <Font name="Alatsi Regular" size="14.0" />
                      </font>
                   </Label>
                </children>

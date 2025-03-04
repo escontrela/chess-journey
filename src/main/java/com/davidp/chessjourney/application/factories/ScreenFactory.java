@@ -84,6 +84,9 @@ public class ScreenFactory {
 
   private ScreenController getChangeUserScreen() {
     FxmlBundle<UserViewController> objectFxmlBundle = loadFxml(Screens.CHANGE_USER.resourceName());
+    var controller = objectFxmlBundle.getController();
+    controller.setGetUsersUseCase(UseCaseFactory.createGetUsersUseCase());
+    controller.setSaveUserUseCase(UseCaseFactory.createSaveActiveUserUseCase());
     return objectFxmlBundle.getController();
   }
 

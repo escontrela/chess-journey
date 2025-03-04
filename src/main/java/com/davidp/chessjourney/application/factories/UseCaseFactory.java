@@ -34,6 +34,12 @@ public class UseCaseFactory {
     return new SaveUserUseCaseImpl(userRepo);
   }
 
+  public static SaveActiveUserUseCase createSaveActiveUserUseCase() {
+
+    SaveActiveUserUseCase activeUserUseCase = new SaveActiveUserUseCaseImpl();
+    return new SaveActiveUserUseCaseImpl();
+  }
+
   public static MemoryGameUseCase createMemoryGameUseCase() {
 
     UserRepository userRepo = RepositoryFactory.createUserRepository();

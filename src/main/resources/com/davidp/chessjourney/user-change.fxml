@@ -6,24 +6,15 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.StackPane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="449.0" prefWidth="560.0" styleClass="panel-gray" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserViewController">
    <children>
       <Pane layoutX="27.0" layoutY="62.0" prefHeight="355.0" prefWidth="509.0" styleClass="panel-menu">
          <children>
-            <StackPane layoutX="48.0" layoutY="66.0" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
-               <children>
-                  <Label fx:id="lbUser" text="AP">
-                     <font>
-                        <Font name="Alatsi Regular" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </StackPane>
-            <Label layoutX="101.0" layoutY="62.0" prefHeight="23.0" prefWidth="166.0" styleClass="text-white-medium" text="Abraham Pereira" />
-            <Label layoutX="101.0" layoutY="85.0" styleClass="text-gray-small" text="abraham.pereira@icloud.com" />
+            <VBox fx:id="userListContainer" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="470.0" />
+            <Label layoutX="160.0" layoutY="304.0" styleClass="text-gray-small" text="&lt; click to select a new user&gt;" />
          </children></Pane>
       <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="510.0" layoutY="8.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>

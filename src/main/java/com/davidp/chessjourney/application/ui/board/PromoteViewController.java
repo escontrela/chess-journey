@@ -62,7 +62,9 @@ public class PromoteViewController implements ScreenController {
 
   @FXML
   void mouseClicked(MouseEvent event) {
-
+        // the user clicked on empty space, do nothing and close the window
+        event.consume();
+        hide();
   }
 
   public void initialize() {
