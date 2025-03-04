@@ -59,4 +59,10 @@ public class UseCaseFactory {
     UserRepository userRepo = RepositoryFactory.createUserRepository();
     return new SaveUserExerciseStatsUseCaseImpl(userRepo);
   }
+
+  public static GetUserStatsForLastNDaysUseCase createGetUserStatsForLastNDaysUseCase() {
+
+    UserRepository userRepo = RepositoryFactory.createUserRepository();
+    return new GetUserStatsForLastNDaysUseCaseImpl(userRepo);
+  }
 }

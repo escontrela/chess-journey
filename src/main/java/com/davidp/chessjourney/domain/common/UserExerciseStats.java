@@ -17,6 +17,7 @@ public class UserExerciseStats {
     private final int attempts;
     private final UUID difficultyId;
 
+
     public UserExerciseStats(UUID id, long userId, UUID exerciseId, LocalDateTime attemptDate,
                              boolean successful, int timeTakenSeconds, int attempts, UUID difficultyId) {
         this.id = id;

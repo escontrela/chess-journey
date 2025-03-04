@@ -17,6 +17,7 @@ import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
+import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
 import com.davidp.chessjourney.application.usecases.GetAllTagsUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.domain.User;
@@ -85,11 +86,13 @@ public class MainSceneController implements ScreenController {
 
   // This map is used to cache the screens that are created.
   private final Map<Screens, ScreenController> screenManager = new HashMap<>();
-  private static final Point MENU_POSITION = new Point(20, 535);
+  private static final Point MENU_POSITION = new Point(20, 490);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
   private static final Point BOARD_POSITION = new Point(140, 60);
   private static final Point MEMORY_GAME_POSITION = new Point(140, 60);
   private static final Point CHANGE_USER_POSITION = new Point(350, 250);
+  private static final Point USER_STATS_POSITION = new Point(210, 120);
+
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -232,6 +235,13 @@ public class MainSceneController implements ScreenController {
     manageMemoryGameVisibility();
   }
 
+  @Subscribe
+  public void onUserStatsClicked(OpenUserStatsEvent event) {
+
+    manageContextMenuVisibility();
+    manageUserStatsVisibility();
+  }
+
   private void manageMemoryGameVisibility() {
 
     ScreenController memoryGameController = getScreen(Screens.MEMORY_GAME);
@@ -275,6 +285,21 @@ public class MainSceneController implements ScreenController {
             new SettingsViewInputScreenData(
                     AppProperties.getInstance().getActiveUserId(), CHANGE_USER_POSITION);
     changeUserController.show(inputData);
+  }
+
+  private void manageUserStatsVisibility() {
+
+    ScreenController userStatsController = getScreen(Screens.USER_STATS);
+    if (userStatsController.isVisible() && !userStatsController.isInitialized()) {
+
+      userStatsController.hide();
+      return;
+    }
+
+    UserStatsInputScreenData inputData =
+            new UserStatsInputScreenData(
+                    AppProperties.getInstance().getActiveUserId(), USER_STATS_POSITION);
+    userStatsController.show(inputData);
   }
 
   public MainSceneController() {

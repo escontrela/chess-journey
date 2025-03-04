@@ -2,10 +2,7 @@ package com.davidp.chessjourney.application.ui.menu;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
-import com.davidp.chessjourney.application.domain.ChangeUserEvent;
-import com.davidp.chessjourney.application.domain.OpenAnalysisBoardEvent;
-import com.davidp.chessjourney.application.domain.OpenMemoryGameEvent;
-import com.davidp.chessjourney.application.domain.OpenSettingsFromMenuEvent;
+import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import javafx.fxml.FXML;
@@ -44,6 +41,18 @@ public class MenuViewController implements ScreenController {
 
   @FXML
   private Text txtUser;
+
+
+  @FXML
+  private Text txtUserStats;
+
+
+  @FXML
+  private Pane pnlOptionUserStats;
+
+
+  @FXML
+  private ImageView imgUserStats;
 
 
   public void initialize() {
@@ -160,6 +169,9 @@ public class MenuViewController implements ScreenController {
     if (isUserChangedClicked(event)){
       GlobalEventBus.get().post(new ChangeUserEvent());
     }
+    if (isUserStatsClicked(event)){
+      GlobalEventBus.get().post(new OpenUserStatsEvent());
+    }
   }
 
   private boolean isMemoryGameClicked(MouseEvent event) {
@@ -180,5 +192,10 @@ public class MenuViewController implements ScreenController {
   protected boolean isUserChangedClicked(MouseEvent event) {
 
     return event.getSource() == pnlOptionUser || event.getSource() == txtUser;
+  }
+
+  protected  boolean isUserStatsClicked(MouseEvent event) {
+
+    return event.getSource() == pnlOptionUserStats || event.getSource() == txtUserStats;
   }
 }
