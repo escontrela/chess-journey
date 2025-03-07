@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="570.0" prefWidth="114.0" styleClass="panel-menu" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.PromoteViewController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onKeyPressed="#keyPressed" onMousePressed="#mouseClicked" prefHeight="570.0" prefWidth="114.0" styleClass="panel-menu" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.PromoteViewController">
    <children>
       <Pane fx:id="pnlPromote" layoutX="11.0" layoutY="13.0" onKeyPressed="#keyPressed" onMouseClicked="#mouseClicked" prefHeight="492.0" prefWidth="92.0" style="-fx-border-color: #303040; -fx-border-width: 1; -fx-border-insets: -3;">
          <children>

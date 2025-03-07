@@ -96,9 +96,10 @@ public class SettingsViewController implements ScreenController {
     this.settingsViewData = settingsViewData;
   }
 
-  public void refreshUserInfo() {
+  public void refreshUserInfo(final long userId) {
 
-    User user = getUserByIdUseCase.execute(settingsViewData.getUserId());
+    User user = getUserByIdUseCase.execute(userId);
+
     inName.setText(user.getFirstname());
     inLastName.setText(user.getLastname());
     inEmail.setText(user.getEmail());
@@ -184,12 +185,16 @@ public class SettingsViewController implements ScreenController {
 
   public void setData(InputScreenData inputData) {
 
-    setSettingsViewData((SettingsViewInputScreenData) inputData);
+    SettingsViewInputScreenData settingsViewData = (SettingsViewInputScreenData) inputData;
+    setSettingsViewData(settingsViewData);
+    refreshUserInfo(settingsViewData.getUserId());
 
     if (inputData.isLayoutInfoValid()) {
 
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
+
+
   }
 
   @Override

@@ -176,5 +176,81 @@ VALUES (
     NOW()
 );
 
++---------------+          +-------------------+          +-------------------+
+|    users      |          |    exercises      |          | difficulty_levels |
++---------------+          +-------------------+          +-------------------+
+| id (PK)       |<-------->| id (PK)           |<-------->| id (PK)           |
+| email         |          | fen               |          | level_name        |
++---------------+          | pgn               |          | description       |
+                           +-------------------+          +-------------------+
 
+                            ^
+                            |
++----------------------+
+| user_exercise_stats  |
++----------------------+
+| id (PK)              |
+| user_id (FK)         |
+| exercise_id (FK)     |
+| attempt_date         |
+| successful           |
+| time_taken_seconds   |
+| attempts             |
+| difficulty_id (FK)   |
++----------------------+
+
++------------+
+| user_elo   |
++------------+
+| id (PK)    |
+| user_id    |
+| current_elo|
+| last_updated|
++------------+
+
+
+CREATE TABLE user_exercise_stats (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id INT8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    exercise_id UUID NOT NULL REFERENCES exercises(id) ON DELETE CASCADE,
+    attempt_date TIMESTAMP DEFAULT NOW(),  -- Fecha y hora del intento
+    successful BOOLEAN NOT NULL,           -- Indica si el intento fue exitoso
+    time_taken_seconds INT NOT NULL,      -- Tiempo en segundos que tardó en resolverlo
+    attempts INT DEFAULT 1,               -- Número de intentos hasta resolverlo
+    difficulty_id UUID NOT NULL REFERENCES difficulty_levels(id) ON DELETE CASCADE  -- Dificultad del ejercicio
+);
+
+CREATE TABLE elo_types (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    type_name VARCHAR(50) NOT NULL UNIQUE,  -- Ejemplos: 'standard', 'rapid', 'blitz', 'exercises'
+    description TEXT
+);
+
+-- Insertar los tipos de ELO por defecto
+INSERT INTO elo_types (type_name, description) VALUES
+    ('standard', 'ELO para partidas clásicas'),
+    ('rapid', 'ELO para partidas rápidas'),
+    ('blitz', 'ELO para partidas blitz'),
+    ('exercises', 'ELO específico para ejercicios de entrenamiento');
+
+
+CREATE TABLE user_elo (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id INT8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    elo_type_id UUID NOT NULL REFERENCES elo_types(id) ON DELETE CASCADE,  -- Relación con tipo de ELO
+    current_elo INT DEFAULT 1200,  -- Valor inicial estándar de ELO
+    last_updated TIMESTAMP DEFAULT NOW(),
+    UNIQUE (user_id, elo_type_id)  -- Un ELO por tipo para cada usuario
+);
+
+CREATE TABLE user_exercise_stats (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    user_id INT8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    exercise_id UUID NOT NULL REFERENCES exercises(id) ON DELETE CASCADE,
+    attempt_date TIMESTAMP DEFAULT NOW(),  -- Fecha y hora del intento
+    successful BOOLEAN NOT NULL,           -- Indica si el intento fue exitoso
+    time_taken_seconds INT NOT NULL,      -- Tiempo en segundos que tardó en resolverlo
+    attempts INT DEFAULT 1,               -- Número de intentos hasta resolverlo
+    difficulty_id UUID NOT NULL REFERENCES difficulty_levels(id) ON DELETE CASCADE  -- Dificultad del ejercicio
+);
 

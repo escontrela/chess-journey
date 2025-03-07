@@ -34,6 +34,12 @@ public class UseCaseFactory {
     return new SaveUserUseCaseImpl(userRepo);
   }
 
+  public static SaveActiveUserUseCase createSaveActiveUserUseCase() {
+
+    SaveActiveUserUseCase activeUserUseCase = new SaveActiveUserUseCaseImpl();
+    return new SaveActiveUserUseCaseImpl();
+  }
+
   public static MemoryGameUseCase createMemoryGameUseCase() {
 
     UserRepository userRepo = RepositoryFactory.createUserRepository();
@@ -46,5 +52,17 @@ public class UseCaseFactory {
 
     TagRepository tagRepository = RepositoryFactory.createTagRepository();
     return new GetAllTagsUseCaseImpl(tagRepository);
+  }
+
+  public static SaveUserExerciseStatsUseCase createSaveUserExerciseStatsUseCase() {
+
+    UserRepository userRepo = RepositoryFactory.createUserRepository();
+    return new SaveUserExerciseStatsUseCaseImpl(userRepo);
+  }
+
+  public static GetUserStatsForLastNDaysUseCase createGetUserStatsForLastNDaysUseCase() {
+
+    UserRepository userRepo = RepositoryFactory.createUserRepository();
+    return new GetUserStatsForLastNDaysUseCaseImpl(userRepo);
   }
 }
