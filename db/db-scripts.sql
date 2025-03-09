@@ -182,9 +182,15 @@ VALUES (
 );
 
 insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
-values('7b/1k1r3P/8/8/8/1B6/K7/2B5 w - - 1 1','Ac2',
+values('7b/1k1r3P/8/8/8/1B6/K7/2B5 w - - 1 1','Bc2',
 (SELECT id FROM public.exercise_types WHERE name = 'defend_memory_game'),
 (SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values('4rk2/2p2ppp/B2p4/8/6b1/P3P3/1PP5/1KR5 w - - 0 1','Re1',
+(SELECT id FROM public.exercise_types WHERE name = 'defend_memory_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
 
 +---------------+          +-------------------+          +-------------------+
 |    users      |          |    exercises      |          | difficulty_levels |

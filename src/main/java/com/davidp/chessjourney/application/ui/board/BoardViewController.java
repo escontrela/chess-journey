@@ -470,7 +470,7 @@ private void gameLoop() {
 
       //TODO: Improve this logic, the activeMemoryGame should be responsible to manage the game state
       //TODO: defend piece game: gesspieces count should be guess steps count, and hiddenpieces positions should be total steps positions
-      if (activeMemoryGameOld.getGuessPiecesCount() == activeMemoryGameOld.getHiddenPiecePositions().size()) {
+      if (activeMemoryGameOld.isTimeToMoveToNextExercise()){
 
         matchedPieces = 0;
         piecesHided = false;

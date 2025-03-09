@@ -52,8 +52,11 @@ public class DefendMemoryGame extends MemoryGame<String> {
 
         expectedDefensiveMove =  defensiveMoves.get(currentExerciseIndex);
 
+        guessPiecesCounts = 0;
+
         partialTime = Instant.now();
         gameState = GameState.SHOWING_PIECES;
+
     }
     private List<PiecePosition> hidePieces(ChessBoard board) {
 
@@ -131,6 +134,12 @@ public class DefendMemoryGame extends MemoryGame<String> {
     public List<PiecePosition> getHiddenPiecePositions() {
 
         return hiddenPiecePositions;
+    }
+
+    @Override
+    public boolean isTimeToMoveToNextExercise() {
+
+        return this.getGuessPiecesCount() == 1;
     }
 
 

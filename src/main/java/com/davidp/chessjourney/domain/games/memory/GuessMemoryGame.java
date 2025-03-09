@@ -120,6 +120,12 @@ public class GuessMemoryGame extends MemoryGame<PiecePosition> {
     }
 
     @Override
+    public boolean isTimeToMoveToNextExercise() {
+        return
+                this.getGuessPiecesCount() == this.getHiddenPiecePositions().size();
+    }
+
+    @Override
     public int getGuessPiecesCount(){
 
         return guessPiecesCounts;

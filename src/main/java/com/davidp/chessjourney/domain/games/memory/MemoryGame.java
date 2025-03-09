@@ -145,6 +145,8 @@ public abstract class MemoryGame<T> extends Game {
         loadExercise();
     }
 
+    public abstract boolean isTimeToMoveToNextExercise();
+
 
     public boolean hasMoreExercises() {
 
