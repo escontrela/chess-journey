@@ -191,6 +191,11 @@ values('4rk2/2p2ppp/B2p4/8/6b1/P3P3/1PP5/1KR5 w - - 0 1','Re1',
 (SELECT id FROM public.exercise_types WHERE name = 'defend_memory_game'),
 (SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
 
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values('r1bqkb1r/ppnp1ppp/4pn2/1B6/2NP4/1PP1PN2/3B1PPP/R2QK2R w KQkq - 0 1','Ba4',
+(SELECT id FROM public.exercise_types WHERE name = 'defend_memory_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
 
 +---------------+          +-------------------+          +-------------------+
 |    users      |          |    exercises      |          | difficulty_levels |
