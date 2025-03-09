@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="359.0" prefWidth="184.0" styleClass="panel-menu" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.menu.MenuViewController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="412.0" prefWidth="184.0" styleClass="panel-menu" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.menu.MenuViewController">
    <children>
       <Line endX="171.5" layoutX="5.0" layoutY="40.0" stroke="#2a293a" />
       <Text fill="#8578f4" layoutX="30.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-purple" text="Options">
@@ -59,7 +59,7 @@
             </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="pnlOptionUser" layoutX="2.0" layoutY="231.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionUser" layoutX="2.0" layoutY="290.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtUser" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="User Selection">
                <font>
@@ -74,8 +74,8 @@
          </children>
       </Pane>
       <Line endX="171.5" layoutX="7.0" layoutY="218.0" stroke="#2a293a" />
-      <Line endX="171.5" layoutX="7.0" layoutY="276.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionUserStats" layoutX="2.0" layoutY="285.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Line endX="171.5" layoutX="7.0" layoutY="335.0" stroke="#2a293a" />
+      <Pane fx:id="pnlOptionUserStats" layoutX="2.0" layoutY="344.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtUserStats" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="User Stats">
                <font>
@@ -89,6 +89,21 @@
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="7.0" layoutY="330.0" stroke="#2a293a" />
+      <Line endX="171.5" layoutX="7.0" layoutY="389.0" stroke="#2a293a" />
+      <Line endX="171.5" layoutX="7.0" layoutY="275.0" stroke="#2a293a" />
+      <Pane fx:id="pnlOptionDefendGame" layoutX="1.0" layoutY="231.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+         <children>
+            <Text fx:id="txtDefendGame" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Defend Game">
+               <font>
+                  <Font name="Alatsi Regular" size="16.0" />
+               </font>
+            </Text>
+            <ImageView fx:id="imgSettings111" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/chess_pawn_18dp.png" />
+               </image>
+            </ImageView>
+         </children>
+      </Pane>
    </children>
 </Pane>

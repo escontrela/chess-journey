@@ -7,6 +7,9 @@ public interface ExerciseRepository {
 
     UUID save(Exercise exercise);
     Exercise getById(UUID id);
+
+    List<Exercise> getExercisesByDifficultyAndType(UUID difficultyId, UUID exerciseTypeId, int limit);
+
     List<Exercise> getAll();
     void assignTag(UUID exerciseId, UUID tagId);
     List<Exercise> getExercisesByDifficulty(UUID difficultyId, int limit);

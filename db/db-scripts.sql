@@ -44,6 +44,11 @@ CREATE TABLE public.users (
      ('tactic', 'Ejercicio táctico con movimientos ganadores'),
      ('endgame', 'Ejercicios de finales de partida');
 
+ -- Insertar tipos de ejercicios por defecto
+ INSERT INTO public.exercise_types (name, description) VALUES
+     ('defend_memory_game', 'Ejercicio de memoria con posiciones FEN ocultas y piezas atacadas');
+
+
 CREATE TABLE public.difficulty_levels (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     level_name VARCHAR(50) NOT NULL UNIQUE,
@@ -175,6 +180,11 @@ VALUES (
     NOW(),
     NOW()
 );
+
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values('7b/1k1r3P/8/8/8/1B6/K7/2B5 w - - 1 1','Ac2',
+(SELECT id FROM public.exercise_types WHERE name = 'defend_memory_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
 
 +---------------+          +-------------------+          +-------------------+
 |    users      |          |    exercises      |          | difficulty_levels |

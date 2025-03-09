@@ -27,6 +27,7 @@ public class ScreenFactory {
     MENU("/com/davidp/chessjourney/menu-view.fxml"),
     BOARD("/com/davidp/chessjourney/board-view-2.fxml"),
     MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
+    DEFEND_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
     EXERCISE_RESULTS_PANEL("/com/davidp/chessjourney/exercise-result-view.fxml"),
     PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml"),
     CHANGE_USER("/com/davidp/chessjourney/user-change.fxml"),
@@ -73,6 +74,8 @@ public class ScreenFactory {
         return getMainScreen();
       case MEMORY_GAME:
         return getMemoryGameScreen();
+      case DEFEND_GAME:
+        return getDefendGameScreen();
       case PROMOTE_PANEL:
         return getPromotePanelScreen();
       case EXERCISE_RESULTS_PANEL:
@@ -84,6 +87,15 @@ public class ScreenFactory {
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
+  }
+
+  private ScreenController getDefendGameScreen() {
+
+    FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.DEFEND_GAME.resourceName());
+    var controller = objectFxmlBundle.getController();
+    controller.setMemoryGameUseCase(UseCaseFactory.createDefendMemoryGameUseCase());
+    controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
+    return objectFxmlBundle.getController();
   }
 
   private ScreenController getUserStatsScreen() {
@@ -137,7 +149,7 @@ public class ScreenFactory {
 
     FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.MEMORY_GAME.resourceName());
     var controller = objectFxmlBundle.getController();
-    controller.setMemoryGameUseCase(UseCaseFactory.createMemoryGameUseCase());
+    controller.setMemoryGameUseCase(UseCaseFactory.createGuessMemoryGameUseCase());
     controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
     return objectFxmlBundle.getController();
   }

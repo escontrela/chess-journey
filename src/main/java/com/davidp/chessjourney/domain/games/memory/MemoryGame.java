@@ -1,342 +1,202 @@
 package com.davidp.chessjourney.domain.games.memory;
 
 import com.davidp.chessjourney.domain.ChessBoard;
-import com.davidp.chessjourney.domain.ChessBoardFactory;
 import com.davidp.chessjourney.domain.Game;
 import com.davidp.chessjourney.domain.Player;
 import com.davidp.chessjourney.domain.common.*;
 
 import java.time.Instant;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
 
 
-/** Clase base para un juego de ajedrez de memoria. */
-public class MemoryGame extends Game {
+/**
+ * Base class for memory games.
+ * @param <T> The type of response the user sends.
+ */
+public abstract class MemoryGame<T> extends Game {
 
-  private final Player player;
-  private final TimeControl timeControl;
-  private final List<Fen> positions;
-  private int currentExerciseIndex;
-  private int hiddenPiecesCount;
-  private int guessPiecesCounts;
-  private int successPiecesCount;
-  private int totalGuessPiecesCounts;
-  private Instant startTime;
-  private Instant partialTime;
-  private List<PiecePosition> hiddenPiecePositions;
-  private final long timeToShowPiecesOnTheCurrentExerciseInSeconds = 5;
-  private List <MemoryGamePartialStat> stats = new ArrayList<>();
-  private boolean wasHided = false;
-  private DifficultyLevel difficultyLevel;
-  private  List<Exercise> exercises;
-  protected UUID currentExerciseId;
+    protected final Player player;
+    protected ChessBoard chessBoard;
+    private final long timeToShowPiecesOnTheCurrentExerciseInSeconds = 5;
+    protected final TimeControl timeControl;
+    protected final List<Fen> positions = new ArrayList<>();
+    protected int currentExerciseIndex;
+    protected Instant startTime;
+    protected Instant partialTime;
+    protected final List<MemoryGamePartialStat> stats = new ArrayList<>();
+    protected final DifficultyLevel difficultyLevel;
+    protected final List<Exercise> exercises;
+    protected UUID currentExerciseId;
+    protected GameState gameState = GameState.WAITING_TO_START;
 
-  private GameState gameState;
+    public MemoryGame(Player player, ChessBoard board, TimeControl timeControl,
+                      DifficultyLevel difficultyLevel, List<Exercise> exercises) {
 
-  public MemoryGame(Player player, ChessBoard board, TimeControl timeControl,  DifficultyLevel difficultyLevel, List<Exercise> exercises) {
-
-    super();
-    this.player = player;
-    this.chessBoard = board;
-    this.timeControl = timeControl;
-    this.currentExerciseIndex = 0;
-    this.hiddenPiecesCount = 1;
-    this.gameState = GameState.WAITING_TO_START;
-    this.exercises = exercises;
-    this.difficultyLevel = difficultyLevel;
-    this.positions = new ArrayList<>();
-
-    exercises.forEach(exercise -> {
-
-      positions.add(Fen.createCustom(exercise.getFen()));
-    });
-  }
-
-
-  /**
-   * Registra la respuesta del usuario.
-   */
-  public void submitAnswer(boolean correct) {
-
-    if (gameState != GameState.GUESSING_PIECES) {
-
-      throw new IllegalStateException("No se puede enviar respuesta en este estado.");
+        super();
+        this.player = player;
+        this.chessBoard = board;
+        this.timeControl = timeControl;
+        this.difficultyLevel = difficultyLevel;
+        this.exercises = exercises;
+        this.currentExerciseIndex = 0;
+        // Se obtienen las posiciones FEN a partir de los ejercicios.
+        exercises.forEach(exercise -> positions.add(Fen.createCustom(exercise.getFen())));
     }
 
-    stats.add(new MemoryGamePartialStat(hiddenPiecesCount, correct, getElapsedTimeOfCurrentPosInSeconds()));
-    nextExercise();
-    //TODO adjust the time control timeControl.adjustTime(solvedExercises);
-  }
+    /**
+     * Inicia el juego desde el primer ejercicio.
+     */
+    public void startGame() {
 
+        if (gameState != GameState.WAITING_TO_START && gameState != GameState.GAME_OVER) {
 
-  /**
-   * Devuelve el tiempo transcurrido en la posición actual.
-   */
-  private long getElapsedTimeOfCurrentPosInSeconds() {
-    return java.time.Duration.between(partialTime, Instant.now()).getSeconds();
-  }
+            throw new IllegalStateException("El juego ya ha comenzado.");
+        }
 
-  /**
-   * Permite omitir un ejercicio y registrarlo como fallo.
-   */
-  public void skipExercise() {
+        startTime = Instant.now();
 
-    if (gameState != GameState.GUESSING_PIECES) {
-
-      throw new IllegalStateException("No se puede omitir un ejercicio en este estado.");
+        gameState = GameState.SHOWING_PIECES;
+        loadExercise();
     }
 
-    submitAnswer(false);
-  }
+    public boolean isTimeToHidePiecesOnTheCurrentExercise() {
 
-  /**
-   * Inicia el juego desde la primera posición.
-   */
-  public void startGame() {
+        if (gameState != MemoryGame.GameState.SHOWING_PIECES) {
 
-    if (gameState != GameState.WAITING_TO_START && gameState != GameState.GAME_OVER) {
+            return false;
+        }
 
-      throw new IllegalStateException("The game is already started!.");
+        Instant currentTime = Instant.now();
+        boolean timeToHide = java.time.Duration.between(partialTime, currentTime).getSeconds()
+                > timeToShowPiecesOnTheCurrentExerciseInSeconds;
+
+        if (timeToHide) {
+
+            gameState = MemoryGame.GameState.GUESSING_PIECES; // Cambiamos al estado de adivinanza
+        }
+
+        return timeToHide;
     }
 
-    startTime = Instant.now();
-    gameState = GameState.SHOWING_PIECES;  // Cambia de estado
-    loadExercise();
-  }
+    /**
+     * Devuelve el tiempo transcurrido desde que se inició el juego.
+     */
+    public long getElapsedTimeInSeconds() {
 
-  /**
-   * Devuelve el tiempo transcurrido desde que se inició el juego.
-   */
-  public long getElapsedTimeInSeconds() {
-    if (startTime == null) return 0;
-    return java.time.Duration.between(startTime, Instant.now()).getSeconds();
-  }
+        if (startTime == null){
+            return 0;
+        }
 
-
-
-  public String getFormatedElapsedTime(){
-
-    long seconds = getElapsedTimeInSeconds();
-    long minutes = seconds / 60;
-    long remainingSeconds = seconds % 60;
-    return String.format("%02d:%02d", minutes, remainingSeconds);
-  }
-
-  public boolean isTimeToHidePiecesOnTheCurrentExercise() {
-
-    if (gameState != GameState.SHOWING_PIECES) {
-
-      return false;
+        return java.time.Duration.between(startTime, Instant.now()).getSeconds();
     }
 
-    Instant currentTime = Instant.now();
-    boolean timeToHide = java.time.Duration.between(partialTime, currentTime).getSeconds()
-            > timeToShowPiecesOnTheCurrentExerciseInSeconds;
+    public int getCurrentExerciseNumber(){
 
-    if (timeToHide) {
-
-      gameState = GameState.GUESSING_PIECES; // Cambiamos al estado de adivinanza
+        return  currentExerciseIndex + 1;
     }
 
-    return timeToHide;
-  }
+    public abstract int totalHiddenPieces();
 
-  /**
-   * Carga la posición actual y oculta las piezas según la dificultad.
-   */
-  private void loadExercise() {
+    public String getFormatedElapsedTime() {
 
-    if (currentExerciseIndex >= positions.size()) {
-      gameState = GameState.GAME_OVER;
-      throw new IllegalStateException("No more exercises available.");
+        long seconds = getElapsedTimeInSeconds();
+        long minutes = seconds / 60;
+        long remainingSeconds = seconds % 60;
+        return String.format("%02d:%02d", minutes, remainingSeconds);
     }
 
-    Fen currentFen = positions.get(currentExerciseIndex);
-    currentExerciseId = exercises.get(currentExerciseIndex).getId();
+    /**
+     * Each memory game has a different way to load the exercise
+     */
+    public abstract void loadExercise();
 
-    chessBoard = ChessBoardFactory.createFromFEN(currentFen);
-    hiddenPiecePositions = hidePieces(hiddenPiecesCount);
-    partialTime = Instant.now();
+    /**
+     * Get the success percentage of the game.
+     * @return  The success percentage.
+     */
+    public  abstract  int getSuccessPercentage();
 
-    gameState = GameState.SHOWING_PIECES;
-  }
-
-  public int totalHiddenPieces(){
-
-    return hiddenPiecePositions.size();
-  }
-
-  public int getGuessPiecesCount(){
-
-    return guessPiecesCounts;
-  }
-
-  public boolean guessPiece(final PiecePosition piecePosition){
-
-    guessPiecesCounts++;
-    totalGuessPiecesCounts++;
-    System.out.println("total guess pieces: " + totalGuessPiecesCounts);
-
-    if (hiddenPiecePositions.contains(piecePosition)){
+    /**
+     * Registra la respuesta del usuario.
+     * El parámetro T representa el tipo de respuesta (por ejemplo, Boolean o String).
+     */
+    public abstract boolean submitAnswer(T answer);
 
 
-      successPiecesCount++;
-      System.out.println("successPiecesCount: " + successPiecesCount);
-      return true;
+    /**
+     * Get the hidden piece positions.
+     * @return  The hidden piece positions.
+     */
+    public abstract  List<PiecePosition> getHiddenPiecePositions();
 
-    }
-    return false;
-  }
+    /**
+     * Go to the next exercise.
+     */
+    public void nextExercise() {
 
-  public int getSuccessPercentage() {
+        if (!hasMoreExercises()) {
 
-    if (totalGuessPiecesCounts == 0) {
-
-      return 0;
-    }
-    return Math.round((float) successPiecesCount / totalGuessPiecesCounts * 100);
-  }
-
-  private List<PiecePosition> hidePieces(int count) {
-
-    List<PiecePosition> allPositions = new ArrayList<>(chessBoard.getAllPiecePositions());
-
-    if (allPositions.isEmpty()) {
-
-      return Collections.emptyList(); // No hay piezas que ocultar
+            gameState = GameState.GAME_OVER;
+            return;
+        }
+        currentExerciseIndex++;
+        loadExercise();
     }
 
-    Collections.shuffle(allPositions);
 
-    int piecesToHide = Math.min(count, allPositions.size());
+    public boolean hasMoreExercises() {
 
-    List<PiecePosition> hiddenPositions = allPositions.subList(0, piecesToHide);
-
-    guessPiecesCounts = 0;
-    return new ArrayList<>(hiddenPositions); // Devolver copia para evitar modificaciones externas
-  }
-
-  public DifficultyLevel getDifficultyLevel() {
-
-    return difficultyLevel;
-  }
-
-  /**
-   * Mueve al siguiente ejercicio.
-   */
-  public void nextExercise() {
-
-    if (!hasMoreExercises()) {
-
-      gameState = GameState.GAME_OVER;
-      return;
+        return currentExerciseIndex < positions.size() - 1;
     }
 
-    currentExerciseIndex++;
-    guessPiecesCounts = 0;
-    increaseDifficulty();
-    loadExercise();
-  }
 
-  public int getCurrentExerciseNumber(){
 
-    return  currentExerciseIndex + 1;
-  }
+    public enum GameState {
 
-  public List<PiecePosition> getHiddenPiecePositions() {
-    return hiddenPiecePositions;
-  }
-
-  /**
-   * Verifica si quedan más ejercicios.
-   */
-  public boolean hasMoreExercises() {
-
-    return currentExerciseIndex < positions.size() - 1;
-  }
-
-  /**
-   * Return the game status for the controller
-   * @return GameState game status
-   */
-  public GameState getGameState(){
-
-    return gameState;
-  }
-
-  /**
-   * Ajusta la dificultad aumentando el número de piezas ocultas a medida que el jugador avanza.
-   */
-  private void increaseDifficulty() {
-
-    int totalExercises = positions.size();
-
-    if (totalExercises == 0) {
-      return; // Evitar división por cero
+        WAITING_TO_START,
+        SHOWING_PIECES,
+        GUESSING_PIECES,
+        GAME_OVER
     }
 
-    return;
-  }
 
-  /**
-   * Ajusta la dificultad aumentando el número de piezas ocultas a medida que el jugador avanza.
-   */
-  private void increaseDifficultyOld() {
+    public static class MemoryGamePartialStat {
 
-    int totalExercises = positions.size();
+        private int level;
+        private boolean succeeded;
+        private long time;
 
-    if (totalExercises == 0) {
-      return; // Evitar división por cero
+        public MemoryGamePartialStat(int level, boolean succeeded, long time) {
+
+            this.level = level;
+            this.succeeded = succeeded;
+            this.time = time;
+        }
+        // Se pueden agregar getters y setters si fuera necesario.
     }
 
-    // Si se han resuelto más del 33% de los ejercicios, ocultar 2 piezas
-    if (currentExerciseIndex >= totalExercises * 0.33) {
-      hiddenPiecesCount = 2;
+    @Override
+    public Fen getFen() {
+
+        return chessBoard.getFen();
     }
 
-    // Si se han resuelto más del 66% de los ejercicios, ocultar 3 piezas
-    if (currentExerciseIndex >= totalExercises * 0.66) {
-      hiddenPiecesCount = 3;
+    public UUID getCurrentExerciseId(){
+
+        return currentExerciseId;
     }
-  }
 
-  /**
-   * Devuelve la posición FEN actual.
-   */
-  @Override
-  public Fen getFen() {
+    public GameState getGameState(){
 
-    return chessBoard.getFen();
-  }
-
-  public UUID getCurrentExerciseId(){
-
-    return currentExerciseId;
-  }
-
-  /**
-   * These states are using to control the game status
-   */
-  public enum GameState {
-    WAITING_TO_START,
-    SHOWING_PIECES,
-    GUESSING_PIECES,
-    GAME_OVER
-  }
-
-  public static class MemoryGamePartialStat{
-
-    private int level;
-    private boolean succeded;
-    private long time;
-
-    public MemoryGamePartialStat(int level,boolean succeed,long time) {
-        this.level = level;
-        this.succeded = succeed;
-        this.time = time;
+        return gameState;
     }
-  }
+
+    public abstract int getGuessPiecesCount();
+
+    public DifficultyLevel getDifficultyLevel() {
+
+        return difficultyLevel;
+    }
 }

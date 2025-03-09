@@ -2,9 +2,8 @@ package com.davidp.chessjourney.application.usecases;
 
 import com.davidp.chessjourney.domain.*;
 import com.davidp.chessjourney.domain.common.*;
-import com.davidp.chessjourney.domain.games.memory.MemoryGame;
+import com.davidp.chessjourney.domain.games.memory.MemoryGameOld;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /** Implementación concreta del caso de uso para guardar (insertar/actualizar) un usuario. */
@@ -24,7 +23,7 @@ public class MemoryGameUseCaseImpl implements MemoryGameUseCase {
   }
 
   @Override
-  public MemoryGame execute(long userId,String difficulty) {
+  public MemoryGameOld execute(long userId, String difficulty) {
 
     // TODO Recover from database 10 FEN positions of MemoryGame tagged as memory exercise
     User user = userRepository.getUserById(userId);

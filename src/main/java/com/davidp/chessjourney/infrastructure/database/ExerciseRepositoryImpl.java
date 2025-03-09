@@ -203,6 +203,54 @@ public class ExerciseRepositoryImpl implements ExerciseRepository {
     }
 
     /**
+     * Recupera una lista de ejercicios por nivel de dificultad con límite de cantidad.
+     */
+    @Override
+    public List<Exercise> getExercisesByDifficultyAndType(UUID difficultyId, UUID exerciseTypeId, int limit) {
+        List<Exercise> exercises = new ArrayList<>();
+        String sql = "SELECT e.id, e.fen, e.pgn, e.created_at, e.updated_at, " +
+                "et.id AS type_id, et.name AS type_name, et.description AS type_description " +
+                "FROM exercises e " +
+                "JOIN exercise_types et ON e.type_id = et.id " +
+                "WHERE e.difficulty_id = ? and et.id = ? LIMIT ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setObject(1, difficultyId);
+            ps.setInt(3, limit);
+            ps.setObject(2, exerciseTypeId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    ExerciseType type = new ExerciseType(
+                            UUID.fromString(rs.getString("type_id")),
+                            rs.getString("type_name"),
+                            rs.getString("type_description")
+                    );
+
+                    DifficultyLevel difficulty = new DifficultyLevel(difficultyId, "", "");
+
+                    Exercise exercise = new Exercise(
+                            UUID.fromString(rs.getString("id")),
+                            rs.getString("fen"),
+                            rs.getString("pgn"),
+                            type,
+                            difficulty
+                    );
+
+                    exercise.getTags().addAll(getTagsForExercise(exercise.getId()));
+                    exercises.add(exercise);
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching exercises by difficulty", e);
+        }
+
+        return exercises;
+    }
+
+    /**
      * Recupera todos los ejercicios.
      */
     @Override

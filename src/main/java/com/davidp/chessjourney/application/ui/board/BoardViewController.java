@@ -15,7 +15,13 @@ import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
 import com.davidp.chessjourney.application.usecases.SaveUserExerciseStatsUseCase;
+import com.davidp.chessjourney.domain.ChessBoard;
+import com.davidp.chessjourney.domain.ChessBoardFactory;
+import com.davidp.chessjourney.domain.ChessRules;
+import com.davidp.chessjourney.domain.games.memory.DefendMemoryGame;
+import com.davidp.chessjourney.domain.games.memory.GuessMemoryGame;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
+import com.davidp.chessjourney.domain.games.memory.MemoryGameOld;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
@@ -26,6 +32,8 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
 
+import com.davidp.chessjourney.domain.services.PGNService;
+import com.davidp.chessjourney.domain.services.PGNServiceFactory;
 import com.google.common.eventbus.Subscribe;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -47,8 +55,10 @@ public class BoardViewController implements ScreenController {
   }
 
   protected BoardType boardType = BoardType.CHESS;
-  protected MemoryGame activeMemoryGame;
+  protected MemoryGame<?> activeMemoryGameOld;
   private final FenService fenService = FenServiceFactory.getFenService();
+  private final PGNService pgnService = PGNServiceFactory.getPGNService();
+
   private final SoundServiceFactory soundService = SoundServiceFactory.getInstance();
   private final Map<ScreenFactory.Screens, ScreenController> screenManager = new HashMap<>();
 
@@ -88,7 +98,7 @@ public class BoardViewController implements ScreenController {
     private Button btOptionMid;
 
 
-    private ImageView imgOk =   new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
+  private ImageView imgOk =   new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
   private ImageView imgFail = new ImageView("com/davidp/chessjourney/img-white/baseline_clear_white_24dp.png");
 
   private boolean piecesHided = false;
@@ -141,12 +151,14 @@ public class BoardViewController implements ScreenController {
 
             Point screenPos = new Point( x, y);
 
-          if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES){
+            //TODO: defend piece game: check if the game is memory or memory defend
+
+          if (activeMemoryGameOld != null && activeMemoryGameOld.getGameState() == MemoryGame.GameState.GUESSING_PIECES && activeMemoryGameOld instanceof GuessMemoryGame) {
 
               String squareId = selectedSquare.get().getId();
               var pos = Pos.parseString(squareId);
 
-              PieceColor pieceColor = getPieceColorFromFENPosition(activeMemoryGame.getFen());
+              PieceColor pieceColor = getPieceColorFromFENPosition(activeMemoryGameOld.getFen());
               managePromotePanelVisibility(screenPos,pos,pieceColor);
           }
         });
@@ -218,6 +230,7 @@ public class BoardViewController implements ScreenController {
                   toPane.getChildren().add(pieceView);
 
                   success = true;
+                  onDefendedGameClicked(fromPane.getId(),toPane.getId());
                 }
                 event.setDropCompleted(success);
                 event.consume();
@@ -357,7 +370,9 @@ public class BoardViewController implements ScreenController {
 
         btStart.setDisable(true);
         System.out.println("Start Memory Game:" + difficulty);
-        activeMemoryGame = memoryGameUseCase.execute( AppProperties.getInstance().getActiveUserId() ,difficulty);
+        //TODO: defend piece game: the use case should accept the kind of memory game that we are looking for
+        activeMemoryGameOld = memoryGameUseCase.execute( AppProperties.getInstance().getActiveUserId() ,difficulty);
+
         startMemoryGame();
       }
 
@@ -379,23 +394,23 @@ public class BoardViewController implements ScreenController {
     FXGL.getGameTimer().clear();
     //TODO, if the results game is shown, then we need to hide it.
 
-    GameState gameState = fenService.parseString(activeMemoryGame.getFen());
+    GameState gameState = fenService.parseString(activeMemoryGameOld.getFen());
 
     showPiecesOnBoard(gameState);
 
     pauseLoopGame=false;
     piecesHided = false;
     matchedPieces = 0;
-    activeMemoryGame.startGame();
+    activeMemoryGameOld.startGame();
     lblBoardType.setText("Estado: Jugando...");
     playTypeWriterEffect(
             "Memoriza la posición...",
             lblGhostMsg,
             0.02);
     lblExerciseNum.setText(
-                    String.valueOf(activeMemoryGame.getCurrentExerciseNumber())
+                    String.valueOf(activeMemoryGameOld.getCurrentExerciseNumber())
                     + " - " +
-                    String.valueOf(activeMemoryGame.totalHiddenPieces())
+                    String.valueOf(activeMemoryGameOld.totalHiddenPieces()) //TODO: defend piece game: total hidde pieces could be total moves , so .. steps
                     );
     // Iniciar el bucle de juego en FXGL
       //TODO ojo, porque esto podría ya estar iniciado!!
@@ -428,54 +443,55 @@ public class BoardViewController implements ScreenController {
 private void gameLoop() {
 
 
-   lblStatus.setText(activeMemoryGame.getGameState().toString());
+   lblStatus.setText(activeMemoryGameOld.getGameState().toString());
 
    if (pauseLoopGame){
 
      return;
    }
 
-  if (activeMemoryGame.getGameState() == MemoryGame.GameState.GAME_OVER) {
+  if (activeMemoryGameOld.getGameState() == MemoryGame.GameState.GAME_OVER) {
 
     pauseLoopGame = true;
     FXGL.getGameTimer().clear();
-    lblBoardType.setText("¡Juego Terminado! " + activeMemoryGame.getSuccessPercentage() + "% conseguido.");
+    lblBoardType.setText("¡Juego Terminado! " + activeMemoryGameOld.getSuccessPercentage() + "% conseguido.");
     lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
     btStart.setDisable(false);
     Point screenPos = new Point(80,240);
       runLater(
-              () ->  manageExerciseResultPanelVisibility(screenPos,activeMemoryGame.getSuccessPercentage()));
+              () ->  manageExerciseResultPanelVisibility(screenPos, activeMemoryGameOld.getSuccessPercentage()));
 
       //TODO hay que deterner el loop! parece que el juego siempre sigue...
     return;
   }
 
 
-    if (activeMemoryGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
+    if (activeMemoryGameOld.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
 
       //TODO: Improve this logic, the activeMemoryGame should be responsible to manage the game state
-      if (activeMemoryGame.getGuessPiecesCount() == activeMemoryGame.getHiddenPiecePositions().size()) {
+      //TODO: defend piece game: gesspieces count should be guess steps count, and hiddenpieces positions should be total steps positions
+      if (activeMemoryGameOld.getGuessPiecesCount() == activeMemoryGameOld.getHiddenPiecePositions().size()) {
 
         matchedPieces = 0;
         piecesHided = false;
-        activeMemoryGame.nextExercise();
+        activeMemoryGameOld.nextExercise();
         runLater(
                   () -> soundService.playSound(SoundServiceFactory.SoundType.NEW_GAME));
-        GameState gameState = fenService.parseString(activeMemoryGame.getFen());
+        GameState gameState = fenService.parseString(activeMemoryGameOld.getFen());
         cleanPieces();
         showPiecesOnBoard(gameState);
         lblExerciseNum.setText(
-                String.valueOf(activeMemoryGame.getCurrentExerciseNumber())
+                String.valueOf(activeMemoryGameOld.getCurrentExerciseNumber())
                         + " - " +
-                        String.valueOf(activeMemoryGame.totalHiddenPieces())
+                        String.valueOf(activeMemoryGameOld.totalHiddenPieces()) //TODO: defend piece game: total hidde pieces could be total moves , so .. steps
         );
       }
   }
 
-  if (activeMemoryGame.getGameState() == MemoryGame.GameState.SHOWING_PIECES
-          && activeMemoryGame.isTimeToHidePiecesOnTheCurrentExercise()) {
+  if (activeMemoryGameOld.getGameState() == MemoryGame.GameState.SHOWING_PIECES
+          && activeMemoryGameOld.isTimeToHidePiecesOnTheCurrentExercise()) {
 
-      hidePiecesOnBoard(activeMemoryGame.getHiddenPiecePositions());
+      hidePiecesOnBoard(activeMemoryGameOld.getHiddenPiecePositions()); // //TODO: defend piece game: should be nice on defend game, we should hide the attack pieces...
       piecesHided = true;
       lblBoardType.setText("Piezas ocultas. Adivina la posición.");
       playTypeWriterEffect(
@@ -484,7 +500,7 @@ private void gameLoop() {
               0.02);
   }
 
-  lblBlackTime.setText(activeMemoryGame.getFormatedElapsedTime());
+  lblBlackTime.setText(activeMemoryGameOld.getFormatedElapsedTime());
 }
 
   private void playTypeWriterEffect(String text, Label textNode, double charInterval) {
@@ -622,31 +638,126 @@ private boolean isButtonStartClicked(ActionEvent event) {
     return event.getSource() == inFen;
   }
 
-  public void setMemoryGameUseCase(MemoryGameUseCase memoryGameUseCase) {
 
-    this.memoryGameUseCase = memoryGameUseCase;
-    this.boardType = BoardType.MEMORY;
-    this.btStart.setVisible(true);
-    this.lblBoardType.setText("The memory game!");
-    playTypeWriterEffect(
-            "¿Preparado?, pulsa en el botón de inicio.",
-            lblGhostMsg,
-            0.02);
-  }
+
+public <T extends MemoryGame<?>> void setMemoryGameUseCase(MemoryGameUseCase<T> memoryGameUseCase) {
+        this.memoryGameUseCase = memoryGameUseCase;
+        this.boardType = BoardType.MEMORY;
+        this.btStart.setVisible(true);
+        this.lblBoardType.setText("The memory game!");
+        playTypeWriterEffect(
+                "¿Preparado?, pulsa en el botón de inicio.",
+                lblGhostMsg,
+                0.02);
+ }
 
   public void setSaveUserExerciseStatsUseCase(SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase) {
       this.saveUserExerciseStatsUseCase = saveUserExerciseStatsUseCase;
   }
 
+ public void onDefendedGameClicked(String from,String to ) {
+
+      System.out.println("onDefendedGameClicked:" + from + " to:" + to);
+
+    if (activeMemoryGameOld != null && activeMemoryGameOld instanceof DefendMemoryGame && activeMemoryGameOld.getGameState()
+            == MemoryGame.GameState.GUESSING_PIECES) {
+
+
+        ChessBoard chessBoard =  ChessBoardFactory.createFromFEN(
+                        activeMemoryGameOld.getFen());
+
+        ChessRules chessRules = new ChessRules();
+
+        String move = pgnService.toAlgebraic(
+                Pos.parseString(from), Pos.parseString(to), chessBoard, chessRules, null);
+
+        System.out.println("move:" + move);
+
+        pauseLoopGame = true;
+
+        //TODO: defend piece game: this is only for memory game, for defend game we need to change the piece on the board, so .. guessMove method better
+        boolean result = ((MemoryGame<String>)activeMemoryGameOld)
+                .submitAnswer(move);
+
+        if (result) {
+
+            FXGL.animationBuilder()
+                    .duration(Duration.seconds(0.2))
+                    .onFinished(
+                            () -> {
+                                lblBoardType.setText("¡Correcto!");
+                                //boardPanes.get(event.getPos()).getChildren().add(imgOk);
+                                boardPanes.get(Pos.parseString(to)).setStyle(
+                                 "-fx-background-color: #00E680;");
+
+                                playTypeWriterEffect(
+                                        "Bien hecho!",
+                                        lblGhostMsg,
+                                        0.02);
+                                runLater(
+                                        () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
+                                //FXGL.play("correct.wav");
+
+                                if (this.idValidForELO){
+
+                                    insertUserStatsForThisExercise(result);
+                                }
+
+                                matchedPieces++;
+                                showHiddenPieces();
+                                FXGL.animationBuilder().duration(Duration.seconds(2))
+                                        .onFinished(()->{ pauseLoopGame = false;}).fadeIn(lblBoardType).buildAndPlay();
+
+                            })
+                    .fadeIn(boardPanes.get(Pos.parseString(to)))
+                    .buildAndPlay();
+
+        } else {
+
+            FXGL.animationBuilder()
+                    .duration(Duration.seconds(0.2))
+                    .onFinished(
+                            () -> {
+                                lblBoardType.setText("Incorrecto");
+                                //boardPanes.get(event.getPos()).getChildren().add(imgFail);
+                                boardPanes.get(Pos.parseString(to)).setStyle(
+                                        "-fx-background-color: #FF0071;");
+                                playTypeWriterEffect(
+                                        "Más suerte para la próxima!",
+                                        lblGhostMsg,
+                                        0.02);
+                                runLater(
+                                        () -> soundService.playSound(SoundServiceFactory.SoundType.FAIL_EXERCISE));
+                                if (this.idValidForELO){
+
+                                    insertUserStatsForThisExercise(result);
+                                }
+                                matchedPieces++;
+                                showHiddenPieces();
+                                FXGL.animationBuilder().duration(Duration.seconds(2))
+                                        .onFinished(()->{ pauseLoopGame = false;}).fadeIn(lblBoardType).buildAndPlay();
+                            })
+                    .fadeIn(boardPanes.get(Pos.parseString(to)))
+                    .buildAndPlay();
+
+        }
+
+
+     }
+ }
 
   @Subscribe
   public void onMemoryGameClicked(PromoteSelectedPieceEvent event) {
 
     System.out.println("MemoryGameClicked:" + event.getSelectedPiece());
     System.out.println("MemoryGameClicked pos:" + event.getPos());
+
     pauseLoopGame = true;
 
-    boolean result = activeMemoryGame.guessPiece(new PiecePosition(event.getSelectedPiece(), event.getPos()));
+    //TODO: defend piece game: this is only for memory game, for defend game we need to change the piece on the board, so .. guessMove method better
+    boolean result = ((MemoryGame<PiecePosition>)activeMemoryGameOld)
+            .submitAnswer(new PiecePosition(event.getSelectedPiece(), event.getPos()));
+
     if (result) {
 
       FXGL.animationBuilder()
@@ -716,21 +827,22 @@ private boolean isButtonStartClicked(ActionEvent event) {
     UserExerciseStats userExerciseStats
             = new UserExerciseStats(UUID.randomUUID(),
             AppProperties.getInstance().getActiveUserId(),
-            activeMemoryGame.getCurrentExerciseId(),
+            activeMemoryGameOld.getCurrentExerciseId(),
             LocalDateTime.now(),
             result,
             1,// //TODO get the partial time taken!
             1, //Attempts
-            activeMemoryGame.getDifficultyLevel().getId() ); //TODO exercise difficulty level!
+            activeMemoryGameOld.getDifficultyLevel().getId() ); //TODO exercise difficulty level!
 
     saveUserExerciseStatsUseCase.execute(userExerciseStats);
   }
 
   private void showHiddenPieces() {
 
-    if (matchedPieces == activeMemoryGame.getHiddenPiecePositions().size()) {
+    //TODO: defend piece game: this is only for memory game, for defend game we need to change the piece on the board.
+    if (matchedPieces == activeMemoryGameOld.getHiddenPiecePositions().size()) {
 
-      List<PiecePosition> hiddenPieces = activeMemoryGame.getHiddenPiecePositions();
+      List<PiecePosition> hiddenPieces = activeMemoryGameOld.getHiddenPiecePositions();
       hiddenPieces.forEach(
           piece -> {
             var pane = boardPanes.get(piece.getPosition());
