@@ -43,6 +43,13 @@ public class GuessMemoryGame extends MemoryGame<PiecePosition> {
         gameState = GameState.SHOWING_PIECES;
     }
 
+    @Override
+    public GameKind getGameKind() {
+
+        return  GameKind.GUESS_MEMORY_GAME;
+    }
+
+
     /**
      * Get the hidden piece positions that should be guessed.
      * @param count The number of pieces to hide.

@@ -21,7 +21,6 @@ import com.davidp.chessjourney.domain.ChessRules;
 import com.davidp.chessjourney.domain.games.memory.DefendMemoryGame;
 import com.davidp.chessjourney.domain.games.memory.GuessMemoryGame;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
-import com.davidp.chessjourney.domain.games.memory.MemoryGameOld;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
@@ -133,6 +132,12 @@ public class BoardViewController implements ScreenController {
 
     selectedSquare.ifPresent(
         pane ->{
+
+            if (pane.getId() == pnlBoard.getId()){
+
+                return;
+            }
+            
             pane.setStyle(
                 "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
 
@@ -212,6 +217,17 @@ public class BoardViewController implements ScreenController {
             new EventHandler<DragEvent>() {
               public void handle(DragEvent event) {
 
+               if (activeMemoryGameOld != null && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.GUESS_MEMORY_GAME){
+                   event.consume();
+                   return;
+               }
+
+                if (activeMemoryGameOld != null  && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.DEFEND_MEMORY_GAME
+                    && activeMemoryGameOld.getGameState() != MemoryGame.GameState.GUESSING_PIECES) {
+                    event.consume();
+                  return;
+                }
+
                 Dragboard db = event.getDragboard();
                 boolean success = false;
                 if (db.hasString()) {
@@ -219,7 +235,6 @@ public class BoardViewController implements ScreenController {
 
                   runLater(
                       () -> soundService.playSound(SoundServiceFactory.SoundType.PIECE_PLACEMENT));
-
 
                   // Lógica para mover la pieza
                   Pane toPane = (Pane) event.getGestureTarget();
@@ -230,7 +245,7 @@ public class BoardViewController implements ScreenController {
                   toPane.getChildren().add(pieceView);
 
                   success = true;
-                  onDefendedGameClicked(fromPane.getId(),toPane.getId());
+                  onDefendedGameClicked(fromPane.getId(), toPane.getId());
                 }
                 event.setDropCompleted(success);
                 event.consume();
@@ -663,8 +678,10 @@ public <T extends MemoryGame<?>> void setMemoryGameUseCase(MemoryGameUseCase<T> 
             == MemoryGame.GameState.GUESSING_PIECES) {
 
 
+        //TODO DEBERÍA COGER EL FEN DE LA POSICIÓN, PORQUE SI SE HA MOVIDO ALGUNA PIEZA PREVIAMENTE.
+
         ChessBoard chessBoard =  ChessBoardFactory.createFromFEN(
-                        activeMemoryGameOld.getFen());
+                        getFenFromActiveBoard());
 
         ChessRules chessRules = new ChessRules();
 
@@ -746,7 +763,12 @@ public <T extends MemoryGame<?>> void setMemoryGameUseCase(MemoryGameUseCase<T> 
      }
  }
 
-  @Subscribe
+    private Fen getFenFromActiveBoard() {
+
+        return activeMemoryGameOld.getFen();
+    }
+
+    @Subscribe
   public void onMemoryGameClicked(PromoteSelectedPieceEvent event) {
 
     System.out.println("MemoryGameClicked:" + event.getSelectedPiece());

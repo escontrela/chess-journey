@@ -7,7 +7,6 @@ import com.davidp.chessjourney.domain.common.TimeControl;
 import com.davidp.chessjourney.domain.games.memory.DefendMemoryGame;
 import com.davidp.chessjourney.domain.games.memory.GuessMemoryGame;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
-import com.davidp.chessjourney.domain.games.memory.MemoryGameOld;
 
 import java.util.List;
 
@@ -22,17 +21,7 @@ public class ChessGameFactory {
     return new ChessGame(player1, player2, rules, chessBoard, timeControl);
   }
 
-  public static MemoryGameOld createMemoryGameFrom(final Player player, final TimeControl timeControl
-          , DifficultyLevel difficultyLevel, List<Exercise> exercises) {
 
-      if (exercises == null || exercises.isEmpty()) {
-
-          throw new IllegalArgumentException("Positions list cannot be null or empty");
-      }
-      ChessBoard chessBoard = ChessBoardFactory.createFromFEN(Fen.createCustom(exercises.get(0).getFen()));
-      return new MemoryGameOld(player,chessBoard,timeControl,difficultyLevel,exercises);
-
-  }
 
     public static GuessMemoryGame createGuessMemoryGameFrom(final Player player, final TimeControl timeControl
             , DifficultyLevel difficultyLevel, List<Exercise> exercises) {

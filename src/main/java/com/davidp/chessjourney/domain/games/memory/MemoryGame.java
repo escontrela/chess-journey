@@ -163,6 +163,12 @@ public abstract class MemoryGame<T> extends Game {
         GAME_OVER
     }
 
+    public abstract GameKind getGameKind();
+
+    public enum GameKind{
+        GUESS_MEMORY_GAME,
+        DEFEND_MEMORY_GAME
+    }
 
     public static class MemoryGamePartialStat {
 

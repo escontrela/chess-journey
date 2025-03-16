@@ -142,6 +142,12 @@ public class DefendMemoryGame extends MemoryGame<String> {
         return this.getGuessPiecesCount() == 1;
     }
 
+    @Override
+    public GameKind getGameKind() {
+
+        return  GameKind.DEFEND_MEMORY_GAME;
+    }
+
 
     @Override
     public int getGuessPiecesCount(){
