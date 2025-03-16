@@ -4,15 +4,15 @@ El siguiente diagrama de flujo describe el ciclo de vida de un juego de memoria 
 
 ```mermaid
 flowchart TD
-    A[Estado Inicial: WAITING_TO_START<br>(Juego en espera de inicio)]
-    B[startGame()<br>- Registra startTime<br>- Cambia estado a SHOWING_PIECES<br>- Llama a loadExercise()]
-    C[loadExercise()<br>- Carga el FEN actual<br>- Actualiza el tablero<br>- Oculta piezas<br>- Registra partialTime]
-    D[Mostrar Piezas<br>(Se visualizan durante un tiempo determinado)]
-    E[isTimeToHidePieces()<br>- Verifica si se cumplió el tiempo de visualización<br>- Cambia estado a GUESSING_PIECES si es verdadero]
-    F[Esperar Respuesta del Usuario<br>(Usuario ingresa su respuesta)]
-    G[submitAnswer(answer)<br>- Evalúa la respuesta<br>- Actualiza estadísticas y tiempos]
-    H[nextExercise()<br>- Si hay más ejercicios: incrementa índice y llama a loadExercise()<br>- Si no: cambia estado a GAME_OVER]
-    I[Fin del Juego<br>(GAME_OVER)]
+    A["Estado Inicial: WAITING_TO_START\n(Juego en espera de inicio)"]
+    B["startGame()\n- Registra startTime\n- Cambia estado a SHOWING_PIECES\n- Llama a loadExercise()"]
+    C["loadExercise()\n- Carga el FEN actual\n- Actualiza el tablero\n- Oculta piezas\n- Registra partialTime"]
+    D["Mostrar Piezas\n(Se visualizan durante un tiempo determinado)"]
+    E["isTimeToHidePieces()\n- Verifica si se cumplió el tiempo de visualización\n- Cambia estado a GUESSING_PIECES si es verdadero"]
+    F["Esperar Respuesta del Usuario\n(Usuario ingresa su respuesta)"]
+    G["submitAnswer(answer)\n- Evalúa la respuesta\n- Actualiza estadísticas y tiempos"]
+    H["nextExercise()\n- Si hay más ejercicios: incrementa índice y llama a loadExercise()\n- Si no: cambia estado a GAME_OVER"]
+    I["Fin del Juego\n(GAME_OVER)"]
 
     A --> B
     B --> C
@@ -21,8 +21,8 @@ flowchart TD
     E --> F
     F --> G
     G --> H
-    H -- Más ejercicios --> C
-    H -- Sin ejercicios --> I
+    H -- "Más ejercicios" --> C
+    H -- "Sin ejercicios" --> I
 ```
 * Estado Inicial (WAITING_TO_START):
 El juego comienza en un estado de espera. Se inicia al llamar a startGame().
