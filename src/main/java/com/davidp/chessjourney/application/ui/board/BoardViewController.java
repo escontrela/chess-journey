@@ -137,7 +137,7 @@ public class BoardViewController implements ScreenController {
 
                 return;
             }
-            
+
             pane.setStyle(
                 "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
 
