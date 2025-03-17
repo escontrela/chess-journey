@@ -37,7 +37,7 @@ import java.util.concurrent.ThreadLocalRandom;
 public class GuessMemoryGame extends MemoryGame<PiecePosition> {
 
     private static final int MIN_PIECES_TO_HIDE = 1;
-    private static final int MAX_PIECES_TO_HIDE = 2;
+    private static final int MAX_PIECES_TO_HIDE = 3;
 
     private int partialStepCounter;
     private int successPiecesCount;
