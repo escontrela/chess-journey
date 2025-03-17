@@ -425,7 +425,7 @@ public class BoardViewController implements ScreenController {
     lblExerciseNum.setText(
                     String.valueOf(activeMemoryGameOld.getCurrentExerciseNumber())
                     + " - " +
-                    String.valueOf(activeMemoryGameOld.totalHiddenPieces()) //TODO: defend piece game: total hidde pieces could be total moves , so .. steps
+                    String.valueOf(activeMemoryGameOld.getTotalStepsPerExercise()) //TODO: defend piece game: total hidde pieces could be total moves , so .. steps
                     );
     // Iniciar el bucle de juego en FXGL
       //TODO ojo, porque esto podría ya estar iniciado!!
@@ -498,7 +498,7 @@ private void gameLoop() {
         lblExerciseNum.setText(
                 String.valueOf(activeMemoryGameOld.getCurrentExerciseNumber())
                         + " - " +
-                        String.valueOf(activeMemoryGameOld.totalHiddenPieces()) //TODO: defend piece game: total hidde pieces could be total moves , so .. steps
+                        String.valueOf(activeMemoryGameOld.getTotalStepsPerExercise()) //TODO: defend piece game: total hidde pieces could be total moves , so .. steps
         );
       }
   }

@@ -9,15 +9,44 @@ import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * A memory game implementation where players must remember and guess the positions of hidden chess pieces.
+ * This game extends the base MemoryGame class and implements specific logic for piece guessing mechanics.
+ *
+ * <p>The game flow works as follows:
+ * <ol>
+ *   <li>Pieces are shown to the player for a fixed time period</li>
+ *   <li>Selected pieces are hidden from the board</li>
+ *   <li>Player must guess the correct positions and pieces that were hidden</li>
+ *   <li>Score is calculated based on correct guesses</li>
+ * </ol>
+ *
+ * <p>Game states transition through:
+ * <ul>
+ *   <li>WAITING_TO_START - Initial state</li>
+ *   <li>SHOWING_PIECES - Pieces are visible to memorize</li>
+ *   <li>GUESSING_PIECES - Player must guess hidden pieces</li>
+ *   <li>GAME_OVER - Final state when exercises are completed</li>
+ * </ul>
+ *
+ * @see MemoryGame
+ * @see GameKind#GUESS_MEMORY_GAME
+ */
 public class GuessMemoryGame extends MemoryGame<PiecePosition> {
 
-    private final int hiddenPiecesCount = 1;
-    private int guessPiecesCounts;
+    private static final int MIN_PIECES_TO_HIDE = 1;
+    private static final int MAX_PIECES_TO_HIDE = 2;
+
+    private int partialStepCounter;
     private int successPiecesCount;
-    private int totalGuessPiecesCounts;
+    /**
+     * The total number of guess pieces that the user has to guess in total.
+     */
+    private int totalStepsAllOverTheExercises;
+
     private List<PiecePosition> hiddenPiecePositions;
-    private final long timeToShowPiecesOnTheCurrentExerciseInSeconds = 5;
 
     public GuessMemoryGame(Player player, ChessBoard board, TimeControl timeControl,
                            DifficultyLevel difficultyLevel, List<Exercise> exercises) {
@@ -37,8 +66,11 @@ public class GuessMemoryGame extends MemoryGame<PiecePosition> {
         currentExerciseId = exercises.get(currentExerciseIndex).getId();
         chessBoard = ChessBoardFactory.createFromFEN(currentFen);
 
+        int numPiecesToHide = getRandomNumberUsingThreadLocalRandom();
+
         // Calculate the pieces that will be hidden
-        hiddenPiecePositions = hidePieces(hiddenPiecesCount);
+        hiddenPiecePositions = calculateHiddenPieces(numPiecesToHide);
+
         partialTime = Instant.now();
         gameState = GameState.SHOWING_PIECES;
     }
@@ -50,22 +82,29 @@ public class GuessMemoryGame extends MemoryGame<PiecePosition> {
     }
 
 
+    protected int getRandomNumberUsingThreadLocalRandom() {
+
+        return ThreadLocalRandom.current().nextInt(MIN_PIECES_TO_HIDE, MAX_PIECES_TO_HIDE);
+    }
+
     /**
      * Get the hidden piece positions that should be guessed.
      * @param count The number of pieces to hide.
      * @return A list of piece positions that should be guessed.
      */
-    private List<PiecePosition> hidePieces(int count) {
+    private List<PiecePosition> calculateHiddenPieces(int count) {
 
         List<PiecePosition> allPositions = new ArrayList<>(chessBoard.getAllPiecePositions());
         if (allPositions.isEmpty()) {
 
             return Collections.emptyList(); // No hay piezas para ocultar
         }
+
         Collections.shuffle(allPositions);
         int piecesToHide = Math.min(count, allPositions.size());
         List<PiecePosition> hiddenPositions = allPositions.subList(0, piecesToHide);
-        guessPiecesCounts = 0;
+
+        partialStepCounter = 0;
         return new ArrayList<>(hiddenPositions);
     }
 
@@ -87,6 +126,7 @@ public class GuessMemoryGame extends MemoryGame<PiecePosition> {
                 .getSeconds() > timeToShowPiecesOnTheCurrentExerciseInSeconds;
 
         if (timeToHide) {
+
             gameState = GameState.GUESSING_PIECES;
         }
         return timeToHide;
@@ -97,22 +137,19 @@ public class GuessMemoryGame extends MemoryGame<PiecePosition> {
     @Override
     public int getSuccessPercentage() {
 
-        if (totalGuessPiecesCounts == 0) return 0;
-        return Math.round((float) successPiecesCount / totalGuessPiecesCounts * 100);
+        if (totalStepsAllOverTheExercises == 0) return 0;
+        return Math.round((float) successPiecesCount / totalStepsAllOverTheExercises * 100);
     }
 
     @Override
     public boolean submitAnswer(PiecePosition answer) {
 
-        guessPiecesCounts++;
-        totalGuessPiecesCounts++;
-        System.out.println("total guess pieces: " + totalGuessPiecesCounts);
+        partialStepCounter++;
+        totalStepsAllOverTheExercises++;
 
         if (hiddenPiecePositions.contains(answer)){
 
-
             successPiecesCount++;
-            System.out.println("successPiecesCount: " + successPiecesCount);
             return true;
 
         }
@@ -128,18 +165,19 @@ public class GuessMemoryGame extends MemoryGame<PiecePosition> {
 
     @Override
     public boolean isTimeToMoveToNextExercise() {
-        return
-                this.getGuessPiecesCount() == this.getHiddenPiecePositions().size();
+
+        return this.getPartialStepCounter()
+                        == this.getTotalStepsPerExercise();
     }
 
     @Override
-    public int getGuessPiecesCount(){
+    public int getPartialStepCounter(){
 
-        return guessPiecesCounts;
+        return partialStepCounter;
     }
 
     @Override
-    public int totalHiddenPieces(){
+    public int getTotalStepsPerExercise(){
 
         return hiddenPiecePositions.size();
     }

@@ -31,7 +31,7 @@ public class DefendMemoryGame extends MemoryGame<String> {
     }
 
     @Override
-    public int totalHiddenPieces() {
+    public int getTotalStepsPerExercise() {
         return 1;
     }
 
@@ -139,7 +139,7 @@ public class DefendMemoryGame extends MemoryGame<String> {
     @Override
     public boolean isTimeToMoveToNextExercise() {
 
-        return this.getGuessPiecesCount() == 1;
+        return this.getPartialStepCounter() == 1;
     }
 
     @Override
@@ -150,7 +150,7 @@ public class DefendMemoryGame extends MemoryGame<String> {
 
 
     @Override
-    public int getGuessPiecesCount(){
+    public int getPartialStepCounter(){
 
         return guessPiecesCounts;
     }

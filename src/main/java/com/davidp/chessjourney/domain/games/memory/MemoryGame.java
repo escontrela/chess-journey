@@ -19,7 +19,7 @@ public abstract class MemoryGame<T> extends Game {
 
     protected final Player player;
     protected ChessBoard chessBoard;
-    private final long timeToShowPiecesOnTheCurrentExerciseInSeconds = 5;
+    protected final long timeToShowPiecesOnTheCurrentExerciseInSeconds = 5;
     protected final TimeControl timeControl;
     protected final List<Fen> positions = new ArrayList<>();
     protected int currentExerciseIndex;
@@ -74,7 +74,7 @@ public abstract class MemoryGame<T> extends Game {
 
         if (timeToHide) {
 
-            gameState = MemoryGame.GameState.GUESSING_PIECES; // Cambiamos al estado de adivinanza
+            gameState = MemoryGame.GameState.GUESSING_PIECES;
         }
 
         return timeToHide;
@@ -86,6 +86,7 @@ public abstract class MemoryGame<T> extends Game {
     public long getElapsedTimeInSeconds() {
 
         if (startTime == null){
+
             return 0;
         }
 
@@ -97,7 +98,19 @@ public abstract class MemoryGame<T> extends Game {
         return  currentExerciseIndex + 1;
     }
 
-    public abstract int totalHiddenPieces();
+
+    /**
+     * For Example: 2 pieces to guess on Guess MemoryGame
+     * @return total steps per exercise
+     */
+    public abstract int getTotalStepsPerExercise();
+
+    /**
+     * For Example: the user try to guess 1 piece over 2 pieces to guess on Guess MemoryGame
+     * @return The current exercise step over the total steps.
+     */
+    public abstract int getPartialStepCounter();
+
 
     public String getFormatedElapsedTime() {
 
@@ -141,6 +154,7 @@ public abstract class MemoryGame<T> extends Game {
             gameState = GameState.GAME_OVER;
             return;
         }
+
         currentExerciseIndex++;
         loadExercise();
     }
@@ -166,6 +180,7 @@ public abstract class MemoryGame<T> extends Game {
     public abstract GameKind getGameKind();
 
     public enum GameKind{
+
         GUESS_MEMORY_GAME,
         DEFEND_MEMORY_GAME
     }
@@ -200,8 +215,6 @@ public abstract class MemoryGame<T> extends Game {
 
         return gameState;
     }
-
-    public abstract int getGuessPiecesCount();
 
     public DifficultyLevel getDifficultyLevel() {
 
