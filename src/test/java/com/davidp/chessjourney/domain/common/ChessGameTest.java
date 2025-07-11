@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.domain.common;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.fail;
 
 import com.davidp.chessjourney.domain.ChessGame;
 import com.davidp.chessjourney.domain.ChessGameFactory;

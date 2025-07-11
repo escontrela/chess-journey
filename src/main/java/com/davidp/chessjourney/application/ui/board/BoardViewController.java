@@ -67,6 +67,8 @@ public class BoardViewController implements ScreenController {
 
   @FXML private TextField inFen;
 
+  @FXML private TextField inPGN;
+
   @FXML private Pane rootPane;
 
   @FXML private Pane pnlTime;
@@ -554,9 +556,35 @@ private boolean isButtonStartClicked(ActionEvent event) {
         showPiecesOnBoard(fenParserResponse);
       }
     }
+
+    if (isPGNInputField(event)) {
+
+        if (event.getCode() == KeyCode.ENTER){
+
+            ChessBoard chessBoard =
+                    ChessBoardFactory.createFromFEN(
+                            Fen.createCustom(
+                                    inFen.getText()));
+
+            ChessRules chessrules = new ChessRules();
+
+            //Castling test
+            GameMove posChessMove = pgnService.fromAlgebraic(inPGN.getText(), chessBoard);
+
+            //TODO una vez aqui se debe validar el movimiento!
+
+
+            System.out.println(posChessMove);
+        }
+    }
   }
 
-  /**
+    private boolean isPGNInputField(KeyEvent event) {
+
+        return event.getSource() == inPGN;
+    }
+
+    /**
    * Get or initialize the screen controller for the given screen
    *
    * @param screen Screen to get

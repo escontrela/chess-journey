@@ -7,7 +7,6 @@ import com.davidp.chessjourney.domain.common.TimeControl;
 import com.davidp.chessjourney.domain.games.memory.DefendMemoryGame;
 import com.davidp.chessjourney.domain.games.memory.GuessMemoryGame;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
-
 import java.util.List;
 
 public class ChessGameFactory {
