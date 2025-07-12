@@ -35,8 +35,6 @@ public class ChessRules {
       boolean isCapture = position.getStone(toIndex) != Chess.NO_STONE;
 
       short move = Move.getRegularMove(fromIndex, toIndex, isCapture);
-      // position.doMove(move);
-
       return isLegalMove(position, move);
 
     } catch (Exception e) {
@@ -50,6 +48,11 @@ public class ChessRules {
     short[] legalMoves = position.getAllMoves();
     // TODO improve this code with a hashmap!
     for (short legalMove : legalMoves) {
+
+      if (Move.isCastle(legalMove)){
+        System.out.println("Este es el move de castling!");
+      }
+
       if (move == legalMove) {
         return true;
       }

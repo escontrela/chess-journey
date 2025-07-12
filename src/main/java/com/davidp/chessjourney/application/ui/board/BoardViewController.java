@@ -570,8 +570,40 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
             //Castling test
             GameMove posChessMove = pgnService.fromAlgebraic(inPGN.getText(), chessBoard);
+            //TODO:
+                // a) validar con rules el movimiento
+                // b) identificar las casillas de origen y eliminar la pieza.
+                // c) identificar las casillas destinto y agregar la pieza.
 
             //TODO una vez aqui se debe validar el movimiento!
+
+            if (posChessMove instanceof CastlingMove){
+
+
+
+                CastlingMove castlingMove = (CastlingMove) posChessMove;
+
+                boolean validMove = chessrules.isValidMove(castlingMove.kingMove().getFrom(), castlingMove.kingMove().getTo(), chessBoard.getFen());
+
+                System.out.println("Is it a valid move:" + validMove);
+
+                Pane kingPane = boardPanes.get(castlingMove.kingMove().getFrom());
+                Pane rookPane = boardPanes.get(castlingMove.rookMove().getFrom());
+                Pane kingPaneTo = boardPanes.get(castlingMove.kingMove().getTo());
+                Pane rookPaneTo = boardPanes.get(castlingMove.rookMove().getTo());
+
+                PieceView kingView = (PieceView) kingPane.getChildren().getFirst();
+                PieceView rookView = (PieceView) rookPane.getChildren().getFirst();
+
+                System.out.println("pieceView: " + kingView);
+                System.out.println("pieceView:" + rookView);
+
+                freeSquare(kingPane);
+                freeSquare(rookPane);
+
+                addPiece(kingPaneTo, kingView, castlingMove.kingMove().getTo());
+                addPiece(rookPaneTo, rookView, castlingMove.rookMove().getTo());
+            }
 
 
             System.out.println(posChessMove);
