@@ -570,20 +570,10 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
             //Castling test
             GameMove posChessMove = pgnService.fromAlgebraic(inPGN.getText(), chessBoard);
-            //TODO:
-                // a) validar con rules el movimiento
-                // b) identificar las casillas de origen y eliminar la pieza.
-                // c) identificar las casillas destinto y agregar la pieza.
 
-            //TODO una vez aqui se debe validar el movimiento!
+            if (posChessMove instanceof CastlingMove castlingMove){
 
-            if (posChessMove instanceof CastlingMove){
-
-
-
-                CastlingMove castlingMove = (CastlingMove) posChessMove;
-
-                boolean validMove = chessrules.isValidMove(castlingMove.kingMove().getFrom(), castlingMove.kingMove().getTo(), chessBoard.getFen());
+                boolean validMove = chessrules.isValidCastlingMove(castlingMove.kingMove().getFrom(), castlingMove.kingMove().getTo(), chessBoard.getFen());
 
                 System.out.println("Is it a valid move:" + validMove);
 
@@ -595,9 +585,6 @@ private boolean isButtonStartClicked(ActionEvent event) {
                 PieceView kingView = (PieceView) kingPane.getChildren().getFirst();
                 PieceView rookView = (PieceView) rookPane.getChildren().getFirst();
 
-                System.out.println("pieceView: " + kingView);
-                System.out.println("pieceView:" + rookView);
-
                 freeSquare(kingPane);
                 freeSquare(rookPane);
 
@@ -605,8 +592,24 @@ private boolean isButtonStartClicked(ActionEvent event) {
                 addPiece(rookPaneTo, rookView, castlingMove.rookMove().getTo());
             }
 
+            if (posChessMove instanceof RegularMove regularMove){
 
-            System.out.println(posChessMove);
+                boolean validMove = chessrules.isValidMove(regularMove.getMoves().getFirst().getFrom(),
+                                                           regularMove.getMoves().getFirst().getTo(), chessBoard.getFen());
+
+                System.out.println("Is it a valid move:" + validMove);
+
+                Pane fromPane = boardPanes.get(regularMove.getMoves().getFirst().getFrom());
+                Pane toPane = boardPanes.get(regularMove.getMoves().getFirst().getTo());
+
+                PieceView pieceView = (PieceView) fromPane.getChildren().getFirst();
+
+                freeSquare(fromPane);
+
+                addPiece(toPane, pieceView, regularMove.getMoves().getFirst().getTo());
+
+            }
+
         }
     }
   }

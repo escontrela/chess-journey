@@ -74,6 +74,30 @@ public class PGNServiceTest {
     //TODO verificar todos los castling moves desdde distintos FEN positions (Quuenside, kingside con white y con black).
   }
 
+  /**
+   * Test for groups 3 and 6
+   */
+  @Test
+  public void fromAlgebraicTest2() {
+
+    ChessBoard chessBoard =
+            ChessBoardFactory.createFromFEN(
+                    Fen.createCustom(
+                            "r3k2r/ppp1qppp/2n1bn2/2bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9"));
+
+    ChessRules chessrules = new ChessRules();
+
+    //Castling test
+    GameMove posChessMove = pgnService.fromAlgebraic("Ng5", chessBoard);
+
+    RegularMove regular = posChessMove
+            .asRegular()
+            .orElseThrow(() -> new AssertionError("No es Regular move"));
+
+    assertEquals("F3", regular.getMoves().getFirst().getFrom().toString());
+    assertEquals("G5", regular.getMoves().getFirst().getTo().toString());
+
+  }
 
   @Test
   public void testExtractSpecificGroupsOld() {

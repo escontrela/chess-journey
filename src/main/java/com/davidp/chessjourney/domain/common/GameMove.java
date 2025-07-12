@@ -65,4 +65,13 @@ public interface GameMove {
                 : Optional.empty();
     }
 
+    /**
+     * Devuelve un NormalMove si este GameMove es regular, o vacío.
+     */
+    default Optional<RegularMove> asRegular() {
+        return this instanceof RegularMove rm
+                ? Optional.of(rm)
+                : Optional.empty();
+    }
+
 }

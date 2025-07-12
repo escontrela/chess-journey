@@ -315,6 +315,28 @@ public class PGNServiceImpl implements PGNService {
             toret = GameMoveFactory.createCastlingMove(kingMove, rookMove, isCheck, isMate);
         }
 
+        // Nf3-> grupo 3 & grupo 6
+        // Test if the move is a castling
+        if (groups.containsKey(PGNRegExprGroups.PIECE_GROUP_3) && groups.containsKey(PGNRegExprGroups.DESTINATION_GROUP_6)) {
+
+            String piece = groups.get(PGNRegExprGroups.PIECE_GROUP_3);
+            String destination = groups.get(PGNRegExprGroups.DESTINATION_GROUP_6);
+
+            // TODO inside the pieces , I need to find the pieces that math with piece
+            // TODO for each piece, I need to find the pieces that can move to the destination
+
+            List<Pos> possiblePositions = board.getAllPiecePositionsOfType(mapPGNLetterToPieceType(piece.toLowerCase())  ,activeColor);
+            Pos destinationPos = Pos.parseString(destination);
+            ChessRules chessRules = new ChessRules();
+
+            toret = possiblePositions.stream()
+                    .filter(p -> chessRules.isValidMove(p, destinationPos, board.getFen()))
+                    .findFirst()
+                    .map(p -> GameMoveFactory.createNormalMove( new BoardMove( p,destinationPos) , false, false,false))
+                    .orElseThrow( ()-> new IllegalArgumentException("Invalid move notation: " + move));
+        }
+
+        //TODO validar is check or checkmate
         return toret;
     }
 
@@ -347,6 +369,17 @@ public class PGNServiceImpl implements PGNService {
             default:
                 throw new IllegalStateException("Unknown piece: " + pieceType);
         }
+    }
+    private static PieceType mapPGNLetterToPieceType(String pieceChar) {
+        return switch (Character.toLowerCase(pieceChar.charAt(0))) {
+            case 'k' -> PieceType.KING;
+            case 'q' -> PieceType.QUEEN;
+            case 'r' -> PieceType.ROOK;
+            case 'b' -> PieceType.BISHOP;
+            case 'n' -> PieceType.KNIGHT;
+            case 'p' -> PieceType.PAWN;
+            default -> throw new IllegalArgumentException("Invalid piece character: " + pieceChar);
+        };
     }
 
     protected static String posToAlgebraic(final Pos pos) {
