@@ -575,7 +575,7 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
                 boolean validMove = chessrules.isValidCastlingMove(castlingMove.kingMove().getFrom(), castlingMove.kingMove().getTo(), chessBoard.getFen());
 
-                System.out.println("Is it a valid move:" + validMove);
+                System.out.println("Is it a valid move castlingMove:" + validMove);
 
                 Pane kingPane = boardPanes.get(castlingMove.kingMove().getFrom());
                 Pane rookPane = boardPanes.get(castlingMove.rookMove().getFrom());
@@ -597,19 +597,50 @@ private boolean isButtonStartClicked(ActionEvent event) {
                 boolean validMove = chessrules.isValidMove(regularMove.getMoves().getFirst().getFrom(),
                                                            regularMove.getMoves().getFirst().getTo(), chessBoard.getFen());
 
-                System.out.println("Is it a valid move:" + validMove);
+          System.out.println(
+              "Is it a valid move regularMove:" + validMove + "check:" + posChessMove.isCheck());
+
+                PiecePosition pieceToMove = chessBoard.getPiece(regularMove.getMoves().getFirst().getFrom());
 
                 Pane fromPane = boardPanes.get(regularMove.getMoves().getFirst().getFrom());
                 Pane toPane = boardPanes.get(regularMove.getMoves().getFirst().getTo());
 
                 PieceView pieceView = (PieceView) fromPane.getChildren().getFirst();
 
+
+
                 freeSquare(fromPane);
 
                 addPiece(toPane, pieceView, regularMove.getMoves().getFirst().getTo());
 
-            }
+                if (regularMove.isCheck() || regularMove.isMate()){
 
+                    //TODO validar si el rey es en check or mate!
+
+                    PieceColor preMoveMotActiveColor = chessBoard.getGameState().getNotActiveColor();
+
+                    // Necesitamos hacer el movimiento en el tablero:
+                    chessBoard.movePiece(pieceToMove.getPiece(),regularMove.getMoves().getFirst().getFrom(),regularMove.getMoves().getFirst().getTo());
+                    chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
+
+                    System.out.println("new FEN:" + chessBoard.getFen().getStringValue());
+
+                    if (chessrules.isCheckOrMate(chessBoard.getFen())) {
+                          System.out.println("check or mate!");
+                          // where is the king?
+                          Pos opponentKingPos =
+                              chessBoard
+                                  .getAllPiecePositionsOfType(PieceType.KING, preMoveMotActiveColor)
+                                  .getFirst();
+                          Pane opponentKingPane = boardPanes.get(opponentKingPos);
+                          PieceView kingView = (PieceView) opponentKingPane.getChildren().getFirst();
+
+                          opponentKingPane.setStyle("-fx-background-color: #FF0000;");
+                    }else{
+                        System.out.println("Error on PGN input, is it not check or mate!");
+                    }
+                }
+            }
         }
     }
   }

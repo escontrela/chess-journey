@@ -319,24 +319,40 @@ public class PGNServiceImpl implements PGNService {
         // Test if the move is a castling
         if (groups.containsKey(PGNRegExprGroups.PIECE_GROUP_3) && groups.containsKey(PGNRegExprGroups.DESTINATION_GROUP_6)) {
 
+            // now we are gone test check or checkmate
+            if (groups.containsKey(PGNRegExprGroups.CHECK_OR_MATE_GROUP_8)) {
+
+                String checkOrMate = groups.get(PGNRegExprGroups.CHECK_OR_MATE_GROUP_8);
+                if ("+".equalsIgnoreCase(checkOrMate)) {
+                    isCheck = true;
+                }
+                if ("#".equalsIgnoreCase(checkOrMate)) {
+                    isMate = true;
+                }
+
+
+            }
+
             String piece = groups.get(PGNRegExprGroups.PIECE_GROUP_3);
             String destination = groups.get(PGNRegExprGroups.DESTINATION_GROUP_6);
-
-            // TODO inside the pieces , I need to find the pieces that math with piece
-            // TODO for each piece, I need to find the pieces that can move to the destination
 
             List<Pos> possiblePositions = board.getAllPiecePositionsOfType(mapPGNLetterToPieceType(piece.toLowerCase())  ,activeColor);
             Pos destinationPos = Pos.parseString(destination);
             ChessRules chessRules = new ChessRules();
 
+            boolean finalIsCheck = isCheck;
+            boolean finalIsMate = isMate;
+
             toret = possiblePositions.stream()
                     .filter(p -> chessRules.isValidMove(p, destinationPos, board.getFen()))
                     .findFirst()
-                    .map(p -> GameMoveFactory.createNormalMove( new BoardMove( p,destinationPos) , false, false,false))
+                    .map(p -> GameMoveFactory.createNormalMove( new BoardMove( p,destinationPos) , false, finalIsCheck, finalIsMate))
                     .orElseThrow( ()-> new IllegalArgumentException("Invalid move notation: " + move));
+
+
+
         }
 
-        //TODO validar is check or checkmate
         return toret;
     }
 
