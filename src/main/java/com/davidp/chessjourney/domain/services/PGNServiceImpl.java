@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * This class is responsible for implements the service for managing the PGN format
@@ -315,7 +316,7 @@ public class PGNServiceImpl implements PGNService {
             toret = GameMoveFactory.createCastlingMove(kingMove, rookMove, isCheck, isMate);
         }
 
-        // Nf3-> grupo 3 & grupo 6
+        // Nf3-> grupo 3 & grupo 6 --> ES más complicado , porque hay que tener en cuenta que no estén otros grupos por el medio....
         // Test if the move is a castling
         if (groups.containsKey(PGNRegExprGroups.PIECE_GROUP_3) && groups.containsKey(PGNRegExprGroups.DESTINATION_GROUP_6)) {
 
@@ -351,6 +352,51 @@ public class PGNServiceImpl implements PGNService {
 
 
 
+        }
+
+        //Pawn move: c3
+
+        // Pawn move: c3 - versión más concisa
+        if (groups.containsKey(PGNRegExprGroups.DESTINATION_GROUP_6) &&
+                Stream.of(PGNRegExprGroups.PIECE_GROUP_3, PGNRegExprGroups.DISAMBIGUATION_GROUP_4, PGNRegExprGroups.CAPTURE_GROUP_5)
+                        .noneMatch(groups::containsKey)) {
+
+
+            // Verificar promoción si está presente
+            if (groups.containsKey(PGNRegExprGroups.PROMOTION_GROUP_7)) {
+                isPromotion = true;
+                String promotionPieceStr = groups.get(PGNRegExprGroups.PROMOTION_GROUP_7);
+                promotionPiece = mapPGNLetterToPieceType(promotionPieceStr.toLowerCase());
+            }
+
+            // Verificar jaque/mate si está presente
+            if (groups.containsKey(PGNRegExprGroups.CHECK_OR_MATE_GROUP_8)) {
+                String checkOrMate = groups.get(PGNRegExprGroups.CHECK_OR_MATE_GROUP_8);
+                if ("+".equals(checkOrMate)) {
+                    isCheck = true;
+                } else if ("#".equals(checkOrMate)) {
+                    isMate = true;
+                }
+            }
+
+            // Procesar el movimiento de peón
+            String destination = groups.get(PGNRegExprGroups.DESTINATION_GROUP_6);
+            Pos destinationPos = Pos.parseString(destination);
+            List<Pos> possiblePawnPositions = board.getAllPiecePositionsOfType(PieceType.PAWN, activeColor);
+            ChessRules chessRules = new ChessRules();
+
+            boolean finalIsCheck = isCheck;
+            boolean finalIsMate = isMate;
+            boolean finalIsPromotion = isPromotion;
+            PieceType finalPromotionPiece = promotionPiece;
+
+            toret = possiblePawnPositions.stream()
+                    .filter(p -> chessRules.isValidMove(p, destinationPos, board.getFen()))
+                    .findFirst()
+                    .map(p -> finalIsPromotion ?
+                            GameMoveFactory.createPromotionMove(new BoardMove(p, destinationPos), finalPromotionPiece, false, finalIsCheck, finalIsMate) :
+                            GameMoveFactory.createNormalMove(new BoardMove(p, destinationPos), false, finalIsCheck, finalIsMate))
+                    .orElseThrow(() -> new IllegalArgumentException("Invalid pawn move notation: " + move));
         }
 
         return toret;

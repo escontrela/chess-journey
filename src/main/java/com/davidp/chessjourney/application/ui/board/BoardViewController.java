@@ -615,8 +615,6 @@ private boolean isButtonStartClicked(ActionEvent event) {
 
                 if (regularMove.isCheck() || regularMove.isMate()){
 
-                    //TODO validar si el rey es en check or mate!
-
                     PieceColor preMoveMotActiveColor = chessBoard.getGameState().getNotActiveColor();
 
                     // Necesitamos hacer el movimiento en el tablero:
@@ -639,7 +637,12 @@ private boolean isButtonStartClicked(ActionEvent event) {
                     }else{
                         System.out.println("Error on PGN input, is it not check or mate!");
                     }
+
+
                 }
+
+                //TODO validar si es promotionMove!!! -> podría ser el caso anterior (un c8) pero con promoción!!
+                //TODO el caso de promotionMove puede interferiro con otros...
             }
         }
     }
