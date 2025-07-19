@@ -66,6 +66,17 @@ public class ChessRules {
     return List.of();
   }
 
+  public boolean isValidMoveWithCapture(Pos from, Pos to, Fen actualFen,boolean isCapture) {
+
+    Position position = new Position(actualFen.getStringValue());
+    int toIndex = Chess.strToSqi(to.toString().toLowerCase());
+    boolean isRealCapture = position.getStone(toIndex) != Chess.NO_STONE;
+    if (isRealCapture != isCapture){
+      return false;
+    }
+    return isValidMove(from, to, actualFen);
+  }
+
   public boolean isValidMove(Pos from, Pos to, Fen actualFen) {
 
     Position position = new Position(actualFen.getStringValue());

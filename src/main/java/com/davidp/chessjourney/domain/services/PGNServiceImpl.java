@@ -251,7 +251,6 @@ public class PGNServiceImpl implements PGNService {
         var gameStatue = board.getGameState();
         var activeColor = gameStatue.getActiveColor(); // necesario para identificar si movemos blancas o negras.
 
-        // TODO Utilizar el método board.getAllPiecePositionsOfType()... para identificar las posiciones de las piezas que participan en el movimiento
         // TODO sin entran variantes no standard no ajustar la expresión regular, mejor convertir esas variantes a standard
 
         Pattern capturePattern = Pattern.compile(PGN_REGEXPR);
@@ -334,6 +333,11 @@ public class PGNServiceImpl implements PGNService {
 
             }
 
+            if (groups.containsKey(PGNRegExprGroups.CAPTURE_GROUP_5)) {
+
+                isCapture = true;
+            }
+
             String piece = groups.get(PGNRegExprGroups.PIECE_GROUP_3);
             String destination = groups.get(PGNRegExprGroups.DESTINATION_GROUP_6);
 
@@ -343,11 +347,12 @@ public class PGNServiceImpl implements PGNService {
 
             boolean finalIsCheck = isCheck;
             boolean finalIsMate = isMate;
+            boolean finalIsCapture = isCapture;
 
             toret = possiblePositions.stream()
                     .filter(p -> chessRules.isValidMove(p, destinationPos, board.getFen()))
                     .findFirst()
-                    .map(p -> GameMoveFactory.createNormalMove( new BoardMove( p,destinationPos) , false, finalIsCheck, finalIsMate))
+                    .map(p -> GameMoveFactory.createNormalMove( new BoardMove( p,destinationPos) , finalIsCapture, finalIsCheck, finalIsMate))
                     .orElseThrow( ()-> new IllegalArgumentException("Invalid move notation: " + move));
 
 
