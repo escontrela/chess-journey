@@ -2,9 +2,8 @@ package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.domain.UserRepository;
-import com.davidp.chessjourney.domain.common.DifficultyLevelRepository;
-import com.davidp.chessjourney.domain.common.ExerciseRepository;
-import com.davidp.chessjourney.domain.common.TagRepository;
+import com.davidp.chessjourney.domain.common.*;
+import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 
 /** Factoría para instanciar casos de uso (UseCases). */
 public class UseCaseFactory {
@@ -40,12 +39,27 @@ public class UseCaseFactory {
     return new SaveActiveUserUseCaseImpl();
   }
 
-  public static MemoryGameUseCase createMemoryGameUseCase() {
 
+  public static  MemoryGameUseCase<MemoryGame<PiecePosition>>  createGuessMemoryGameUseCase() {
+    //TODO make values objects for PiecePosition and String for GuessMemoryGameSubmit
     UserRepository userRepo = RepositoryFactory.createUserRepository();
     ExerciseRepository exerciseRepository = RepositoryFactory.createExerciseRepository();
     DifficultyLevelRepository difficultyLevelRepository = RepositoryFactory.createDifficultyLevelRepository();
-    return new MemoryGameUseCaseImpl(userRepo,exerciseRepository,difficultyLevelRepository);
+    ExerciseTypeRepository exerciseTypeRepository = RepositoryFactory.createExerciseTypeRepository();
+
+
+    return new GuessMemoryGameUseCaseImpl(userRepo, exerciseRepository, difficultyLevelRepository,exerciseTypeRepository);
+  }
+
+
+  public static MemoryGameUseCase<MemoryGame<String>>  createDefendMemoryGameUseCase() {
+    //TODO make values objects for PiecePosition and String for DefendMemoryGameSubmit
+    UserRepository userRepo = RepositoryFactory.createUserRepository();
+    ExerciseRepository exerciseRepository = RepositoryFactory.createExerciseRepository();
+    DifficultyLevelRepository difficultyLevelRepository = RepositoryFactory.createDifficultyLevelRepository();
+    ExerciseTypeRepository exerciseTypeRepository = RepositoryFactory.createExerciseTypeRepository();
+
+    return new DefendMemoryGameUseCaseImpl(userRepo, exerciseRepository, difficultyLevelRepository,exerciseTypeRepository);
   }
 
   public static GetAllTagsUseCase createGetAllTagsUseCase() {

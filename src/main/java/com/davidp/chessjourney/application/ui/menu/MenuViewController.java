@@ -32,6 +32,10 @@ public class MenuViewController implements ScreenController {
 
   @FXML private Pane pnlOptionMemoryGame;
 
+  @FXML private Pane pnlOptionDefendGame;
+
+  @FXML private Text txtDefendGame;
+
   @FXML
   private Pane pnlOptionUser;
 
@@ -172,6 +176,14 @@ public class MenuViewController implements ScreenController {
     if (isUserStatsClicked(event)){
       GlobalEventBus.get().post(new OpenUserStatsEvent());
     }
+    if (isDefendGameClicked(event)){
+      GlobalEventBus.get().post(new OpenDefendGameEvent());
+    }
+  }
+
+  private boolean isDefendGameClicked(MouseEvent event) {
+
+    return event.getSource() == pnlOptionDefendGame || event.getSource() == txtDefendGame;
   }
 
   private boolean isMemoryGameClicked(MouseEvent event) {

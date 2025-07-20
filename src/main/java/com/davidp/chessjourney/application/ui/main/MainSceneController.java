@@ -86,10 +86,11 @@ public class MainSceneController implements ScreenController {
 
   // This map is used to cache the screens that are created.
   private final Map<Screens, ScreenController> screenManager = new HashMap<>();
-  private static final Point MENU_POSITION = new Point(20, 490);
+  private static final Point MENU_POSITION = new Point(20, 460);
   private static final Point SETTINGS_POSITION = new Point(250, 250);
   private static final Point BOARD_POSITION = new Point(140, 60);
   private static final Point MEMORY_GAME_POSITION = new Point(140, 60);
+  private static final Point DEFEND_GAME_POSITION = new Point(140, 60);
   private static final Point CHANGE_USER_POSITION = new Point(350, 250);
   private static final Point USER_STATS_POSITION = new Point(210, 120);
 
@@ -236,11 +237,33 @@ public class MainSceneController implements ScreenController {
   }
 
   @Subscribe
+  public void onDefendGameClicked(OpenDefendGameEvent event) {
+
+    manageContextMenuVisibility();
+    manageDefendGameVisibility();
+  }
+
+  @Subscribe
   public void onUserStatsClicked(OpenUserStatsEvent event) {
 
     manageContextMenuVisibility();
     manageUserStatsVisibility();
   }
+  private void manageDefendGameVisibility() {
+
+    ScreenController defendGameController = getScreen(Screens.DEFEND_GAME);
+    if (defendGameController.isVisible() && !defendGameController.isInitialized()) {
+
+      defendGameController.hide();
+      return;
+    }
+
+    SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    AppProperties.getInstance().getActiveUserId(), DEFEND_GAME_POSITION);
+    defendGameController.show(inputData);
+  }
+
 
   private void manageMemoryGameVisibility() {
 

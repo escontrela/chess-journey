@@ -34,6 +34,10 @@ public class GameState {
   public PieceColor getActiveColor() {
     return activeColor;
   }
+  public PieceColor getNotActiveColor() {
+
+    return getActiveColor() == PieceColor.WHITE ? PieceColor.BLACK : PieceColor.WHITE;
+  }
 
   public CastlingAvailability getCastlingAvailability() {
     return castlingAvailability;

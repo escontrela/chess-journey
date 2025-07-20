@@ -143,7 +143,11 @@ The way to send message from the different screens is using the following:
 
 ```
 
+## Training Games
 
+### Memory Games
+
+Follow this markdown link to see the different memory games:  [Memory Games](./docs/memory-games.md)
 
 ## Contributing
 

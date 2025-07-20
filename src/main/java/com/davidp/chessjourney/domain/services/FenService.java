@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.domain.services;
 
-import com.davidp.chessjourney.domain.common.*;
+import com.davidp.chessjourney.domain.common.Fen;
+import com.davidp.chessjourney.domain.common.GameState;
 
 /** This class is responsible for creating a Fen object from a string or from a game status. */
 public interface FenService {

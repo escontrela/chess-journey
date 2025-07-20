@@ -1,11 +1,10 @@
 package com.davidp.chessjourney.domain.common;
 
 import com.davidp.chessjourney.domain.User;
-import org.junit.Test;
-import org.junit.jupiter.api.Assertions;
-
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
 
 public class UserEloTest {
 

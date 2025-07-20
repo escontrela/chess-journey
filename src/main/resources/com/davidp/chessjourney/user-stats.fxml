@@ -26,7 +26,7 @@
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btOptionMid1" alignment="BASELINE_CENTER" layoutX="690.0" layoutY="46.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="98.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="memory" textFill="WHITE">
+            <Button fx:id="btOptionGuess" alignment="BASELINE_CENTER" layoutX="690.0" layoutY="46.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="98.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="guess " textFill="WHITE">
                <font>
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
@@ -39,6 +39,11 @@
                 <NumberAxis side="LEFT" />
               </yAxis>
             </BarChart>
+            <Button fx:id="btOptionDefend" alignment="BASELINE_CENTER" layoutX="690.0" layoutY="101.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="98.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="defend" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+            </Button>
          </children></Pane>
       <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="819.0" layoutY="8.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>

@@ -179,17 +179,21 @@ public class ChessBoard {
 
   public Fen getFen() {
 
+    GameState gameState = getGameState();
+
+    return fenService.parseActualStatus(gameState);
+  }
+
+  public GameState getGameState() {
+
     // TODO: implement all the GameState, because we need to know the actual status of the board!
-    GameState gameState =
-        new GameState(
+    return  new GameState(
             getAllPiecePositions(),
             activeColor,
             castlingAvailability,
             enPassantTargetSquare,
             halfMoveClock,
             fullMoveNumber);
-
-    return fenService.parseActualStatus(gameState);
   }
 
   public void setEnPassantTargetSquare(final EnPassantTargetSquare enPassantTargetSquare) {

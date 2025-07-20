@@ -46,7 +46,11 @@ public class UserStatsController implements ScreenController {
   private Button btOptionMid;
 
   @FXML
-  private Button btOptionMid1;
+  private Button btOptionDefend;
+
+  @FXML
+  private Button btOptionGuess;
+
 
   @FXML
   private ImageView imgClose;
@@ -71,7 +75,7 @@ public class UserStatsController implements ScreenController {
   UserStatsInputScreenData userStatsInputScreenData;
 
   protected String difficulty = "easy";
-
+  protected String exerciseType = "memory_game";
 
   public void initialize() {
 
@@ -90,13 +94,13 @@ public class UserStatsController implements ScreenController {
     this.userStatsInputScreenData = userStatsInputScreenData;
 
     displayUserData(userStatsInputScreenData.getUserId());
-    displayUserStats(userStatsInputScreenData.getUserId());
+    displayUserStats(userStatsInputScreenData.getUserId(),exerciseType);
   }
 
   /**
    * 📊 Método para obtener y mostrar las estadísticas de usuario en el gráfico de barras.
    */
-  private void displayUserStats(final Long userId) {
+  private void displayUserStats(final Long userId,final String exerciseType) {
 
     if (userId == null || userId <= 0) {
 
@@ -104,8 +108,21 @@ public class UserStatsController implements ScreenController {
       return;
     }
 
+
+
     // 🔹 Configuración de parámetros
     UUID gameType = UUID.fromString("7ad9f7dd-1e9a-44b6-a8ad-1bb36fb53a38");
+
+    if (Objects.equals(exerciseType, "memory_game")){
+
+      gameType = UUID.fromString("7ad9f7dd-1e9a-44b6-a8ad-1bb36fb53a38");
+    }
+
+    if (Objects.equals(exerciseType, "defend_memory_game")){
+
+      gameType = UUID.fromString("b8570288-21e1-4130-ad52-e88ac2444f94");
+    }
+
 
     //TODO fix the difficulty levels, should be retrieved as a dynamic way from the database
 
@@ -231,17 +248,29 @@ public class UserStatsController implements ScreenController {
 
       rootPane.setVisible(false);
     }
+    if (event.getSource() == btOptionGuess){
+
+      exerciseType = "memory_game";
+      displayUserStats(userStatsInputScreenData.getUserId(),exerciseType);
+
+    }
+
+    if (event.getSource() == btOptionDefend){
+
+      exerciseType = "defend_memory_game";
+      displayUserStats(userStatsInputScreenData.getUserId(),exerciseType);
+    }
 
     if (event.getSource() == btOptEasy){
 
       difficulty = "easy";
-      displayUserStats(userStatsInputScreenData.getUserId());
-      System.out.println("Difficulty set at:" + difficulty);
+      displayUserStats(userStatsInputScreenData.getUserId(),exerciseType);
+
     }
     if (event.getSource() == btOptionMid){
       difficulty = "medium";
-      displayUserStats(userStatsInputScreenData.getUserId());
-      System.out.println("Difficulty set at:" + difficulty);
+      displayUserStats(userStatsInputScreenData.getUserId(),exerciseType);
+
     }
   }
 
