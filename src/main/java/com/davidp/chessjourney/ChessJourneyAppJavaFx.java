@@ -3,6 +3,7 @@ package com.davidp.chessjourney;
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.ui.main.MainSceneController;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -49,6 +50,13 @@ public class ChessJourneyAppJavaFx extends Application {
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
       scene.setFill(Color.TRANSPARENT);
+
+      // Efecto niebla al iniciar
+      root.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+        if (newVal.getWidth() > 0 && newVal.getHeight() > 0) {
+           JavaFXAnimationUtil.playFogEffect(root, 10.0);
+        }
+      });
       primaryStage.show();
 
       System.out.println(
