@@ -2,6 +2,7 @@ package com.davidp.chessjourney;
 
 import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
+import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import javafx.application.Application;
@@ -41,11 +42,10 @@ public class ChessJourneyAppJavaFx extends Application {
       primaryStage.setTitle("Chess Journey");
       primaryStage.initStyle(StageStyle.TRANSPARENT);
 
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("main-scene-3.fxml"));
-      Pane root = loader.load();
-
-      MainSceneController mainController = loader.getController();
-      mainController.setStage(primaryStage);
+      var mainScreenController =
+              ScreenFactory.getInstance().createScreen(ScreenFactory.Screens.MAIN_STAGE);
+      Pane root = mainScreenController.getRootPane();
+      ((MainSceneController) mainScreenController).setStage(primaryStage);
 
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);

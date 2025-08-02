@@ -1,12 +1,12 @@
 package com.davidp.chessjourney.application.ui.settings;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.UserSavedAppEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.usecases.GetAllTagsUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.SaveUserUseCase;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.domain.User;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -17,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-import java.awt.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class SettingsViewController implements ScreenController {
@@ -150,7 +149,7 @@ public class SettingsViewController implements ScreenController {
     if (event.getSource() == btOptionTags) {
 
       pnlProfile.setVisible(false);
-      FXGL.animationBuilder()
+      JavaFXAnimationUtil.animationBuilder()
               .duration(Duration.seconds(0.2))
               .onFinished(
                       () -> {

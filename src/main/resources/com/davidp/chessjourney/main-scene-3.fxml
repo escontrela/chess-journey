@@ -10,9 +10,9 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="mainPane" prefHeight="850.0" prefWidth="1290.0" style="-fx-border-width: 0; -fx-border-insets: 0; -fx-border-radius: 20; -fx-background-radius: 20; -fx-border-color: transparent; -fx-background-color: transparent; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-size: 1345 793; -fx-background-repeat: no-repeat; -fx-background-opacity: 0.3; -fx-padding: 20; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.main.MainSceneController">
+<Pane fx:id="mainPane" prefHeight="830.0" prefWidth="1290.0" style="-fx-border-width: 1; -fx-border-insets: 0; -fx-border-radius: 20; -fx-background-radius: 20; -fx-border-color: #333; -fx-background-color: transparent; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-size: 1345 793; -fx-background-repeat: no-repeat; -fx-background-opacity: 0.3; -fx-padding: 20; -fx-background-insets: 0;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.main.MainSceneController">
    <children>
-      <Pane fx:id="pnlMessage11" layoutX="194.0" layoutY="65.0" prefHeight="797.0" prefWidth="1065.0" styleClass="panel-black" stylesheets="@custom-styles.css">
+      <Pane fx:id="pnlMessage11" layoutX="194.0" layoutY="55.0" prefHeight="760.0" prefWidth="1065.0" styleClass="panel-black" stylesheets="@custom-styles.css">
          <children>
             <Pane fx:id="pnlMessage1" layoutX="18.0" layoutY="15.0" prefHeight="197.0" prefWidth="1033.0" styleClass="panel-header" stylesheets="@custom-styles.css">
                <children>
@@ -31,7 +31,7 @@
             <Font name="Alatsi Regular" size="13.0" />
          </font>
       </Text>
-      <StackPane fx:id="pnlMenu" layoutX="14.0" layoutY="800.0" onMouseClicked="#handleButtonClick" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container" stylesheets="@custom-styles.css">
+      <StackPane fx:id="pnlMenu" layoutX="14.0" layoutY="770.0" onMouseClicked="#handleButtonClick" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container" stylesheets="@custom-styles.css">
          <children>
             <StackPane prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
                <children>
