@@ -1,6 +1,5 @@
 package com.davidp.chessjourney.application.ui.user;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.*;
@@ -9,7 +8,7 @@ import com.davidp.chessjourney.application.ui.board.PromoteViewInputScreenData;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.GetUsersUseCase;
 import com.davidp.chessjourney.application.usecases.SaveActiveUserUseCase;
-import com.davidp.chessjourney.application.usecases.SaveUserUseCase;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.domain.User;
 import java.util.List;
 import javafx.animation.PauseTransition;
@@ -73,8 +72,11 @@ public class UserViewController implements ScreenController {
           e -> {
             userListContainer.getChildren().add(userPane);
 
-            // Efecto de Fade In
-            FXGL.animationBuilder().duration(Duration.seconds(0.5)).fadeIn(userPane).buildAndPlay();
+            JavaFXAnimationUtil
+                .animationBuilder()
+                .duration(Duration.seconds(0.5))
+                .fadeIn(userPane)
+                .buildAndPlay();
           });
 
       delay.play();
@@ -146,8 +148,7 @@ public class UserViewController implements ScreenController {
 
     rootPane.setVisible(false);
 
-    // Fade in animation when showing
-    FXGL.animationBuilder()
+    JavaFXAnimationUtil.animationBuilder()
         .duration(Duration.seconds(0.2))
         .onFinished(
             () -> {
@@ -156,6 +157,7 @@ public class UserViewController implements ScreenController {
             })
         .fadeIn(rootPane)
         .buildAndPlay();
+
   }
 
   @Override
@@ -169,7 +171,7 @@ public class UserViewController implements ScreenController {
   @Override
   public void hide() {
 
-    FXGL.animationBuilder()
+    JavaFXAnimationUtil.animationBuilder()
         .duration(Duration.seconds(0.2))
         .onFinished(
             () -> {

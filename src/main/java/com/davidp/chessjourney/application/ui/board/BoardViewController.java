@@ -1,9 +1,7 @@
 package com.davidp.chessjourney.application.ui.board;
-
-import static com.almasb.fxgl.dsl.FXGLForKtKt.runOnce;
+ 
 import static javafx.application.Platform.runLater;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.PromoteSelectedPieceEvent;

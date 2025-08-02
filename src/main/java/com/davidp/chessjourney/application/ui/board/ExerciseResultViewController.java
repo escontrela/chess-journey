@@ -1,9 +1,9 @@
 package com.davidp.chessjourney.application.ui.board;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -109,14 +109,13 @@ public class ExerciseResultViewController implements ScreenController {
 
         rootPane.setVisible(false);
 
-        // Fade in animation when showing
-        FXGL.animationBuilder()
+        // Fade in animation when showing (custom util)
+        JavaFXAnimationUtil.animationBuilder()
                 .duration(Duration.seconds(0.2))
-                .onFinished(
-                        () -> {
-                            rootPane.setVisible(true);
-                            rootPane.toFront();
-                        })
+                .onFinished(() -> {
+                    rootPane.setVisible(true);
+                    rootPane.toFront();
+                })
                 .fadeIn(rootPane)
                 .buildAndPlay();
     }
@@ -132,13 +131,12 @@ public class ExerciseResultViewController implements ScreenController {
     @Override
     public void hide() {
 
-        FXGL.animationBuilder()
+        JavaFXAnimationUtil.animationBuilder()
                 .duration(Duration.seconds(0.2))
-                .onFinished(
-                        () -> {
-                            rootPane.setVisible(false);
-                            status = ScreenStatus.HIDDEN;
-                        })
+                .onFinished(() -> {
+                    rootPane.setVisible(false);
+                    status = ScreenStatus.HIDDEN;
+                })
                 .fadeOut(rootPane)
                 .buildAndPlay();
     }

@@ -1,6 +1,5 @@
 package com.davidp.chessjourney.application.ui.board;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.PromoteSelectedPieceEvent;
 import com.davidp.chessjourney.application.ui.ScreenController;
