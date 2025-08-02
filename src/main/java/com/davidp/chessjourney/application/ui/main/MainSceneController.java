@@ -18,6 +18,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
+import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.GetAllTagsUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.domain.User;
@@ -125,16 +126,6 @@ public class MainSceneController implements ScreenController {
             emitter.setEndColor(Color.RED);
             emitter.setSize(5, 10);
 
-            Entity fire =
-                entityBuilder()
-                    .at(200, 200) // Posición inicial
-                    .with(new ParticleComponent(emitter)) // Agregar el componente de partículas
-                    .buildAndAttach();
-
-            if (!getGameWorld().getEntities().contains(fire)) {
-
-              getGameWorld().addEntity(fire);
-            }
           });
     }
   }
@@ -336,7 +327,7 @@ public class MainSceneController implements ScreenController {
 
     moveMainWindowsSetUp();
     reloadUserInitials(AppProperties.getInstance().getActiveUserId());
-    showTextAnimation();
+    //showTextAnimation();
   }
 
   private void showTextAnimation() {
@@ -392,12 +383,10 @@ public class MainSceneController implements ScreenController {
     User loggedUser = getUserByIdUseCase.execute(userId);
     lbUserInitials.setText(loggedUser.getInitials());
 
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.5))
-        .repeat(2)
-        .autoReverse(true)
-        .fadeOut(lbUserInitials)
-        .buildAndPlay();
+    FXAnimationUtil.fadeOut(lbUserInitials, 0.5)
+            .repeat(2)
+            .autoReverse(true)
+            .buildAndPlay();
   }
 
   private Stage stage;

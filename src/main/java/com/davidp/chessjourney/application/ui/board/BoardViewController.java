@@ -13,6 +13,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
 import com.davidp.chessjourney.application.usecases.SaveUserExerciseStatsUseCase;
 import com.davidp.chessjourney.domain.ChessBoard;
@@ -45,6 +46,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
+
+import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
+import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
 
 public class BoardViewController implements ScreenController {
 
@@ -180,75 +184,75 @@ public class BoardViewController implements ScreenController {
         Pane square = (Pane) node;
 
         node.setOnDragOver(
-            new EventHandler<DragEvent>() {
+                new EventHandler<DragEvent>() {
 
-              public void handle(DragEvent event) {
+                  public void handle(DragEvent event) {
 
-                event.acceptTransferModes(TransferMode.ANY);
-                event.consume();
-              }
-            });
+                    event.acceptTransferModes(TransferMode.ANY);
+                    event.consume();
+                  }
+                });
 
         node.setOnDragEntered(
-            new EventHandler<DragEvent>() {
-              public void handle(DragEvent event) {
+                new EventHandler<DragEvent>() {
+                  public void handle(DragEvent event) {
 
-                square.setStyle(
-                    "-fx-border-color: #FF0000; -fx-border-width: 2px; -fx-border-inset: -2px;");
-                event.consume();
-              }
-            });
+                    square.setStyle(
+                            "-fx-border-color: #FF0000; -fx-border-width: 2px; -fx-border-inset: -2px;");
+                    event.consume();
+                  }
+                });
 
         node.setOnDragExited(
-            new EventHandler<DragEvent>() {
-              public void handle(DragEvent event) {
+                new EventHandler<DragEvent>() {
+                  public void handle(DragEvent event) {
 
-                square.setStyle(
-                    "-fx-border-color: #000000; -fx-border-width: 0px; -fx-border-inset: -2px;");
-                event.consume();
-              }
-            });
+                    square.setStyle(
+                            "-fx-border-color: #000000; -fx-border-width: 0px; -fx-border-inset: -2px;");
+                    event.consume();
+                  }
+                });
 
         node.setOnDragDropped(
-            new EventHandler<DragEvent>() {
-              public void handle(DragEvent event) {
+                new EventHandler<DragEvent>() {
+                  public void handle(DragEvent event) {
 
-                if (activeMemoryGameOld != null
-                    && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.GUESS_MEMORY_GAME) {
-                  event.consume();
-                  return;
-                }
+                    if (activeMemoryGameOld != null
+                            && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.GUESS_MEMORY_GAME) {
+                      event.consume();
+                      return;
+                    }
 
-                if (activeMemoryGameOld != null
-                    && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.DEFEND_MEMORY_GAME
-                    && activeMemoryGameOld.getGameState() != MemoryGame.GameState.GUESSING_PIECES) {
-                  event.consume();
-                  return;
-                }
+                    if (activeMemoryGameOld != null
+                            && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.DEFEND_MEMORY_GAME
+                            && activeMemoryGameOld.getGameState() != MemoryGame.GameState.GUESSING_PIECES) {
+                      event.consume();
+                      return;
+                    }
 
-                Dragboard db = event.getDragboard();
-                boolean success = false;
-                if (db.hasString()) {
-                  String droppedPos = db.getString(); // esto sí existirá
+                    Dragboard db = event.getDragboard();
+                    boolean success = false;
+                    if (db.hasString()) {
+                      String droppedPos = db.getString(); // esto sí existirá
 
-                  runLater(
-                      () -> soundService.playSound(SoundServiceFactory.SoundType.PIECE_PLACEMENT));
+                      runLater(
+                              () -> soundService.playSound(SoundServiceFactory.SoundType.PIECE_PLACEMENT));
 
-                  // Lógica para mover la pieza
-                  Pane toPane = (Pane) event.getGestureTarget();
-                  PieceView pieceView = (PieceView) event.getGestureSource();
-                  // Quita la pieza del panel original y muévela al nuevo panel
-                  Pane fromPane = (Pane) pieceView.getParent();
-                  fromPane.getChildren().remove(pieceView);
-                  toPane.getChildren().add(pieceView);
+                      // Lógica para mover la pieza
+                      Pane toPane = (Pane) event.getGestureTarget();
+                      PieceView pieceView = (PieceView) event.getGestureSource();
+                      // Quita la pieza del panel original y muévela al nuevo panel
+                      Pane fromPane = (Pane) pieceView.getParent();
+                      fromPane.getChildren().remove(pieceView);
+                      toPane.getChildren().add(pieceView);
 
-                  success = true;
-                  onDefendedGameClicked(fromPane.getId(), toPane.getId());
-                }
-                event.setDropCompleted(success);
-                event.consume();
-              }
-            });
+                      success = true;
+                      onDefendedGameClicked(fromPane.getId(), toPane.getId());
+                    }
+                    event.setDropCompleted(success);
+                    event.consume();
+                  }
+                });
 
         String squareId = square.getId();
 
@@ -310,10 +314,8 @@ public class BoardViewController implements ScreenController {
   public void show() {
 
     // Fade in animation when showing
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.2))
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
         .onFinished(() -> rootPane.setVisible(true))
-        .fadeIn(rootPane)
         .buildAndPlay();
   }
 
@@ -327,14 +329,12 @@ public class BoardViewController implements ScreenController {
   @Override
   public void hide() {
 
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.2))
-        .onFinished(
-            () -> {
-              rootPane.setVisible(false);
-              status = ScreenStatus.HIDDEN;
-            })
-        .fadeOut(rootPane)
+    
+    FXAnimationUtil.fadeOut(rootPane, 0.2)
+        .onFinished(() -> {
+            rootPane.setVisible(false);
+            status = ScreenStatus.HIDDEN;
+        })
         .buildAndPlay();
   }
 
@@ -405,7 +405,7 @@ public class BoardViewController implements ScreenController {
   private void startMemoryGame() {
 
     cleanPieces();
-    FXGL.getGameTimer().clear();
+    JavaFXGameTimerUtil.clear();
     // TODO, if the results game is shown, then we need to hide it.
 
     GameState gameState = fenService.parseString(activeMemoryGameOld.getFen());
@@ -426,9 +426,8 @@ public class BoardViewController implements ScreenController {
                     .getTotalStepsPerExercise()) // TODO: defend piece game: total hidde pieces
                                                  // could be total moves , so .. steps
         );
-    // Iniciar el bucle de juego en FXGL
-    // TODO ojo, porque esto podría ya estar iniciado!!
-    FXGL.run(this::gameLoop, Duration.millis(0.1));
+    // Iniciar el bucle de juego con JavaFXGameTimerUtil
+    JavaFXGameTimerUtil.runLoop(this::gameLoop, Duration.millis(100));
   }
 
   private void showPiecesOnBoard(GameState gameState) {
@@ -463,7 +462,7 @@ public class BoardViewController implements ScreenController {
     if (activeMemoryGameOld.getGameState() == MemoryGame.GameState.GAME_OVER) {
 
       pauseLoopGame = true;
-      FXGL.getGameTimer().clear();
+      JavaFXGameTimerUtil.clear();
       lblBoardType.setText(
           "¡Juego Terminado! " + activeMemoryGameOld.getSuccessPercentage() + "% conseguido.");
       lblGhostMsg.setText("El juego ha terminado. ¡Felicitaciones!");
@@ -525,11 +524,10 @@ public class BoardViewController implements ScreenController {
 
     for (int i = 0; i < text.length(); i++) {
       int index = i;
-      runOnce(
+      JavaFXSchedulerUtil.runOnce(
           () -> {
             currentText.append(text.charAt(index)); // Añadir la siguiente letra
             textNode.setText(currentText.toString());
-            return null;
           },
           javafx.util.Duration.seconds(i * charInterval));
     }
@@ -809,10 +807,10 @@ public class BoardViewController implements ScreenController {
 
       if (result) {
 
-        FXGL.animationBuilder()
-            .duration(Duration.seconds(0.2))
-            .onFinished(
-                () -> {
+        FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
+                .onFinished(
+                        () -> {
+
                   lblBoardType.setText("¡Correcto!");
                   // boardPanes.get(event.getPos()).getChildren().add(imgOk);
                   boardPanes.get(Pos.parseString(to)).setStyle("-fx-background-color: #00E680;");
@@ -829,23 +827,16 @@ public class BoardViewController implements ScreenController {
 
                   matchedPieces++;
                   showHiddenPieces();
-                  FXGL.animationBuilder()
-                      .duration(Duration.seconds(2))
-                      .onFinished(
-                          () -> {
-                            pauseLoopGame = false;
-                          })
-                      .fadeIn(lblBoardType)
+                  FXAnimationUtil.fadeIn(lblBoardType, 2.0)
+                      .onFinished(() -> pauseLoopGame = false)
                       .buildAndPlay();
                 })
-            .fadeIn(boardPanes.get(Pos.parseString(to)))
             .buildAndPlay();
 
       } else {
 
-        FXGL.animationBuilder()
-            .duration(Duration.seconds(0.2))
-            .onFinished(
+        FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
+                .onFinished(
                 () -> {
                   lblBoardType.setText("Incorrecto");
                   // boardPanes.get(event.getPos()).getChildren().add(imgFail);
@@ -859,16 +850,10 @@ public class BoardViewController implements ScreenController {
                   }
                   matchedPieces++;
                   showHiddenPieces();
-                  FXGL.animationBuilder()
-                      .duration(Duration.seconds(2))
-                      .onFinished(
-                          () -> {
-                            pauseLoopGame = false;
-                          })
-                      .fadeIn(lblBoardType)
+                  FXAnimationUtil.fadeIn(lblBoardType, 2.0)
+                      .onFinished(() -> pauseLoopGame = false)
                       .buildAndPlay();
-                })
-            .fadeIn(boardPanes.get(Pos.parseString(to)))
+                }) 
             .buildAndPlay();
       }
     }
@@ -895,15 +880,20 @@ public class BoardViewController implements ScreenController {
 
     if (result) {
 
-      FXGL.animationBuilder()
-          .duration(Duration.seconds(0.2))
-          .onFinished(
-              () -> {
+      FXAnimationUtil.fadeIn(boardPanes.get(event.getPos()), 0.2)
+              .repeat(1)
+              .autoReverse(false)
+              .onFinished(() -> {
+
                 lblBoardType.setText("¡Correcto!");
                 // boardPanes.get(event.getPos()).getChildren().add(imgOk);
                 boardPanes.get(event.getPos()).setStyle("-fx-background-color: #00E680;");
 
-                playTypeWriterEffect("Bien hecho!", lblGhostMsg, 0.02);
+
+                runLater(
+                    () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
+                // FXGL.play("correct.wav");
+
                 runLater(
                     () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
                 // FXGL.play("correct.wav");
@@ -915,46 +905,35 @@ public class BoardViewController implements ScreenController {
 
                 matchedPieces++;
                 showHiddenPieces();
-                FXGL.animationBuilder()
-                    .duration(Duration.seconds(2))
-                    .onFinished(
-                        () -> {
-                          pauseLoopGame = false;
-                        })
-                    .fadeIn(lblBoardType)
+
+
+                FXAnimationUtil.fadeIn(lblBoardType, 2.0)
+                    .onFinished(() -> pauseLoopGame = false)
                     .buildAndPlay();
               })
-          .fadeIn(boardPanes.get(event.getPos()))
           .buildAndPlay();
 
     } else {
 
-      FXGL.animationBuilder()
-          .duration(Duration.seconds(0.2))
-          .onFinished(
-              () -> {
-                lblBoardType.setText("Incorrecto");
-                // boardPanes.get(event.getPos()).getChildren().add(imgFail);
-                boardPanes.get(event.getPos()).setStyle("-fx-background-color: #FF0071;");
-                playTypeWriterEffect("Más suerte para la próxima!", lblGhostMsg, 0.02);
-                runLater(() -> soundService.playSound(SoundServiceFactory.SoundType.FAIL_EXERCISE));
-                if (this.idValidForELO) {
+      FXAnimationUtil.fadeIn(boardPanes.get(event.getPos()), 0.2)
+              .onFinished(
+                  () -> {
+                    lblBoardType.setText("Incorrecto");
+                    // boardPanes.get(event.getPos()).getChildren().add(imgFail);
+                    boardPanes.get(event.getPos()).setStyle("-fx-background-color: #FF0071;");
+                    playTypeWriterEffect("Más suerte para la próxima!", lblGhostMsg, 0.02);
+                    runLater(() -> soundService.playSound(SoundServiceFactory.SoundType.FAIL_EXERCISE));
+                    if (this.idValidForELO) {
 
-                  insertUserStatsForThisExercise(result);
-                }
-                matchedPieces++;
-                showHiddenPieces();
-                FXGL.animationBuilder()
-                    .duration(Duration.seconds(2))
-                    .onFinished(
-                        () -> {
-                          pauseLoopGame = false;
-                        })
-                    .fadeIn(lblBoardType)
-                    .buildAndPlay();
-              })
-          .fadeIn(boardPanes.get(event.getPos()))
-          .buildAndPlay();
+                      insertUserStatsForThisExercise(result);
+                    }
+                    matchedPieces++;
+                    showHiddenPieces();
+                    FXAnimationUtil.fadeIn(lblBoardType, 2.0)
+                        .onFinished(() -> pauseLoopGame = false)
+                        .buildAndPlay();
+                  })
+              .buildAndPlay();
     }
   }
 

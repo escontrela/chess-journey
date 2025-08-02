@@ -4,6 +4,7 @@ import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.image.Image;
@@ -201,13 +202,11 @@ public class ExerciseResultViewController implements ScreenController {
 
         // Show stars progressively
         for (int i = 0; i < starsToShow; i++) {
-
             int starIndex = i;
-            FXGL.runOnce(
-                    () ->{
+            JavaFXGameTimerUtil.runLoop(
+                    () -> {
                         stars.get(starIndex).setImage(new Image("com/davidp/chessjourney/img-gray/stars_48dp_purple.png"));
-                        runLater(
-                                () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
+                        runLater(() -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
                     },
                     Duration.millis(400 * (i + 1))
 

@@ -1,9 +1,5 @@
 package com.davidp.chessjourney.application.factories;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAssetLoader;
-import static com.almasb.fxgl.dsl.FXGLForKtKt.getAudioPlayer;
-
-import com.almasb.fxgl.audio.Sound;
 import java.util.EnumMap;
 import java.util.Optional;
 
@@ -30,17 +26,10 @@ public class SoundServiceFactory {
   }
 
   private static volatile SoundServiceFactory instance;
-  private final EnumMap<SoundType, Sound> soundCache;
+  private final JavaFXSoundUtil<SoundType> soundUtil;
 
   private SoundServiceFactory() {
-
-    // Initialize and preload sounds
-    soundCache = new EnumMap<>(SoundType.class);
-
-    for (SoundType type : SoundType.values()) {
-
-      soundCache.put(type, getAssetLoader().loadSound(type.resourceName()));
-    }
+    soundUtil = new JavaFXSoundUtil<>(SoundType.class, SoundType::resourceName);
   }
 
   public static SoundServiceFactory getInstance() {
@@ -60,8 +49,6 @@ public class SoundServiceFactory {
    * @param soundType the type of sound to play
    */
   public void playSound(SoundType soundType) {
-
-    Optional.ofNullable(soundCache.get(soundType))
-        .ifPresent(sound -> getAudioPlayer().playSound(sound));
+    soundUtil.playSound(soundType);
   }
 }

@@ -38,6 +38,9 @@ public class ChessJourneyApp extends GameApplication {
 
     try {
 
+
+
+
       Stage primaryStage = FXGL.getPrimaryStage();
 
       var mainScreenController =
@@ -49,6 +52,14 @@ public class ChessJourneyApp extends GameApplication {
       Scene scene = new Scene(root);
       scene.setFill(Color.TRANSPARENT);
       getGameScene().addUINode(scene.getRoot());
+
+      root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+
+      FXGL.getGameScene().getContentRoot().setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+      FXGL.getGameScene().setBackgroundColor(Color.TRANSPARENT);
+
+      FXGL.getGameScene().getContentRoot().getScene().setFill(Color.TRANSPARENT);
+
 
       String userId = String.valueOf(AppProperties.getInstance().getActiveUserId());
       validateUserId(userId);

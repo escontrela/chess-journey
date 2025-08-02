@@ -7,6 +7,7 @@ import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.board.PromoteViewInputScreenData;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserStatsForLastNDaysUseCase;
 import com.davidp.chessjourney.application.usecases.GetUsersUseCase;
@@ -178,17 +179,17 @@ public class UserStatsController implements ScreenController {
   public void show() {
 
     rootPane.setVisible(false);
-
-    // Fade in animation when showing
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.2))
-        .onFinished(
-            () -> {
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
+            .repeat(1)
+            .autoReverse(false)
+            .onFinished(() -> {
               rootPane.setVisible(true);
               rootPane.toFront();
+              status = ScreenStatus.HIDDEN;
+
             })
-        .fadeIn(rootPane)
-        .buildAndPlay();
+            .buildAndPlay();
+
   }
 
   @Override
@@ -202,15 +203,15 @@ public class UserStatsController implements ScreenController {
   @Override
   public void hide() {
 
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.2))
-        .onFinished(
-            () -> {
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
+            .repeat(1)
+            .autoReverse(false)
+            .onFinished(() -> {
               rootPane.setVisible(false);
               status = ScreenStatus.HIDDEN;
+
             })
-        .fadeOut(rootPane)
-        .buildAndPlay();
+            .buildAndPlay();
   }
 
   @Override

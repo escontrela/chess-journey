@@ -7,6 +7,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.domain.common.Piece;
 import com.davidp.chessjourney.domain.common.PieceColor;
 import com.davidp.chessjourney.domain.common.PieceFactory;
@@ -185,18 +186,13 @@ public class PromoteViewController implements ScreenController {
 
   @Override
   public void show() {
-
     rootPane.setVisible(false);
 
-    // Fade in animation when showing
-    FXGL.animationBuilder()
-            .duration(Duration.seconds(0.2))
-            .onFinished(
-                    () -> {
-                      rootPane.setVisible(true);
-                      rootPane.toFront();
-                    })
-            .fadeIn(rootPane)
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
+            .repeat(1)
+            .autoReverse(false)
+            .onFinished(() -> {   rootPane.setVisible(true);
+              rootPane.toFront();})
             .buildAndPlay();
   }
 
@@ -211,15 +207,17 @@ public class PromoteViewController implements ScreenController {
   @Override
   public void hide() {
 
-    FXGL.animationBuilder()
-            .duration(Duration.seconds(0.2))
-            .onFinished(
-                    () -> {
-                      rootPane.setVisible(false);
-                      status = ScreenStatus.HIDDEN;
-                    })
-            .fadeOut(rootPane)
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
+            .repeat(1)
+            .autoReverse(false)
+            .onFinished(() -> {
+              rootPane.setVisible(false);
+              status = ScreenStatus.HIDDEN;
+
+            })
             .buildAndPlay();
+
+
   }
 
 
