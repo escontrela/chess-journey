@@ -173,6 +173,26 @@
     -fx-background-radius: 20;
 }
 
+.panel-header{
+    -fx-border-color: transparent;
+    -fx-border-radius: 20;
+    -fx-padding: 20;
+    -fx-background-color: #1C1E2A;
+    -fx-background-image: url("images/chess-header.png");
+    -fx-background-radius: 20;
+    -fx-control-inner-background: transparent;
+}
+
+.panel-black{
+    -fx-background-color: #000000;
+    -fx-border-color: #000000;
+    -fx-border-radius: 20;
+    -fx-background-radius: 20;
+}
+
+
+
+
 .panel-gray-for-menu{
     -fx-background-color: transparent;
 }
