@@ -1,8 +1,10 @@
 package com.davidp.chessjourney.application.ui.controls;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -20,16 +22,23 @@ public class SelectableCardController extends Pane {
     @FXML private VBox subtitlesBox;
 
     private boolean selected = false;
-    private final List<String> subtitles = new ArrayList<>();
 
     public SelectableCardController() {
+
+        System.out.println("Cargando FXML: /com/davidp/chessjourney/selectable-card.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/davidp/chessjourney/selectable-card.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
+
+        subtitles.addListener((ListChangeListener<String>) change -> updateSubtitles());
+
         try {
+
             fxmlLoader.load();
+
         } catch (IOException e) {
-            throw new RuntimeException(e);
+
+            throw new RuntimeException("No se pudo cargar el FXML: /com/davidp/chessjourney/selectable-card.fxml", e);
         }
         this.addEventHandler(MouseEvent.MOUSE_CLICKED, this::onCardClicked);
     }
@@ -43,7 +52,16 @@ public class SelectableCardController extends Pane {
         imgIcon.setImage(image);
     }
 
+    public void setImageUrl(String url) {
+        imgIcon.setImage(new Image(url));
+    }
+    public String getImageUrl() {
+
+        return imgIcon.getImage() != null ? imgIcon.getImage().getUrl() : null;
+    }
+
     public void setTitle(String title) {
+        System.out.println("Setting title: " + title);
         lblTitle.setText(title);
     }
 
@@ -53,8 +71,10 @@ public class SelectableCardController extends Pane {
         updateSubtitles();
     }
 
-    public List<String> getSubtitles() {
-        return new ArrayList<>(subtitles);
+    private final ObservableList<String> subtitles = FXCollections.observableArrayList();
+
+    public ObservableList<String> getSubtitles() {
+        return subtitles;
     }
 
     public String getTitle() {

@@ -26,8 +26,8 @@ public class PGNServiceTest {
   PGNService pgnService = PGNServiceFactory.getPGNService();
 
   /**
-   * This test converts  standard algebraic notation (e.g., e4, Nf3)
-   * into algebraic coordinates (e.g., e2, e4)
+   * This test converts standard algebraic notation (e.g., e4, Nf3) into algebraic coordinates
+   * (e.g., e2, e4)
    */
   @Test
   public void fromAlgebraicTest() {
@@ -39,126 +39,106 @@ public class PGNServiceTest {
 
     ChessRules chessrules = new ChessRules();
 
-    //Castling test
+    // Castling test
     GameMove posChessMove = pgnService.fromAlgebraic("O-O", chessBoard);
 
     /*
-     * Se podría hacer también (si bien se opta por el método en la interfaz) :
-     * if (posChessMove instanceof CastlingMove castle) {
-     *     // dentro de este bloque `castle` ya está tipado
-     *     assertEquals("E1", castle.kingMove().from().toString());
-     *     assertEquals("G1", castle.kingMove().to().toString());
-     *     assertEquals("H1", castle.rookMove().from().toString());
-     *     assertEquals("F1", castle.rookMove().to().toString());
-     * } else {
-     *     fail("Se esperaba un CastlingMove");
-     * }
-     *
-     * También se aceptar switch:
-     * GameMove mv = Factory.createCastlingMove(CastlingType.KINGSIDE, true, false);
-        switch (mv) {
-          case CastlingMove cm -> handleCastling(cm);
-          case NormalMove nm   -> handleNormal(nm);
-     * }
-     */
+    * Se podría hacer también (si bien se opta por el método en la interfaz) :
+    * if (posChessMove instanceof CastlingMove castle) {
+    *     // dentro de este bloque `castle` ya está tipado
+    *     assertEquals("E1", castle.kingMove().from().toString());
+    *     assertEquals("G1", castle.kingMove().to().toString());
+    *     assertEquals("H1", castle.rookMove().from().toString());
+    *     assertEquals("F1", castle.rookMove().to().toString());
+    * } else {
+    *     fail("Se esperaba un CastlingMove");
+    * }
+    *
+    * También se aceptar switch:
+    * GameMove mv = Factory.createCastlingMove(CastlingType.KINGSIDE, true, false);
+       switch (mv) {
+         case CastlingMove cm -> handleCastling(cm);
+         case NormalMove nm   -> handleNormal(nm);
+    * }
+    */
 
-    CastlingMove castle = posChessMove
-            .asCastling()
-            .orElseThrow(() -> new AssertionError("No es CastlingMove"));
+    CastlingMove castle =
+        posChessMove.asCastling().orElseThrow(() -> new AssertionError("No es CastlingMove"));
 
     assertEquals("E1", castle.kingMove().getFrom().toString());
     assertEquals("G1", castle.kingMove().getTo().toString());
     assertEquals("H1", castle.rookMove().getFrom().toString());
     assertEquals("F1", castle.rookMove().getTo().toString());
 
-    //TODO verificar todos los castling moves desdde distintos FEN positions (Quuenside, kingside con white y con black).
+    // TODO verificar todos los castling moves desdde distintos FEN positions (Quuenside, kingside
+    // con white y con black).
   }
 
-  /**
-   * Test for groups 3 and 6
-   */
+  /** Test for groups 3 and 6 */
   @Test
   public void fromAlgebraicTest2() {
 
     ChessBoard chessBoard =
-            ChessBoardFactory.createFromFEN(
-                    Fen.createCustom(
-                            "r3k2r/ppp1qppp/2n1bn2/2bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9"));
+        ChessBoardFactory.createFromFEN(
+            Fen.createCustom(
+                "r3k2r/ppp1qppp/2n1bn2/2bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9"));
 
     ChessRules chessrules = new ChessRules();
 
-    //Castling test
+    // Castling test
     GameMove posChessMove = pgnService.fromAlgebraic("Ng5", chessBoard);
 
-    RegularMove regular = posChessMove
-            .asRegular()
-            .orElseThrow(() -> new AssertionError("No es Regular move"));
+    RegularMove regular =
+        posChessMove.asRegular().orElseThrow(() -> new AssertionError("No es Regular move"));
 
     assertEquals("F3", regular.getMoves().getFirst().getFrom().toString());
     assertEquals("G5", regular.getMoves().getFirst().getTo().toString());
-
   }
 
   @Test
   public void testExtractSpecificGroupsOld() {
-    Pattern regularNotationPattern = Pattern.compile("^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
+    Pattern regularNotationPattern =
+        Pattern.compile(
+            "^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
 
     // Extract only piece and destination groups
-    Map<PGNServiceImpl.PGNRegExprGroups, String> groups = extractValuableGroups(
+    Map<PGNServiceImpl.PGNRegExprGroups, String> groups =
+        extractValuableGroups(
             "Nf3",
             regularNotationPattern,
             PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3,
-            PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6
-    );
+            PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6);
 
     assertEquals("N", groups.get(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3));
     assertEquals("f3", groups.get(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
     assertEquals(2, groups.size());
   }
 
-
-
   /**
-   *
-   * | Movimiento  | Grupo 3 (pieza) | Grupo 4 (desambiguación) | Grupo 5 (captura) | Grupo 6 (destino) | Grupo 7 (promoción) | Grupo 8 (check/mate) |
+   * | Movimiento | Grupo 3 (pieza) | Grupo 4 (desambiguación) | Grupo 5 (captura) | Grupo 6
+   * (destino) | Grupo 7 (promoción) | Grupo 8 (check/mate) |
    * |-------------|-----------------|--------------------------|-------------------|-------------------|---------------------|----------------------|
-   * | c3          | —               | —                        | —                 | c3                | —                   | —                    |
-   * | Nf3         | N               | —                        | —                 | f3                | —                   | —                    |
-   * | Nxd4        | N               | —                        | x                 | d4                | —                   | —                    |
-   * | Qa4+        | Q               | —                        | —                 | a4                | —                   | +                    |
-   * | Rhf1        | R               | h                        | —                 | f1                | —                   | —                    |
-   * | R1h4        | R               | 1                        | —                 | h4                | —                   | —                    |
-   * | gxf3        | —               | g                        | x                 | f3                | —                   | —                    |
-   * | fxe6+       | —               | f                        | x                 | e6                | —                   | +                    |
-   * | gxf8=Q+     | —               | g                        | x                 | f8                | Q                   | +                    |
-   * | N5xf4       | N               | 5                        | x                 | f4                | —                   | —                    |
-   * | Ndxf4       | N               | d                        | x                 | f4                | —                   | —                    |
-   * | Rhxe4       | R               | h                        | x                 | e4                | —                   | —                    |
-   * | R2xf4       | R               | 2                        | x                 | f4                | —                   | —                    |
-   *
+   * | c3 | — | — | — | c3 | — | — | | Nf3 | N | — | — | f3 | — | — | | Nxd4 | N | — | x | d4 | — |
+   * — | | Qa4+ | Q | — | — | a4 | — | + | | Rhf1 | R | h | — | f1 | — | — | | R1h4 | R | 1 | — | h4
+   * | — | — | | gxf3 | — | g | x | f3 | — | — | | fxe6+ | — | f | x | e6 | — | + | | gxf8=Q+ | — |
+   * g | x | f8 | Q | + | | N5xf4 | N | 5 | x | f4 | — | — | | Ndxf4 | N | d | x | f4 | — | — | |
+   * Rhxe4 | R | h | x | e4 | — | — | | R2xf4 | R | 2 | x | f4 | — | — |
    */
 
   /**
    * | Movimiento | Grupo 1 (Enroque) | Grupo 2 (check/mate) |
-   * |------------|-------------------|----------------------|
-   * | O-O        | O-O               | —                    |
-   * | O-O+       | O-O               | +                    |
-   * | O-O-O      | O-O-O             | —                    |
-   * | O-O-O#     | O-O-O             | #                    |
+   * |------------|-------------------|----------------------| | O-O | O-O | — | | O-O+ | O-O | + |
+   * | O-O-O | O-O-O | — | | O-O-O# | O-O-O | # |
    */
-
-
-
-
-
-
-
   @Test
   public void testExtractValuableGroups() {
-    Pattern regularNotationPattern = Pattern.compile("^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
+    Pattern regularNotationPattern =
+        Pattern.compile(
+            "^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
 
     // Test case: "Nf3"
-    Map<PGNServiceImpl.PGNRegExprGroups, String> groups = extractAllValuableGroups("Nf3", regularNotationPattern);
+    Map<PGNServiceImpl.PGNRegExprGroups, String> groups =
+        extractAllValuableGroups("Nf3", regularNotationPattern);
 
     assertEquals("N", groups.get(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3));
     assertEquals("f3", groups.get(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
@@ -192,90 +172,93 @@ public class PGNServiceTest {
 
   @Test
   public void testExtractSpecificGroups() {
-    Pattern regularNotationPattern = Pattern.compile("^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
+    Pattern regularNotationPattern =
+        Pattern.compile(
+            "^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
 
     // Extract only piece and destination groups
-    Map<PGNServiceImpl.PGNRegExprGroups, String> groups = extractValuableGroups(
+    Map<PGNServiceImpl.PGNRegExprGroups, String> groups =
+        extractValuableGroups(
             "Nf3",
             regularNotationPattern,
             PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3,
-            PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6
-    );
+            PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6);
 
     assertEquals("N", groups.get(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3));
     assertEquals("f3", groups.get(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
     assertEquals(2, groups.size());
   }
 
-
-
-
   @Test
-  public void fromAlgebraicTestRegularExpressionUseCases_2(){
+  public void fromAlgebraicTestRegularExpressionUseCases_2() {
 
-    Pattern regularNotationPatter = Pattern.compile("^([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?$");
+    Pattern regularNotationPatter =
+        Pattern.compile("^([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?$");
 
     // 2. Case Nf3
     Matcher matcher = regularNotationPatter.matcher("Nf3");
 
-    if (matcher.matches()){
+    if (matcher.matches()) {
 
-      List<String> matcherGroups = getMatcherGroups(matcher,6);
+      List<String> matcherGroups = getMatcherGroups(matcher, 6);
       Pos position = Pos.parseString(matcherGroups.get(3));
       String piece = matcherGroups.get(0);
 
       assertEquals("f3", matcherGroups.get(3));
-      assertEquals("N",piece); //TODO cloud I recover the piece instead of the piece string?
+      assertEquals("N", piece); // TODO cloud I recover the piece instead of the piece string?
       assertEquals(Row.THREE, position.getRow());
       assertEquals(Col.F, position.getCol());
-      assertEmptyGroups(matcherGroups,List.of(1,2,4,5));
-
+      assertEmptyGroups(matcherGroups, List.of(1, 2, 4, 5));
     }
   }
 
   @Test
-  public void fromAlgebraicTestRegularExpressionUseCases_3(){
+  public void fromAlgebraicTestRegularExpressionUseCases_3() {
 
-    Pattern regularNotationPatter = Pattern.compile("^([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?$");
+    Pattern regularNotationPatter =
+        Pattern.compile("^([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?$");
 
     // 3. Case Nxd4
     Matcher matcher = regularNotationPatter.matcher("Nxd4");
 
-    if (matcher.matches()){
+    if (matcher.matches()) {
 
-      List<String> matcherGroups = getMatcherGroups(matcher,6);
+      List<String> matcherGroups = getMatcherGroups(matcher, 6);
       Pos position = Pos.parseString(matcherGroups.get(3));
       String piece = matcherGroups.get(0);
 
       String capture = matcherGroups.get(2);
 
       assertEquals("d4", matcherGroups.get(3));
-      assertEquals("N",piece); //TODO cloud I recover the piece instead of the piece string?
+      assertEquals("N", piece); // TODO cloud I recover the piece instead of the piece string?
       assertEquals(Row.FOUR, position.getRow());
       assertEquals(Col.D, position.getCol());
       assertEquals("x", capture);
-      assertEmptyGroups(matcherGroups,List.of(1,4,5));
-
+      assertEmptyGroups(matcherGroups, List.of(1, 4, 5));
     }
   }
 
-  private List<String> getMatcherGroups(Matcher matcher,int numberOfGroups) {
+  private List<String> getMatcherGroups(Matcher matcher, int numberOfGroups) {
 
     List<String> toret = new ArrayList<>();
 
-    IntStream.range(1, numberOfGroups + 1).forEach(i -> {
-      toret.add(matcher.group(i));
-    });
+    IntStream.range(1, numberOfGroups + 1)
+        .forEach(
+            i -> {
+              toret.add(matcher.group(i));
+            });
 
     return toret;
   }
 
-  private void assertEmptyGroups(final List<String> groups,final List<Integer> nonContentGroups){
+  private void assertEmptyGroups(final List<String> groups, final List<Integer> nonContentGroups) {
 
-    nonContentGroups.forEach(groupIndex -> {
-      assertTrue(Objects.isNull(groups.get(groupIndex))
-              || "".equalsIgnoreCase(groups.get(groupIndex)));
-    });
+    nonContentGroups.forEach(
+        groupIndex -> {
+          assertTrue(
+              Objects.isNull(groups.get(groupIndex))
+                  || "".equalsIgnoreCase(groups.get(groupIndex)));
+        });
   }
 
   // TODO split this test on each case...
@@ -291,29 +274,24 @@ public class PGNServiceTest {
 
     assertEquals(
         "d4",
-        pgnService.toAlgebraic(
-            parseString("d2"), parseString("d4"), chessBoard, chessRules, null));
+        pgnService.toAlgebraic(parseString("d2"), parseString("d4"), chessBoard, chessRules, null));
     assertEquals(
         "Bc4",
-        pgnService.toAlgebraic(
-            parseString("f1"), parseString("c4"), chessBoard, chessRules, null));
+        pgnService.toAlgebraic(parseString("f1"), parseString("c4"), chessBoard, chessRules, null));
     assertEquals(
         "exf6",
-        pgnService.toAlgebraic(
-            parseString("e5"), parseString("f6"), chessBoard, chessRules, null));
+        pgnService.toAlgebraic(parseString("e5"), parseString("f6"), chessBoard, chessRules, null));
 
     // The c3 Knight or the e3 Knight, both can move to d5, the service should have known Nc it's
     // the right one
     assertEquals(
         "Ncd5",
-        pgnService.toAlgebraic(
-            parseString("c3"), parseString("d5"), chessBoard, chessRules, null));
+        pgnService.toAlgebraic(parseString("c3"), parseString("d5"), chessBoard, chessRules, null));
 
     // En passant test
     assertEquals(
         "cxb6 e.p.",
-        pgnService.toAlgebraic(
-            parseString("c5"), parseString("b6"), chessBoard, chessRules, null));
+        pgnService.toAlgebraic(parseString("c5"), parseString("b6"), chessBoard, chessRules, null));
 
     // Rooks on the same rank test
     ChessBoard chessBoardPos2 =
@@ -350,19 +328,11 @@ public class PGNServiceTest {
     assertEquals(
         "g8=Q",
         pgnService.toAlgebraic(
-            parseString("g7"),
-            parseString("g8"),
-            chessBoardPos4,
-            chessRules,
-            PieceType.QUEEN));
+            parseString("g7"), parseString("g8"), chessBoardPos4, chessRules, PieceType.QUEEN));
     assertEquals(
         "axb8=B",
         pgnService.toAlgebraic(
-            parseString("a7"),
-            parseString("b8"),
-            chessBoardPos4,
-            chessRules,
-            PieceType.BISHOP));
+            parseString("a7"), parseString("b8"), chessBoardPos4, chessRules, PieceType.BISHOP));
     // TODO en esta posicion anterior se puede coronar con jaque, porque lo podría ser axb8=N+, con
     // un caballo por ejemplo, probar este caso....
 

@@ -8,6 +8,7 @@ import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.SaveUserUseCase;
 import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.domain.User;
+import java.util.concurrent.atomic.AtomicInteger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -17,16 +18,11 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-import java.util.concurrent.atomic.AtomicInteger;
-
 public class SettingsViewController implements ScreenController {
 
   @FXML private Button btClose;
 
-
-  @FXML
-  private Button btProfile;
-
+  @FXML private Button btProfile;
 
   @FXML private Button btSave;
 
@@ -48,25 +44,15 @@ public class SettingsViewController implements ScreenController {
 
   @FXML private Pane rootPane;
 
+  @FXML private Pane pnlProfile;
 
-  @FXML
-  private Pane pnlProfile;
+  @FXML private Pane pnlTags;
 
+  @FXML private TextField inTag;
 
-  @FXML
-  private Pane pnlTags;
+  @FXML private Button btOptionTags;
 
-
-  @FXML
-  private TextField inTag;
-
-  @FXML
-  private Button btOptionTags;
-
-
-  @FXML
-  private Button btAddTag;
-
+  @FXML private Button btAddTag;
 
   private GetAllTagsUseCase getAllTagsUseCase;
   private GetUserByIdUseCase getUserByIdUseCase;
@@ -111,18 +97,18 @@ public class SettingsViewController implements ScreenController {
 
     AtomicInteger pos = new AtomicInteger(10);
     getAllTagsUseCase
-            .execute()
-            .forEach(
-                    tag -> {
-                      Label label = new Label(tag.getName());
-                      label.setId("tag");
-                      label.getStyleClass().add("text-white-medium");
-                      label.setText(tag.getName());
-                      label.setLayoutX(10);
-                      label.setLayoutY(pos.get());
-                      pos.set(pos.get() + 25);
-                      pnlTags.getChildren().add(label);
-                    });
+        .execute()
+        .forEach(
+            tag -> {
+              Label label = new Label(tag.getName());
+              label.setId("tag");
+              label.getStyleClass().add("text-white-medium");
+              label.setText(tag.getName());
+              label.setLayoutX(10);
+              label.setLayoutY(pos.get());
+              pos.set(pos.get() + 25);
+              pnlTags.getChildren().add(label);
+            });
   }
 
   public void initialize() {
@@ -150,23 +136,21 @@ public class SettingsViewController implements ScreenController {
 
       pnlProfile.setVisible(false);
       JavaFXAnimationUtil.animationBuilder()
-              .duration(Duration.seconds(0.2))
-              .onFinished(
-                      () -> {
-                        refreshTags();
-                        pnlTags.setVisible(true);
-                        //TODO set status = ....
-                      })
-              .fadeIn(pnlTags)
-              .buildAndPlay();
+          .duration(Duration.seconds(0.2))
+          .onFinished(
+              () -> {
+                refreshTags();
+                pnlTags.setVisible(true);
+                // TODO set status = ....
+              })
+          .fadeIn(pnlTags)
+          .buildAndPlay();
     }
 
     if (event.getSource() == btProfile) {
       pnlTags.setVisible(false);
       pnlProfile.setVisible(true);
     }
-
-
   }
 
   private User buildUserFromForm() {
@@ -192,8 +176,6 @@ public class SettingsViewController implements ScreenController {
 
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
-
-
   }
 
   @Override

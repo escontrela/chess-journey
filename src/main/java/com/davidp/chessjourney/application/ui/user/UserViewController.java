@@ -5,6 +5,7 @@ import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.board.PromoteViewInputScreenData;
+import com.davidp.chessjourney.application.ui.controls.SelectableCardController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.GetUsersUseCase;
 import com.davidp.chessjourney.application.usecases.SaveActiveUserUseCase;
@@ -40,9 +41,13 @@ public class UserViewController implements ScreenController {
 
   @FXML private VBox userListContainer; // Contenedor donde se agregarán los usuarios dinámicamente
 
+  @FXML private SelectableCardController cardOne;
+
   public void initialize() {
 
     status = ScreenStatus.INITIALIZED;
+    cardOne.setVisible(true);
+    cardOne.setScaleZ(1.0);
   }
 
   @Override

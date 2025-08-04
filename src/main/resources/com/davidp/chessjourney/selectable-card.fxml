@@ -1,14 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 
-<Pane fx:id="rootPane" prefHeight="156.0" prefWidth="317.0" styleClass="selectable-card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.controls.SelectableCardController">
+<fx:root type="Pane" styleClass="selectable-card" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
     <children>
-        <ImageView fx:id="imgIcon" fitHeight="65.0" fitWidth="112.0" layoutX="27.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" styleClass="selectable-card-icon" />
-        <Label fx:id="lblTitle" layoutX="118.0" layoutY="31.0" styleClass="selectable-card-title" text="Title" />
-        <VBox fx:id="subtitlesBox" layoutX="132.0" layoutY="69.0" spacing="4.0" />
+        <ImageView fx:id="imgIcon" fitHeight="58.0" fitWidth="96.0" layoutX="14.0" layoutY="26.0"
+                   pickOnBounds="true" preserveRatio="true" styleClass="selectable-card-icon"/>
+        <Label fx:id="lblTitle" layoutX="126.0" layoutY="26.0" styleClass="selectable-card-title" text="Title"/>
+        <VBox fx:id="subtitlesBox" layoutX="132.0" layoutY="69.0" spacing="4.0"/>
     </children>
-</Pane>
-
+    <stylesheets>
+        <URL value="@custom-styles.css"/>
+    </stylesheets>
+</fx:root>

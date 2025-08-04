@@ -52,11 +52,12 @@ public class ChessJourneyApp extends GameApplication {
 
       root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
 
-      FXGL.getGameScene().getContentRoot().setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+      FXGL.getGameScene()
+          .getContentRoot()
+          .setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
       FXGL.getGameScene().setBackgroundColor(Color.TRANSPARENT);
 
       FXGL.getGameScene().getContentRoot().getScene().setFill(Color.TRANSPARENT);
-
 
       String userId = String.valueOf(AppProperties.getInstance().getActiveUserId());
       validateUserId(userId);
