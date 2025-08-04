@@ -38,9 +38,6 @@ public class ChessJourneyApp extends GameApplication {
 
     try {
 
-
-
-
       Stage primaryStage = FXGL.getPrimaryStage();
 
       var mainScreenController =

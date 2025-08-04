@@ -52,11 +52,13 @@ public class ChessJourneyAppJavaFx extends Application {
       scene.setFill(Color.TRANSPARENT);
 
       // Efecto niebla al iniciar
+      /*
       root.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
         if (newVal.getWidth() > 0 && newVal.getHeight() > 0) {
            JavaFXAnimationUtil.playFogEffect(root, 10.0);
         }
       });
+       */
       primaryStage.show();
 
       System.out.println(

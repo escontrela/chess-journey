@@ -5,6 +5,8 @@
  Reads:
    https://docs.oracle.com/javafx/2/text/jfxpub-text.htm
 */
+
+
 @font-face {
     font-family: "Alatsi";
     src: url("fonts/Alatsi-Regular.ttf");
@@ -17,8 +19,179 @@
 }
 
 
+/* Start: borde de la ventana principal */
+.root-gemini-style {
+    /* Fondo con foco central */
+    -fx-background-color: radial-gradient(
+        center 50% 50%, radius 60%,
+        #2a2a2a,
+        #0d0d0d
+    );
+    /* Borde redondeado con degradado tipo neón */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-border-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+
+
+    /* Sombra tipo glow */
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.5), 30, 0.3, 0, 0);
+}
+/* End: borde de la ventana principal */
+
+/* Start: Task bar */
+.task-bar {
+    -fx-background-color: #1c1c1c;
+    -fx-background-radius: 30;
+    -fx-padding: 8 30 8 30;
+    -fx-spacing: 40;
+}
+
+/* Item base (StackPane) */
+.task-item {
+    -fx-background-color: transparent;
+    -fx-background-radius: 20;
+    -fx-padding: 8 20 8 20;
+    -fx-cursor: hand;
+    -fx-border-color: transparent;
+    -fx-border-radius: 20;
+    -fx-border-width: 1.5;
+}
+
+/* Texto dentro */
+.task-item Label {
+    -fx-text-fill: #b3b3b3;
+    -fx-font-size: 15px;
+    -fx-font-weight: 500;
+}
+
+/* Hover → borde visible y texto blanco */
+.task-item:hover {
+    -fx-border-color: #b3b3b3;
+}
+.task-item:hover Label {
+    -fx-text-fill: white;
+}
+
+/* Estado seleccionado */
+.task-item.selected {
+    -fx-background-color: #2a2a2a;   /* fondo ligeramente más claro */
+    -fx-border-color: #b3b3b3;       /* borde gris claro */
+    -fx-border-width: 1.5;
+    -fx-border-radius: 20;           /* bordes redondeados */
+}
+
+/* Texto dentro del seleccionado */
+.task-item.selected Label {
+    -fx-text-fill: white;            /* texto blanco */
+}
+
+/* End: Task bar */
+
+/* Start: Button Regular */
+.button-regular {
+    -fx-background-color: transparent;   /* fondo por defecto transparente */
+    -fx-background-radius: 50%;          /* circular */
+    -fx-border-color: #b3b3b3;           /* borde sutil visible siempre */
+    -fx-border-width: 1;
+    -fx-border-radius: 50%;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+/* Hover → más contraste */
+.button-regular:hover {
+    -fx-background-color: #2a2a2a;       /* fondo visible */
+    -fx-border-color: white;             /* borde más claro */
+}
+
+/* Pressed → efecto hundido */
+.button-regular:pressed {
+    -fx-background-color: #404040;
+    -fx-border-color: #b3b3b3;
+}
+
+/* Imagen dentro del botón */
+.button-regular .image-view {
+    -fx-opacity: 0.8;                    /* ícono un poco más visible */
+}
+
+/* Hover en la imagen */
+.button-regular:hover .image-view {
+    -fx-opacity: 1.0;
+}
+/* End: Button Regular */
+
+/* Start: Button Simple Close button */
+.button-simple {
+    -fx-background-color: transparent;   /* Sin fondo inicial */
+    -fx-background-radius: 50%;          /* Forma circular */
+    -fx-border-color: transparent;       /* Sin borde por defecto */
+    -fx-border-width: 1;
+    -fx-border-radius: 50%;
+    -fx-padding: 6;
+    -fx-cursor: hand;
+}
+
+/* Hover → muestra fondo sutil y borde */
+.button-simple:hover {
+    -fx-background-color: #2a2a2a;       /* Fondo sutil */
+    -fx-border-color: #b3b3b3;           /* Borde visible solo en hover */
+}
+
+/* Pressed → más oscuro */
+.button-simple:pressed {
+    -fx-background-color: #404040;
+    -fx-border-color: #b3b3b3;
+}
+
+/* Imagen dentro del botón */
+.button-simple .image-view {
+    -fx-opacity: 0.8;
+}
+
+/* Imagen más visible en hover */
+.button-simple:hover .image-view {
+    -fx-opacity: 1.0;
+}
+/* End: Button Simple Close button */
 
 /** Start: Rounded Avatar Container **/
+
+/* Marco externo del avatar */
+.avatar-frame {
+    -fx-border-color: #686b75;       /* borde sutil gris */
+    -fx-border-width: 2;
+    -fx-border-radius: 50;           /* forma circular */
+    -fx-background-radius: 50;
+    -fx-padding: 2;                  /* espacio entre marco y contenido */
+    -fx-background-color: transparent;
+}
+
+.avatar-frame:hover {
+    -fx-border-color: #8b8e99;       /* borde un poco más claro en hover */
+    -fx-background-color: rgba(104, 107, 117, 0.2); /* leve highlight */
+}
+
+/* Círculo interior donde van las iniciales */
+.avatar-circle {
+    -fx-background-radius: 50;
+    -fx-border-radius: 50;
+    -fx-border-color: transparent;
+    -fx-background-color: linear-gradient(to bottom, #3a86ff, #6ea8ff); /* degradado azul */
+    -fx-alignment: center;
+}
+
+/* Texto con iniciales */
+.avatar-text {
+    -fx-fill: white;                  /* color del texto */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Alatsi";
+}
+
+/** Old avatar Container **/
+
 .avatar-container {
     -fx-border-color: #686b75;       /* color del borde */
     -fx-border-width: 2;         /* grosor del borde */
@@ -45,8 +218,42 @@
     -fx-padding: 2;              /* algo de espacio para que el borde no se “coma” la imagen */
 }
 
+/* Start: notify pannels */
+.note-panel {
+    -fx-background-color: #1C1C1C; /* Fondo oscuro elegante */
+    -fx-background-radius: 12;     /* Bordes redondeados */
+    -fx-border-radius: 12;         /* Bordes redondeados del borde */
+    -fx-border-color: #3a3a3a;     /* Borde gris sutil */
+    -fx-border-width: 1;           /* Grosor del borde */
+    -fx-padding: 12;               /* Relleno interno */
+    -fx-spacing: 8;                /* Espaciado entre hijos */
+    -fx-alignment: center-left;    /* Contenido alineado a la izquierda */
+}
+
+/* Texto de la nota */
+.note-label {
+    -fx-font-size: 15px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #E0E0E0; /* Texto claro */
+}
+
+/* Imagen de icono inicial */
+.note-icon {
+    -fx-fit-width: 28px;
+    -fx-fit-height: 28px;
+}
+/* End: notify pannels */
+
+
 
 /* start: system design - text */
+.text-blue-gradient-big {
+    -fx-font-size: 42px;
+    -fx-font-family: "Alatsi";
+    -fx-font-smoothing-type: gray;
+    -fx-fill: linear-gradient(to bottom, #3a86ff, #6ea8ff); /* degradado azul */
+}
+
 
 .text-gray-small{
     -fx-text-fill: #686b75;
@@ -141,6 +348,166 @@
 
 /* end: system design - text */
 
+/******************************************/
+/** START: POPUP WINDOWS SYSTEM DESIGN   **/
+/******************************************/
+
+
+/* Panel principal del popup */
+.popup-root {
+    -fx-background-color: #1C1C1C;               /* mismo fondo que note-panel */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #3A3A3A;                  /* borde sutil gris */
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-effect: none;  /* quita cualquier sombra */
+}
+
+/* Cabecera de popup */
+.popup-header {
+    -fx-font-size: 26px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Pestañas de navegación */
+.popup-tab {
+    -fx-background-color: #2A2A2A;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: transparent;
+    -fx-padding: 6 16;
+    -fx-cursor: hand;
+    -fx-text-fill: #b3b3b3;
+    -fx-font-size: 14px;
+}
+.popup-tab:hover {
+    -fx-background-color: #3A3A3A;
+    -fx-text-fill: white;
+}
+.popup-tab:selected {
+    -fx-background-color: #3A86FF;
+    -fx-text-fill: white;
+}
+
+/* Contenedor de campos */
+.popup-section {
+    -fx-background-color: #262626;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-padding: 20;
+    -fx-spacing: 12;
+}
+
+/* Etiquetas */
+.popup-label {
+    -fx-text-fill: #E0E0E0;
+    -fx-font-size: 14px;
+}
+
+/* Campos de texto */
+.popup-text-field {
+    -fx-background-color: #1C1C1C;
+    -fx-text-fill: #ffffff;
+    -fx-font-size: 14px;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: #3A3A3A;
+    -fx-border-width: 1;
+    -fx-padding: 6 10;
+}
+/* Color del prompt text (texto de sugerencia) */
+.popup-text-field .text {
+    -fx-fill: #ffffff;
+}
+
+.popup-text-field:focused {
+    -fx-border-color: #3A86FF;
+}
+
+/* Botón rojo con estilo premium tipo degradado */
+.popup-button-primary {
+    -fx-background-color: linear-gradient(to bottom, #3a86ff, #6ea8ff);
+    -fx-text-fill: white;
+    -fx-font-size: 15px;
+    -fx-font-weight: bold;
+    -fx-background-radius: 15;
+    -fx-border-radius: 15;
+    -fx-border-color: transparent;
+    -fx-padding: 6 20;
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 6, 0.3, 0, 2);
+}
+.popup-button-primary:hover {
+    -fx-background-color: linear-gradient(to bottom, #5599ff, #82bbff);
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.5), 8, 0.3, 0, 3);
+}
+.popup-button-primary:pressed {
+    -fx-background-color: linear-gradient(to bottom, #2f6de0, #5f94f0);
+    -fx-effect: none;
+}
+
+/******************************************/
+/** END: POPUP WINDOWS SYSTEM DESIGN     **/
+/******************************************/
+
+/* Start: selectable card */
+
+/* === Panel seleccionable estilo tarjeta === */
+.selectable-card {
+    -fx-background-color: #1C1C1C;       /* Fondo base oscuro */
+    -fx-border-color: #2A2A2A;           /* Borde sutil por defecto */
+    -fx-border-width: 1;
+    -fx-background-radius: 16;
+    -fx-border-radius: 16;
+    -fx-padding: 12;
+    -fx-spacing: 12;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+    -fx-effect: null;                    /* Sin sombras */
+}
+
+/* Hover → ilumina borde y fondo */
+.selectable-card:hover {
+    -fx-background-color: #2A2A2A;       /* Fondo más claro en hover */
+    -fx-border-color: #3A86FF;           /* Azul brillante */
+}
+
+/* Estado seleccionado */
+.selectable-card.selected {
+    -fx-background-color: #2A2A2A;
+    -fx-border-color: #3A86FF;
+    -fx-border-width: 2;                 /* Borde un poco más marcado */
+}
+
+/* === Versión con icono grande a la izquierda === */
+.selectable-card-icon {
+    -fx-spacing: 16;                     /* Más separación entre icono y textos */
+    -fx-alignment: center-left;
+}
+
+/* Imagen de icono */
+.selectable-card-icon .image-view {
+    -fx-fit-width: 64px;
+    -fx-fit-height: 64px;
+}
+
+/* Texto principal (título) */
+.selectable-card-title {
+    -fx-text-fill: #FFFFFF;              /* Blanco puro para el título */
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Alatsi";
+}
+
+/* Texto secundario (descripción) */
+.selectable-card-subtitle {
+    -fx-text-fill: #C0C0C0;              /* Gris claro */
+    -fx-font-size: 13px;
+    -fx-font-family: "Alatsi";
+}
+/* End: selectable card */
 
 /* start: system design - panels */
 .panel-gray{
