@@ -465,7 +465,15 @@
     -fx-spacing: 12;
     -fx-alignment: center-left;
     -fx-cursor: hand;
-    -fx-effect: null;                    /* Sin sombras */
+    -fx-effect: null;
+    -fx-scale-x: 1;
+    -fx-scale-y: 1;
+    -fx-transition: all 0.2s ease-in-out;
+}
+
+.selectable-card:pressed {
+    -fx-scale-x: 0.98;
+    -fx-scale-y: 0.98;
 }
 
 /* Hover → ilumina borde y fondo */
@@ -507,6 +515,28 @@
     -fx-font-size: 13px;
     -fx-font-family: "Alatsi";
 }
+
+.popup-button-compact {
+    -fx-background-color: linear-gradient(to bottom, #3a86ff, #6ea8ff); /* igual al avatar */
+    -fx-text-fill: white;
+    -fx-font-size: 13px;
+    -fx-font-family: "Alatsi";
+    -fx-background-radius: 12;     /* bordes suaves, más pequeños */
+    -fx-padding: 4 12;             /* compacto: menos alto y ancho */
+    -fx-cursor: hand;
+    -fx-border-width: 0;
+}
+
+/* Hover → un poco más brillante */
+.popup-button-compact:hover {
+    -fx-background-color: linear-gradient(to bottom, #4b97ff, #7fb8ff);
+}
+
+/* Pressed → más oscuro */
+.popup-button-compact:pressed {
+    -fx-background-color: linear-gradient(to bottom, #2f6fd6, #5a90e6);
+}
+
 /* End: selectable card */
 
 /* start: system design - panels */
