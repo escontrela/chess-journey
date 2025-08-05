@@ -79,6 +79,19 @@ public class UserViewController implements ScreenController {
 
         SelectableCardController userPane = createUserPane(user, activeUserId);
 
+        // Añadimos el listener para enterarnos del click
+        userPane.setCardClickListener(
+            card -> {
+
+              User selectedUser = (User) card.getUserData();
+              saveUserUseCase.execute(selectedUser.getId());
+
+              System.out.println("Active user: " + selectedUser.getEmail() + " was saved on properties.");
+
+              GlobalEventBus.get().post(new UserSavedAppEvent(selectedUser.getId()));
+              hide();
+            });
+
         PauseTransition delay = new PauseTransition(Duration.seconds(0.5 * i));
         delay.setOnFinished(
             e -> {

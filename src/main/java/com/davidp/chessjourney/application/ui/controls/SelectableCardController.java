@@ -95,10 +95,21 @@ public class SelectableCardController extends Pane {
     }
 
     private void onCardClicked(MouseEvent event) {
-
+        if (cardClickListener != null) {
+            cardClickListener.onCardClicked(this);
+        }
         System.out.println("Card clicked: " + getTitle() + ", selected: " + this.getUserData());
         selected = !selected;
         this.pseudoClassStateChanged(javafx.css.PseudoClass.getPseudoClass("selected"), selected);
     }
-}
 
+    private CardClickListener cardClickListener;
+
+    public interface CardClickListener {
+        void onCardClicked(SelectableCardController card);
+    }
+
+    public void setCardClickListener(CardClickListener listener) {
+        this.cardClickListener = listener;
+    }
+}
