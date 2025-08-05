@@ -70,27 +70,13 @@ public class UserViewController implements ScreenController {
     usersFlowPanel.setVgap(20);  // espacio vertical entre filas
     usersFlowPanel.setPrefWrapLength(400); // ancho máximo antes de crear una nueva fila
 
-    for (int z = 0; z < 3; z++) {
-
-      // TODO the active user should be the first one in the list
       for (int i = 0; i < users.size(); i++) {
 
         User user = users.get(i);
 
         SelectableCardController userPane = createUserPane(user, activeUserId);
 
-        // Añadimos el listener para enterarnos del click
-        userPane.setCardClickListener(
-            card -> {
-
-              User selectedUser = (User) card.getUserData();
-              saveUserUseCase.execute(selectedUser.getId());
-
-              System.out.println("Active user: " + selectedUser.getEmail() + " was saved on properties.");
-
-              GlobalEventBus.get().post(new UserSavedAppEvent(selectedUser.getId()));
-              hide();
-            });
+        userPane.setCardClickListener(this::onUserCardClicked);
 
         PauseTransition delay = new PauseTransition(Duration.seconds(0.5 * i));
         delay.setOnFinished(
@@ -105,7 +91,6 @@ public class UserViewController implements ScreenController {
 
         delay.play();
       }
-    }
   }
 
   private SelectableCardController createUserPane(User user,long activeUserId) {
@@ -248,5 +233,15 @@ public class UserViewController implements ScreenController {
   public void setSaveUserUseCase(final SaveActiveUserUseCase saveUserUseCase) {
 
     this.saveUserUseCase = saveUserUseCase;
+  }
+
+  private void onUserCardClicked(SelectableCardController card) {
+
+    User selectedUser = (User) card.getUserData();
+    saveUserUseCase.execute(selectedUser.getId());
+    System.out.println("Active user: " + selectedUser.getEmail() + " was saved on properties.");
+    GlobalEventBus.get().post(new UserSavedAppEvent(selectedUser.getId()));
+    //TODO animación del OK al nuevo usuario seleccionado
+    hide();
   }
 }
