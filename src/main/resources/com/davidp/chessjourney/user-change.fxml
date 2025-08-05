@@ -1,23 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.davidp.chessjourney.application.ui.controls.SelectableCardController?>
-<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
 <Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="1104.0" styleClass="popup-root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserViewController">
    <children>
-      <Pane layoutX="27.0" layoutY="62.0" prefHeight="296.0" prefWidth="795.0" styleClass="popup-section">
-         <children>
-            <VBox fx:id="userListContainer" layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="470.0" />
-            <Label layoutX="160.0" layoutY="261.0" styleClass="text-gray-small" text="&lt; click to select a new user&gt;" />
-         </children></Pane>
       <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1049.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
@@ -31,51 +24,8 @@
          </graphic>
       </Button>
       <Label layoutX="33.0" layoutY="14.0" styleClass="popup-header" text="User selection" />
-      <Pane layoutX="52.0" layoutY="377.0" prefHeight="156.0" prefWidth="317.0" styleClass="selectable-card">
-         <children>
-            <ImageView fitHeight="65.0" fitWidth="112.0" layoutX="27.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" styleClass="selectable-card-icon">
-               <image>
-                  <Image url="@avatar/robot-avatar-1.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="118.0" layoutY="31.0" styleClass="selectable-card-title" text="Player One" />
-            <Label layoutX="132.0" layoutY="69.0" styleClass="selectable-card-subtitle" text="ELO FIDE: 2400" />
-            <Label layoutX="134.0" layoutY="93.0" styleClass="selectable-card-subtitle" text="CLUB: Arteixo" />
-         </children>
-      </Pane>
-      <Pane layoutX="411.0" layoutY="377.0" prefHeight="156.0" prefWidth="317.0" styleClass="selectable-card">
-         <children>
-            <ImageView fitHeight="65.0" fitWidth="112.0" layoutX="27.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" styleClass="selectable-card-icon">
-               <image>
-                  <Image url="@avatar/robot-avatar-5.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="118.0" layoutY="31.0" styleClass="selectable-card-title" text="Player Two" />
-            <Label layoutX="132.0" layoutY="69.0" styleClass="selectable-card-subtitle" text="ELO FIDE: 2400" />
-            <Label layoutX="134.0" layoutY="93.0" styleClass="selectable-card-subtitle" text="CLUB: Arteixo" />
-         </children>
-      </Pane>
-      <Pane layoutX="757.0" layoutY="377.0" prefHeight="156.0" prefWidth="317.0" styleClass="selectable-card">
-         <children>
-            <ImageView fitHeight="65.0" fitWidth="112.0" layoutX="27.0" layoutY="36.0" pickOnBounds="true" preserveRatio="true" styleClass="selectable-card-icon">
-               <image>
-                  <Image url="@avatar/robot-avatar-4.png" />
-               </image>
-            </ImageView>
-            <Label layoutX="118.0" layoutY="31.0" styleClass="selectable-card-title" text="Player Two" />
-            <Label layoutX="132.0" layoutY="69.0" styleClass="selectable-card-subtitle" text="ELO FIDE: 2400" />
-            <Label layoutX="134.0" layoutY="93.0" styleClass="selectable-card-subtitle" text="CLUB: Arteixo" />
-         </children>
-      </Pane>
-      <SelectableCardController fx:id="cardOne" imageUrl="@avatar/robot-avatar-4.png" layoutX="52.0" layoutY="440.0" prefHeight="156.0" prefWidth="317.0" styleClass="selectable-card" title="This is the title">
-         <title>
-            <String fx:value="This is the title" />
-         </title>
-         <subtitles>
-            <String fx:value="Hola" />
-            <String fx:value="Adios" />
-         </subtitles>
-      </SelectableCardController>
+      <FlowPane fx:id="usersFlowPanel" layoutX="33.0" layoutY="97.0" prefHeight="458.0" prefWidth="1036.0" />
+
    </children>
    <stylesheets>
       <URL value="@custom-styles.css" />

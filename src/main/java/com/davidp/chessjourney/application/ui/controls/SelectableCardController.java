@@ -95,6 +95,8 @@ public class SelectableCardController extends Pane {
     }
 
     private void onCardClicked(MouseEvent event) {
+
+        System.out.println("Card clicked: " + getTitle() + ", selected: " + this.getUserData());
         selected = !selected;
         this.pseudoClassStateChanged(javafx.css.PseudoClass.getPseudoClass("selected"), selected);
     }
