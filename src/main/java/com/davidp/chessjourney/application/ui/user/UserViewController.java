@@ -91,6 +91,15 @@ public class UserViewController implements ScreenController {
 
         delay.play();
       }
+
+      SelectableCardController addNewUserCard = new SelectableCardController();
+      addNewUserCard.setTitle("< add new user >");
+      addNewUserCard.setUserData("new_user");
+      addNewUserCard.getStyleClass().add("selectable-card");
+      String avatarPath = "/com/davidp/chessjourney/avatar/robot-avatar-0.png";
+      addNewUserCard.setImageUrl(avatarPath);
+      usersFlowPanel.getChildren().add(addNewUserCard);
+
   }
 
   private SelectableCardController createUserPane(User user,long activeUserId) {
@@ -236,6 +245,14 @@ public class UserViewController implements ScreenController {
   }
 
   private void onUserCardClicked(SelectableCardController card) {
+
+    if ("new_user".equals(card.getUserData())) {
+      // Handle the case for adding a new user
+      System.out.println("Add new user clicked");
+      //TODO new logic to create a new user
+      // GlobalEventBus.get().post(new OpenAddNewUserEvent());
+      return;
+    }
 
     User selectedUser = (User) card.getUserData();
     saveUserUseCase.execute(selectedUser.getId());
