@@ -62,7 +62,7 @@
     <dependency>
         <groupId>org.postgresql</groupId>
         <artifactId>postgresql</artifactId>
-        <version>42.6.0</version>
+        <version>42.2.20</version>
     </dependency>
     <dependency>
         <groupId>com.google.guava</groupId>
@@ -114,6 +114,11 @@
         <artifactId>junit</artifactId>
         <version>4.13.2</version>
         <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.javalin</groupId>
+      <artifactId>javalin</artifactId>
+      <version>5.6.2</version>
     </dependency>
 </dependencies>
 
