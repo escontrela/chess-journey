@@ -1,16 +1,15 @@
 package com.davidp.chessjourney.application.ui.menu;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
+import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import javafx.fxml.FXML;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
-import javafx.util.Duration;
 
 public class MenuViewController implements ScreenController {
 
@@ -83,28 +82,16 @@ public class MenuViewController implements ScreenController {
   @Override
   public void show() {
 
-    rootPane.setVisible(false);
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
+            .repeat(1)
+            .autoReverse(false)
+            .onFinished(() -> {
 
-    //   Platform.runLater(() -> {
-    /*
-       FadeInAnimation fadeIn = new FadeInAnimation(rootPane, Duration.seconds(0.4));
-       fadeIn.onFinished(
-           () -> {
-             rootPane.setVisible(true);
-             rootPane.toFront();
-           });
-       fadeIn.play();
-    */
-    // Fade in animation when showing
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.2))
-        .onFinished(
-            () -> {
               rootPane.setVisible(true);
               rootPane.toFront();
             })
-        .fadeIn(rootPane)
-        .buildAndPlay();
+            .buildAndPlay();
+
   }
 
   public void show(InputScreenData inputData) {
@@ -116,16 +103,17 @@ public class MenuViewController implements ScreenController {
 
   @Override
   public void hide() {
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
+            .repeat(1)
+            .autoReverse(false)
+            .onFinished(() -> {
 
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.2))
-        .onFinished(
-            () -> {
               rootPane.setVisible(false);
-              status = ScreenStatus.HIDDEN;
+              status = ScreenController.ScreenStatus.HIDDEN;
             })
-        .fadeOut(rootPane)
-        .buildAndPlay();
+            .buildAndPlay();
+
+
   }
 
   @Override

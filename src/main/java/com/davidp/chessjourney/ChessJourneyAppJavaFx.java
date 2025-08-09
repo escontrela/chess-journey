@@ -1,11 +1,14 @@
 package com.davidp.chessjourney;
 
+import com.davidp.chessjourney.api.ActiveUserController;
 import com.davidp.chessjourney.application.config.AppProperties;
+import com.davidp.chessjourney.application.factories.ScreenFactory;
+import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -23,6 +26,7 @@ public class ChessJourneyAppJavaFx extends Application {
   String fenPosition = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
 
   private static Stage primaryStage;
+  private ActiveUserController activeUserController;
 
   /** Old Code * */
   public static void main(String[] args) {
@@ -34,19 +38,30 @@ public class ChessJourneyAppJavaFx extends Application {
   public void start(Stage stage) throws Exception {
 
     try {
+      // Iniciar el servidor REST
+      initializeRestServer();
 
       primaryStage = stage;
       primaryStage.setTitle("Chess Journey");
       primaryStage.initStyle(StageStyle.TRANSPARENT);
 
-      FXMLLoader loader = new FXMLLoader(getClass().getResource("main-scene-3.fxml"));
-      Pane root = loader.load();
-
-      MainSceneController mainController = loader.getController();
-      mainController.setStage(primaryStage);
+      var mainScreenController =
+          ScreenFactory.getInstance().createScreen(ScreenFactory.Screens.MAIN_STAGE);
+      Pane root = mainScreenController.getRootPane();
+      ((MainSceneController) mainScreenController).setStage(primaryStage);
 
       Scene scene = new Scene(root);
       primaryStage.setScene(scene);
+      scene.setFill(Color.TRANSPARENT);
+
+      // Efecto niebla al iniciar
+      /*
+      root.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
+        if (newVal.getWidth() > 0 && newVal.getHeight() > 0) {
+           JavaFXAnimationUtil.playFogEffect(root, 10.0);
+        }
+      });
+       */
       primaryStage.show();
 
       System.out.println(
@@ -56,5 +71,19 @@ public class ChessJourneyAppJavaFx extends Application {
 
       e.printStackTrace();
     }
+  }
+
+  private void initializeRestServer() {
+
+    activeUserController = new ActiveUserController(UseCaseFactory.createGetUserByIdUseCase());
+    activeUserController.start(8080); // Puerto 8080 para el servidor REST
+  }
+
+  @Override
+  public void stop() throws Exception {
+    if (activeUserController != null) {
+      activeUserController.stop();
+    }
+    super.stop();
   }
 }

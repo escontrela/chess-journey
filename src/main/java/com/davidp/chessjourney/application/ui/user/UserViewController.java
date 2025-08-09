@@ -1,27 +1,28 @@
 package com.davidp.chessjourney.application.ui.user;
 
-import com.almasb.fxgl.dsl.FXGL;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.board.PromoteViewInputScreenData;
+import com.davidp.chessjourney.application.ui.controls.SelectableCardController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.GetUsersUseCase;
 import com.davidp.chessjourney.application.usecases.SaveActiveUserUseCase;
-import com.davidp.chessjourney.application.usecases.SaveUserUseCase;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.domain.User;
+
+import java.util.ArrayList;
 import java.util.List;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 public class UserViewController implements ScreenController {
@@ -39,7 +40,9 @@ public class UserViewController implements ScreenController {
 
   @FXML private Pane rootPane;
 
-  @FXML private VBox userListContainer; // Contenedor donde se agregarán los usuarios dinámicamente
+
+  @FXML
+  private FlowPane usersFlowPanel;
 
   public void initialize() {
 
@@ -55,83 +58,75 @@ public class UserViewController implements ScreenController {
     }
 
     List<User> users = getUsersUseCase.execute();
-    Long activeUserId = AppProperties.getInstance().getActiveUserId();
+    long activeUserId = AppProperties.getInstance().getActiveUserId();
     showUsersWithAnimation(users,activeUserId);
   }
 
   private void showUsersWithAnimation(List<User> users, long activeUserId) {
 
-    userListContainer.getChildren().clear(); // Limpia la lista antes de mostrar nuevos usuarios
+    usersFlowPanel.getChildren().clear(); // Limpia la lista antes de mostrar nuevos usuarios
 
-    for (int i = 0; i < users.size(); i++) {
-      User user = users.get(i);
+    usersFlowPanel.setHgap(20);  // espacio horizontal entre tarjetas
+    usersFlowPanel.setVgap(20);  // espacio vertical entre filas
+    usersFlowPanel.setPrefWrapLength(400); // ancho máximo antes de crear una nueva fila
 
-      Pane userPane = createUserPane(user,activeUserId);
+      for (int i = 0; i < users.size(); i++) {
 
-      PauseTransition delay = new PauseTransition(Duration.seconds(0.5 * i));
-      delay.setOnFinished(
-          e -> {
-            userListContainer.getChildren().add(userPane);
+        User user = users.get(i);
 
-            // Efecto de Fade In
-            FXGL.animationBuilder().duration(Duration.seconds(0.5)).fadeIn(userPane).buildAndPlay();
-          });
+        SelectableCardController userPane = createUserPane(user, activeUserId);
 
-      delay.play();
-    }
+        userPane.setCardClickListener(this::onUserCardClicked);
+
+        PauseTransition delay = new PauseTransition(Duration.seconds(0.5 * i));
+        delay.setOnFinished(
+            e -> {
+              usersFlowPanel.getChildren().add(userPane);
+
+              JavaFXAnimationUtil.animationBuilder()
+                  .duration(Duration.seconds(0.5))
+                  .fadeIn(userPane)
+                  .buildAndPlay();
+            });
+
+        delay.play();
+      }
+
+      SelectableCardController addNewUserCard = new SelectableCardController();
+      addNewUserCard.setTitle("< add new user >");
+      addNewUserCard.setUserData("new_user");
+      addNewUserCard.getStyleClass().add("selectable-card");
+      String avatarPath = "/com/davidp/chessjourney/avatar/robot-avatar-0.png";
+      addNewUserCard.setImageUrl(avatarPath);
+      usersFlowPanel.getChildren().add(addNewUserCard);
+
   }
 
-  private Pane createUserPane(User user,long activeUserId) {
+  private SelectableCardController createUserPane(User user,long activeUserId) {
 
-    Pane userPane = new Pane();
-    userPane.setUserData(user);
-    userPane.setPrefWidth(70);
-    userPane.setPrefHeight(454);
-    userPane.setLayoutX(28);
-    userPane.getStyleClass().add("panel-gray-for-menu");
-    userPane.setOnMouseClicked(this::optionClicked);
-    // userPane.setLayoutY(100 + i * 50);
+    SelectableCardController card = new SelectableCardController();
+    card.setTitle(user.getFirstname() + " " + user.getLastname() + " (" + user.getInitials() + ")");
+    card.getStyleClass().add("selectable-card");
+    card.setPrefHeight(135); // Ajusta la altura deseada
+    card.setPrefWidth(330);  // Ajusta el ancho deseado si necesitas uniformidad
+    card.setUserData(user);
 
-    // Nombre
-    Label nameLabel = new Label(user.getFirstname() + " " + user.getLastname());
-    nameLabel.getStyleClass().add("text-white-medium");
-    nameLabel.setLayoutX(73);
-    nameLabel.setLayoutY(16);
+    String idStr = Long.toString(user.getId());
+    int lastDigit = Character.getNumericValue(idStr.charAt(idStr.length() - 2));
+    int avatarNum = (lastDigit % 4) + 1;
+    String avatarPath = "/com/davidp/chessjourney/avatar/robot-avatar-" + avatarNum + ".png";
+    card.setImageUrl(avatarPath);
 
-    // Active user
-    Label activeUser = new Label("<active>");
-    activeUser.getStyleClass().add("text-white-medium");
-    activeUser.setLayoutY(24);
-    activeUser.setLayoutX(400);
-
-    // Email
-    Label emailLabel = new Label(user.getEmail());
-    emailLabel.setStyle("-fx-text-fill: #888888;");
-    emailLabel.getStyleClass().add("text-gray-small");
-    emailLabel.setLayoutX(73);
-    emailLabel.setLayoutY(36);
-
-    // Iniciales
-    StackPane initialsPane = new StackPane();
-    initialsPane.getStyleClass().add("avatar-container-inside");
-    initialsPane.setPrefSize(40, 40);
-    initialsPane.setPrefWidth(39);
-    initialsPane.setPrefHeight(37);
-    initialsPane.setLayoutX(14);
-    initialsPane.setLayoutY(17);
-
-    Label initialsLabel = new Label(user.getInitials());
-    // initialsLabel.setStyle("-fx-text-fill: white; -fx-font-size: 14px; -fx-font-weight: bold;");
-    initialsPane.getChildren().add(initialsLabel);
-
+    card.setSubtitles(new ArrayList<>());
+    card.getSubtitles().add(user.getEmail());
     if (user.getId() == activeUserId) {
 
-      userPane.getChildren().addAll(initialsPane, nameLabel,activeUser, emailLabel);
-    } else{
-
-      userPane.getChildren().addAll(initialsPane, nameLabel, emailLabel);
+      card.getSubtitles().add("<Active User>");
     }
-    return userPane;
+
+    //card.setOnMouseClicked(this::optionClicked);
+
+    return card;
   }
 
   @Override
@@ -146,8 +141,7 @@ public class UserViewController implements ScreenController {
 
     rootPane.setVisible(false);
 
-    // Fade in animation when showing
-    FXGL.animationBuilder()
+    JavaFXAnimationUtil.animationBuilder()
         .duration(Duration.seconds(0.2))
         .onFinished(
             () -> {
@@ -156,6 +150,7 @@ public class UserViewController implements ScreenController {
             })
         .fadeIn(rootPane)
         .buildAndPlay();
+
   }
 
   @Override
@@ -169,7 +164,7 @@ public class UserViewController implements ScreenController {
   @Override
   public void hide() {
 
-    FXGL.animationBuilder()
+    JavaFXAnimationUtil.animationBuilder()
         .duration(Duration.seconds(0.2))
         .onFinished(
             () -> {
@@ -247,5 +242,23 @@ public class UserViewController implements ScreenController {
   public void setSaveUserUseCase(final SaveActiveUserUseCase saveUserUseCase) {
 
     this.saveUserUseCase = saveUserUseCase;
+  }
+
+  private void onUserCardClicked(SelectableCardController card) {
+
+    if ("new_user".equals(card.getUserData())) {
+      // Handle the case for adding a new user
+      System.out.println("Add new user clicked");
+      //TODO new logic to create a new user
+      // GlobalEventBus.get().post(new OpenAddNewUserEvent());
+      return;
+    }
+
+    User selectedUser = (User) card.getUserData();
+    saveUserUseCase.execute(selectedUser.getId());
+    System.out.println("Active user: " + selectedUser.getEmail() + " was saved on properties.");
+    GlobalEventBus.get().post(new UserSavedAppEvent(selectedUser.getId()));
+    //TODO animación del OK al nuevo usuario seleccionado
+    hide();
   }
 }

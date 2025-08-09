@@ -9,96 +9,96 @@
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="panel-gray" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.settings.SettingsViewController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="700.0" styleClass="popup-root" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.settings.SettingsViewController">
    <children>
-      <Pane fx:id="pnlProfile" layoutX="50.0" layoutY="129.0" prefHeight="285.0" prefWidth="610.0" styleClass="panel-purple" stylesheets="@custom-styles.css">
+      <Pane fx:id="pnlTags" layoutX="50.0" layoutY="129.0" prefHeight="285.0" prefWidth="610.0" styleClass="popup-section" stylesheets="@custom-styles.css">
          <children>
-            <StackPane layoutX="543.0" layoutY="34.0" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
+            <Pane fx:id="pnlTitleBar111121" layoutX="31.0" layoutY="210.0" opacity="0.21" prefHeight="39.0" prefWidth="344.0">
                <children>
-                  <Label fx:id="lbUser" text="AP">
-                     <font>
-                        <Font name="Alatsi Regular" size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </StackPane>
-            <Pane fx:id="pnlTitleBar1111" layoutX="31.0" layoutY="114.0" opacity="0.21" prefHeight="39.0" prefWidth="233.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
-               <children>
-                  <TextField fx:id="inName" layoutX="14.0" layoutY="2.0" prefHeight="26.0" prefWidth="145.0" promptText="this is a input text box" text="Abraham">
-                     <font>
-                        <Font name="Alatsi Regular" size="18.0" />
-                     </font></TextField>
-               </children>
-            </Pane>
-            <Pane fx:id="pnlTitleBar11111" layoutX="287.0" layoutY="114.0" opacity="0.21" prefHeight="39.0" prefWidth="245.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
-               <children>
-                  <TextField fx:id="inLastName" layoutX="14.0" layoutY="2.0" prefHeight="35.0" prefWidth="219.0" promptText="this is a input text box" text="Pereira Fernandez">
-                     <font>
-                        <Font name="Alatsi Regular" size="18.0" />
-                     </font></TextField>
-               </children>
-            </Pane>
-            <Pane fx:id="pnlTitleBar11112" layoutX="31.0" layoutY="210.0" opacity="0.21" prefHeight="39.0" prefWidth="498.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
-               <children>
-                  <TextField fx:id="inEmail" layoutX="15.0" layoutY="2.0" prefHeight="26.0" prefWidth="469.0" promptText="this is a input text box" text="escontrela@live.com">
-                     <font>
-                        <Font name="Alatsi Regular" size="18.0" />
-                     </font></TextField>
-               </children>
-            </Pane>
-            <Label layoutX="34.0" layoutY="23.0" styleClass="text-white-medium" text="Personal Info" />
-            <Label layoutX="34.0" layoutY="82.0" styleClass="text-white-medium" text="First Name" />
-            <Label layoutX="293.0" layoutY="82.0" styleClass="text-white-medium" text="Last Name" />
-            <Label layoutX="34.0" layoutY="179.0" styleClass="text-white-medium" text="Email" />
-            <Label layoutX="34.0" layoutY="53.0" styleClass="text-gray-small" text="Update your personal details here." />
-         </children>
-      </Pane>
-      <Button fx:id="btProfile" alignment="BASELINE_CENTER" layoutX="50.0" layoutY="78.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="105.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Profile" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="625.0" layoutY="24.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-         <graphic>
-            <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
-               <image>
-                  <Image url="@img-gray/close_18dp_gray.png" />
-               </image>
-            </ImageView>
-         </graphic>
-      </Button>
-      <Button fx:id="btSave" alignment="BASELINE_CENTER" layoutX="538.0" layoutY="442.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="121.0" styleClass="button-red" stylesheets="@custom-styles.css" text="Save" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
-      <Label layoutX="37.0" layoutY="17.0" styleClass="text-white-extra-big" text="Settings" />
-      <Button fx:id="btOptionTags" alignment="BASELINE_CENTER" layoutX="167.0" layoutY="78.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="105.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Tags" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
-      <Pane fx:id="pnlTags" layoutX="50.0" layoutY="129.0" prefHeight="285.0" prefWidth="610.0" styleClass="panel-purple" stylesheets="@custom-styles.css" visible="false">
-         <children>
-            <Pane fx:id="pnlTitleBar111121" layoutX="31.0" layoutY="210.0" opacity="0.21" prefHeight="39.0" prefWidth="182.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
-               <children>
-                  <TextField fx:id="inTag" layoutX="15.0" layoutY="2.0" prefHeight="35.0" prefWidth="155.0" promptText="this is a input text box" text="escontrela@live.com">
+                  <TextField fx:id="inTag" layoutX="15.0" layoutY="2.0" prefHeight="35.0" prefWidth="324.0" promptText="this is a input text box" styleClass="popup-text-field" text="escontrela@live.com">
                      <font>
                         <Font name="Alatsi Regular" size="18.0" />
                      </font>
                   </TextField>
                </children>
             </Pane>
-            <Label layoutX="34.0" layoutY="179.0" styleClass="text-white-medium" text="New" />
-            <Button fx:id="btAddTag" alignment="BASELINE_CENTER" layoutX="228.0" layoutY="213.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="55.0" styleClass="button-red" stylesheets="@custom-styles.css" text="add" textFill="WHITE">
+            <Label layoutX="34.0" layoutY="179.0" styleClass="popup-label" text="New" />
+            <Button fx:id="btAddTag" alignment="BASELINE_CENTER" layoutX="394.0" layoutY="213.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="80.0" styleClass="popup-button-primary" stylesheets="@custom-styles.css" text="add" textFill="WHITE">
                <font>
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
             </Button>
          </children>
       </Pane>
+      <Pane fx:id="pnlProfile" layoutX="50.0" layoutY="129.0" prefHeight="285.0" prefWidth="610.0" styleClass="popup-section" stylesheets="@custom-styles.css">
+         <children>
+            <StackPane layoutX="543.0" layoutY="34.0" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-circle" stylesheets="@custom-styles.css">
+               <children>
+                  <Label fx:id="lbUser" styleClass="avatar-text" text="AP">
+                     <font>
+                        <Font name="Alatsi Regular" size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </StackPane>
+            <Pane fx:id="pnlTitleBar1111" layoutX="31.0" layoutY="114.0" opacity="0.21" prefHeight="39.0" prefWidth="233.0" stylesheets="@custom-styles.css">
+               <children>
+                  <TextField fx:id="inName" layoutX="14.0" layoutY="2.0" prefHeight="26.0" prefWidth="145.0" promptText="this is a input text box" style="-fx-text-fill: #3a86ff;" styleClass="popup-text-field" text="Abraham">
+                     <font>
+                        <Font name="Alatsi Regular" size="18.0" />
+                     </font></TextField>
+               </children>
+            </Pane>
+            <Pane fx:id="pnlTitleBar11111" layoutX="287.0" layoutY="114.0" opacity="0.21" prefHeight="39.0" prefWidth="245.0" stylesheets="@custom-styles.css">
+               <children>
+                  <TextField fx:id="inLastName" layoutX="14.0" layoutY="2.0" prefHeight="35.0" prefWidth="219.0" promptText="this is a input text box" styleClass="popup-text-field" text="Pereira Fernandez">
+                     <font>
+                        <Font name="Alatsi Regular" size="18.0" />
+                     </font></TextField>
+               </children>
+            </Pane>
+            <Label layoutX="34.0" layoutY="23.0" styleClass="popup-label" text="Personal Info" />
+            <Label layoutX="34.0" layoutY="82.0" styleClass="popup-label" text="First Name" />
+            <Label layoutX="293.0" layoutY="82.0" styleClass="popup-label" text="Last Name" />
+            <Label layoutX="34.0" layoutY="179.0" styleClass="popup-label" text="Email" />
+            <Label layoutX="34.0" layoutY="53.0" styleClass="text-gray-small" text="Update your personal details here." />
+            <Pane fx:id="pnlTitleBar11112" layoutX="31.0" layoutY="210.0" opacity="0.21" prefHeight="39.0" prefWidth="498.0" stylesheets="@custom-styles.css">
+               <children>
+                  <TextField fx:id="inEmail" layoutX="15.0" layoutY="2.0" prefHeight="26.0" prefWidth="469.0" promptText="this is a input text box" styleClass="popup-text-field" text="escontrela@live.com">
+                     <font>
+                        <Font name="Alatsi Regular" size="18.0" />
+                     </font></TextField>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
+      <Button fx:id="btProfile" alignment="BASELINE_CENTER" layoutX="50.0" layoutY="78.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="105.0" styleClass="popup-tab" stylesheets="@custom-styles.css" text="Profile" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="651.0" layoutY="13.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/close_18dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btSave" alignment="BASELINE_CENTER" layoutX="538.0" layoutY="442.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="121.0" styleClass="popup-button-primary" stylesheets="@custom-styles.css" text="Save" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
+      <Label layoutX="37.0" layoutY="17.0" styleClass="popup-header" text="Settings" />
+      <Button fx:id="btOptionTags" alignment="BASELINE_CENTER" layoutX="167.0" layoutY="78.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="23.0" prefWidth="105.0" styleClass="popup-tab" stylesheets="@custom-styles.css" text="Tags" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
    </children>
 </Pane>

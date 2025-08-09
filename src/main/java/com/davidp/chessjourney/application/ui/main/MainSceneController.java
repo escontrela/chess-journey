@@ -1,13 +1,5 @@
 package com.davidp.chessjourney.application.ui.main;
 
-import static com.almasb.fxgl.dsl.FXGLForKtKt.*;
-import static javafx.application.Platform.runLater;
-
-import com.almasb.fxgl.dsl.FXGL;
-import com.almasb.fxgl.entity.Entity;
-import com.almasb.fxgl.particle.ParticleComponent;
-import com.almasb.fxgl.particle.ParticleEmitter;
-import com.almasb.fxgl.particle.ParticleEmitters;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.*;
@@ -18,12 +10,12 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
-import com.davidp.chessjourney.application.usecases.GetAllTagsUseCase;
+import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.domain.User;
-import com.davidp.chessjourney.domain.common.Tag;
 import com.google.common.eventbus.Subscribe;
 import java.awt.*;
+import java.util.Arrays;
 import java.util.List;
 import java.io.IOException;
 import java.util.HashMap;
@@ -36,12 +28,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 /**
  * This class is responsible for managing the main scene of the application, the main scene controls
@@ -79,6 +70,20 @@ public class MainSceneController implements ScreenController {
   @FXML
   private Text lblChessboard;
 
+  @FXML
+  private HBox taskBar;
+
+  @FXML
+  private StackPane taskOption_analysis;
+
+  @FXML
+  private StackPane taskOption_games;
+
+  @FXML
+  private StackPane taskOption_stats;
+
+  @FXML
+  private StackPane taskOption_settings;
 
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
@@ -87,11 +92,11 @@ public class MainSceneController implements ScreenController {
   // This map is used to cache the screens that are created.
   private final Map<Screens, ScreenController> screenManager = new HashMap<>();
   private static final Point MENU_POSITION = new Point(20, 460);
-  private static final Point SETTINGS_POSITION = new Point(250, 250);
+  private static final Point SETTINGS_POSITION = new Point(320, 180);
   private static final Point BOARD_POSITION = new Point(140, 60);
   private static final Point MEMORY_GAME_POSITION = new Point(140, 60);
   private static final Point DEFEND_GAME_POSITION = new Point(140, 60);
-  private static final Point CHANGE_USER_POSITION = new Point(350, 250);
+  private static final Point CHANGE_USER_POSITION = new Point(120, 180);
   private static final Point USER_STATS_POSITION = new Point(210, 120);
 
 
@@ -114,28 +119,6 @@ public class MainSceneController implements ScreenController {
 
       showInfoPanel(pnlMessage);
 
-      runLater(
-          () -> {
-            // TODO test code, remove it asap
-            ParticleEmitter emitter = ParticleEmitters.newFireEmitter();
-            emitter.setNumParticles(10); // Número de partículas
-            emitter.setSize(5, 10); // Tamaño de las partículas
-
-            emitter.setStartColor(javafx.scene.paint.Color.ORANGE);
-            emitter.setEndColor(Color.RED);
-            emitter.setSize(5, 10);
-
-            Entity fire =
-                entityBuilder()
-                    .at(200, 200) // Posición inicial
-                    .with(new ParticleComponent(emitter)) // Agregar el componente de partículas
-                    .buildAndAttach();
-
-            if (!getGameWorld().getEntities().contains(fire)) {
-
-              getGameWorld().addEntity(fire);
-            }
-          });
     }
   }
 
@@ -334,14 +317,29 @@ public class MainSceneController implements ScreenController {
   @FXML
   public void initialize() {
 
+    initializeTaskBarBehaviour();
     moveMainWindowsSetUp();
     reloadUserInitials(AppProperties.getInstance().getActiveUserId());
     showTextAnimation();
   }
 
+  private void initializeTaskBarBehaviour(){
+
+    List<StackPane> items = Arrays.asList(taskOption_analysis, taskOption_games, taskOption_stats,taskOption_settings);
+
+    for (StackPane item : items) {
+      item.setOnMouseClicked(e -> {
+        items.forEach(i -> i.getStyleClass().remove("selected"));
+        if (!item.getStyleClass().contains("selected")) {
+          item.getStyleClass().add("selected");
+        }
+      });
+    }
+
+  }
   private void showTextAnimation() {
 
-    playTypeWriterEffect(lblChessboard.getText(), lblChessboard,0.1);
+    playTypeWriterEffect(lblChessboard.getText(), lblChessboard,0.04);
     playTypeWriterEffect(lblPractice.getText(), lblPractice,0.1);
 
   }
@@ -392,12 +390,10 @@ public class MainSceneController implements ScreenController {
     User loggedUser = getUserByIdUseCase.execute(userId);
     lbUserInitials.setText(loggedUser.getInitials());
 
-    FXGL.animationBuilder()
-        .duration(Duration.seconds(0.5))
-        .repeat(2)
-        .autoReverse(true)
-        .fadeOut(lbUserInitials)
-        .buildAndPlay();
+    FXAnimationUtil.fadeOut(lbUserInitials, 0.5)
+            .repeat(2)
+            .autoReverse(true)
+            .buildAndPlay();
   }
 
   private Stage stage;
@@ -473,16 +469,22 @@ public class MainSceneController implements ScreenController {
 
 
   private void playTypeWriterEffect(String text, Text textNode, double charInterval) {
-    textNode.setText(""); // Asegurarse de que el Text esté vacío al iniciar
-    StringBuilder currentText = new StringBuilder();
 
-    for (int i = 0; i < text.length(); i++) {
-      int index = i;
-      runOnce(() -> {
-        currentText.append(text.charAt(index)); // Añadir la siguiente letra
-        textNode.setText(currentText.toString());
-          return null;
-      }, javafx.util.Duration.seconds(i * charInterval));
-    }
+      textNode.setText("");
+      StringBuilder currentText = new StringBuilder();
+
+      javafx.animation.Timeline timeline = new javafx.animation.Timeline();
+      for (int i = 0; i < text.length(); i++) {
+          final int index = i;
+          javafx.animation.KeyFrame keyFrame = new javafx.animation.KeyFrame(
+              javafx.util.Duration.seconds(index * charInterval),
+              e -> {
+                  currentText.append(text.charAt(index));
+                  textNode.setText(currentText.toString());
+              }
+          );
+          timeline.getKeyFrames().add(keyFrame);
+      }
+      timeline.play();
   }
 }

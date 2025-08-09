@@ -5,23 +5,49 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="mainPane" prefHeight="900.0" prefWidth="1290.0" style="-fx-border-width: 1; -fx-border-insets: 1; -fx-border-radius: 0; -fx-background-radius: 0; -fx-border-color: #686b75; -fx-background-color: #191b2b; -fx-effect: dropshadow(three-pass-box, derive(white, -20%), 10, 0, 4, 4); -fx-background-size: 1345 793; -fx-background-repeat: no-repeat; -fx-background-opacity: 0.3;" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.main.MainSceneController">
+<Pane fx:id="mainPane" prefHeight="830.0" prefWidth="1290.0" styleClass="root-gemini-style" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.main.MainSceneController">
    <children>
-      <Text fx:id="lblChessboard" fill="#e55c45" layoutX="458.0" layoutY="410.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-red-big" text="Chessboard">
+      <HBox fx:id="taskBar" alignment="CENTER" layoutX="309.0" layoutY="41.0" prefHeight="56.0" prefWidth="678.0" spacing="40.0" styleClass="task-bar">
+         <children>
+            <StackPane fx:id="taskOption_analysis" prefHeight="40.0" prefWidth="97.0" styleClass="task-item">
+               <children>
+                  <Label prefWidth="80.0" text="Analysis" />
+               </children>
+            </StackPane>
+            <StackPane fx:id="taskOption_games" prefHeight="40.0" prefWidth="123.0" styleClass="task-item">
+               <children>
+                  <Label text="Play Games" />
+               </children>
+            </StackPane>
+            <StackPane fx:id="taskOption_stats" prefHeight="40.0" prefWidth="131.0" styleClass="task-item">
+               <children>
+                  <Label text="User Stats" />
+               </children>
+            </StackPane>
+            <StackPane fx:id="taskOption_settings" prefHeight="40.0" prefWidth="131.0" styleClass="task-item">
+               <children>
+                  <Label text="Settings" />
+               </children>
+            </StackPane>
+         </children>
+      </HBox>
+      <Pane fx:id="pnlMessage11" layoutX="194.0" layoutY="55.0" prefHeight="760.0" prefWidth="1065.0" styleClass="panel-black" stylesheets="@custom-styles.css" visible="false" />
+      <Text fx:id="lblChessboard" fill="#e55c45" layoutX="339.0" layoutY="287.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-blue-gradient-big" text="“Some people think that if their opponent plays a beautiful game, it’s okay to lose. I don’t. You have to be merciless.”" wrappingWidth="740.072021484375">
          <font>
             <Font name="Alatsi Regular" size="42.0" />
          </font>
       </Text>
-      <StackPane fx:id="pnlMenu" layoutX="14.0" layoutY="850.0" onMouseClicked="#handleButtonClick" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container" stylesheets="@custom-styles.css">
+      <StackPane fx:id="pnlMenu" layoutX="1192.0" layoutY="51.0" onMouseClicked="#handleButtonClick" prefHeight="37.0" prefWidth="39.0" styleClass="avatar-frame" stylesheets="@custom-styles.css">
          <children>
-            <StackPane prefHeight="37.0" prefWidth="39.0" styleClass="avatar-container-inside" stylesheets="@custom-styles.css">
+            <StackPane prefHeight="37.0" prefWidth="39.0" styleClass="avatar-circle" stylesheets="@custom-styles.css">
                <children>
-                  <Label fx:id="lbUserInitials" text="AP">
+                  <Label fx:id="lbUserInitials" styleClass="avatar-text" text="AP">
                      <font>
                         <Font name="Alatsi Regular" size="14.0" />
                      </font>
@@ -30,7 +56,7 @@
             </StackPane>
          </children>
       </StackPane>
-      <Text fx:id="lblPractice" fill="#686b75" layoutX="681.0" layoutY="412.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-medium" text="for practice">
+      <Text fx:id="lblPractice" fill="#686b75" layoutX="738.0" layoutY="504.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-medium" text="— Magnus Carlsen">
          <font>
             <Font name="Alatsi Regular" size="35.0" />
          </font>
@@ -170,95 +196,95 @@
             </Pane>
          </children>
       </Pane>
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="10.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1242.0" layoutY="14.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
          <graphic>
             <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/close_18dp_gray.png" />
+                  <Image url="@img-white/close_18dp_white.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="btSettings" alignment="BASELINE_CENTER" layoutX="66.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btSettings" alignment="BASELINE_CENTER" layoutX="1128.0" layoutY="52.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
          <graphic>
             <ImageView fx:id="imgSettings" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/settings_18dp_gray.png" />
+                  <Image url="@img-white/settings_18dp_white.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="btRight" alignment="BASELINE_CENTER" layoutX="130.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btRight" alignment="BASELINE_CENTER" layoutX="1036.0" layoutY="52.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
          <graphic>
             <ImageView fx:id="imgMinimize12222" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/chevron_left_18dp_gray.png" />
+                  <Image url="@img-white/chevron_left_18dp_white.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Button fx:id="btLeft" alignment="BASELINE_CENTER" layoutX="168.0" layoutY="7.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btLeft" alignment="BASELINE_CENTER" layoutX="1080.0" layoutY="52.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
          <graphic>
             <ImageView fx:id="imgMinimize12223" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/chevron_right_18dp_gray.png" />
+                  <Image url="@img-white/chevron_right_18dp_white.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
-      <Pane fx:id="pnlMessage" layoutX="718.0" layoutY="670.0" prefHeight="75.0" prefWidth="502.0" styleClass="panel-purple" stylesheets="@custom-styles.css">
+      <Pane fx:id="pnlMessage" layoutX="750.0" layoutY="719.0" prefHeight="75.0" prefWidth="502.0" styleClass="note-panel" stylesheets="@custom-styles.css">
          <children>
-            <Label layoutX="48.0" layoutY="28.0" styleClass=".text-purple-small" text="This is a note that you have to confirm, or not?" textFill="#848ae0">
+            <Label layoutX="70.0" layoutY="30.0" styleClass="note-label" text="This is a note that you have to confirm, or not?" textFill="#8389de">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <ImageView fx:id="imgMinimize12112" fitHeight="27.0" fitWidth="31.0" layoutX="15.0" layoutY="26.0" preserveRatio="true">
+            <ImageView fx:id="imgMinimize12112" fitHeight="27.0" fitWidth="31.0" layoutX="21.0" layoutY="26.0" preserveRatio="true" styleClass="note-icon">
                <image>
-                  <Image url="@img-gray/shield_question_24dp_purple.png" />
+                  <Image url="@img-white/chat_40dp_white.png" />
                </image>
             </ImageView>
-            <Button fx:id="btAdd1211" alignment="BASELINE_CENTER" layoutX="435.0" layoutY="19.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+            <Button fx:id="btAdd1211" alignment="BASELINE_CENTER" layoutX="435.0" layoutY="19.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
                <font>
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
                <graphic>
                   <ImageView fx:id="imgMinimize122" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                      <image>
-                        <Image url="@img-gray/close_18dp_gray.png" />
+                        <Image url="@img-white/close_18dp_white.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
-            <Button fx:id="btAdd12111" alignment="BASELINE_CENTER" layoutX="384.0" layoutY="20.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+            <Button fx:id="btAdd12111" alignment="BASELINE_CENTER" layoutX="384.0" layoutY="19.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
                <font>
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
                <graphic>
                   <ImageView fx:id="imgMinimize1221" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                      <image>
-                        <Image url="@img-gray/check_18dp_gray.png" />
+                        <Image url="@img-white/check_18dp_white.png" />
                      </image>
                   </ImageView>
                </graphic>
             </Button>
          </children>
       </Pane>
-      <ImageView fx:id="imgLogo" fitHeight="49.0" fitWidth="237.0" layoutX="511.0" layoutY="-1.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imgLogo" fitHeight="125.0" fitWidth="189.0" layoutX="34.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@logo/chess-journey-logo-small.png" />
+            <Image url="@logo/chess-journey-logo-modern.png" />
          </image>
       </ImageView>
    </children>

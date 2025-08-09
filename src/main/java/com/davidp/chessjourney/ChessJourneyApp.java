@@ -11,6 +11,7 @@ import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import java.util.logging.Logger;
 import javafx.scene.Scene;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
@@ -46,7 +47,17 @@ public class ChessJourneyApp extends GameApplication {
       ((MainSceneController) mainScreenController).setStage(primaryStage);
 
       Scene scene = new Scene(root);
+      scene.setFill(Color.TRANSPARENT);
       getGameScene().addUINode(scene.getRoot());
+
+      root.setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+
+      FXGL.getGameScene()
+          .getContentRoot()
+          .setBackground(new Background(new BackgroundFill(Color.TRANSPARENT, null, null)));
+      FXGL.getGameScene().setBackgroundColor(Color.TRANSPARENT);
+
+      FXGL.getGameScene().getContentRoot().getScene().setFill(Color.TRANSPARENT);
 
       String userId = String.valueOf(AppProperties.getInstance().getActiveUserId());
       validateUserId(userId);

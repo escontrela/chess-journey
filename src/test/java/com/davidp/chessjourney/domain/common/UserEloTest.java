@@ -39,22 +39,27 @@ public class UserEloTest {
 
     // Crear un ELO para un usuario
     UserElo userElo =
-            new UserElo(
-                    UUID.randomUUID(),
-                    123456789L, // ID de usuario (INT8)
-                    blitzType,
-                    1200, // ELO inicial
-                    LocalDateTime.now());
+        new UserElo(
+            UUID.randomUUID(),
+            123456789L, // ID de usuario (INT8)
+            blitzType,
+            1200, // ELO inicial
+            LocalDateTime.now());
 
-    int exerciseElo = 1400;  // Dificultad del ejercicio
+    int exerciseElo = 1400; // Dificultad del ejercicio
     boolean solvedCorrectly = true;
-    int timeTaken = 90;  // Tiempo que tardó el jugador (en segundos)
-    int expectedTime = 120;  // Tiempo esperado para resolver el ejercicio
+    int timeTaken = 90; // Tiempo que tardó el jugador (en segundos)
+    int expectedTime = 120; // Tiempo esperado para resolver el ejercicio
     int kFactor = 32;
 
-    int newElo = User.calculateNewEloForExercise(
-            userElo.getCurrentElo(), exerciseElo, solvedCorrectly, timeTaken, expectedTime, kFactor
-    );
+    int newElo =
+        User.calculateNewEloForExercise(
+            userElo.getCurrentElo(),
+            exerciseElo,
+            solvedCorrectly,
+            timeTaken,
+            expectedTime,
+            kFactor);
 
     Assertions.assertEquals(1232, newElo);
   }
