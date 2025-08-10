@@ -266,9 +266,9 @@
       </Button>
       <Pane layoutX="16.0" layoutY="65.0" prefHeight="306.0" prefWidth="230.0" styleClass="popup-section-square">
          <children>
-            <ImageView fitHeight="229.0" fitWidth="177.0" layoutX="34.0" layoutY="-34.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="229.0" fitWidth="177.0" layoutX="32.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@avatar/bombardino-crocodilo-avatar.png" />
+                  <Image url="@avatar/cappuccino-assasino-avatar-2.png" />
                </image>
             </ImageView>
             <Pane layoutX="10.0" layoutY="164.0" prefHeight="116.0" prefWidth="212.0" styleClass="popup-section-2">
@@ -280,6 +280,11 @@
                   </Label>
                </children>
             </Pane>
+            <ImageView fx:id="imgLogo" fitHeight="72.0" fitWidth="80.0" layoutX="-2.0" layoutY="-74.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@logo/chess-journey-logo-modern.png" />
+               </image>
+            </ImageView>
          </children>
       </Pane>
       <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="656.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="37.0" prefWidth="35.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="1" textFill="WHITE">
@@ -295,7 +300,7 @@
       <Label fx:id="lblExerciseNum" layoutX="871.0" layoutY="16.0" styleClass="popup-label" text="..." />
       <Label fx:id="lblStatus" layoutX="274.0" layoutY="16.0" styleClass="popup-label" text="..." />
       <Label layoutX="27.0" layoutY="620.0" styleClass="popup-label" text="Difficulty level" />
-      <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="71.0" layoutY="381.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="121.0" styleClass="popup-button-primary" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
+      <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="71.0" layoutY="381.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="121.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
@@ -378,6 +383,7 @@
             <Label layoutX="459.0" layoutY="12.0" styleClass="score-caption" text="RATING" />
          </Pane>
       </Pane>
+      <Label layoutX="93.0" layoutY="17.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text=" |    FOCUS GAME" />
 
    </children>
    <stylesheets>
