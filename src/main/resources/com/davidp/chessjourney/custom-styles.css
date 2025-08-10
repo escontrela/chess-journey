@@ -764,12 +764,12 @@
     -fx-background-radius: 0, 0;
 }
 .text-board-gemini {
-    -fx-text-fill: #E2E8F0; /* Gris muy claro con toque azulado para contraste */
-    -fx-font-size: 14px; /* Un poco más compacto para no robar foco */
+    -fx-text-fill: #4A4A4A; /* Gris oscuro neutro, menos contraste que el negro */
+    -fx-font-size: 14px;
     -fx-font-family: "Alatsi";
-    -fx-font-weight: bold; /* Aumenta la legibilidad en tamaños pequeños */
-    -fx-font-smoothing-type: lcd; /* Mejora la nitidez en pantallas */
-    -fx-opacity: 0.85; /* Evita que el texto sea demasiado “duro” visualmente */
+    -fx-font-weight: bold;
+    -fx-font-smoothing-type: lcd;
+    -fx-opacity: 0.85; /* Un toque de suavidad extra */
 }
 
 /* Contenedor de campos */
@@ -792,11 +792,10 @@
 }
 
 .chessboard-border {
-    -fx-background-color: rgba(255,255,255,0.03); /* leve film para dar contraste */
-    -fx-border-color: #3A3A3A;
+    -fx-background-color: transparent;
     -fx-border-width: 2;
-    -fx-border-radius: 10;
-    -fx-background-radius: 10;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.25), 30, 0.3, 0, 0);
 }
 
 /* end: system design - button 3 */
@@ -927,6 +926,15 @@
     -fx-text-transform: uppercase;    /* convierte el texto a mayúsculas */
 }
 
+.score-name-right {
+    -fx-font-size: 18px;              /* tamaño de fuente más grande */
+    -fx-font-weight: bold;            /* texto en negrita */
+    -fx-text-fill: white;           /* color blanco */
+    -fx-text-alignment: center;       /* centra el texto si es multilínea */
+    -fx-wrap-text: true;              /* permite saltos de línea */
+    -fx-text-transform: uppercase;    /* convierte el texto a mayúsculas */
+}
+
 /* Reloj (tiempo) */
 .score-clock {
     -fx-text-fill: #f0ebd8;
@@ -934,7 +942,13 @@
     -fx-font-weight: bold;
     -fx-font-family: "Alatsi";
 }
-
+/* Reloj (tiempo) para piezas negras */
+.score-clock-black {
+    -fx-text-fill: #7A7E83; /* Gris oscuro con matiz frío */
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Alatsi";
+}
 /* Texto pequeño tipo "RATING" o "Heart rate" */
 .score-caption {
     -fx-text-fill: white;

@@ -10,14 +10,13 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
 <Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1260.0" styleClass="board-gemini-style" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.BoardViewController">
    <children>
-      <Pane layoutX="240.0" layoutY="47.0" prefHeight="701.0" prefWidth="680.0" styleClass="popup-section-square" stylesheets="@custom-styles.css">
+      <Pane layoutX="260.0" layoutY="47.0" prefHeight="640.0" prefWidth="640.0" styleClass="chessboard-border" stylesheets="@custom-styles.css">
          <children>
-            <Pane fx:id="pnlBoard" layoutX="20.0" layoutY="3.0" prefHeight="640.0" prefWidth="640.0" styleClass="chessboard-border">
+            <Pane fx:id="pnlBoard" prefHeight="640.0" prefWidth="640.0" styleClass="chessboard-border">
                <children>
                   <Pane fx:id="a7" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
                   <Pane fx:id="f7" layoutX="400.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
@@ -84,82 +83,82 @@
                   <Pane fx:id="e5" layoutX="320.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
                   <Pane fx:id="e6" layoutX="320.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
                </children></Pane>
-            <Label layoutX="291.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="D" textFill="#303040">
+            <Label layoutX="305.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="D" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="371.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="E" textFill="#303040">
+            <Label layoutX="385.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="E" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="454.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="F" textFill="#303040">
+            <Label layoutX="465.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="F" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="525.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="G" textFill="#303040">
+            <Label layoutX="545.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="G" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="614.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="H" textFill="#303040">
+            <Label layoutX="625.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="H" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="623.0" styleClass="text-board-gemini" text="1" textFill="WHITE">
+            <Label layoutX="2.0" layoutY="560.0" styleClass="text-board-gemini" text="1" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="547.0" styleClass="text-board-gemini" text="2" textFill="WHITE">
+            <Label layoutX="2.0" layoutY="480.0" styleClass="text-board-gemini" text="2" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="462.0" styleClass="text-board-gemini" text="3" textFill="WHITE">
+            <Label layoutX="2.0" layoutY="400.0" styleClass="text-board-gemini" text="3" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="382.0" styleClass="text-board-gemini" text="4" textFill="WHITE">
+            <Label layoutX="2.0" layoutY="320.0" styleClass="text-board-gemini" text="4" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="302.0" styleClass="text-board-gemini" text="5" textFill="WHITE">
+            <Label layoutX="2.0" layoutY="240.0" styleClass="text-board-gemini" text="5" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="229.0" styleClass="text-board-gemini" text="6" textFill="WHITE">
+            <Label layoutX="2.0" layoutY="160.0" styleClass="text-board-gemini" text="6" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="144.0" styleClass="text-board-gemini" text="7" textFill="WHITE">
+            <Label layoutX="2.0" layoutY="80.0" styleClass="text-board-gemini" text="7" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="24.0" layoutY="63.0" styleClass="text-board-gemini" text="8" textFill="WHITE">
+            <Label layoutX="2.0" styleClass="text-board-gemini" text="8" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="50.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="A" textFill="WHITE">
+            <Label layoutX="65.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="A" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="139.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="B" textFill="#303040">
+            <Label layoutX="145.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="B" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="213.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="C" textFill="#303040">
+            <Label layoutX="225.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="C" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
@@ -167,7 +166,7 @@
          </children>
       </Pane>
 
-      <Pane fx:id="pnlTime" layoutX="930.0" layoutY="47.0" prefHeight="352.0" prefWidth="303.0" styleClass="popup-section-2">
+      <Pane fx:id="pnlTime" layoutX="930.0" layoutY="47.0" prefHeight="472.0" prefWidth="303.0" styleClass="popup-section-2">
          <!-- CONTENIDO DEL PANEL DERECHA SUPERIOR (pnlTime) -->
          <children>
             <!-- Cabecera -->
@@ -179,7 +178,7 @@
             <Label layoutX="168.0" layoutY="44.0" styleClass="text-gray-small" text="Black" />
 
             <!-- Lista PGN con scroll -->
-            <ScrollPane fx:id="pgnScroll" fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="64.0" prefHeight="220.0" prefWidth="279.0" styleClass="pgn-box">
+            <ScrollPane fx:id="pgnScroll" fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="64.0" prefHeight="289.0" prefWidth="279.0" styleClass="pgn-box">
                <content>
                   <VBox fx:id="pgnList" fillWidth="true" spacing="6.0" style="-fx-padding: 8;">
                      <!-- Fila de ejemplo (puedes borrarla en runtime) -->
@@ -198,55 +197,88 @@
             </ScrollPane>
 
             <!-- Botonera navegación -->
-            <HBox layoutX="12.0" layoutY="292.0" spacing="10.0">
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="370.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
                <Button fx:id="btnFirst" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
-                        <image><Image url="@img-white/arrow_back_ios_18dp_white.png" /></image>
+                        <image><Image url="@img-white/keyboard_double_arrow_left_24dp_white.png" /></image>
                      </ImageView>
                   </graphic>
                </Button>
                <Button fx:id="btnPrev" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
-                        <image><Image url="@img-white/chevron_left_18dp_white.png" /></image>
+                        <image><Image url="@img-white/keyboard_arrow_left_24dp_white.png" /></image>
                      </ImageView>
                   </graphic>
                </Button>
-               <Button fx:id="btnPlay" onAction="#buttonAction" prefHeight="32.0" prefWidth="56.0" styleClass="button-regular">
+               <Button fx:id="btnPlay" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
-                        <image><Image url="@img-white/arrow_back_ios_18dp_white.png" /></image>
+                        <image><Image url="@img-white/keyboard_arrow_right_24dp_white.png" /></image>
                      </ImageView>
                   </graphic>
                </Button>
                <Button fx:id="btnNext" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
-                        <image><Image url="@img-white/chevron_right_18dp_white.png" /></image>
+                        <image><Image url="@img-white/keyboard_double_arrow_right_24dp_white.png" /></image>
                      </ImageView>
                   </graphic>
                </Button>
-               <Button fx:id="btnLast" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+               <Button fx:id="btnNext1" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
-                        <image><Image url="@img-white/arrow_back_ios_18dp_white.png" /></image>
+                        <image>
+                           <Image url="@img-white/content_copy_24dp_white.png" />
+                        </image>
                      </ImageView>
                   </graphic>
                </Button>
             </HBox>
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="420.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
+               <children>
+                  <Button fx:id="btnFirst1" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                           <image>
+                              <Image url="@img-white/edit_square_24dp_white.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnPrev1" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                           <image>
+                              <Image url="@img-white/share_24dp_white.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+                  <Button fx:id="btnPlay1" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                     <graphic>
+                        <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                           <image>
+                              <Image url="@img-white/star_24dp_white.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </Button>
+               </children>
+            </HBox>
          </children>
       </Pane>
-      <Pane layoutX="930.0" layoutY="420.0" prefHeight="264.0" prefWidth="303.0" styleClass="popup-section-2">
+      <Pane layoutX="930.0" layoutY="526.0" prefHeight="161.0" prefWidth="303.0" styleClass="popup-section-2">
          <children>
-            <Label layoutX="21.0" layoutY="110.0" styleClass="popup-label" text="PGN" />
-            <Label layoutX="21.0" layoutY="46.0" styleClass="popup-label" text="FEN" />
-            <TextField fx:id="inFen" layoutX="12.0" layoutY="64.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="277.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
+            <Label layoutX="21.0" layoutY="83.0" styleClass="popup-label" text="PGN" />
+            <Label layoutX="21.0" layoutY="19.0" styleClass="popup-label" text="FEN" />
+            <TextField fx:id="inFen" layoutX="12.0" layoutY="37.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="277.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
                <font>
                   <Font name="Alatsi Regular" size="12.0" />
                </font>
             </TextField>
-            <TextField fx:id="inPGN" layoutX="14.0" layoutY="131.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
+            <TextField fx:id="inPGN" layoutX="14.0" layoutY="104.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
                <font>
                   <Font name="Alatsi Regular" size="12.0" />
                </font>
@@ -271,7 +303,7 @@
                   <Image url="@avatar/cappuccino-assasino-avatar-2.png" />
                </image>
             </ImageView>
-            <Pane layoutX="10.0" layoutY="164.0" prefHeight="116.0" prefWidth="212.0" styleClass="popup-section-2">
+            <Pane layoutX="10.0" layoutY="168.0" prefHeight="116.0" prefWidth="212.0" styleClass="popup-section-2">
                <children>
                   <Label fx:id="lblGhostMsg" alignment="CENTER" layoutX="9.0" layoutY="7.0" prefHeight="97.0" prefWidth="196.0" styleClass="chat-bubble-text" text="Hola, preparado?" wrapText="true">
                      <font>
@@ -317,8 +349,8 @@
             <Pane layoutX="36.0" layoutY="-3.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #C7C2B3;">
                <children>
                   <!-- Rating -->
-                  <Label layoutX="20.0" layoutY="15.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
-                  <Label layoutX="23.0" layoutY="27.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="1470" textFill="#f0ebd8">
+                  <Label layoutX="20.0" layoutY="5.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
+                  <Label layoutX="23.0" layoutY="17.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="1470" textFill="#f0ebd8">
                      <font>
                         <Font size="14.0" />
                      </font>
@@ -350,37 +382,35 @@
          <!-- LADO NEGRAS (DCHA) -->
          <Pane layoutX="656.0" layoutY="10.0" prefHeight="52.0" prefWidth="560.0">
             <Label layoutX="14.0" layoutY="12.0" styleClass="score-caption" text="Heart rate" />
-            <Label fx:id="lblBlackHR" layoutX="14.0" layoutY="28.0" text="113 BPM" />
-
-            <!-- Nombre + avatar mini -->
-            <ImageView fitHeight="28.0" fitWidth="28.0" layoutX="349.0" layoutY="12.0" preserveRatio="true">
-               <image>
-                  <Image url="@avatar/robot-avatar-4.png" />
-               </image>
-            </ImageView>
-
-            <!-- Rating -->
-            <Label layoutX="278.0" layoutY="28.0" styleClass="score-caption-right" text="RATING" />
+            <Label fx:id="lblBlackHR" layoutX="18.0" layoutY="28.0" styleClass="score-value-white" text="113 BPM" />
 
             <!-- Victorias del rival (a la derecha) -->
-            <Label fx:id="lblBlackWins" alignment="CENTER" layoutX="516.0" layoutY="8.0" prefWidth="36.0" styleClass="score-pill" text="0" />
-            <Label layoutX="229.0" layoutY="15.0" styleClass="score-name" text="Martin Pereira" textFill="#1d2d44">
+            <Label fx:id="lblBlackWins" alignment="CENTER" layoutX="520.0" layoutY="-3.0" prefHeight="60.0" prefWidth="36.0" styleClass="score-pill" text="0" />
+            <Label layoutX="97.0" layoutY="8.0" styleClass="score-clock-black" text="24:32" textFill="#f0ebd8">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="458.0" layoutY="28.0" styleClass="score-value" text="(1440)" textFill="#1d2d44">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Circle fill="WHITE" layoutX="205.0" layoutY="28.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
-            <Label layoutX="97.0" layoutY="8.0" styleClass="score-clock" text="24:32" textFill="#f0ebd8">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="459.0" layoutY="12.0" styleClass="score-caption" text="RATING" />
+            <Label layoutX="527.0" layoutY="1.0" prefHeight="13.0" prefWidth="33.0" styleClass="score-caption-right" text="LEVEL" />
+            <Pane layoutX="198.0" layoutY="-3.0" prefHeight="60.0" prefWidth="242.0" style="-fx-background-color: transparent;">
+               <children>
+                  <Label layoutX="76.0" layoutY="2.0" prefHeight="56.0" prefWidth="105.0" styleClass="score-name-right" stylesheets="@custom-styles.css" text="MARTIN PEREIRA" textFill="#f0ebd8" wrapText="true">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </Pane>
+         <Pane layoutX="1096.0" layoutY="7.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #C7C2B3;">
+            <children>
+               <Label layoutX="20.0" layoutY="5.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
+               <Label layoutX="23.0" layoutY="17.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="1440" textFill="#f0ebd8">
+                  <font>
+                     <Font size="14.0" />
+                  </font>
+               </Label>
+            </children>
          </Pane>
       </Pane>
       <Label layoutX="93.0" layoutY="17.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text=" |    FOCUS GAME" />
