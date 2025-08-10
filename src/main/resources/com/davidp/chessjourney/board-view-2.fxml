@@ -3,10 +3,13 @@
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
@@ -163,85 +166,93 @@
             </Label>
          </children>
       </Pane>
-      <Label layoutX="299.0" layoutY="772.0" styleClass="text-white-medium" stylesheets="@custom-styles.css" text="Abraham Pereira" textFill="#f0ebd8">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="429.0" layoutY="771.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@flags/es_gl.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="226.0" layoutY="767.0" prefHeight="23.0" prefWidth="92.0" styleClass="text-white-medium" stylesheets="@custom-styles.css" text="(1470)" textFill="#f0ebd8">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label fx:id="lblBlackTime" layoutX="485.0" layoutY="766.0" styleClass="text-white-medium" text="24:32" textFill="#1d2d44">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="715.0" layoutY="764.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@flags/es_gl.png" />
-         </image>
-      </ImageView>
-      <Label layoutX="825.0" layoutY="760.0" styleClass="text-white-medium" text="(1440)" textFill="#1d2d44">
-         <font>
-            <Font size="14.0" />
-         </font>
-      </Label>
-      <Label layoutX="752.0" layoutY="748.0" styleClass="text-white-medium" text="24:32" textFill="#f0ebd8">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Label layoutX="898.0" layoutY="766.0" styleClass="text-white-medium" text="Martin Pereira" textFill="#1d2d44">
-         <font>
-            <Font size="18.0" />
-         </font>
-      </Label>
-      <Circle fill="WHITE" layoutX="815.0" layoutY="771.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle fill="#030303" layoutX="470.0" layoutY="783.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
-      <Pane fx:id="pnlTime" layoutX="1003.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="popup-section-2">
+
+      <Pane fx:id="pnlTime" layoutX="930.0" layoutY="47.0" prefHeight="352.0" prefWidth="303.0" styleClass="popup-section-2">
+         <!-- CONTENIDO DEL PANEL DERECHA SUPERIOR (pnlTime) -->
          <children>
-            <Label fx:id="lblBoardType" layoutX="14.0" layoutY="14.0" styleClass="text-white-medium" text="board" />
-            <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="43.0" layoutY="95.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="145.0" styleClass="button-red" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
-               <font>
-                  <Font name="Alatsi Regular" size="18.0" />
-               </font>
-            </Button>
-            <Label fx:id="lblStatus" layoutX="89.0" layoutY="50.0" styleClass="text-gray-small" text="..." />
-            <Label fx:id="lblExerciseNum" layoutX="202.0" layoutY="171.0" styleClass="text-gray-small" text="..." />
-            <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="80.0" styleClass="popup-button-primary" stylesheets="@custom-styles.css" text="easy" textFill="WHITE">
-               <font>
-                  <Font name="Alatsi Regular" size="18.0" />
-               </font>
-            </Button>
-            <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="109.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="80.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="mid" textFill="WHITE">
-               <font>
-                  <Font name="Alatsi Regular" size="18.0" />
-               </font>
-            </Button>
-         </children></Pane>
-      <Pane layoutX="1003.0" layoutY="265.0" prefHeight="468.0" prefWidth="230.0" styleClass="popup-section-2">
+            <!-- Cabecera -->
+            <Label layoutX="16.0" layoutY="14.0" styleClass="popup-label" text="PGN" />
+
+            <!-- Encabezados columnas -->
+            <Label layoutX="16.0" layoutY="44.0" styleClass="text-gray-small" text="#" />
+            <Label layoutX="44.0" layoutY="44.0" styleClass="text-gray-small" text="White" />
+            <Label layoutX="168.0" layoutY="44.0" styleClass="text-gray-small" text="Black" />
+
+            <!-- Lista PGN con scroll -->
+            <ScrollPane fx:id="pgnScroll" fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="64.0" prefHeight="220.0" prefWidth="279.0" styleClass="pgn-box">
+               <content>
+                  <VBox fx:id="pgnList" fillWidth="true" spacing="6.0" style="-fx-padding: 8;">
+                     <!-- Fila de ejemplo (puedes borrarla en runtime) -->
+                     <HBox spacing="10.0">
+                        <Label styleClass="pgn-index" text="1." />
+                        <Label styleClass="pgn-move-white" text="e4" />
+                        <Label styleClass="pgn-move-black" text="...c5" />
+                     </HBox>
+                     <HBox spacing="10.0">
+                        <Label styleClass="pgn-index" text="2." />
+                        <Label styleClass="pgn-move-white" text="Nf3" />
+                        <Label styleClass="pgn-move-black" text="d6" />
+                     </HBox>
+                  </VBox>
+               </content>
+            </ScrollPane>
+
+            <!-- Botonera navegación -->
+            <HBox layoutX="12.0" layoutY="292.0" spacing="10.0">
+               <Button fx:id="btnFirst" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                  <graphic>
+                     <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                        <image><Image url="@img-white/arrow_back_ios_18dp_white.png" /></image>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button fx:id="btnPrev" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                  <graphic>
+                     <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                        <image><Image url="@img-white/chevron_left_18dp_white.png" /></image>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button fx:id="btnPlay" onAction="#buttonAction" prefHeight="32.0" prefWidth="56.0" styleClass="button-regular">
+                  <graphic>
+                     <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                        <image><Image url="@img-white/arrow_back_ios_18dp_white.png" /></image>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button fx:id="btnNext" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                  <graphic>
+                     <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                        <image><Image url="@img-white/chevron_right_18dp_white.png" /></image>
+                     </ImageView>
+                  </graphic>
+               </Button>
+               <Button fx:id="btnLast" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                  <graphic>
+                     <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                        <image><Image url="@img-white/arrow_back_ios_18dp_white.png" /></image>
+                     </ImageView>
+                  </graphic>
+               </Button>
+            </HBox>
+         </children>
+      </Pane>
+      <Pane layoutX="930.0" layoutY="420.0" prefHeight="264.0" prefWidth="303.0" styleClass="popup-section-2">
          <children>
-            <Label layoutX="20.0" layoutY="395.0" styleClass="popup-label" text="PGN" />
-            <Label layoutX="20.0" layoutY="331.0" styleClass="popup-label" text="FEN" />
-            <TextField fx:id="inFen" layoutX="11.0" layoutY="349.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
+            <Label layoutX="21.0" layoutY="110.0" styleClass="popup-label" text="PGN" />
+            <Label layoutX="21.0" layoutY="46.0" styleClass="popup-label" text="FEN" />
+            <TextField fx:id="inFen" layoutX="12.0" layoutY="64.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="277.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
                <font>
                   <Font name="Alatsi Regular" size="12.0" />
                </font>
             </TextField>
-            <TextField fx:id="inPGN" layoutX="13.0" layoutY="413.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
+            <TextField fx:id="inPGN" layoutX="14.0" layoutY="131.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
                <font>
                   <Font name="Alatsi Regular" size="12.0" />
                </font>
             </TextField>
          </children></Pane>
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1215.0" layoutY="6.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1230.0" layoutY="4.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
@@ -257,10 +268,10 @@
          <children>
             <ImageView fitHeight="229.0" fitWidth="177.0" layoutX="34.0" layoutY="-34.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@avatar/cappuccino-assasino-avatar-2.png" />
+                  <Image url="@avatar/bombardino-crocodilo-avatar.png" />
                </image>
             </ImageView>
-            <Pane layoutX="10.0" layoutY="164.0" prefHeight="116.0" prefWidth="212.0" styleClass="chat-bubble">
+            <Pane layoutX="10.0" layoutY="164.0" prefHeight="116.0" prefWidth="212.0" styleClass="popup-section-2">
                <children>
                   <Label fx:id="lblGhostMsg" alignment="CENTER" layoutX="9.0" layoutY="7.0" prefHeight="97.0" prefWidth="196.0" styleClass="chat-bubble-text" text="Hola, preparado?" wrapText="true">
                      <font>
@@ -271,6 +282,103 @@
             </Pane>
          </children>
       </Pane>
+      <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="656.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="37.0" prefWidth="35.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="1" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
+      <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="80.0" layoutY="656.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="2" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
+      <Label fx:id="lblExerciseNum" layoutX="871.0" layoutY="16.0" styleClass="popup-label" text="..." />
+      <Label fx:id="lblStatus" layoutX="274.0" layoutY="16.0" styleClass="popup-label" text="..." />
+      <Label layoutX="27.0" layoutY="620.0" styleClass="popup-label" text="Difficulty level" />
+      <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="71.0" layoutY="381.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="121.0" styleClass="popup-button-primary" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
+      <Label fx:id="lblBoardType" layoutX="551.0" layoutY="16.0" styleClass="popup-label" text="..." />
+
+      <!-- ===== Bottom score/time strip ===== -->
+      <Pane fx:id="pnlScoreStrip" layoutX="16.0" layoutY="720.0" prefHeight="72.0" prefWidth="1228.0" styleClass="score-strip">
+
+         <!-- LADO BLANCAS (IZQ) -->
+         <Pane layoutX="12.0" layoutY="10.0" prefHeight="52.0" prefWidth="560.0">
+            <!-- Victorias -->
+            <Label fx:id="lblWhiteWins" alignment="CENTER" layoutX="0.0" layoutY="-3.0" prefHeight="60.0" prefWidth="36.0" styleClass="score-pill" text="0" />
+            <Pane layoutX="36.0" layoutY="-3.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #C7C2B3;">
+               <children>
+                  <!-- Rating -->
+                  <Label layoutX="20.0" layoutY="15.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
+                  <Label layoutX="23.0" layoutY="27.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="1470" textFill="#f0ebd8">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Pane layoutX="116.0" layoutY="-3.0" prefHeight="60.0" prefWidth="242.0" style="-fx-background-color: white;">
+               <children>
+                  <Label layoutX="57.0" layoutY="1.0" prefHeight="52.0" prefWidth="121.0" styleClass="score-name-left" stylesheets="@custom-styles.css" text="ABRAHAM PEREIRA" textFill="#f0ebd8">
+                     <font>
+                        <Font size="18.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+            <Label layoutX="493.0" layoutY="12.0" styleClass="score-caption" text="Heart rate" />
+            <Label fx:id="lblWhiteHR" layoutX="495.0" layoutY="30.0" styleClass="score-value-white" text="92 BPM" />
+            <Label fx:id="lblBlackTime" layoutX="384.0" layoutY="9.0" styleClass="score-clock" text="24:32" textFill="#1d2d44">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="6.0" layoutY="1.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="LEVEL" />
+         </Pane>
+
+         <!-- DIVISOR CENTRAL (opcional) -->
+         <Pane layoutX="606.0" layoutY="6.0" prefHeight="60.0" prefWidth="1.0" styleClass="score-divider" />
+
+         <!-- LADO NEGRAS (DCHA) -->
+         <Pane layoutX="656.0" layoutY="10.0" prefHeight="52.0" prefWidth="560.0">
+            <Label layoutX="14.0" layoutY="12.0" styleClass="score-caption" text="Heart rate" />
+            <Label fx:id="lblBlackHR" layoutX="14.0" layoutY="28.0" text="113 BPM" />
+
+            <!-- Nombre + avatar mini -->
+            <ImageView fitHeight="28.0" fitWidth="28.0" layoutX="349.0" layoutY="12.0" preserveRatio="true">
+               <image>
+                  <Image url="@avatar/robot-avatar-4.png" />
+               </image>
+            </ImageView>
+
+            <!-- Rating -->
+            <Label layoutX="278.0" layoutY="28.0" styleClass="score-caption-right" text="RATING" />
+
+            <!-- Victorias del rival (a la derecha) -->
+            <Label fx:id="lblBlackWins" alignment="CENTER" layoutX="516.0" layoutY="8.0" prefWidth="36.0" styleClass="score-pill" text="0" />
+            <Label layoutX="229.0" layoutY="15.0" styleClass="score-name" text="Martin Pereira" textFill="#1d2d44">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="458.0" layoutY="28.0" styleClass="score-value" text="(1440)" textFill="#1d2d44">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Circle fill="WHITE" layoutX="205.0" layoutY="28.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
+            <Label layoutX="97.0" layoutY="8.0" styleClass="score-clock" text="24:32" textFill="#f0ebd8">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <Label layoutX="459.0" layoutY="12.0" styleClass="score-caption" text="RATING" />
+         </Pane>
+      </Pane>
+
    </children>
    <stylesheets>
       <URL value="@custom-styles.css" />

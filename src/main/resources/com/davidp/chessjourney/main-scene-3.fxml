@@ -17,22 +17,22 @@
          <children>
             <StackPane fx:id="taskOption_analysis" prefHeight="40.0" prefWidth="97.0" styleClass="task-item">
                <children>
-                  <Label prefWidth="80.0" text="Analysis" />
+                  <Label prefWidth="80.0" text="Home" />
                </children>
             </StackPane>
             <StackPane fx:id="taskOption_games" prefHeight="40.0" prefWidth="123.0" styleClass="task-item">
                <children>
-                  <Label text="Play Games" />
+                  <Label text="Analysis" />
                </children>
             </StackPane>
             <StackPane fx:id="taskOption_stats" prefHeight="40.0" prefWidth="131.0" styleClass="task-item">
                <children>
-                  <Label text="User Stats" />
+                  <Label text="Focus" />
                </children>
             </StackPane>
             <StackPane fx:id="taskOption_settings" prefHeight="40.0" prefWidth="131.0" styleClass="task-item">
                <children>
-                  <Label text="Settings" />
+                  <Label text="Training" />
                </children>
             </StackPane>
          </children>

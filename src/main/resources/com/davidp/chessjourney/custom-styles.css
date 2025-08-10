@@ -401,8 +401,9 @@
 }
 
 .popup-section-2 {
-    /* Fondo oscuro con degradado sutil */
-    -fx-background-color: linear-gradient(to bottom, #1C1C22, #17171C);
+     -fx-background-color: #262626;
+        -fx-padding: 16;
+        -fx-spacing: 12;
 
     /* Bordes redondeados */
     -fx-background-radius: 14;
@@ -412,14 +413,9 @@
     -fx-border-color: rgba(255,255,255,0.08);
     -fx-border-width: 1;
 
-    /* Espaciado interior */
-    -fx-padding: 16;  /* más compacto que 20 para que parezca globo */
-
-    /* Separación entre hijos si es un contenedor tipo VBox/HBox */
-    -fx-spacing: 12;
 
     /* Sombra para dar sensación de flotante */
-    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 14, 0, 0, 2);
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 14, 0, 0, 2);*/
 }
 
 /* Contenedor de campos */
@@ -885,6 +881,158 @@
     -fx-background-color: rgba(59,130,246,0.18);
 }
 /** End: avatar for chessboard **/
+
+/** Start: board panel strip **/
+/* Contenedor principal de la franja inferior */
+.score-strip {
+    -fx-background-color: linear-gradient(to bottom, #1a1a1a, #0f0f0f);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 1;
+}
+
+/* Pastillas de victorias */
+.score-pill {
+    -fx-background-color: #4A5D23;
+   /* -fx-background-radius: 50%; */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+/* Nombre del jugador */
+.score-name {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-weight: bold;
+}
+
+/* Nombre del jugador */
+.score-name-white {
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-weight: bold;
+}
+
+.score-name-left {
+    -fx-font-size: 18px;              /* tamaño de fuente más grande */
+    -fx-font-weight: bold;            /* texto en negrita */
+    -fx-text-fill: black;           /* color blanco */
+    -fx-text-alignment: center;       /* centra el texto si es multilínea */
+    -fx-wrap-text: true;              /* permite saltos de línea */
+    -fx-text-transform: uppercase;    /* convierte el texto a mayúsculas */
+}
+
+/* Reloj (tiempo) */
+.score-clock {
+    -fx-text-fill: #f0ebd8;
+    -fx-font-size:28px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Alatsi";
+}
+
+/* Texto pequeño tipo "RATING" o "Heart rate" */
+.score-caption {
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-family: "Alatsi";
+}
+.score-caption-right {
+    -fx-text-fill: rgba(0,0,0,0.6);
+    -fx-font-size: 10px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Valor numérico (rating, BPM...) */
+.score-value {
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Valor numérico (rating, BPM...) */
+.score-value-white {
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Divisor vertical central */
+.score-divider {
+    -fx-background-color: rgba(255,255,255,0.15);
+}
+/** End: board panel strip **/
+
+/** Start: board panel PGN **/
+/* Etiqueta de cabecera PGN */
+.popup-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Panel gris para texto (como el recuadro PGN) */
+.panel-gray-for-text {
+    -fx-background-color: #1E1E1E;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+}
+
+/* Estilo para índice de jugada */
+.pgn-index {
+    -fx-text-fill: #888888;
+    -fx-font-size: 13px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Estilo para jugada de blancas */
+.pgn-move-white {
+    -fx-text-fill: #E6E6E6;
+    -fx-font-size: 14px;
+    -fx-font-family: "Alatsi";
+}
+
+.pgn-box {
+    -fx-background-color: transparent;      /* fondo exterior */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* Quitar el fondo de la zona de scroll */
+.pgn-box .viewport {
+    -fx-background-color: transparent;      /* fondo del viewport */
+}
+/* Quitar bordes visibles */
+.pgn-content {
+    -fx-background-color: transparent;
+}
+/* Estilo para jugada de negras */
+.pgn-move-black {
+    -fx-text-fill: #C8C8C8;
+    -fx-font-size: 14px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Botón regular para navegación */
+.button-regular {
+    -fx-background-color: #2C2C2C;
+    -fx-background-radius: 6;
+    -fx-border-color: #3A3A3A;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+.button-regular:hover {
+    -fx-background-color: #3A3A3A;
+}
+.button-regular:pressed {
+    -fx-background-color: #1A1A1A;
+}
+/** End: board panel PGN **/
+
 
 /******************************************/
 /** END: NEW SYSTEM DESIGN  10-01-2025 **/
