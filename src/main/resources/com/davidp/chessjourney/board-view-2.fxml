@@ -10,202 +10,202 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="980.0" styleClass="panel-gray" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.BoardViewController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1260.0" styleClass="board-gemini-style" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.BoardViewController">
    <children>
-      <Pane layoutX="10.0" layoutY="47.0" prefHeight="701.0" prefWidth="680.0" styleClass="panel-menu" stylesheets="@custom-styles.css">
+      <Pane layoutX="240.0" layoutY="47.0" prefHeight="701.0" prefWidth="680.0" styleClass="popup-section-square" stylesheets="@custom-styles.css">
          <children>
-            <Label layoutX="7.0" layoutY="623.0" styleClass="text-purple-small" text="1" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label layoutX="50.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="A" textFill="WHITE">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Label layoutX="139.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="B" textFill="#303040">
-               <font>
-                  <Font size="14.0" />
-               </font>
-            </Label>
-            <Pane fx:id="pnlBoard" layoutX="20.0" layoutY="31.0" prefHeight="640.0" prefWidth="640.0" style="-fx-border-color: #303040; -fx-border-width: 1; -fx-border-insets: -3;">
+            <Pane fx:id="pnlBoard" layoutX="20.0" layoutY="3.0" prefHeight="640.0" prefWidth="640.0" styleClass="chessboard-border">
                <children>
-                  <Pane fx:id="a7" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f7" layoutX="400.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e7" layoutX="320.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h7" layoutX="560.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g7" layoutX="480.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="a6" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b6" layoutX="80.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c6" layoutX="160.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d6" layoutX="240.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f6" layoutX="400.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g6" layoutX="480.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h6" layoutX="560.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b5" layoutX="80.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="a5" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c5" layoutX="160.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f5" layoutX="400.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h5" layoutX="560.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g5" layoutX="480.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="a4" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b4" layoutX="80.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c4" layoutX="160.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d4" layoutX="240.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e4" layoutX="320.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f4" layoutX="400.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g4" layoutX="480.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h4" layoutX="560.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b3" layoutX="80.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="a3" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c3" layoutX="160.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f3" layoutX="400.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e3" layoutX="320.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h3" layoutX="560.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g3" layoutX="480.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="a2" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b2" layoutX="80.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c2" layoutX="160.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d2" layoutX="240.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e2" layoutX="320.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f2" layoutX="400.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g2" layoutX="480.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h2" layoutX="560.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b1" layoutX="80.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="a1" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d1" layoutX="240.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c1" layoutX="160.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f1" layoutX="400.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e1" layoutX="320.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h1" layoutX="560.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g1" layoutX="480.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c7" layoutX="160.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b7" layoutX="80.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="a8" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="b8" layoutX="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="c8" layoutX="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e8" layoutX="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="f8" layoutX="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="g8" layoutX="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="h8" layoutX="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d8" layoutX="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d7" layoutX="240.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d3" layoutX="240.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="d5" layoutX="240.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e5" layoutX="320.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black" stylesheets="@custom-styles.css" />
-                  <Pane fx:id="e6" layoutX="320.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a7" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f7" layoutX="400.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e7" layoutX="320.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h7" layoutX="560.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g7" layoutX="480.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a6" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b6" layoutX="80.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c6" layoutX="160.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d6" layoutX="240.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f6" layoutX="400.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g6" layoutX="480.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h6" layoutX="560.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b5" layoutX="80.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a5" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c5" layoutX="160.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f5" layoutX="400.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h5" layoutX="560.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g5" layoutX="480.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a4" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b4" layoutX="80.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c4" layoutX="160.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d4" layoutX="240.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e4" layoutX="320.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f4" layoutX="400.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g4" layoutX="480.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h4" layoutX="560.0" layoutY="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b3" layoutX="80.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a3" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c3" layoutX="160.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f3" layoutX="400.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e3" layoutX="320.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h3" layoutX="560.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g3" layoutX="480.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a2" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b2" layoutX="80.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c2" layoutX="160.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d2" layoutX="240.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e2" layoutX="320.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f2" layoutX="400.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g2" layoutX="480.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h2" layoutX="560.0" layoutY="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b1" layoutX="80.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a1" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d1" layoutX="240.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c1" layoutX="160.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f1" layoutX="400.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e1" layoutX="320.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h1" layoutX="560.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g1" layoutX="480.0" layoutY="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c7" layoutX="160.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b7" layoutX="80.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="a8" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="b8" layoutX="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="c8" layoutX="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e8" layoutX="320.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="f8" layoutX="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="g8" layoutX="480.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="h8" layoutX="560.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d8" layoutX="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d7" layoutX="240.0" layoutY="80.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d3" layoutX="240.0" layoutY="400.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="d5" layoutX="240.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e5" layoutX="320.0" layoutY="240.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-black-gemini" stylesheets="@custom-styles.css" />
+                  <Pane fx:id="e6" layoutX="320.0" layoutY="160.0" prefHeight="80.0" prefWidth="80.0" styleClass="chessboard-square-white-gemini" stylesheets="@custom-styles.css" />
                </children></Pane>
-            <Label layoutX="213.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="C" textFill="#303040">
+            <Label layoutX="291.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="D" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="291.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="D" textFill="#303040">
+            <Label layoutX="371.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="E" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="371.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="E" textFill="#303040">
+            <Label layoutX="454.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="F" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="454.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="F" textFill="#303040">
+            <Label layoutX="525.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="G" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="525.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="G" textFill="#303040">
+            <Label layoutX="614.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="H" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="614.0" layoutY="675.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-purple-small" text="H" textFill="#303040">
+            <Label layoutX="24.0" layoutY="623.0" styleClass="text-board-gemini" text="1" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="547.0" styleClass="text-purple-small" text="2" textFill="WHITE">
+            <Label layoutX="24.0" layoutY="547.0" styleClass="text-board-gemini" text="2" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="462.0" styleClass="text-purple-small" text="3" textFill="WHITE">
+            <Label layoutX="24.0" layoutY="462.0" styleClass="text-board-gemini" text="3" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="382.0" styleClass="text-purple-small" text="4" textFill="WHITE">
+            <Label layoutX="24.0" layoutY="382.0" styleClass="text-board-gemini" text="4" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="302.0" styleClass="text-purple-small" text="5" textFill="WHITE">
+            <Label layoutX="24.0" layoutY="302.0" styleClass="text-board-gemini" text="5" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="229.0" styleClass="text-purple-small" text="6" textFill="WHITE">
+            <Label layoutX="24.0" layoutY="229.0" styleClass="text-board-gemini" text="6" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="144.0" styleClass="text-purple-small" text="7" textFill="WHITE">
+            <Label layoutX="24.0" layoutY="144.0" styleClass="text-board-gemini" text="7" textFill="WHITE">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <Label layoutX="7.0" layoutY="63.0" styleClass="text-purple-small" text="8" textFill="WHITE">
+            <Label layoutX="24.0" layoutY="63.0" styleClass="text-board-gemini" text="8" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="50.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="A" textFill="WHITE">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="139.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="B" textFill="#303040">
+               <font>
+                  <Font size="14.0" />
+               </font>
+            </Label>
+            <Label layoutX="213.0" layoutY="624.0" prefHeight="18.0" prefWidth="13.0" styleClass="text-board-gemini" text="C" textFill="#303040">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
          </children>
       </Pane>
-      <Label layoutX="64.0" layoutY="12.0" styleClass="text-white-medium" stylesheets="@custom-styles.css" text="Abraham Pereira" textFill="#f0ebd8">
+      <Label layoutX="299.0" layoutY="772.0" styleClass="text-white-medium" stylesheets="@custom-styles.css" text="Abraham Pereira" textFill="#f0ebd8">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="26.0" layoutY="17.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="429.0" layoutY="771.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@flags/es_gl.png" />
          </image>
       </ImageView>
-      <Label layoutX="210.0" layoutY="13.0" prefHeight="23.0" prefWidth="92.0" styleClass="text-white-medium" stylesheets="@custom-styles.css" text="(1470)" textFill="#f0ebd8">
+      <Label layoutX="226.0" layoutY="767.0" prefHeight="23.0" prefWidth="92.0" styleClass="text-white-medium" stylesheets="@custom-styles.css" text="(1470)" textFill="#f0ebd8">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label fx:id="lblBlackTime" layoutX="609.0" layoutY="13.0" styleClass="text-white-medium" text="24:32" textFill="#1d2d44">
+      <Label fx:id="lblBlackTime" layoutX="485.0" layoutY="766.0" styleClass="text-white-medium" text="24:32" textFill="#1d2d44">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="26.0" layoutY="767.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="715.0" layoutY="764.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@flags/es_gl.png" />
          </image>
       </ImageView>
-      <Label layoutX="204.0" layoutY="762.0" styleClass="text-white-medium" text="(1440)" textFill="#1d2d44">
+      <Label layoutX="825.0" layoutY="760.0" styleClass="text-white-medium" text="(1440)" textFill="#1d2d44">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
-      <Label layoutX="608.0" layoutY="762.0" styleClass="text-white-medium" text="24:32" textFill="#f0ebd8">
+      <Label layoutX="752.0" layoutY="748.0" styleClass="text-white-medium" text="24:32" textFill="#f0ebd8">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Label layoutX="64.0" layoutY="762.0" styleClass="text-white-medium" text="Martin Pereira" textFill="#1d2d44">
+      <Label layoutX="898.0" layoutY="766.0" styleClass="text-white-medium" text="Martin Pereira" textFill="#1d2d44">
          <font>
             <Font size="18.0" />
          </font>
       </Label>
-      <Circle fill="WHITE" layoutX="283.0" layoutY="774.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
-      <Circle fill="#030303" layoutX="283.0" layoutY="25.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
-      <Pane fx:id="pnlTime" layoutX="709.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="panel-menu">
+      <Circle fill="WHITE" layoutX="815.0" layoutY="771.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
+      <Circle fill="#030303" layoutX="470.0" layoutY="783.0" radius="6.0" stroke="WHITE" strokeType="INSIDE" />
+      <Pane fx:id="pnlTime" layoutX="1003.0" layoutY="47.0" prefHeight="203.0" prefWidth="230.0" styleClass="popup-section-2">
          <children>
             <Label fx:id="lblBoardType" layoutX="14.0" layoutY="14.0" styleClass="text-white-medium" text="board" />
             <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="43.0" layoutY="95.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="145.0" styleClass="button-red" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
@@ -215,65 +215,62 @@
             </Button>
             <Label fx:id="lblStatus" layoutX="89.0" layoutY="50.0" styleClass="text-gray-small" text="..." />
             <Label fx:id="lblExerciseNum" layoutX="202.0" layoutY="171.0" styleClass="text-gray-small" text="..." />
-            <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="61.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="easy" textFill="WHITE">
+            <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="80.0" styleClass="popup-button-primary" stylesheets="@custom-styles.css" text="easy" textFill="WHITE">
                <font>
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
             </Button>
-            <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="109.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="61.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="mid" textFill="WHITE">
+            <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="109.0" layoutY="155.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="80.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="mid" textFill="WHITE">
                <font>
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
             </Button>
          </children></Pane>
-      <Pane layoutX="709.0" layoutY="279.0" prefHeight="468.0" prefWidth="230.0" styleClass="panel-menu">
+      <Pane layoutX="1003.0" layoutY="265.0" prefHeight="468.0" prefWidth="230.0" styleClass="popup-section-2">
          <children>
-            <Pane fx:id="pnlTitleBar1111" layoutX="1.0" layoutY="355.0" opacity="0.21" prefHeight="39.0" prefWidth="224.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
-               <children>
-                  <TextField fx:id="inFen" layoutX="10.0" layoutY="2.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
-                     <font>
-                        <Font name="Alatsi Regular" size="12.0" />
-                     </font>
-                  </TextField>
-               </children>
-            </Pane>
-            <Pane fx:id="pnlTitleBar11111" layoutX="1.0" layoutY="420.0" opacity="0.21" prefHeight="39.0" prefWidth="224.0" styleClass="panel-gray-for-text" stylesheets="@custom-styles.css">
-               <children>
-                  <TextField fx:id="inPGN" layoutX="10.0" layoutY="2.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" stylesheets="@custom-styles.css" text="Bb5+">
-                     <font>
-                        <Font name="Alatsi Regular" size="12.0" />
-                     </font>
-                  </TextField>
-               </children>
-            </Pane>
-            <Label layoutX="6.0" layoutY="395.0" styleClass="text-gray-small" text="PGN" />
-            <Label layoutX="6.0" layoutY="331.0" styleClass="text-gray-small" text="FEN" />
-            <ImageView fitHeight="64.0" fitWidth="61.0" layoutX="6.0" layoutY="58.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@sample/other/ghost-bot.png" />
-               </image>
-            </ImageView>
-            <Pane layoutX="69.0" layoutY="36.0" prefHeight="69.0" prefWidth="151.0" style="-fx-background-color: white; -fx-border-radius: 40; -fx-background-radius: 10;">
-               <children>
-                  <Label fx:id="lblGhostMsg" layoutX="20.0" layoutY="7.0" prefHeight="55.0" prefWidth="121.0" text="Hola, preparado?" wrapText="true">
-                     <font>
-                        <Font size="12.0" />
-                     </font></Label>
-               </children>
-            </Pane>
+            <Label layoutX="20.0" layoutY="395.0" styleClass="popup-label" text="PGN" />
+            <Label layoutX="20.0" layoutY="331.0" styleClass="popup-label" text="FEN" />
+            <TextField fx:id="inFen" layoutX="11.0" layoutY="349.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
+               <font>
+                  <Font name="Alatsi Regular" size="12.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="inPGN" layoutX="13.0" layoutY="413.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
+               <font>
+                  <Font name="Alatsi Regular" size="12.0" />
+               </font>
+            </TextField>
          </children></Pane>
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="931.0" layoutY="8.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-gray" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1215.0" layoutY="6.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
          <graphic>
             <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/close_18dp_gray.png" />
+                  <Image url="@img-white/close_18dp_white.png" />
                </image>
             </ImageView>
          </graphic>
       </Button>
+      <Pane layoutX="16.0" layoutY="65.0" prefHeight="306.0" prefWidth="230.0" styleClass="popup-section-square">
+         <children>
+            <ImageView fitHeight="229.0" fitWidth="177.0" layoutX="34.0" layoutY="-34.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@avatar/cappuccino-assasino-avatar-2.png" />
+               </image>
+            </ImageView>
+            <Pane layoutX="10.0" layoutY="164.0" prefHeight="116.0" prefWidth="212.0" styleClass="chat-bubble">
+               <children>
+                  <Label fx:id="lblGhostMsg" alignment="CENTER" layoutX="9.0" layoutY="7.0" prefHeight="97.0" prefWidth="196.0" styleClass="chat-bubble-text" text="Hola, preparado?" wrapText="true">
+                     <font>
+                        <Font size="12.0" />
+                     </font>
+                  </Label>
+               </children>
+            </Pane>
+         </children>
+      </Pane>
    </children>
    <stylesheets>
       <URL value="@custom-styles.css" />
