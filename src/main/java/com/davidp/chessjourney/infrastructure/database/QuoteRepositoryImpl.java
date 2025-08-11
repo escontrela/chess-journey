@@ -24,7 +24,8 @@ public class QuoteRepositoryImpl implements QuoteRepository {
     @Override
     public Quote save(Quote quote) {
         String sql = "INSERT INTO quotes (text, author) VALUES (?, ?) RETURNING id";
-        try (PreparedStatement stmt = dataSource.getConnection().prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, quote.getText());
             stmt.setString(2, quote.getAuthor());
 
@@ -42,7 +43,8 @@ public class QuoteRepositoryImpl implements QuoteRepository {
     @Override
     public Optional<Quote> getRandomQuote() {
         String sql = "SELECT * FROM quotes ORDER BY RANDOM() LIMIT 1";
-        try (PreparedStatement stmt = dataSource.getConnection().prepareStatement(sql)) {
+        try (Connection conn = dataSource.getConnection()) {
+            PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 return Optional.of(new Quote(
@@ -61,7 +63,10 @@ public class QuoteRepositoryImpl implements QuoteRepository {
     public List<Quote> getAllQuotes() {
         String sql = "SELECT * FROM quotes";
         List<Quote> quotes = new ArrayList<>();
-        try (PreparedStatement stmt = dataSource.getConnection().prepareStatement(sql)) {
+
+        try (Connection conn = dataSource.getConnection()) {
+
+            PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 quotes.add(new Quote(

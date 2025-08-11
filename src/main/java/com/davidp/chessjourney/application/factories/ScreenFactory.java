@@ -28,6 +28,7 @@ public class ScreenFactory {
     BOARD("/com/davidp/chessjourney/board-view-2.fxml"),
     MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
     DEFEND_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
+    TACTIC_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
     EXERCISE_RESULTS_PANEL("/com/davidp/chessjourney/exercise-result-view.fxml"),
     PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml"),
     CHANGE_USER("/com/davidp/chessjourney/user-change.fxml"),
@@ -76,6 +77,8 @@ public class ScreenFactory {
         return getMemoryGameScreen();
       case DEFEND_GAME:
         return getDefendGameScreen();
+      case TACTIC_GAME:
+        return getTacticGameScreen();
       case PROMOTE_PANEL:
         return getPromotePanelScreen();
       case EXERCISE_RESULTS_PANEL:
@@ -148,6 +151,15 @@ public class ScreenFactory {
   protected ScreenController getMemoryGameScreen() {
 
     FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.MEMORY_GAME.resourceName());
+    var controller = objectFxmlBundle.getController();
+    controller.setMemoryGameUseCase(UseCaseFactory.createGuessMemoryGameUseCase());
+    controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getTacticGameScreen() {
+
+    FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.TACTIC_GAME.resourceName());
     var controller = objectFxmlBundle.getController();
     controller.setMemoryGameUseCase(UseCaseFactory.createGuessMemoryGameUseCase());
     controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
