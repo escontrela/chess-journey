@@ -2,9 +2,11 @@ package com.davidp.chessjourney.api;
 
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
+import com.davidp.chessjourney.domain.Quote;
 import com.davidp.chessjourney.domain.User;
 import io.javalin.Javalin;
 import io.javalin.http.Context;
+import io.javalin.http.Handler;
 
 /**
  * Controlador para manejar las peticiones relacionadas con el usuario activo. Proporciona un
@@ -14,23 +16,18 @@ import io.javalin.http.Context;
  */
 public class ActiveUserController {
 
-  private final GetUserByIdUseCase getUserByIdUseCase;
+  private  GetUserByIdUseCase getUserByIdUseCase = null;
 
-  private final Javalin app;
+  private ActiveUserController(){}
 
   public ActiveUserController(GetUserByIdUseCase getUserByIdUseCase) {
 
     this.getUserByIdUseCase = getUserByIdUseCase;
-    this.app = Javalin.create();
-    configureRoutes();
+
   }
 
-  private void configureRoutes() {
 
-    app.get("/chessjourney/activeUser", this::getActiveUser);
-  }
-
-  private void getActiveUser(Context ctx) {
+  public Handler getActiveUser = ctx -> {
 
     long activeUserId = AppProperties.getInstance().getActiveUserId();
     User user = getUserByIdUseCase.execute(activeUserId);
@@ -42,17 +39,8 @@ public class ActiveUserController {
     }
 
     ctx.json(new UserResponse(user));
-  }
 
-  public void start(int port) {
-
-    app.start(port);
-  }
-
-  public void stop() {
-
-    app.stop();
-  }
+  };
 
   private static class UserResponse {
 

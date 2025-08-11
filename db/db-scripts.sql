@@ -275,3 +275,18 @@ CREATE TABLE user_exercise_stats (
     difficulty_id UUID NOT NULL REFERENCES difficulty_levels(id) ON DELETE CASCADE  -- Dificultad del ejercicio
 );
 
+CREATE TABLE IF NOT EXISTS quotes (
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(500) NOT NULL,
+    author VARCHAR(100) NOT NULL
+);
+
+-- Insertar algunas quotes iniciales
+INSERT INTO quotes (text, author) VALUES
+('Some people think that if their opponent plays a beautiful game, it''s okay to lose. I don''t. You have to be merciless.', 'Magnus Carlsen'),
+('Chess is life in miniature. Chess is struggle, chess is battles.', 'Garry Kasparov'),
+('Every chess master was once a beginner.', 'Irving Chernev'),
+('Chess is the gymnasium of the mind.', 'Blaise Pascal'),
+('When you see a good move, look for a better one.', 'Emanuel Lasker');
+
+

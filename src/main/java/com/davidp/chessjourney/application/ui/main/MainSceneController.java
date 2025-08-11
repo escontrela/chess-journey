@@ -11,7 +11,9 @@ import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
+import com.davidp.chessjourney.application.usecases.GetRandomQuoteUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
+import com.davidp.chessjourney.domain.Quote;
 import com.davidp.chessjourney.domain.User;
 import com.google.common.eventbus.Subscribe;
 import java.awt.*;
@@ -339,9 +341,11 @@ public class MainSceneController implements ScreenController {
   }
   private void showTextAnimation() {
 
-    playTypeWriterEffect(lblChessboard.getText(), lblChessboard,0.04);
-    playTypeWriterEffect(lblPractice.getText(), lblPractice,0.1);
+      GetRandomQuoteUseCase getRandomQuoteUseCase = UseCaseFactory.createGetRandomQuoteUseCase();
+      Quote randomQuote = getRandomQuoteUseCase.execute();
 
+      playTypeWriterEffect(randomQuote.getText(), lblChessboard, 0.04);
+      playTypeWriterEffect("— " + randomQuote.getAuthor(), lblPractice, 0.1);
   }
 
   private void moveMainWindowsSetUp() {
