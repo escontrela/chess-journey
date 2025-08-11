@@ -768,7 +768,7 @@ public class TacticViewController implements ScreenController {
         this.memoryGameUseCase = memoryGameUseCase;
         this.boardType = BoardType.MEMORY;
         this.btStart.setVisible(true);
-        this.lblBoardType.setText("The memory game!");
+        this.lblBoardType.setText("The tactics game!");
         playTypeWriterEffect("¿Preparado?, pulsa en el botón de inicio.", lblGhostMsg, 0.02);
     }
 

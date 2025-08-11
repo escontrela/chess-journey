@@ -300,7 +300,7 @@
          <children>
             <ImageView fitHeight="229.0" fitWidth="177.0" layoutX="32.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@avatar/cappuccino-assasino-avatar-2.png" />
+                  <Image url="@avatar/bombardino-crocodilo-avatar.png" />
                </image>
             </ImageView>
             <Pane layoutX="10.0" layoutY="168.0" prefHeight="116.0" prefWidth="212.0" styleClass="popup-section-2">
@@ -413,7 +413,7 @@
             </children>
          </Pane>
       </Pane>
-      <Label layoutX="93.0" layoutY="17.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text=" |    FOCUS GAME" />
+      <Label layoutX="93.0" layoutY="17.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text=" |    TACTIC GAME" />
 
    </children>
    <stylesheets>
