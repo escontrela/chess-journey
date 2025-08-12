@@ -135,8 +135,14 @@ public class TacticViewController implements ScreenController {
           }
 
           @Override
-          public void onPGNChanged(String newPGN) {
+          public void onSANChanged(String newSAN) {
             PGNMove();
+          }
+
+          @Override
+          public void onPGNChanged(String newPGN) {
+            //TODO place the new PGN on the board
+            // This is not implemented yet, but we can use the PGNService to parse
           }
         });
 

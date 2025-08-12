@@ -46,7 +46,7 @@ public class PGNEditorController extends Pane {
 
   public interface PGNEditorKeyListener {
     void onFenChanged(String newFen);
-
+    void onSANChanged(String newSAN);
     void onPGNChanged(String newPGN);
   }
 
@@ -117,6 +117,15 @@ public class PGNEditorController extends Pane {
         keyListener.onPGNChanged(txtPGN.getText());
       }
     }
+    if (isSANInputField(event)) {
+      if (keyListener != null) {
+        keyListener.onSANChanged(txtSAN.getText());
+      }
+    }
+  }
+
+  private boolean isSANInputField(KeyEvent event) {
+    return event.getSource() == txtSAN;
   }
 
   private boolean isPGNInputField(KeyEvent event) {

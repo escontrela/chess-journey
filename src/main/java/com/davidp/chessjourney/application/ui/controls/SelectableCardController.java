@@ -12,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelectableCardController extends Pane {
