@@ -24,7 +24,7 @@ public class PGNEditorController extends Pane {
   @FXML private Button btCloseCtrlPGN;
 
   @FXML private Button btnCopyFen;
-
+  @FXML private Button btMaxMin;
   @FXML private Button btnCopyPGN;
 
   @FXML private ImageView imgClose1;
@@ -38,19 +38,13 @@ public class PGNEditorController extends Pane {
   private PGNEditorActionListener actionListener;
   private PGNEditorKeyListener keyListener;
 
-  /**
-   * Property synchronized with txtFen's text.
-   */
+  /** Property synchronized with txtFen's text. */
   private final StringProperty fenProperty = new SimpleStringProperty();
 
-  /**
-   * Property synchronized with txtPGN's text.
-   */
+  /** Property synchronized with txtPGN's text. */
   private final StringProperty pgnProperty = new SimpleStringProperty();
 
-  /**
-   * Property synchronized with txtSAN's text.
-   */
+  /** Property synchronized with txtSAN's text. */
   private final StringProperty sanProperty = new SimpleStringProperty();
 
   public interface PGNEditorActionListener {
@@ -59,11 +53,15 @@ public class PGNEditorController extends Pane {
     void onFenCopyClicked();
 
     void onPGNCopyClicked();
+
+    void onMaxMinButtonClicked();
   }
 
   public interface PGNEditorKeyListener {
     void onFenChanged(String newFen);
+
     void onSANChanged(String newSAN);
+
     void onPGNChanged(String newPGN);
   }
 
@@ -93,23 +91,17 @@ public class PGNEditorController extends Pane {
     }
   }
 
-  /**
-   * Property synchronized with txtFen's text.
-   */
+  /** Property synchronized with txtFen's text. */
   public StringProperty fenProperty() {
     return fenProperty;
   }
 
-  /**
-   * Property synchronized with txtPGN's text.
-   */
+  /** Property synchronized with txtPGN's text. */
   public StringProperty pgnProperty() {
     return pgnProperty;
   }
 
-  /**
-   * Property synchronized with txtSAN's text.
-   */
+  /** Property synchronized with txtSAN's text. */
   public StringProperty sanProperty() {
     return sanProperty;
   }
@@ -143,8 +135,15 @@ public class PGNEditorController extends Pane {
       if (actionListener != null) {
         actionListener.onPGNCopyClicked();
       }
+    } else if (isMaxMinButtonClicked(event)) {
+
+      if (actionListener != null) {
+        actionListener.onMaxMinButtonClicked();
+      }
     }
   }
+
+
 
   @FXML
   void handleKeyPress(KeyEvent event) {
@@ -184,6 +183,11 @@ public class PGNEditorController extends Pane {
   private boolean idPGNCopyButtonClicked(ActionEvent event) {
 
     return event.getSource() == btnCopyPGN;
+  }
+
+  private boolean isMaxMinButtonClicked(ActionEvent event) {
+
+    return btMaxMin == event.getSource();
   }
 
   private boolean isTxtFenPressed(ActionEvent event) {

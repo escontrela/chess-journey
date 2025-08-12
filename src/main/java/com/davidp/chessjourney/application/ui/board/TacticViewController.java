@@ -160,6 +160,14 @@ public class TacticViewController implements ScreenController {
       public void onPGNCopyClicked() {
         // No hacer nada
       }
+
+      @Override
+      public void onMaxMinButtonClicked() {
+
+          //TODO fix it!
+          pnlPGNControl.setLayoutY(710 - 60);
+          pnlPGNControl.setPrefHeight(pnlPGNControl.getHeight() + 60);
+      }
     });
 
     // Inicializa el estilo del botón según el estado del panel
