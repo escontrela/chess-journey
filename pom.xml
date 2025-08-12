@@ -168,7 +168,7 @@
             <configuration>
                 <java>
                     <googleJavaFormat>
-                        <version>1.7</version>
+                        <version>1.28.0</version>
                     </googleJavaFormat>
                 </java>
             </configuration>
