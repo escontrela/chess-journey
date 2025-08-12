@@ -33,6 +33,31 @@ public class PGNEditorController extends Pane {
 
   @FXML private TextField txtSAN;
 
+  private PGNEditorActionListener actionListener;
+  private PGNEditorKeyListener keyListener;
+
+  public interface PGNEditorActionListener {
+    void onCloseButtonClicked();
+
+    void onFenCopyClicked();
+
+    void onPGNCopyClicked();
+  }
+
+  public interface PGNEditorKeyListener {
+    void onFenChanged(String newFen);
+
+    void onPGNChanged(String newPGN);
+  }
+
+  public void setPGNEditorActionListener(PGNEditorActionListener listener) {
+    this.actionListener = listener;
+  }
+
+  public void setPGNEditorKeyListener(PGNEditorKeyListener listener) {
+    this.keyListener = listener;
+  }
+
   public PGNEditorController() {
 
     FXMLLoader fxmlLoader =
@@ -59,14 +84,22 @@ public class PGNEditorController extends Pane {
 
     if (isButtonCloseClicked(event)) {
 
-      // TODO event handler should be notified to close the PGN editor
+      if (actionListener != null) {
+        actionListener.onCloseButtonClicked();
+      }
 
     } else if (isTxtFenPressed(event)) {
 
       txtFen.copy();
+      if (actionListener != null) {
+        actionListener.onFenCopyClicked();
+      }
     } else if (idPGNCopyButtonClicked(event)) {
 
       txtPGN.copy();
+      if (actionListener != null) {
+        actionListener.onPGNCopyClicked();
+      }
     }
   }
 
@@ -74,12 +107,15 @@ public class PGNEditorController extends Pane {
   void handleKeyPress(KeyEvent event) {
 
     if (isFenInputField(event)) {
-      // TODO we should notify the event handler that the FEN has changed
+      if (keyListener != null) {
+        keyListener.onFenChanged(txtFen.getText());
+      }
     }
 
     if (isPGNInputField(event)) {
-
-      // TODO we should notify the event handler that the PGN has changed
+      if (keyListener != null) {
+        keyListener.onPGNChanged(txtPGN.getText());
+      }
     }
   }
 
