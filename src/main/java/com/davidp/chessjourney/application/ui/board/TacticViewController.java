@@ -120,6 +120,43 @@ public class TacticViewController implements ScreenController {
     initializeBoardPanes();
 
     pnlBoard.setOnMousePressed(this::onMousePressed);
+
+    pnlPGNControl.setPGNEditorKeyListener(
+        new PGNEditorController.PGNEditorKeyListener() {
+          @Override
+          public void onFenChanged(String newFen) {
+
+            cleanPieces();
+
+            final GameState fenParserResponse =
+                    fenService.parseString(Fen.createCustom(inFen.getText()));
+
+            showPiecesOnBoard(fenParserResponse);
+          }
+
+          @Override
+          public void onPGNChanged(String newPGN) {
+            PGNMove();
+          }
+        });
+
+    pnlPGNControl.setPGNEditorActionListener(new PGNEditorController.PGNEditorActionListener() {
+      @Override
+      public void onCloseButtonClicked() {
+
+        pnlPGNControl.setVisible(false);
+      }
+
+      @Override
+      public void onFenCopyClicked() {
+        // No hacer nada
+      }
+
+      @Override
+      public void onPGNCopyClicked() {
+        // No hacer nada
+      }
+    });
   }
 
   private void onMousePressed(MouseEvent event) {
@@ -553,114 +590,118 @@ public class TacticViewController implements ScreenController {
 
       if (event.getCode() == KeyCode.ENTER) {
 
-        ChessBoard chessBoard = ChessBoardFactory.createFromFEN(Fen.createCustom(inFen.getText()));
+        PGNMove();
+      }
+    }
+  }
 
-        ChessRules chessrules = new ChessRules();
+  private void PGNMove() {
+    ChessBoard chessBoard = ChessBoardFactory.createFromFEN(Fen.createCustom(inFen.getText()));
 
-        // Castling test
-        GameMove posChessMove = pgnService.fromAlgebraic(inPGN.getText(), chessBoard);
+    ChessRules chessrules = new ChessRules();
 
-        if (posChessMove instanceof CastlingMove castlingMove) {
+    // Castling test
+    GameMove posChessMove = pgnService.fromAlgebraic(inPGN.getText(), chessBoard);
 
-          boolean validMove =
-              chessrules.isValidCastlingMove(
-                  castlingMove.kingMove().getFrom(),
-                  castlingMove.kingMove().getTo(),
-                  chessBoard.getFen());
+    if (posChessMove instanceof CastlingMove castlingMove) {
 
-          System.out.println("Is it a valid move castlingMove:" + validMove);
+      boolean validMove =
+          chessrules.isValidCastlingMove(
+              castlingMove.kingMove().getFrom(),
+              castlingMove.kingMove().getTo(),
+              chessBoard.getFen());
 
-          Pane kingPane = boardPanes.get(castlingMove.kingMove().getFrom());
-          Pane rookPane = boardPanes.get(castlingMove.rookMove().getFrom());
-          Pane kingPaneTo = boardPanes.get(castlingMove.kingMove().getTo());
-          Pane rookPaneTo = boardPanes.get(castlingMove.rookMove().getTo());
+      System.out.println("Is it a valid move castlingMove:" + validMove);
 
-          PieceView kingView = (PieceView) kingPane.getChildren().getFirst();
-          PieceView rookView = (PieceView) rookPane.getChildren().getFirst();
+      Pane kingPane = boardPanes.get(castlingMove.kingMove().getFrom());
+      Pane rookPane = boardPanes.get(castlingMove.rookMove().getFrom());
+      Pane kingPaneTo = boardPanes.get(castlingMove.kingMove().getTo());
+      Pane rookPaneTo = boardPanes.get(castlingMove.rookMove().getTo());
 
-          freeSquare(kingPane);
-          freeSquare(rookPane);
+      PieceView kingView = (PieceView) kingPane.getChildren().getFirst();
+      PieceView rookView = (PieceView) rookPane.getChildren().getFirst();
 
-          addPiece(kingPaneTo, kingView, castlingMove.kingMove().getTo());
-          addPiece(rookPaneTo, rookView, castlingMove.rookMove().getTo());
-        }
+      freeSquare(kingPane);
+      freeSquare(rookPane);
 
-        if (posChessMove instanceof RegularMove regularMove) {
+      addPiece(kingPaneTo, kingView, castlingMove.kingMove().getTo());
+      addPiece(rookPaneTo, rookView, castlingMove.rookMove().getTo());
+    }
 
-          boolean isCapture = regularMove.isCapture();
-          boolean validMove =
-              chessrules.isValidMoveWithCapture(
-                  regularMove.getMoves().getFirst().getFrom(),
-                  regularMove.getMoves().getFirst().getTo(),
-                  chessBoard.getFen(),
-                  isCapture);
+    if (posChessMove instanceof RegularMove regularMove) {
 
-          System.out.println(
-              "Is it a valid move regularMove:"
-                  + validMove
-                  + " check:"
-                  + posChessMove.isCheck()
-                  + " isCapture:"
-                  + isCapture);
+      boolean isCapture = regularMove.isCapture();
+      boolean validMove =
+          chessrules.isValidMoveWithCapture(
+              regularMove.getMoves().getFirst().getFrom(),
+              regularMove.getMoves().getFirst().getTo(),
+              chessBoard.getFen(),
+              isCapture);
 
-          if (!validMove) {
+      System.out.println(
+          "Is it a valid move regularMove:"
+              + validMove
+              + " check:"
+              + posChessMove.isCheck()
+              + " isCapture:"
+              + isCapture);
 
-            throw new RuntimeException("Is not a valid move:" + regularMove);
-          }
+      if (!validMove) {
 
-          PiecePosition pieceToMove =
-              chessBoard.getPiece(regularMove.getMoves().getFirst().getFrom());
+        throw new RuntimeException("Is not a valid move:" + regularMove);
+      }
 
-          Pane fromPane = boardPanes.get(regularMove.getMoves().getFirst().getFrom());
-          Pane toPane = boardPanes.get(regularMove.getMoves().getFirst().getTo());
+      PiecePosition pieceToMove =
+          chessBoard.getPiece(regularMove.getMoves().getFirst().getFrom());
 
-          PieceView pieceView = (PieceView) fromPane.getChildren().getFirst();
+      Pane fromPane = boardPanes.get(regularMove.getMoves().getFirst().getFrom());
+      Pane toPane = boardPanes.get(regularMove.getMoves().getFirst().getTo());
 
-          freeSquare(fromPane);
+      PieceView pieceView = (PieceView) fromPane.getChildren().getFirst();
 
-          if (isCapture) {
+      freeSquare(fromPane);
 
-            // TODO aqui deberíamos emitir un sonido de captura
-            freeSquare(toPane);
-          }
+      if (isCapture) {
 
-          addPiece(toPane, pieceView, regularMove.getMoves().getFirst().getTo());
+        // TODO aqui deberíamos emitir un sonido de captura
+        freeSquare(toPane);
+      }
 
-          if (regularMove.isCheck() || regularMove.isMate()) {
+      addPiece(toPane, pieceView, regularMove.getMoves().getFirst().getTo());
 
-            PieceColor preMoveMotActiveColor = chessBoard.getGameState().getNotActiveColor();
+      if (regularMove.isCheck() || regularMove.isMate()) {
 
-            // Necesitamos hacer el movimiento en el tablero:
-            chessBoard.movePiece(
-                pieceToMove.getPiece(),
-                regularMove.getMoves().getFirst().getFrom(),
-                regularMove.getMoves().getFirst().getTo());
-            chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
+        PieceColor preMoveMotActiveColor = chessBoard.getGameState().getNotActiveColor();
 
-            System.out.println("new FEN:" + chessBoard.getFen().getStringValue());
+        // Necesitamos hacer el movimiento en el tablero:
+        chessBoard.movePiece(
+            pieceToMove.getPiece(),
+            regularMove.getMoves().getFirst().getFrom(),
+            regularMove.getMoves().getFirst().getTo());
+        chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
 
-            if (chessrules.isCheckOrMate(chessBoard.getFen())) {
-              System.out.println("check or mate!");
-              // where is the king?
-              Pos opponentKingPos =
-                  chessBoard
-                      .getAllPiecePositionsOfType(PieceType.KING, preMoveMotActiveColor)
-                      .getFirst();
-              Pane opponentKingPane = boardPanes.get(opponentKingPos);
-              PieceView kingView = (PieceView) opponentKingPane.getChildren().getFirst();
+        System.out.println("new FEN:" + chessBoard.getFen().getStringValue());
 
-              opponentKingPane.setStyle("-fx-background-color: #FF0000;");
-              // TODO aqui deberíamos emitir un sonido de check!
-            } else {
-              System.out.println("Error on PGN input, is it not check or mate!");
-            }
-          }
+        if (chessrules.isCheckOrMate(chessBoard.getFen())) {
+          System.out.println("check or mate!");
+          // where is the king?
+          Pos opponentKingPos =
+              chessBoard
+                  .getAllPiecePositionsOfType(PieceType.KING, preMoveMotActiveColor)
+                  .getFirst();
+          Pane opponentKingPane = boardPanes.get(opponentKingPos);
+          PieceView kingView = (PieceView) opponentKingPane.getChildren().getFirst();
 
-          // TODO validar si es promotionMove!!! -> podría ser el caso anterior (un c8) pero con
-          // promoción!!
-          // TODO el caso de promotionMove puede interferiro con otros...
+          opponentKingPane.setStyle("-fx-background-color: #FF0000;");
+          // TODO aqui deberíamos emitir un sonido de check!
+        } else {
+          System.out.println("Error on PGN input, is it not check or mate!");
         }
       }
+
+      // TODO validar si es promotionMove!!! -> podría ser el caso anterior (un c8) pero con
+      // promoción!!
+      // TODO el caso de promotionMove puede interferiro con otros...
     }
   }
 
