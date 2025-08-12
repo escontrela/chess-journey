@@ -147,7 +147,6 @@ public class TacticViewController implements ScreenController {
     pnlPGNControl.setPGNEditorActionListener(new PGNEditorController.PGNEditorActionListener() {
       @Override
       public void onCloseButtonClicked() {
-
         pnlPGNControl.setVisible(false);
       }
 
@@ -163,10 +162,13 @@ public class TacticViewController implements ScreenController {
 
       @Override
       public void onMaxMinButtonClicked() {
-
-          //TODO fix it!
-          pnlPGNControl.setLayoutY(710 - 60);
-          pnlPGNControl.setPrefHeight(pnlPGNControl.getHeight() + 60);
+        boolean newMaximizedState = !pnlPGNControl.isMaximized();
+        pnlPGNControl.setMaximized(newMaximizedState);
+        if (newMaximizedState) {
+          pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() - 80);
+        } else {
+          pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() + 80);
+        }
       }
     });
 

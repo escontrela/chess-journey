@@ -8,6 +8,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
@@ -31,7 +32,7 @@ public class PGNEditorController extends Pane {
 
   @FXML private TextField txtFen;
 
-  @FXML private TextField txtPGN;
+  @FXML private TextArea txtPGN;
 
   @FXML private TextField txtSAN;
 
@@ -46,6 +47,8 @@ public class PGNEditorController extends Pane {
 
   /** Property synchronized with txtSAN's text. */
   private final StringProperty sanProperty = new SimpleStringProperty();
+
+  private boolean isMaximized = false;
 
   public interface PGNEditorActionListener {
     void onCloseButtonClicked();
@@ -106,12 +109,39 @@ public class PGNEditorController extends Pane {
     return sanProperty;
   }
 
+  public boolean isMaximized() {
+    return isMaximized;
+  }
+
+  public void setMaximized(boolean maximized) {
+    this.isMaximized = maximized;
+    updateMaxMinButtonStyle();
+    if (maximized) {
+      setPrefHeight(getPrefHeight() + 80);
+      txtPGN.setPrefHeight(txtPGN.getPrefHeight() + 50);
+    } else {
+      setPrefHeight(getPrefHeight() - 80);
+      txtPGN.setPrefHeight(txtPGN.getPrefHeight() - 50);
+    }
+  }
+
+  private void updateMaxMinButtonStyle() {
+    btMaxMin.getStyleClass().removeAll("button-regular", "button-regular-pressed");
+    if (isMaximized) {
+      btMaxMin.getStyleClass().add("button-regular-pressed");
+    } else {
+      btMaxMin.getStyleClass().add("button-regular");
+    }
+  }
+
   @FXML
   private void initialize() {
     // Synchronize properties with text fields
     fenProperty.bindBidirectional(txtFen.textProperty());
     pgnProperty.bindBidirectional(txtPGN.textProperty());
     sanProperty.bindBidirectional(txtSAN.textProperty());
+    btMaxMin.getStyleClass().add("button-regular");
+    txtPGN.setWrapText(true);
   }
 
   @FXML
