@@ -2,6 +2,8 @@ package com.davidp.chessjourney.application.ui.controls;
 
 import java.io.IOException;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -35,6 +37,21 @@ public class PGNEditorController extends Pane {
 
   private PGNEditorActionListener actionListener;
   private PGNEditorKeyListener keyListener;
+
+  /**
+   * Property synchronized with txtFen's text.
+   */
+  private final StringProperty fenProperty = new SimpleStringProperty();
+
+  /**
+   * Property synchronized with txtPGN's text.
+   */
+  private final StringProperty pgnProperty = new SimpleStringProperty();
+
+  /**
+   * Property synchronized with txtSAN's text.
+   */
+  private final StringProperty sanProperty = new SimpleStringProperty();
 
   public interface PGNEditorActionListener {
     void onCloseButtonClicked();
@@ -76,8 +93,34 @@ public class PGNEditorController extends Pane {
     }
   }
 
+  /**
+   * Property synchronized with txtFen's text.
+   */
+  public StringProperty fenProperty() {
+    return fenProperty;
+  }
+
+  /**
+   * Property synchronized with txtPGN's text.
+   */
+  public StringProperty pgnProperty() {
+    return pgnProperty;
+  }
+
+  /**
+   * Property synchronized with txtSAN's text.
+   */
+  public StringProperty sanProperty() {
+    return sanProperty;
+  }
+
   @FXML
-  private void initialize() {}
+  private void initialize() {
+    // Synchronize properties with text fields
+    fenProperty.bindBidirectional(txtFen.textProperty());
+    pgnProperty.bindBidirectional(txtPGN.textProperty());
+    sanProperty.bindBidirectional(txtSAN.textProperty());
+  }
 
   @FXML
   void buttonAction(ActionEvent event) {

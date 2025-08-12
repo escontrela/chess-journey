@@ -69,9 +69,7 @@ public class TacticViewController implements ScreenController {
 
   @FXML private Pane pnlBoard;
 
-  @FXML private TextField inFen;
 
-  @FXML private TextField inPGN;
 
   @FXML private Pane rootPane;
 
@@ -129,7 +127,7 @@ public class TacticViewController implements ScreenController {
             cleanPieces();
 
             final GameState fenParserResponse =
-                    fenService.parseString(Fen.createCustom(inFen.getText()));
+                    fenService.parseString(Fen.createCustom(pnlPGNControl.fenProperty().get()));
 
             showPiecesOnBoard(fenParserResponse);
           }
@@ -578,36 +576,17 @@ public class TacticViewController implements ScreenController {
   @FXML
   private void handleKeyPress(KeyEvent event) {
 
-    if (isFenInputField(event)) {
 
-      if (event.getCode() == KeyCode.ENTER) {
 
-        cleanPieces();
-
-        // TODO validate fen
-        final GameState fenParserResponse =
-            fenService.parseString(Fen.createCustom(inFen.getText()));
-
-        showPiecesOnBoard(fenParserResponse);
-      }
-    }
-
-    if (isPGNInputField(event)) {
-
-      if (event.getCode() == KeyCode.ENTER) {
-
-        PGNMove();
-      }
-    }
   }
 
   private void PGNMove() {
-    ChessBoard chessBoard = ChessBoardFactory.createFromFEN(Fen.createCustom(inFen.getText()));
+    ChessBoard chessBoard = ChessBoardFactory.createFromFEN(Fen.createCustom(pnlPGNControl.fenProperty().get()));
 
     ChessRules chessrules = new ChessRules();
 
     // Castling test
-    GameMove posChessMove = pgnService.fromAlgebraic(inPGN.getText(), chessBoard);
+    GameMove posChessMove = pgnService.fromAlgebraic(pnlPGNControl.sanProperty().get(), chessBoard);
 
     if (posChessMove instanceof CastlingMove castlingMove) {
 
@@ -711,11 +690,6 @@ public class TacticViewController implements ScreenController {
     }
   }
 
-  private boolean isPGNInputField(KeyEvent event) {
-
-    return event.getSource() == inPGN;
-  }
-
   /**
    * Get or initialize the screen controller for the given screen
    *
@@ -812,10 +786,6 @@ public class TacticViewController implements ScreenController {
     return event.getSource() == btnPGNEditor;
   }
 
-  private boolean isFenInputField(KeyEvent event) {
-
-    return event.getSource() == inFen;
-  }
 
   public <T extends MemoryGame<?>> void setMemoryGameUseCase(
       MemoryGameUseCase<T> memoryGameUseCase) {
