@@ -166,7 +166,7 @@
          </children>
       </Pane>
 
-      <Pane fx:id="pnlTime" layoutX="930.0" layoutY="47.0" prefHeight="472.0" prefWidth="303.0" styleClass="popup-section-2">
+      <Pane fx:id="pnlTime" layoutX="930.0" layoutY="47.0" prefHeight="640.0" prefWidth="303.0" styleClass="popup-section-2">
          <!-- CONTENIDO DEL PANEL DERECHA SUPERIOR (pnlTime) -->
          <children>
             <!-- Cabecera -->
@@ -178,7 +178,7 @@
             <Label layoutX="168.0" layoutY="44.0" styleClass="text-gray-small" text="Black" />
 
             <!-- Lista PGN con scroll -->
-            <ScrollPane fx:id="pgnScroll" fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="64.0" prefHeight="289.0" prefWidth="279.0" styleClass="pgn-box">
+            <ScrollPane fx:id="pgnScroll" fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="64.0" prefHeight="455.0" prefWidth="279.0" styleClass="pgn-box">
                <content>
                   <VBox fx:id="pgnList" fillWidth="true" spacing="6.0" style="-fx-padding: 8;">
                      <!-- Fila de ejemplo (puedes borrarla en runtime) -->
@@ -197,7 +197,7 @@
             </ScrollPane>
 
             <!-- Botonera navegación -->
-            <HBox alignment="CENTER" layoutX="12.0" layoutY="370.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="544.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
                <Button fx:id="btnFirst" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
@@ -236,7 +236,7 @@
                   </graphic>
                </Button>
             </HBox>
-            <HBox alignment="CENTER" layoutX="12.0" layoutY="420.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="594.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
                <children>
                   <Button fx:id="btnFirst1" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                      <graphic>
@@ -269,21 +269,6 @@
             </HBox>
          </children>
       </Pane>
-      <Pane layoutX="930.0" layoutY="526.0" prefHeight="161.0" prefWidth="303.0" styleClass="popup-section-2">
-         <children>
-            <Label layoutX="21.0" layoutY="83.0" styleClass="popup-label" text="PGN" />
-            <Label layoutX="21.0" layoutY="19.0" styleClass="popup-label" text="FEN" />
-            <TextField fx:id="inFen" layoutX="12.0" layoutY="37.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="277.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
-               <font>
-                  <Font name="Alatsi Regular" size="12.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="inPGN" layoutX="14.0" layoutY="104.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
-               <font>
-                  <Font name="Alatsi Regular" size="12.0" />
-               </font>
-            </TextField>
-         </children></Pane>
       <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1230.0" layoutY="4.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
@@ -319,19 +304,8 @@
             </ImageView>
          </children>
       </Pane>
-      <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="656.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="37.0" prefWidth="35.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="1" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="80.0" layoutY="656.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="2" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
       <Label fx:id="lblExerciseNum" layoutX="871.0" layoutY="16.0" styleClass="popup-label" text="..." />
       <Label fx:id="lblStatus" layoutX="274.0" layoutY="16.0" styleClass="popup-label" text="..." />
-      <Label layoutX="27.0" layoutY="620.0" styleClass="popup-label" text="Difficulty level" />
       <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="71.0" layoutY="381.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="121.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
@@ -414,6 +388,58 @@
          </Pane>
       </Pane>
       <Label layoutX="93.0" layoutY="17.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text=" |    TACTIC GAME" />
+      <Pane layoutX="16.0" layoutY="710.0" prefHeight="86.0" prefWidth="1228.0" styleClass="popup-section-2">
+         <children>
+            <TextField fx:id="inFen" layoutX="14.0" layoutY="35.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="501.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
+               <font>
+                  <Font name="Alatsi Regular" size="12.0" />
+               </font>
+            </TextField>
+            <TextField fx:id="inPGN" layoutX="588.0" layoutY="36.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="96.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
+               <font>
+                  <Font name="Alatsi Regular" size="12.0" />
+               </font>
+            </TextField>
+            <Label layoutX="19.0" layoutY="15.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text="FEN POSITION" />
+            <Label layoutX="591.0" layoutY="15.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text="FEN POSITION" />
+            <Button fx:id="btnNext11" layoutX="527.0" layoutY="37.0" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-white/content_copy_24dp_white.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <Button fx:id="btClose1" alignment="BASELINE_CENTER" layoutX="1193.0" layoutY="-4.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="18.0" />
+               </font>
+               <graphic>
+                  <ImageView fx:id="imgClose1" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-white/close_18dp_white.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+            <TextField fx:id="inFen1" layoutX="710.0" layoutY="35.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="454.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="1. f3 Ke7 2. Kf2 Ke6 3. Ke2 a5 4. a3 g5 5. b4 a4 6. g4 Kd5 7. Kd3 h6 8. h3 Kd6 9. Kd4 Kc6 10. Ke5 Kd7 11. Kf6 Ke8 12. Kg7 Ke7 13. Kxh6 f6 14. b5 Kd7 15. Kg6 Ke6 16. b6 Kd7 17. Kxf6 Kc6 18. Kxg5 Kxb6 19. h4 Kc5 20. h5 Kc4 21. h6 Kb3 22. h7 Kxa3 23. h8=Q Kb3 24. Qa1 Kb4 25. f4 Kb3 26. f5 Kb4 27. f6 Kb3 28. f7 a3 29. f8=Q Kc2 30. Qfxa3 Kd2 31. Q1b2+ Kd1 32. Qaa1# { White wins by checkmate. } 1-0">
+               <font>
+                  <Font name="Alatsi Regular" size="12.0" />
+               </font>
+            </TextField>
+            <Label layoutX="719.0" layoutY="15.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text="PGN" />
+            <Button fx:id="btnNext111" layoutX="1173.0" layoutY="37.0" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+               <graphic>
+                  <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+                     <image>
+                        <Image url="@img-white/content_copy_24dp_white.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
+         </children>
+      </Pane>
 
    </children>
    <stylesheets>

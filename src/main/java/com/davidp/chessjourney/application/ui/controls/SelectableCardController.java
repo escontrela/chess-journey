@@ -25,7 +25,6 @@ public class SelectableCardController extends Pane {
 
     public SelectableCardController() {
 
-        System.out.println("Cargando FXML: /com/davidp/chessjourney/selectable-card.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/davidp/chessjourney/selectable-card.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);

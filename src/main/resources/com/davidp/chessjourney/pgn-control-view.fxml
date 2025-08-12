@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<fx:root prefHeight="86.0" prefWidth="1228.0" styleClass="popup-section-2" stylesheets="@custom-styles.css" type="Pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+      <Label layoutX="19.0" layoutY="15.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text="FEN POSITION" />
+      <TextField fx:id="txtFen" layoutX="14.0" layoutY="35.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="501.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
+         <font>
+            <Font name="Alatsi Regular" size="12.0" />
+         </font>
+      </TextField>
+      <Button fx:id="btnCopyFen" layoutX="527.0" layoutY="37.0" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+         <graphic>
+            <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/content_copy_24dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Label layoutX="595.0" layoutY="15.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text="SAN" />
+      <TextField fx:id="txtSAN" layoutX="588.0" layoutY="36.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="96.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
+         <font>
+            <Font name="Alatsi Regular" size="12.0" />
+         </font>
+      </TextField>
+      <Label layoutX="719.0" layoutY="15.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text="PGN" />
+      <TextField fx:id="txtPGN" layoutX="710.0" layoutY="35.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="454.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="1. f3 Ke7 2. Kf2 Ke6 3. Ke2 a5 4. a3 g5 5. b4 a4 6. g4 Kd5 7. Kd3 h6 8. h3 Kd6 9. Kd4 Kc6 10. Ke5 Kd7 11. Kf6 Ke8 12. Kg7 Ke7 13. Kxh6 f6 14. b5 Kd7 15. Kg6 Ke6 16. b6 Kd7 17. Kxf6 Kc6 18. Kxg5 Kxb6 19. h4 Kc5 20. h5 Kc4 21. h6 Kb3 22. h7 Kxa3 23. h8=Q Kb3 24. Qa1 Kb4 25. f4 Kb3 26. f5 Kb4 27. f6 Kb3 28. f7 a3 29. f8=Q Kc2 30. Qfxa3 Kd2 31. Q1b2+ Kd1 32. Qaa1# { White wins by checkmate. } 1-0">
+         <font>
+            <Font name="Alatsi Regular" size="12.0" />
+         </font>
+      </TextField>
+      <Button fx:id="btnCopyPGN" layoutX="1173.0" layoutY="37.0" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+         <graphic>
+            <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/content_copy_24dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Button fx:id="btCloseCtrlPGN" alignment="BASELINE_CENTER" layoutX="1193.0" layoutY="-4.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgClose1" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/close_18dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</fx:root>

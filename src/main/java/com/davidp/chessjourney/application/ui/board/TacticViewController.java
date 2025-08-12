@@ -88,11 +88,7 @@ public class TacticViewController implements ScreenController {
     @FXML private Label lblBlackTime;
 
     @FXML private Label lblGhostMsg;
-
-    @FXML private Button btOptEasy;
-
-    @FXML private Button btOptionMid;
-
+ 
     private ImageView imgOk =
             new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
     private ImageView imgFail =
@@ -389,15 +385,7 @@ public class TacticViewController implements ScreenController {
                 startMemoryGame();
             }
         }
-        if (event.getSource() == btOptEasy) {
 
-            difficulty = "easy";
-            System.out.println("Difficulty set at:" + difficulty);
-        }
-        if (event.getSource() == btOptionMid) {
-            difficulty = "medium";
-            System.out.println("Difficulty set at:" + difficulty);
-        }
     }
 
     private void startMemoryGame() {
