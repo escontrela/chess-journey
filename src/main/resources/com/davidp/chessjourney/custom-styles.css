@@ -447,13 +447,36 @@
     -fx-border-width: 1;
     -fx-padding: 6 10;
 }
-/* Color del prompt text (texto de sugerencia) */
-.popup-text-field .text {
-    -fx-fill: #ffffff;
+
+/* Estilos específicos para TextArea con la misma apariencia */
+.popup-text-field.text-area {
+    -fx-background-color: #1C1C1C;
 }
 
-.popup-text-field:focused {
-    -fx-border-color: #3A86FF;
+.popup-text-field.text-area .content {
+    -fx-background-color: #1C1C1C;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.popup-text-field.text-area .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.popup-text-field.text-area .viewport {
+    -fx-background-color: transparent;
+}
+
+.popup-text-field.text-area .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.popup-text-field.text-area .scroll-bar:vertical .thumb {
+    -fx-background-color: #3A3A3A;
+    -fx-background-radius: 6;
 }
 
 /* Botón rojo con estilo premium tipo degradado */
@@ -1055,4 +1078,4 @@
 
 /******************************************/
 /** END: NEW SYSTEM DESIGN  10-01-2025 **/
-/******************************************/
+/******************************************
