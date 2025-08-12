@@ -161,6 +161,13 @@ public class TacticViewController implements ScreenController {
         // No hacer nada
       }
     });
+
+    // Inicializa el estilo del botón según el estado del panel
+    updatePGNEditorButtonStyle();
+
+    pnlPGNControl.visibleProperty().addListener((obs, oldVal, newVal) -> {
+      updatePGNEditorButtonStyle();
+    });
   }
 
   private void onMousePressed(MouseEvent event) {
@@ -434,6 +441,7 @@ public class TacticViewController implements ScreenController {
     if (isButtonPGNEditorClicked(event)) {
 
       pnlPGNControl.setVisible(!pnlPGNControl.isVisible());
+      // El listener de visibleProperty se encarga de actualizar el estilo
     }
   }
 
@@ -984,6 +992,16 @@ public class TacticViewController implements ScreenController {
             var pane = boardPanes.get(piece.getPosition());
             addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
           });
+    }
+  }
+
+  private void updatePGNEditorButtonStyle() {
+
+    btnPGNEditor.getStyleClass().removeAll("button-regular", "button-regular-pressed");
+    if (pnlPGNControl.isVisible()) {
+      btnPGNEditor.getStyleClass().add("button-regular-pressed");
+    } else {
+      btnPGNEditor.getStyleClass().add("button-regular");
     }
   }
 }

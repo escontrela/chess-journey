@@ -111,6 +111,11 @@
     -fx-border-color: #b3b3b3;
 }
 
+.button-regular-pressed {
+    -fx-background-color: #404040;
+    -fx-border-color: #b3b3b3;
+}
+
 /* Imagen dentro del botón */
 .button-regular .image-view {
     -fx-opacity: 0.8;                    /* ícono un poco más visible */
