@@ -15,6 +15,38 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+/*
+/ Configurar textos
+setExerciseAvgTime("20 s.");
+setExerciseLevel("5");
+setExerciseRating("85%");
+setUserName("MARTIN PEREIRA");
+setUserRating("1470");
+setExerciseTime("24:32");
+
+// Configurar número de rectángulos
+setNumExercises(5);  // Crea 5 rectángulos en hbExercises
+setNumPly(3);        // Crea 3 rectángulos en hbPly
+
+// Configurar ejercicio/ply actual (con stroke blanco)
+setCurrentExercise(2);  // El 3er rectángulo tendrá stroke blanco
+setCurrentPly(1);       // El 2do rectángulo tendrá stroke blanco
+
+// Configurar estados de los rectángulos
+setExerciseState(0, TacticStatusController.STATE_OK);    // Verde
+setExerciseState(1, TacticStatusController.STATE_FAIL);  // Rojo
+setPlyState(0, TacticStatusController.STATE_OK);
+
+// Si necesitas hacer binding bidireccional
+tacticStatus.exerciseAvgTimeProperty().bind(otherProperty);
+tacticStatus.numExercisesProperty().bind(countProperty);
+
+ */
+
+/**
+ *  This controller is responsible for the Tactic Status control that displays the status of
+ *  exercises and ply in a chess tactics training session.
+ */
 public class TacticStatusController extends Pane {
 
   @FXML private HBox hbExercises;
@@ -65,7 +97,7 @@ public class TacticStatusController extends Pane {
   private final List<Integer> plyStates = new ArrayList<>();
 
   // Colors
-  private static final Color NORMAL_COLOR = Color.GRAY;
+  private static final Color NORMAL_COLOR = Color.BLACK;
   private static final Color OK_COLOR = Color.GREEN;
   private static final Color FAIL_COLOR = Color.RED;
   private static final Color ACTIVE_STROKE = Color.WHITE;

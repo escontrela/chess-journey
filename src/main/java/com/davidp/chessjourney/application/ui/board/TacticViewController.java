@@ -11,6 +11,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
 import com.davidp.chessjourney.application.ui.controls.PGNEditorController;
+import com.davidp.chessjourney.application.ui.controls.TacticStatusController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.MemoryGameUseCase;
@@ -90,6 +91,7 @@ public class TacticViewController implements ScreenController {
   @FXML private Label lblGhostMsg;
 
   @FXML private PGNEditorController pnlPGNControl;
+  @FXML private TacticStatusController pnlStatusControl;
 
   private ImageView imgOk =
       new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
@@ -178,6 +180,39 @@ public class TacticViewController implements ScreenController {
     pnlPGNControl.visibleProperty().addListener((obs, oldVal, newVal) -> {
       updatePGNEditorButtonStyle();
     });
+
+    setStatusPanelState();
+  }
+
+  private void setStatusPanelState(){
+
+      pnlStatusControl.setExerciseAvgTime("1.5 s.");
+      pnlStatusControl.setExerciseLevel("5");
+      pnlStatusControl.setExerciseRating("85%");
+      pnlStatusControl.setUserName("MARTIN PEREIRA :)");
+      pnlStatusControl.setUserRating("1470");
+      pnlStatusControl.setExerciseTime("00:32");
+
+      // Configurar número de rectángulos
+      pnlStatusControl.setNumExercises(20);  // Crea 5 rectángulos en hbExercises
+      pnlStatusControl.setNumPly(4);        // Crea 3 rectángulos en hbPly
+
+      // Configurar ejercicio/ply actual (con stroke blanco)
+      pnlStatusControl.setCurrentExercise(3);  // El 3er rectángulo tendrá stroke blanco
+      pnlStatusControl.setCurrentPly(4);       // El 2do rectángulo tendrá stroke blanco
+
+      pnlStatusControl.setExerciseState(0, TacticStatusController.STATE_OK);    // Verde
+      pnlStatusControl.setExerciseState(1, TacticStatusController.STATE_FAIL);
+      pnlStatusControl.setExerciseState(2, TacticStatusController.STATE_OK); // Rojo
+      pnlStatusControl.setPlyState(0, TacticStatusController.STATE_OK);
+      pnlStatusControl.setPlyState(1, TacticStatusController.STATE_OK);
+      pnlStatusControl.setPlyState(2, TacticStatusController.STATE_FAIL);
+
+    /**
+     * // Si necesitas hacer binding bidireccional
+     * tacticStatus.exerciseAvgTimeProperty().bind(otherProperty);
+     * tacticStatus.numExercisesProperty().bind(countProperty);
+     */
   }
 
   private void onMousePressed(MouseEvent event) {
