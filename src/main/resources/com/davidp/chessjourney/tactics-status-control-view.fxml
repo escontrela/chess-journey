@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<fx:root prefHeight="72.0" prefWidth="1228.0" styleClass="score-strip" stylesheets="@custom-styles.css" type="Pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+
+<children>
+    <Pane fx:id="pnlWhite" layoutX="12.0" layoutY="10.0" prefHeight="52.0" prefWidth="560.0">
+        <children>
+            <Label fx:id="lblWhiteLevel" alignment="CENTER" layoutX="0.0" layoutY="-3.0" prefHeight="60.0" prefWidth="36.0" styleClass="score-pill" text="0" />
+            <Pane layoutX="36.0" layoutY="-3.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #C7C2B3;">
+                <children>
+                    <Label layoutX="20.0" layoutY="5.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
+                    <Label fx:id="lblWhiteRating" layoutX="23.0" layoutY="17.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="1470" textFill="#f0ebd8">
+                        <font>
+                            <Font size="14.0" />
+                        </font>
+                    </Label>
+                </children>
+            </Pane>
+            <Pane layoutX="116.0" layoutY="-3.0" prefHeight="60.0" prefWidth="242.0" style="-fx-background-color: white;">
+                <children>
+                    <Label fx:id="lblWhiteName" layoutX="57.0" layoutY="1.0" prefHeight="52.0" prefWidth="121.0" styleClass="score-name-left" stylesheets="@custom-styles.css" text="MARTIN PEREIRA" textFill="#f0ebd8">
+                        <font>
+                            <Font size="18.0" />
+                        </font>
+                    </Label>
+                </children>
+            </Pane>
+            <Label layoutX="493.0" layoutY="12.0" styleClass="score-caption" text="Heart rate" />
+            <Label fx:id="lblWhiteHR" layoutX="495.0" layoutY="30.0" styleClass="score-value-white" text="92 BPM" />
+            <Label fx:id="lblWhiteTime" layoutX="384.0" layoutY="9.0" styleClass="score-clock" text="24:32" textFill="#1d2d44">
+                <font>
+                    <Font size="18.0" />
+                </font>
+            </Label>
+            <Label layoutX="6.0" layoutY="1.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="LEVEL" />
+        </children>
+    </Pane>
+    <Pane layoutX="606.0" layoutY="6.0" prefHeight="60.0" prefWidth="1.0" styleClass="score-divider" />
+    <Pane fx:id="pnlBlack" layoutX="656.0" layoutY="10.0" prefHeight="52.0" prefWidth="560.0">
+        <children>
+            <Label layoutX="8.0" layoutY="-3.0" styleClass="score-caption" text="Exercise" />
+            <HBox fx:id="hbExercises" layoutX="9.0" layoutY="12.0" prefHeight="13.0" prefWidth="340.0" spacing="4.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#7c1c2f" height="12.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4a5d23" height="12.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4a5d23" height="12.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" height="12.0" stroke="WHITE" strokeType="INSIDE" width="13.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" height="12.0" stroke="#757171" strokeType="INSIDE" width="13.0" />
+               </children>
+            </HBox>
+            <Label layoutX="9.0" layoutY="26.0" styleClass="score-caption" text="Ply  #" />
+            <HBox fx:id="hbPly" layoutX="8.0" layoutY="40.0" prefHeight="13.0" prefWidth="343.0" spacing="4.0">
+               <children>
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4a5d23" height="12.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+                  <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#4a5d23" height="12.0" stroke="BLACK" strokeType="INSIDE" width="13.0" />
+               </children>
+            </HBox>
+            <Pane layoutX="198.0" layoutY="-3.0" prefHeight="60.0" prefWidth="242.0" style="-fx-background-color: transparent;">
+               <children>
+                <Pane layoutX="242.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #C7C2B3;">
+                    <children>
+                        <Label layoutX="20.0" layoutY="5.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
+                        <Label fx:id="lblBlackRating" layoutX="23.0" layoutY="17.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="30%" textFill="#f0ebd8">
+                            <font>
+                                <Font size="14.0" />
+                            </font>
+                        </Label>
+                    </children>
+                </Pane>
+                  <Pane layoutX="162.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: white;">
+                     <children>
+                        <Label layoutX="20.0" layoutY="5.0" prefHeight="13.0" prefWidth="43.0" styleClass="score-caption-right" text="AVG TIME" />
+                        <Label fx:id="lblAvgTime" layoutX="23.0" layoutY="17.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="20 s." textFill="WHITE">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </Pane>
+                  <Label fx:id="lblBlackLevel" alignment="CENTER" layoutX="322.0" prefHeight="60.0" prefWidth="36.0" styleClass="score-pill" text="0" />
+                  <Label layoutX="328.0" layoutY="3.0" prefHeight="13.0" prefWidth="33.0" styleClass="score-caption-right" text="LEVEL" />
+               </children>
+            </Pane>
+        </children>
+    </Pane>
+</children>
+</fx:root>
