@@ -513,12 +513,12 @@ public class TacticViewController implements ScreenController {
     lblBoardType.setText("Estado: Jugando...");
     playTypeWriterEffect("Memoriza la posición...", lblGhostMsg, 0.02);
 
-    pnlStatusControl.setNumExercises(activeTacticGame.getCurrentExerciseNumber());
+    pnlStatusControl.setNumExercises(activeTacticGame.getTotalExercises());
     pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
     pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
     pnlStatusControl.setExerciseLevel(activeTacticGame.toString());
-    pnlStatusControl.setCurrentExercise(0);
-    pnlStatusControl.setCurrentPly(0);
+    pnlStatusControl.setCurrentExercise(activeTacticGame.getCurrentExerciseNumber()-1);
+    pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber()-1);
     pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
     pnlStatusControl.setExerciseState(0, TacticStatusController.STATE_NORMAL);
     lblExerciseNum.setText(
