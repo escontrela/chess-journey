@@ -162,7 +162,7 @@ public class ScreenFactory {
 
     FxmlBundle<TacticViewController> objectFxmlBundle = loadFxml(Screens.TACTIC_GAME.resourceName());
     var controller = objectFxmlBundle.getController();
-    controller.setMemoryGameUseCase(UseCaseFactory.createGuessMemoryGameUseCase());
+    controller.setTacticGameUseCase(UseCaseFactory.createTacticGameUseCase());
     controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
     return objectFxmlBundle.getController();
   }

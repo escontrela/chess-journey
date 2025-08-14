@@ -51,6 +51,17 @@ public class UseCaseFactory {
         return new GuessMemoryGameUseCaseImpl(userRepo, exerciseRepository, difficultyLevelRepository,exerciseTypeRepository);
     }
 
+    public static  TacticGameUseCase  createTacticGameUseCase() {
+
+        UserRepository userRepo = RepositoryFactory.createUserRepository();
+        ExerciseRepository exerciseRepository = RepositoryFactory.createExerciseRepository();
+        DifficultyLevelRepository difficultyLevelRepository = RepositoryFactory.createDifficultyLevelRepository();
+        ExerciseTypeRepository exerciseTypeRepository = RepositoryFactory.createExerciseTypeRepository();
+
+    return new TacticGameUseCaseImpl(
+        userRepo, exerciseRepository, difficultyLevelRepository, exerciseTypeRepository);
+    }
+
 
     public static MemoryGameUseCase<MemoryGame<String>>  createDefendMemoryGameUseCase() {
         //TODO make values objects for PiecePosition and String for DefendMemoryGameSubmit

@@ -1,6 +1,6 @@
 package com.davidp.chessjourney.domain;
 
-/** Clase base para un juego de ajedrez de táctica. */
+/* TODO , this class should be deprecated, review it!*/
 public class TacticGame extends Game {
   public TacticGame() {
     super();

@@ -196,6 +196,17 @@ values('r1bqkb1r/ppnp1ppp/4pn2/1B6/2NP4/1PP1PN2/3B1PPP/R2QK2R w KQkq - 0 1','Ba4
 (SELECT id FROM public.exercise_types WHERE name = 'defend_memory_game'),
 (SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
 
+-- tactic_game
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values ('8/8/4k3/3r4/8/3N4/4K3/8 w - - 0 1','1. Nf4+ Ke5 2. Nxd5',
+(SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values ('8/R5K1/8/3k4/8/8/3r4/8 w - - 0 2','1. Rd7+ Ke6 2. Rxd2',
+(SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
 
 +---------------+          +-------------------+          +-------------------+
 |    users      |          |    exercises      |          | difficulty_levels |
