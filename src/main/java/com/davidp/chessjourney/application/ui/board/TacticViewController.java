@@ -20,8 +20,6 @@ import com.davidp.chessjourney.domain.ChessBoard;
 import com.davidp.chessjourney.domain.ChessBoardFactory;
 import com.davidp.chessjourney.domain.ChessRules;
 import com.davidp.chessjourney.domain.games.tactic.TacticGame;
-import com.davidp.chessjourney.domain.games.memory.DefendMemoryGame;
-import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
@@ -343,7 +341,7 @@ public class TacticViewController implements ScreenController {
                   toPane.getChildren().add(pieceView);
 
                   success = true;
-                  onDefendedGameClicked(fromPane.getId(), toPane.getId());
+                  onPieceMoveClicked(fromPane.getId(), toPane.getId());
                 }
                 event.setDropCompleted(success);
                 event.consume();
@@ -879,10 +877,27 @@ public class TacticViewController implements ScreenController {
     this.saveUserExerciseStatsUseCase = saveUserExerciseStatsUseCase;
   }
 
-  public void onDefendedGameClicked(String from, String to) {
+  public void onPieceMoveClicked(String from, String to) {
 
-    System.out.println("onDefendedGameClicked:" + from + " to:" + to);
-/*
+    System.out.println("onPieceMoveClicked:" + from + " to:" + to);
+
+    if (activeTacticGame != null
+        && activeTacticGame.getGameState() == TacticGame.GameState.PLAYING) {
+
+        ChessBoard chessBoard = ChessBoardFactory.createFromFEN(getFenFromActiveBoard());
+        ChessRules chessRules = new ChessRules();
+
+        String move =
+                pgnService.toAlgebraic(
+                        Pos.parseString(from), Pos.parseString(to), chessBoard, chessRules, null);
+
+        System.out.println("move:" + move);
+        //TODO ver si está en jaque!
+        System.out.println("result:" + activeTacticGame.submitMove(move+"+"));
+
+    }
+
+    /*
     if (activeTacticGame != null
         && activeTacticGame instanceof DefendMemoryGame
         && activeTacticGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
@@ -893,9 +908,7 @@ public class TacticViewController implements ScreenController {
 
       ChessRules chessRules = new ChessRules();
 
-      String move =
-          pgnService.toAlgebraic(
-              Pos.parseString(from), Pos.parseString(to), chessBoard, chessRules, null);
+
 
       System.out.println("move:" + move);
 
