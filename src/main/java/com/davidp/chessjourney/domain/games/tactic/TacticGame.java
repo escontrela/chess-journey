@@ -119,6 +119,7 @@ public class TacticGame extends Game {
      * @return true if the move is correct, false otherwise
      */
     public boolean submitMove(String move) {
+
         if (gameState != GameState.PLAYING) {
             return false;
         }
@@ -131,6 +132,7 @@ public class TacticGame extends Game {
         boolean isCorrect = move.equals(expectedMove);
 
         if (isCorrect) {
+
             currentPlyIndex++;
 
             // Check if exercise is completed

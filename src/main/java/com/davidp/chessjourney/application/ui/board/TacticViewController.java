@@ -891,41 +891,57 @@ public class TacticViewController implements ScreenController {
                 pgnService.toAlgebraic(
                         Pos.parseString(from), Pos.parseString(to), chessBoard, chessRules, null);
 
-        System.out.println("move:" + move);
-        //TODO ver si está en jaque!
-        System.out.println("result:" + activeTacticGame.submitMove(move+"+"));
-
-    }
-
-    /*
-    if (activeTacticGame != null
-        && activeTacticGame instanceof DefendMemoryGame
-        && activeTacticGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
-
-      // TODO DEBERÍA COGER EL FEN DE LA POSICIÓN, PORQUE SI SE HA MOVIDO ALGUNA PIEZA PREVIAMENTE.
-
-      ChessBoard chessBoard = ChessBoardFactory.createFromFEN(getFenFromActiveBoard());
-
-      ChessRules chessRules = new ChessRules();
-
-
-
-      System.out.println("move:" + move);
-
       pauseLoopGame = true;
 
       // TODO: defend piece game: this is only for memory game, for defend game we need to change
       // the piece on the board, so .. guessMove method better
-      boolean result = ((MemoryGame<String>) activeTacticGame).submitAnswer(move);
+      boolean result =  activeTacticGame.submitMove(move);
+
+      System.out.println("Result of the move: " + result + " for move:" + move);
 
       if (result) {
 
         FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
             .onFinished(
                 () -> {
+
                   lblBoardType.setText("¡Correcto!");
                   // boardPanes.get(event.getPos()).getChildren().add(imgOk);
                   boardPanes.get(Pos.parseString(to)).setStyle("-fx-background-color: #00E680;");
+
+                  pnlStatusControl.setPlyState(
+                      activeTacticGame.getCurrentPlyNumber() - 2, TacticStatusController.STATE_OK);
+
+                  if (activeTacticGame.getGameState() == TacticGame.GameState.EXERCISE_COMPLETED) {
+
+                      Pos fromPos = Pos.parseString(from);
+                      Pos toPos =  Pos.parseString(to);
+                      PiecePosition movingPiece = chessBoard.getPiece(fromPos);
+                      chessBoard.movePiece(movingPiece.getPiece(), fromPos, toPos);
+                      chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
+
+                      //TODO make the new move from PGN
+
+
+
+                      cleanPieces();
+                      GameState gameState = fenService.parseString(chessBoard.getFen());
+
+                      showPiecesOnBoard(gameState);
+
+                      //TODO pasar al siguient ejercicio o al final
+                      pnlStatusControl.setExerciseState(activeTacticGame.getCurrentExerciseNumber()-1, TacticStatusController.STATE_OK);
+                      pnlStatusControl.setCurrentExercise(activeTacticGame.getCurrentExerciseNumber());
+
+
+                  } else {
+
+                      //TODO pasar al siguiente ply
+                        pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
+
+
+                  }
+
 
                   playTypeWriterEffect("Bien hecho!", lblGhostMsg, 0.02);
                   runLater(
@@ -950,8 +966,15 @@ public class TacticViewController implements ScreenController {
         FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
             .onFinished(
                 () -> {
+
                   lblBoardType.setText("Incorrecto");
-                  // boardPanes.get(event.getPos()).getChildren().add(imgFail);
+
+                    pnlStatusControl.setPlyState(
+                            activeTacticGame.getCurrentPlyNumber() - 1, TacticStatusController.STATE_FAIL);
+
+                    // TODO we must show the piece on the board, so we can see the error
+
+                    // boardPanes.get(event.getPos()).getChildren().add(imgFail);
                   boardPanes.get(Pos.parseString(to)).setStyle("-fx-background-color: #FF0071;");
                   playTypeWriterEffect("Más suerte para la próxima!", lblGhostMsg, 0.02);
                   runLater(
@@ -969,7 +992,7 @@ public class TacticViewController implements ScreenController {
             .buildAndPlay();
       }
     }
-    */
+
   }
 
   private Fen getFenFromActiveBoard() {
