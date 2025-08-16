@@ -4,7 +4,6 @@ import static javafx.application.Platform.runLater;
 
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
-import com.davidp.chessjourney.application.domain.PromoteSelectedPieceEvent;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
@@ -16,23 +15,22 @@ import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.SaveUserExerciseStatsUseCase;
 import com.davidp.chessjourney.application.usecases.TacticGameUseCase;
+import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
+import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
 import com.davidp.chessjourney.domain.ChessBoard;
 import com.davidp.chessjourney.domain.ChessBoardFactory;
 import com.davidp.chessjourney.domain.ChessRules;
-import com.davidp.chessjourney.domain.games.tactic.TacticGame;
 import com.davidp.chessjourney.domain.common.*;
+import com.davidp.chessjourney.domain.games.tactic.TacticGame;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
-
+import com.davidp.chessjourney.domain.services.PGNService;
+import com.davidp.chessjourney.domain.services.PGNServiceFactory;
 import java.awt.*;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
-
-import com.davidp.chessjourney.domain.services.PGNService;
-import com.davidp.chessjourney.domain.services.PGNServiceFactory;
-import com.google.common.eventbus.Subscribe;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -44,14 +42,12 @@ import javafx.scene.input.*;
 import javafx.scene.layout.Pane;
 import javafx.util.Duration;
 
-import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
-import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
-
 public class TacticViewController implements ScreenController {
 
   private enum BoardType {
     CHESS,
-    MEMORY, TACTIC
+    MEMORY,
+    TACTIC
   }
 
   protected BoardType boardType = BoardType.CHESS;
@@ -66,8 +62,6 @@ public class TacticViewController implements ScreenController {
   @FXML private Button btnPGNEditor;
 
   @FXML private Pane pnlBoard;
-
-
 
   @FXML private Pane rootPane;
 
@@ -117,7 +111,6 @@ public class TacticViewController implements ScreenController {
     status = ScreenController.ScreenStatus.INITIALIZED;
     initializeBoardPanes();
 
-    pnlBoard.setOnMousePressed(this::onMousePressed);
 
     pnlPGNControl.setPGNEditorKeyListener(
         new PGNEditorController.PGNEditorKeyListener() {
@@ -127,7 +120,7 @@ public class TacticViewController implements ScreenController {
             cleanPieces();
 
             final GameState fenParserResponse =
-                    fenService.parseString(Fen.createCustom(pnlPGNControl.fenProperty().get()));
+                fenService.parseString(Fen.createCustom(pnlPGNControl.fenProperty().get()));
 
             showPiecesOnBoard(fenParserResponse);
           }
@@ -139,72 +132,76 @@ public class TacticViewController implements ScreenController {
 
           @Override
           public void onPGNChanged(String newPGN) {
-            //TODO place the new PGN on the board
+            // TODO place the new PGN on the board
             // This is not implemented yet, but we can use the PGNService to parse
           }
         });
 
-    pnlPGNControl.setPGNEditorActionListener(new PGNEditorController.PGNEditorActionListener() {
-      @Override
-      public void onCloseButtonClicked() {
-        pnlPGNControl.setVisible(false);
-      }
+    pnlPGNControl.setPGNEditorActionListener(
+        new PGNEditorController.PGNEditorActionListener() {
+          @Override
+          public void onCloseButtonClicked() {
+            pnlPGNControl.setVisible(false);
+          }
 
-      @Override
-      public void onFenCopyClicked() {
-        // No hacer nada
-      }
+          @Override
+          public void onFenCopyClicked() {
+            // No hacer nada
+          }
 
-      @Override
-      public void onPGNCopyClicked() {
-        // No hacer nada
-      }
+          @Override
+          public void onPGNCopyClicked() {
+            // No hacer nada
+          }
 
-      @Override
-      public void onMaxMinButtonClicked() {
-        boolean newMaximizedState = !pnlPGNControl.isMaximized();
-        pnlPGNControl.setMaximized(newMaximizedState);
-        if (newMaximizedState) {
-          pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() - 80);
-        } else {
-          pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() + 80);
-        }
-      }
-    });
+          @Override
+          public void onMaxMinButtonClicked() {
+            boolean newMaximizedState = !pnlPGNControl.isMaximized();
+            pnlPGNControl.setMaximized(newMaximizedState);
+            if (newMaximizedState) {
+              pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() - 80);
+            } else {
+              pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() + 80);
+            }
+          }
+        });
 
     // Inicializa el estilo del botón según el estado del panel
     updatePGNEditorButtonStyle();
 
-    pnlPGNControl.visibleProperty().addListener((obs, oldVal, newVal) -> {
-      updatePGNEditorButtonStyle();
-    });
+    pnlPGNControl
+        .visibleProperty()
+        .addListener(
+            (obs, oldVal, newVal) -> {
+              updatePGNEditorButtonStyle();
+            });
 
     setStatusPanelState();
   }
 
-  private void setStatusPanelState(){
+  private void setStatusPanelState() {
 
-      pnlStatusControl.setExerciseAvgTime("1.5 s.");
-      pnlStatusControl.setExerciseLevel("5");
-      pnlStatusControl.setExerciseRating("85%");
-      pnlStatusControl.setUserName("MARTIN PEREIRA :)");
-      pnlStatusControl.setUserRating("1470");
-      pnlStatusControl.setExerciseTime("00:32");
+    pnlStatusControl.setExerciseAvgTime("1.5 s.");
+    pnlStatusControl.setExerciseLevel("5");
+    pnlStatusControl.setExerciseRating("85%");
+    pnlStatusControl.setUserName("MARTIN PEREIRA :)");
+    pnlStatusControl.setUserRating("1470");
+    pnlStatusControl.setExerciseTime("00:32");
 
-      // Configurar número de rectángulos
-      pnlStatusControl.setNumExercises(20);  // Crea 5 rectángulos en hbExercises
-      pnlStatusControl.setNumPly(4);        // Crea 3 rectángulos en hbPly
+    // Configurar número de rectángulos
+    pnlStatusControl.setNumExercises(20); // Crea 5 rectángulos en hbExercises
+    pnlStatusControl.setNumPly(4); // Crea 3 rectángulos en hbPly
 
-      // Configurar ejercicio/ply actual (con stroke blanco)
-      pnlStatusControl.setCurrentExercise(3);  // El 3er rectángulo tendrá stroke blanco
-      pnlStatusControl.setCurrentPly(4);       // El 2do rectángulo tendrá stroke blanco
+    // Configurar ejercicio/ply actual (con stroke blanco)
+    pnlStatusControl.setCurrentExercise(3); // El 3er rectángulo tendrá stroke blanco
+    pnlStatusControl.setCurrentPly(4); // El 2do rectángulo tendrá stroke blanco
 
-      pnlStatusControl.setExerciseState(0, TacticStatusController.STATE_OK);    // Verde
-      pnlStatusControl.setExerciseState(1, TacticStatusController.STATE_FAIL);
-      pnlStatusControl.setExerciseState(2, TacticStatusController.STATE_OK); // Rojo
-      pnlStatusControl.setPlyState(0, TacticStatusController.STATE_OK);
-      pnlStatusControl.setPlyState(1, TacticStatusController.STATE_OK);
-      pnlStatusControl.setPlyState(2, TacticStatusController.STATE_FAIL);
+    pnlStatusControl.setExerciseState(0, TacticStatusController.STATE_OK); // Verde
+    pnlStatusControl.setExerciseState(1, TacticStatusController.STATE_FAIL);
+    pnlStatusControl.setExerciseState(2, TacticStatusController.STATE_OK); // Rojo
+    pnlStatusControl.setPlyState(0, TacticStatusController.STATE_OK);
+    pnlStatusControl.setPlyState(1, TacticStatusController.STATE_OK);
+    pnlStatusControl.setPlyState(2, TacticStatusController.STATE_FAIL);
 
     /**
      * // Si necesitas hacer binding bidireccional
@@ -213,59 +210,7 @@ public class TacticViewController implements ScreenController {
      */
   }
 
-  /** Método que selecciona la pieza que falta en memory game. */
-  private void onMousePressed(MouseEvent event) {
 
-    Optional<Pane> selectedSquare = getSquareViewFromMouseEvent(event);
-
-    selectedSquare.ifPresent(
-
-        pane -> {
-
-          if (Objects.equals(pane.getId(), pnlBoard.getId())) {
-
-            return;
-          }
-
-          pane.setStyle(
-              "-fx-border-color: #FFFFFF; -fx-border-width: 2px; -fx-border-inset: -2px;");
-
-          int x = (int) event.getX();
-
-          if (event.getX() < 80) {
-            x = 80;
-          }
-          if (event.getX() > 480) {
-            x = 480;
-          }
-          int y = (int) event.getY();
-          if (event.getY() > 80) {
-            y = 80;
-          }
-
-          Point screenPos = new Point(x, y);
-
-          // TODO: review this because was commented
-           /*
-          if (activeMemoryGameOld != null
-              && activeMemoryGameOld.getGameState() == MemoryGame.GameState.GUESSING_PIECES
-              && activeMemoryGameOld instanceof GuessMemoryGame) {
-
-            String squareId = selectedSquare.get().getId();
-            var pos = Pos.parseString(squareId);
-
-            PieceColor pieceColor = getPieceColorFromFENPosition(activeMemoryGameOld.getFen());
-            managePromotePanelVisibility(screenPos, pos, pieceColor);
-          }
-          */
-        });
-  }
-
-  private PieceColor getPieceColorFromFENPosition(Fen fen) {
-
-    GameState gameState = fenService.parseString(fen);
-    return gameState.getActiveColor();
-  }
 
   // TODO improve
   private void initializeBoardPanes() {
@@ -310,19 +255,7 @@ public class TacticViewController implements ScreenController {
             new EventHandler<DragEvent>() {
               public void handle(DragEvent event) {
 
-                  /* TODO: review this because was commented,
-                if (activeMemoryGameOld != null
-                    && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.GUESS_MEMORY_GAME) {
-                  event.consume();
-                  return;
-                }
 
-                if (activeMemoryGameOld != null
-                    && activeMemoryGameOld.getGameKind() == MemoryGame.GameKind.DEFEND_MEMORY_GAME
-                    && activeMemoryGameOld.getGameState() != MemoryGame.GameState.GUESSING_PIECES) {
-                  event.consume();
-                  return;
-                }*/
 
                 Dragboard db = event.getDragboard();
                 boolean success = false;
@@ -360,27 +293,6 @@ public class TacticViewController implements ScreenController {
     }
   }
 
-  private Optional<Pane> getSquareViewFromMouseEvent(MouseEvent event) {
-
-    Object target = event.getTarget();
-
-    if (target instanceof Pane) {
-
-      return Optional.of((Pane) target);
-
-    } else if (target instanceof PieceView) {
-
-      Node parent = ((PieceView) target).getParent();
-
-      if (parent instanceof Pane) {
-
-        return Optional.of((Pane) parent);
-      }
-    }
-
-    // Si no se cumple ninguna de las condiciones, devolvemos un Optional vacío
-    return Optional.empty();
-  }
 
   private void freeSquare(Pane pane) {
 
@@ -472,17 +384,15 @@ public class TacticViewController implements ScreenController {
       // GlobalEventBus.get().post(new UserSavedAppEvent(settingsViewData.getUserId()));
     }
 
-      if (boardType == BoardType.MEMORY) {
+    if (boardType == BoardType.MEMORY) {
 
-        btStart.setDisable(true);
+      btStart.setDisable(true);
 
+      // looking for
+      activeTacticGame =
+          tacticGameUseCase.execute(AppProperties.getInstance().getActiveUserId(), difficulty);
 
-        // looking for
-        activeTacticGame =
-            tacticGameUseCase.execute(AppProperties.getInstance().getActiveUserId(), difficulty);
-
-        startTacticGame();
-
+      startTacticGame();
     }
 
     if (isButtonPGNEditorClicked(event)) {
@@ -515,8 +425,8 @@ public class TacticViewController implements ScreenController {
     pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
     pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
     pnlStatusControl.setExerciseLevel(activeTacticGame.toString());
-    pnlStatusControl.setCurrentExercise(activeTacticGame.getCurrentExerciseNumber()-1);
-    pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber()-1);
+    pnlStatusControl.setCurrentExercise(activeTacticGame.getCurrentExerciseNumber() - 1);
+    pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber() - 1);
     pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
     pnlStatusControl.setExerciseState(0, TacticStatusController.STATE_NORMAL);
     lblExerciseNum.setText(
@@ -542,13 +452,7 @@ public class TacticViewController implements ScreenController {
         });
   }
 
-  private void hidePiecesOnBoard(List<PiecePosition> pieces) {
-    pieces.forEach(
-        piece -> {
-          var pane = boardPanes.get(piece.getPosition());
-          freeSquare(pane);
-        });
-  }
+
 
   /** Bucle de juego que controla la lógica del MemoryGame. */
   private void gameLoop() {
@@ -578,7 +482,7 @@ public class TacticViewController implements ScreenController {
       return;
     }
 
-    //TODO review the GAME LOOP for tactic game
+    // TODO review the GAME LOOP for tactic game
     /*
     if (activeTacticGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
 
@@ -606,21 +510,9 @@ public class TacticViewController implements ScreenController {
       }
     }
     */
-      /*
-    if (activeTacticGame.getGameState() == MemoryGame.GameState.SHOWING_PIECES
-        && activeTacticGame.isTimeToHidePiecesOnTheCurrentExercise()) {
 
-      hidePiecesOnBoard(
-          activeTacticGame
-              .getHiddenPiecePositions()); // //TODO: defend piece game: should be nice on defend
-      // game, we should hide the attack pieces...
-      piecesHided = true;
-      lblBoardType.setText("Piezas ocultas. Adivina la posición.");
-      playTypeWriterEffect("Adivina la posición de las piezas ocultas.", lblGhostMsg, 0.02);
-    }
-   */
 
-     pnlStatusControl.setExerciseTime(activeTacticGame.getFormattedElapsedTime());
+    pnlStatusControl.setExerciseTime(activeTacticGame.getFormattedElapsedTime());
   }
 
   private void playTypeWriterEffect(String text, Label textNode, double charInterval) {
@@ -650,14 +542,11 @@ public class TacticViewController implements ScreenController {
   }
 
   @FXML
-  private void handleKeyPress(KeyEvent event) {
-
-
-
-  }
+  private void handleKeyPress(KeyEvent event) {}
 
   private void PGNMove() {
-    ChessBoard chessBoard = ChessBoardFactory.createFromFEN(Fen.createCustom(pnlPGNControl.fenProperty().get()));
+    ChessBoard chessBoard =
+        ChessBoardFactory.createFromFEN(Fen.createCustom(pnlPGNControl.fenProperty().get()));
 
     ChessRules chessrules = new ChessRules();
 
@@ -712,8 +601,7 @@ public class TacticViewController implements ScreenController {
         throw new RuntimeException("Is not a valid move:" + regularMove);
       }
 
-      PiecePosition pieceToMove =
-          chessBoard.getPiece(regularMove.getMoves().getFirst().getFrom());
+      PiecePosition pieceToMove = chessBoard.getPiece(regularMove.getMoves().getFirst().getFrom());
 
       Pane fromPane = boardPanes.get(regularMove.getMoves().getFirst().getFrom());
       Pane toPane = boardPanes.get(regularMove.getMoves().getFirst().getTo());
@@ -790,20 +678,6 @@ public class TacticViewController implements ScreenController {
   }
 
   /** This method is called when the user clicks on the logger user icon. */
-  private void managePromotePanelVisibility(
-      final Point screenPos, final Pos pos, final PieceColor pieceColor) {
-
-    ScreenController contextMenuController = getScreen(ScreenFactory.Screens.PROMOTE_PANEL);
-
-    if (contextMenuController.isVisible() && !contextMenuController.isInitialized()) {
-
-      contextMenuController.hide();
-    }
-
-    contextMenuController.show(PromoteViewInputScreenData.from(screenPos, pos, pieceColor));
-  }
-
-  /** This method is called when the user clicks on the logger user icon. */
   private void manageExerciseResultPanelVisibility(final Point screenPos, final int percentage) {
 
     ScreenController exerciseResultsController =
@@ -868,43 +742,51 @@ public class TacticViewController implements ScreenController {
     this.boardType = BoardType.MEMORY;
     this.btStart.setVisible(true);
     this.lblBoardType.setText("The tactics game!");
-    playTypeWriterEffect("¿Preparado para una sesión de táctica?, pulsa en el botón de inicio.", lblGhostMsg, 0.02);
+    playTypeWriterEffect(
+        "¿Preparado para una sesión de táctica?, pulsa en el botón de inicio.", lblGhostMsg, 0.02);
   }
 
   public void setSaveUserExerciseStatsUseCase(
-
       SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase) {
     this.saveUserExerciseStatsUseCase = saveUserExerciseStatsUseCase;
   }
 
   public void onPieceMoveClicked(String from, String to) {
 
-    System.out.println("onPieceMoveClicked:" + from + " to:" + to);
+    System.out.println(
+        "onPieceMoveClicked:"
+            + from
+            + " to:"
+            + to
+            + " for game:"
+            + activeTacticGame.getGameState());
 
     if (activeTacticGame != null
-        && activeTacticGame.getGameState() == TacticGame.GameState.PLAYING) {
+        && (activeTacticGame.getGameState() == TacticGame.GameState.PLAYING
+            || activeTacticGame.getGameState() == TacticGame.GameState.PLAYING_NEW_EXERCISE)) {
 
-        ChessBoard chessBoard = ChessBoardFactory.createFromFEN(getFenFromActiveBoard());
-        ChessRules chessRules = new ChessRules();
+      ChessBoard chessBoard = ChessBoardFactory.createFromFEN(getFenFromActiveBoard());
+      ChessRules chessRules = new ChessRules();
 
-        String move =
-                pgnService.toAlgebraic(
-                        Pos.parseString(from), Pos.parseString(to), chessBoard, chessRules, null);
+      System.out.println("ChessBoard:" + chessBoard.getFen().getStringValue());
+      String move =
+          pgnService.toAlgebraic(
+              Pos.parseString(from), Pos.parseString(to), chessBoard, chessRules, null);
 
       pauseLoopGame = true;
 
+      System.out.println("Move to make:" + move);
       // TODO: defend piece game: this is only for memory game, for defend game we need to change
       // the piece on the board, so .. guessMove method better
-      boolean result =  activeTacticGame.submitMove(move);
+      boolean result = activeTacticGame.submitMove(move);
 
-      System.out.println("Result of the move: " + result + " for move:" + move);
+      System.out.println("Result of the move: " + result + " for move: " + move);
 
       if (result) {
 
         FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
             .onFinished(
                 () -> {
-
                   lblBoardType.setText("¡Correcto!");
                   // boardPanes.get(event.getPos()).getChildren().add(imgOk);
                   boardPanes.get(Pos.parseString(to)).setStyle("-fx-background-color: #00E680;");
@@ -912,36 +794,83 @@ public class TacticViewController implements ScreenController {
                   pnlStatusControl.setPlyState(
                       activeTacticGame.getCurrentPlyNumber() - 2, TacticStatusController.STATE_OK);
 
-                  if (activeTacticGame.getGameState() == TacticGame.GameState.EXERCISE_COMPLETED) {
+                  if (activeTacticGame.getGameState() == TacticGame.GameState.GAME_OVER) {
+                    playTypeWriterEffect("Bien hecho, ejercicio terminado!", lblGhostMsg, 0.02);
+                    runLater(
+                        () ->
+                            soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
 
-                      Pos fromPos = Pos.parseString(from);
-                      Pos toPos =  Pos.parseString(to);
-                      PiecePosition movingPiece = chessBoard.getPiece(fromPos);
-                      chessBoard.movePiece(movingPiece.getPiece(), fromPos, toPos);
-                      chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
+                    pnlStatusControl.setExerciseState(
+                        activeTacticGame.getCurrentExerciseNumber() - 2,
+                        TacticStatusController.STATE_OK);
+                    pnlStatusControl.setCurrentExercise(
+                        activeTacticGame.getCurrentExerciseNumber() - 1);
 
-                      //TODO make the new move from PGN
+                    return;
+                  } else if (activeTacticGame.getGameState()
+                      == TacticGame.GameState.PLAYING_NEW_EXERCISE) {
 
-
-
-                      cleanPieces();
-                      GameState gameState = fenService.parseString(chessBoard.getFen());
-
-                      showPiecesOnBoard(gameState);
-
-                      //TODO pasar al siguient ejercicio o al final
-                      pnlStatusControl.setExerciseState(activeTacticGame.getCurrentExerciseNumber()-1, TacticStatusController.STATE_OK);
-                      pnlStatusControl.setCurrentExercise(activeTacticGame.getCurrentExerciseNumber());
-
+                    // TODO pasar al siguient ejercicio o al final
+                    pnlStatusControl.setExerciseState(
+                        activeTacticGame.getCurrentExerciseNumber() - 2,
+                        TacticStatusController.STATE_OK);
+                    pnlStatusControl.setCurrentExercise(
+                        activeTacticGame.getCurrentExerciseNumber() - 1);
+                    GameState gameState = fenService.parseString(activeTacticGame.getFen());
+                    cleanPieces();
+                    showPiecesOnBoard(gameState);
 
                   } else {
 
-                      //TODO pasar al siguiente ply
-                        pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
+                    Pos fromPos = Pos.parseString(from);
+                    Pos toPos = Pos.parseString(to);
+                    PiecePosition movingPiece = chessBoard.getPiece(fromPos);
+                    chessBoard.movePiece(movingPiece.getPiece(), fromPos, toPos);
+                    chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
 
+                    String[] nextMoves =
+                        activeTacticGame.getPlyMoves(
+                            activeTacticGame.getCurrentExerciseNumber() - 1,
+                            activeTacticGame.getCurrentPlyNumber() - 2);
 
+                    System.out.println("Next moves:" + Arrays.toString(nextMoves));
+
+                    String moveToMake = null;
+                    if (movingPiece.getPiece().getColor().opposite().equals(PieceColor.BLACK)) {
+                      moveToMake = nextMoves[1];
+                    } else {
+                      // TODO what happend whith this??
+                    }
+                    System.out.println("Next move:" + moveToMake);
+
+                    // now we should perform the move!
+                    GameMove gameMove = pgnService.fromAlgebraic(moveToMake, chessBoard);
+
+                    System.out.println("gameMove:" + gameMove);
+
+                    Pos nextMoveFrom = gameMove.getMoves().getFirst().getFrom();
+                    Pos nextMoveTo = gameMove.getMoves().getFirst().getTo();
+                    PiecePosition nextMovingPiece = chessBoard.getPiece(nextMoveFrom);
+                    System.out.println(
+                        "Next move from:"
+                            + nextMoveFrom
+                            + " to:"
+                            + nextMoveTo
+                            + " piece:"
+                            + nextMovingPiece);
+
+                    chessBoard.movePiece(nextMovingPiece.getPiece(), nextMoveFrom, nextMoveTo);
+                    chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
+
+                    activeTacticGame.setCurrentFen(chessBoard.getFen());
+                    cleanPieces();
+                    GameState gameState = fenService.parseString(chessBoard.getFen());
+
+                    showPiecesOnBoard(gameState);
+
+                    // TODO pasar al siguiente ply
+                    pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
                   }
-
 
                   playTypeWriterEffect("Bien hecho!", lblGhostMsg, 0.02);
                   runLater(
@@ -953,8 +882,6 @@ public class TacticViewController implements ScreenController {
                     insertUserStatsForThisExercise(result);
                   }
 
-                  matchedPieces++;
-                  showHiddenPieces();
                   FXAnimationUtil.fadeIn(lblBoardType, 2.0)
                       .onFinished(() -> pauseLoopGame = false)
                       .buildAndPlay();
@@ -966,15 +893,15 @@ public class TacticViewController implements ScreenController {
         FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
             .onFinished(
                 () -> {
-
                   lblBoardType.setText("Incorrecto");
 
-                    pnlStatusControl.setPlyState(
-                            activeTacticGame.getCurrentPlyNumber() - 1, TacticStatusController.STATE_FAIL);
+                  pnlStatusControl.setPlyState(
+                      activeTacticGame.getCurrentPlyNumber() - 1,
+                      TacticStatusController.STATE_FAIL);
 
-                    // TODO we must show the piece on the board, so we can see the error
+                  // TODO we must show the piece on the board, so we can see the error
 
-                    // boardPanes.get(event.getPos()).getChildren().add(imgFail);
+                  // boardPanes.get(event.getPos()).getChildren().add(imgFail);
                   boardPanes.get(Pos.parseString(to)).setStyle("-fx-background-color: #FF0071;");
                   playTypeWriterEffect("Más suerte para la próxima!", lblGhostMsg, 0.02);
                   runLater(
@@ -983,8 +910,6 @@ public class TacticViewController implements ScreenController {
 
                     insertUserStatsForThisExercise(result);
                   }
-                  matchedPieces++;
-                  showHiddenPieces();
                   FXAnimationUtil.fadeIn(lblBoardType, 2.0)
                       .onFinished(() -> pauseLoopGame = false)
                       .buildAndPlay();
@@ -992,84 +917,11 @@ public class TacticViewController implements ScreenController {
             .buildAndPlay();
       }
     }
-
   }
 
   private Fen getFenFromActiveBoard() {
 
     return activeTacticGame.getFen();
-  }
-
-  @Subscribe
-  public void onMemoryGameClicked(PromoteSelectedPieceEvent event) {
-
-    System.out.println("MemoryGameClicked:" + event.getSelectedPiece());
-    System.out.println("MemoryGameClicked pos:" + event.getPos());
-
-    pauseLoopGame = true;
-
-    // TODO: defend piece game: this is only for memory game, for defend game we need to change the
-    // piece on the board, so .. guessMove method better
-
-      //TODO IMPORTANT: RESULT OF TEH TACTIC GAME WITH THE USER MOVE!!!
-      boolean result = false;
-         //activeTacticGame.submitMove(new PiecePosition(event.getSelectedPiece(), event.getPos()));
-
-    if (result) {
-
-      FXAnimationUtil.fadeIn(boardPanes.get(event.getPos()), 0.2)
-          .repeat(1)
-          .autoReverse(false)
-          .onFinished(
-              () -> {
-                lblBoardType.setText("¡Correcto!");
-                // boardPanes.get(event.getPos()).getChildren().add(imgOk);
-                boardPanes.get(event.getPos()).setStyle("-fx-background-color: #00E680;");
-
-                runLater(
-                    () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
-                // FXGL.play("correct.wav");
-
-                runLater(
-                    () -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
-                // FXGL.play("correct.wav");
-
-                if (this.idValidForELO) {
-
-                  insertUserStatsForThisExercise(result);
-                }
-
-                matchedPieces++;
-                showHiddenPieces();
-
-                FXAnimationUtil.fadeIn(lblBoardType, 2.0)
-                    .onFinished(() -> pauseLoopGame = false)
-                    .buildAndPlay();
-              })
-          .buildAndPlay();
-
-    } else {
-
-      FXAnimationUtil.fadeIn(boardPanes.get(event.getPos()), 0.2)
-          .onFinished(
-              () -> {
-                lblBoardType.setText("Incorrecto");
-                // boardPanes.get(event.getPos()).getChildren().add(imgFail);
-                boardPanes.get(event.getPos()).setStyle("-fx-background-color: #FF0071;");
-                playTypeWriterEffect("Más suerte para la próxima!", lblGhostMsg, 0.02);
-                runLater(() -> soundService.playSound(SoundServiceFactory.SoundType.FAIL_EXERCISE));
-                if (this.idValidForELO) {
-
-                  insertUserStatsForThisExercise(result);
-                }
-                matchedPieces++;
-                showHiddenPieces();
-                FXAnimationUtil.fadeIn(lblBoardType, 2.0)
-                    .onFinished(() -> pauseLoopGame = false)
-                    .buildAndPlay();
-              })
-          .buildAndPlay();
-    }
   }
 
   protected void insertUserStatsForThisExercise(boolean result) {
@@ -1086,22 +938,6 @@ public class TacticViewController implements ScreenController {
             activeTacticGame.getDifficultyLevel().getId()); // TODO exercise difficulty level!
 
     saveUserExerciseStatsUseCase.execute(userExerciseStats);
-  }
-
-  private void showHiddenPieces() {
-
-    // TODO: defend piece game: this is only for memory game, for defend game we need to change the
-    // piece on the board.
-      /*
-    if (matchedPieces == activeTacticGame.getHiddenPiecePositions().size()) {
-
-      List<PiecePosition> hiddenPieces = activeTacticGame.getHiddenPiecePositions();
-      hiddenPieces.forEach(
-          piece -> {
-            var pane = boardPanes.get(piece.getPosition());
-            addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
-          });
-    }*/
   }
 
   private void updatePGNEditorButtonStyle() {

@@ -23,6 +23,7 @@ public class TacticGame extends Game {
     public enum GameState {
         WAITING_TO_START,
         PLAYING,
+        PLAYING_NEW_EXERCISE,
         EXERCISE_COMPLETED,
         GAME_OVER
     }
@@ -42,6 +43,7 @@ public class TacticGame extends Game {
 
     // Game state
     protected GameState gameState = GameState.WAITING_TO_START;
+    protected GameState lastGame = GameState.WAITING_TO_START;
     protected int currentExerciseIndex = 0;
     protected int currentPlyIndex = 0;
     protected UUID currentExerciseId;
@@ -91,6 +93,7 @@ public class TacticGame extends Game {
      * Loads the current exercise and sets up the board.
      */
     public void loadCurrentExercise() {
+
         if (currentExerciseIndex >= exercises.size()) {
             gameState = GameState.GAME_OVER;
             return;
@@ -113,6 +116,12 @@ public class TacticGame extends Game {
         gameState = GameState.PLAYING;
     }
 
+    public void setCurrentFen(Fen fen) {
+        if (fen == null) {
+            throw new IllegalArgumentException("FEN cannot be null");
+        }
+        chessBoard = ChessBoardFactory.createFromFEN(fen);
+    }
     /**
      * Validates if the given move is the correct next move in the current exercise.
      * @param move The move in algebraic notation (e.g., "Nf3", "Qxh7+")
@@ -120,7 +129,7 @@ public class TacticGame extends Game {
      */
     public boolean submitMove(String move) {
 
-        if (gameState != GameState.PLAYING) {
+        if (gameState != GameState.PLAYING && gameState != GameState.PLAYING_NEW_EXERCISE ) {
             return false;
         }
 
@@ -128,7 +137,10 @@ public class TacticGame extends Game {
             return false;
         }
 
-        String expectedMove = currentExerciseMoves.get(currentPlyIndex);
+        gameState =  GameState.PLAYING;
+
+        String expectedMove = currentExerciseMoves.get(currentPlyIndex*2);
+        System.out.println("Expected move: " + expectedMove + " for ply index: " + currentPlyIndex + " current exercise: " + currentExerciseIndex);
         boolean isCorrect = move.equals(expectedMove);
 
         if (isCorrect) {
@@ -136,12 +148,17 @@ public class TacticGame extends Game {
             currentPlyIndex++;
 
             // Check if exercise is completed
-            if (currentPlyIndex >= currentExerciseMoves.size()) {
+            if (currentPlyIndex+ 1 >= currentExerciseMoves.size()) {
+
                 completeCurrentExercise(true);
+
             }
         } else {
+
             completeCurrentExercise(false);
         }
+
+
 
         return isCorrect;
     }
@@ -171,6 +188,7 @@ public class TacticGame extends Game {
         currentExerciseIndex++;
         if (currentExerciseIndex < exercises.size()) {
             loadCurrentExercise();
+            gameState =  GameState.PLAYING_NEW_EXERCISE;
         } else {
             gameState = GameState.GAME_OVER;
         }
@@ -300,5 +318,40 @@ public class TacticGame extends Game {
         gameState = GameState.WAITING_TO_START;
         startTime = null;
         exerciseStartTime = null;
+    }
+
+    /**
+     * Gets the moves for a specific ply in a specific exercise.
+     * @param exerciseIndex The exercise index (0-based)
+     * @param plyIndex The ply index (0-based, where each ply represents 2 moves or 1 if at the end)
+     * @return Array containing the ply moves, may contain 1 or 2 elements
+     */
+    public String[] getPlyMoves(int exerciseIndex, int plyIndex) {
+        if (exerciseIndex < 0 || exerciseIndex >= exercises.size()) {
+            return new String[0];
+        }
+
+        Exercise exercise = exercises.get(exerciseIndex);
+        List<String> exerciseMoves = parsePGNMoves(exercise.getPgn());
+
+        if (exerciseMoves.isEmpty()) {
+            return new String[0];
+        }
+
+        // Calculate starting move index for this ply (each ply has 2 moves)
+        int startMoveIndex = plyIndex * 2;
+        List<String> plyMoves = new ArrayList<>();
+
+        // Add first move of the ply if exists
+        if (startMoveIndex < exerciseMoves.size()) {
+            plyMoves.add(exerciseMoves.get(startMoveIndex));
+
+            // Add second move of the ply if exists
+            if (startMoveIndex + 1 < exerciseMoves.size()) {
+                plyMoves.add(exerciseMoves.get(startMoveIndex + 1));
+            }
+        }
+
+        return plyMoves.toArray(new String[0]);
     }
 }
