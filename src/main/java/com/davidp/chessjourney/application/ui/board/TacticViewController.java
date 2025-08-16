@@ -21,7 +21,7 @@ import com.davidp.chessjourney.domain.ChessBoard;
 import com.davidp.chessjourney.domain.ChessBoardFactory;
 import com.davidp.chessjourney.domain.ChessRules;
 import com.davidp.chessjourney.domain.common.*;
-import com.davidp.chessjourney.domain.games.tactic.TacticGame2;
+import com.davidp.chessjourney.domain.games.tactic.TacticGame;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import com.davidp.chessjourney.domain.services.PGNService;
@@ -97,7 +97,7 @@ public class TacticViewController implements ScreenController {
   private ScreenController.ScreenStatus status;
 
   protected TacticGameUseCase tacticGameUseCase;
-  protected TacticGame2 activeTacticGame;
+  protected TacticGame activeTacticGame;
   protected SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase;
 
   protected boolean pauseLoopGame = false;
@@ -464,7 +464,7 @@ public class TacticViewController implements ScreenController {
       return;
     }
 
-    if (activeTacticGame.getGameState() == TacticGame2.GameState.GAME_OVER) {
+    if (activeTacticGame.getGameState() == TacticGame.GameState.GAME_OVER) {
 
       pauseLoopGame = true;
       JavaFXGameTimerUtil.clear();
@@ -762,7 +762,7 @@ public class TacticViewController implements ScreenController {
             + activeTacticGame.getGameState());
 
     if (activeTacticGame != null
-        && (activeTacticGame.getGameState() == TacticGame2.GameState.AWAITING_USER_MOVE)) {
+        && (activeTacticGame.getGameState() == TacticGame.GameState.AWAITING_USER_MOVE)) {
 
       ChessBoard chessBoard = ChessBoardFactory.createFromFEN(getFenFromActiveBoard());
       ChessRules chessRules = new ChessRules();
@@ -776,7 +776,7 @@ public class TacticViewController implements ScreenController {
 
       if (result) {
 
-        FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
+        FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 1.0)
             .onFinished(
                 () -> {
 
@@ -787,7 +787,7 @@ public class TacticViewController implements ScreenController {
                   pnlStatusControl.setPlyState(
                       activeTacticGame.getCurrentPlyNumber()-1 , TacticStatusController.STATE_OK);
 
-                  if (activeTacticGame.getGameState() == TacticGame2.GameState.GAME_OVER) {
+                  if (activeTacticGame.getGameState() == TacticGame.GameState.GAME_OVER) {
 
                       playTypeWriterEffect("Bien hecho, ejercicio terminado!", lblGhostMsg, 0.02);
 
@@ -805,7 +805,7 @@ public class TacticViewController implements ScreenController {
 
                     return;
                   } else if (activeTacticGame.getGameState()
-                      == TacticGame2.GameState.READY_FOR_NEXT_EXERCISE) {
+                      == TacticGame.GameState.READY_FOR_NEXT_EXERCISE) {
 
                       //Publicamos en el tablero un nuevo ejercicio con su FEN position
                       activeTacticGame.startNextExercise();
@@ -905,7 +905,7 @@ public class TacticViewController implements ScreenController {
                       .onFinished(() -> pauseLoopGame = false)
                       .buildAndPlay();
 
-                    if (activeTacticGame.getGameState() == TacticGame2.GameState.READY_FOR_NEXT_EXERCISE) {
+                    if (activeTacticGame.getGameState() == TacticGame.GameState.READY_FOR_NEXT_EXERCISE) {
                         activeTacticGame.startNextExercise();
                         pnlStatusControl.setExerciseState(
                                 activeTacticGame.getCurrentExerciseNumber() - 2,

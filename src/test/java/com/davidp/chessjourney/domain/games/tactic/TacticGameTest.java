@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * This class tests the functionality of the TacticGame2 game logic, including starting the game,
  * submitting moves, handling automatic responses, and transitioning between exercises.
  */
-public class TacticGame2Test {
+public class TacticGameTest {
 
   private static final DifficultyLevel TEST_DIFFICULTY_LEVEL =
       new DifficultyLevel(
@@ -50,13 +50,13 @@ public class TacticGame2Test {
   @Test
   void startGame_initialState_and_plyCounting() {
 
-    TacticGame2 game = new TacticGame2(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1));
+    TacticGame game = new TacticGame(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1));
 
-    assertEquals(TacticGame2.GameState.WAITING_TO_START, game.getGameState());
+    assertEquals(TacticGame.GameState.WAITING_TO_START, game.getGameState());
 
     game.startGame();
 
-    assertEquals(TacticGame2.GameState.AWAITING_USER_MOVE, game.getGameState());
+    assertEquals(TacticGame.GameState.AWAITING_USER_MOVE, game.getGameState());
     assertEquals(1, game.getCurrentPlyNumber());
     assertEquals(2, game.getTotalPliesInCurrentExercise()); // ceil(3/2)=2
     assertEquals("Re2+", game.getCurrentExpectedMove());
@@ -64,19 +64,19 @@ public class TacticGame2Test {
 
   @Test
   void happyPath_withAutoMove_and_finalMove_noAuto_leadsToGameOver() {
-    TacticGame2 game = new TacticGame2(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1));
+    TacticGame game = new TacticGame(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1));
     game.startGame();
 
     // Ply 1 (usuario): "Re2+"
     assertTrue(game.submitMove("Re2+"));
     // Hay respuesta automática "Kf6"
-    assertEquals(TacticGame2.GameState.AWAITING_ENGINE_MOVE, game.getGameState());
+    assertEquals(TacticGame.GameState.AWAITING_ENGINE_MOVE, game.getGameState());
     assertTrue(game.hasPendingAutoMove());
     assertEquals("Kf6", game.peekPendingAutoMove());
 
     // La UI aplica el auto-move y lo consume
     game.consumePendingAutoMove();
-    assertEquals(TacticGame2.GameState.AWAITING_USER_MOVE, game.getGameState());
+    assertEquals(TacticGame.GameState.AWAITING_USER_MOVE, game.getGameState());
     assertEquals(2, game.getCurrentPlyNumber());
     assertEquals("Rxe7", game.getCurrentExpectedMove());
 
@@ -84,7 +84,7 @@ public class TacticGame2Test {
     assertTrue(game.submitMove("Rxe7"));
 
     // Como no hay más ejercicios, el juego debería terminar
-    assertEquals(TacticGame2.GameState.GAME_OVER, game.getGameState());
+    assertEquals(TacticGame.GameState.GAME_OVER, game.getGameState());
     assertEquals(1, game.getCorrectExercises());
     assertEquals(0, game.getFailedExercises());
   }
@@ -92,8 +92,8 @@ public class TacticGame2Test {
   @Test
   void wrongFirstMove_marksFailed_and_readyForNextExercise() {
 
-    TacticGame2 game =
-        new TacticGame2(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1, ex2));
+    TacticGame game =
+        new TacticGame(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1, ex2));
     game.startGame();
 
     // Esperaba "Re2+", jugamos mal:
@@ -101,13 +101,13 @@ public class TacticGame2Test {
 
 
     // Hay más ejercicios, así que quedamos listos para cargar el siguiente
-    assertEquals(TacticGame2.GameState.READY_FOR_NEXT_EXERCISE, game.getGameState());
+    assertEquals(TacticGame.GameState.READY_FOR_NEXT_EXERCISE, game.getGameState());
     assertEquals(0, game.getCorrectExercises());
     assertEquals(1, game.getFailedExercises());
 
     // La UI decide pasar al siguiente ejercicio:
     game.startNextExercise();
-    assertEquals(TacticGame2.GameState.AWAITING_USER_MOVE, game.getGameState());
+    assertEquals(TacticGame.GameState.AWAITING_USER_MOVE, game.getGameState());
     assertEquals(1, game.getCurrentPlyNumber());
     assertEquals("Rb5+", game.getCurrentExpectedMove());
   }
@@ -115,12 +115,12 @@ public class TacticGame2Test {
   @Test
   void finishingLastExercise_setsGameOver() {
 
-    TacticGame2 game = new TacticGame2(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1));
+    TacticGame game = new TacticGame(anyPlayer(), anyTime(), TEST_DIFFICULTY_LEVEL, List.of(ex1));
     game.startGame();
 
     assertTrue(game.submitMove("Re2+"));
 
-    assertEquals(TacticGame2.GameState.AWAITING_ENGINE_MOVE, game.getGameState());
+    assertEquals(TacticGame.GameState.AWAITING_ENGINE_MOVE, game.getGameState());
     assertTrue(game.hasPendingAutoMove());
     assertEquals("Kf6", game.peekPendingAutoMove());
 
@@ -129,7 +129,7 @@ public class TacticGame2Test {
     assertTrue(game.submitMove("Rxe7"));
 
 
-    assertEquals(TacticGame2.GameState.GAME_OVER, game.getGameState());
+    assertEquals(TacticGame.GameState.GAME_OVER, game.getGameState());
     assertEquals(1, game.getCorrectExercises());
     assertEquals(0, game.getFailedExercises());
   }

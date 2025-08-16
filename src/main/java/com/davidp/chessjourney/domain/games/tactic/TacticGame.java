@@ -25,7 +25,7 @@ import java.util.*;
  * y si existe índice impar inmediatamente posterior, es el movimiento automático a ejecutar por la UI.
  * El último ply puede tener 1 SAN (sólo usuario).
  */
-public class TacticGame2 extends Game {
+public class TacticGame extends Game {
 
     public enum GameState {
         WAITING_TO_START,
@@ -67,10 +67,10 @@ public class TacticGame2 extends Game {
     // Movimiento automático pendiente (si tras acertar el usuario hay respuesta)
     protected String pendingAutoMove = null;
 
-    public TacticGame2(com.davidp.chessjourney.domain.Player player,
-                       TimeControl timeControl,
-                       DifficultyLevel difficultyLevel,
-                       List<Exercise> exercises) {
+    public TacticGame(com.davidp.chessjourney.domain.Player player,
+                      TimeControl timeControl,
+                      DifficultyLevel difficultyLevel,
+                      List<Exercise> exercises) {
         super();
         this.player = player;
         this.timeControl = timeControl;

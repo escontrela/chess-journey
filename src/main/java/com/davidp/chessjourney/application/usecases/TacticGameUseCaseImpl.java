@@ -4,7 +4,7 @@ import com.davidp.chessjourney.domain.Player;
 import com.davidp.chessjourney.domain.User;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.*;
-import com.davidp.chessjourney.domain.games.tactic.TacticGame2;
+import com.davidp.chessjourney.domain.games.tactic.TacticGame;
 
 import java.util.List;
 
@@ -27,12 +27,12 @@ public class TacticGameUseCaseImpl implements TacticGameUseCase {
     }
 
     @Override
-    public TacticGame2 execute(long userId, String difficulty) {
+    public TacticGame execute(long userId, String difficulty) {
         return execute(userId, difficulty, 10); // Default 10 exercises
     }
 
     @Override
-    public TacticGame2 execute(long userId, String difficulty, int numberOfExercises) {
+    public TacticGame execute(long userId, String difficulty, int numberOfExercises) {
 
         User user = userRepository.getUserById(userId);
         Player player = new Player(user.getInitials(), userId);
@@ -45,6 +45,6 @@ public class TacticGameUseCaseImpl implements TacticGameUseCase {
 
         TimeControl timeControl = TimeControl.fivePlusThree();
 
-        return new TacticGame2(player, timeControl, level, exercises);
+        return new TacticGame(player, timeControl, level, exercises);
     }
 }

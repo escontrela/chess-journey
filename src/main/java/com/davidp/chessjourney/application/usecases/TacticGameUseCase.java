@@ -1,6 +1,6 @@
 package com.davidp.chessjourney.application.usecases;
 
-import com.davidp.chessjourney.domain.games.tactic.TacticGame2;
+import com.davidp.chessjourney.domain.games.tactic.TacticGame;
 
 /**
  * Use case for creating and managing tactic games.
@@ -13,7 +13,7 @@ public interface TacticGameUseCase {
      * @param difficulty The difficulty level (e.g., "easy", "medium", "hard")
      * @return A configured TacticGame instance
      */
-    TacticGame2 execute(long userId, String difficulty);
+    TacticGame execute(long userId, String difficulty);
 
     /**
      * Creates a tactic game with specified number of exercises.
@@ -22,5 +22,5 @@ public interface TacticGameUseCase {
      * @param numberOfExercises The number of exercises to include
      * @return A configured TacticGame instance
      */
-    TacticGame2 execute(long userId, String difficulty, int numberOfExercises);
+    TacticGame execute(long userId, String difficulty, int numberOfExercises);
 }
