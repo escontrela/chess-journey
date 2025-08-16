@@ -21,7 +21,7 @@ import com.davidp.chessjourney.domain.ChessBoard;
 import com.davidp.chessjourney.domain.ChessBoardFactory;
 import com.davidp.chessjourney.domain.ChessRules;
 import com.davidp.chessjourney.domain.common.*;
-import com.davidp.chessjourney.domain.games.tactic.TacticGame;
+import com.davidp.chessjourney.domain.games.tactic.TacticGame2;
 import com.davidp.chessjourney.domain.services.FenService;
 import com.davidp.chessjourney.domain.services.FenServiceFactory;
 import com.davidp.chessjourney.domain.services.PGNService;
@@ -97,7 +97,7 @@ public class TacticViewController implements ScreenController {
   private ScreenController.ScreenStatus status;
 
   protected TacticGameUseCase tacticGameUseCase;
-  protected TacticGame activeTacticGame;
+  protected TacticGame2 activeTacticGame;
   protected SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase;
 
   protected boolean pauseLoopGame = false;
@@ -464,7 +464,7 @@ public class TacticViewController implements ScreenController {
       return;
     }
 
-    if (activeTacticGame.getGameState() == TacticGame.GameState.GAME_OVER) {
+    if (activeTacticGame.getGameState() == TacticGame2.GameState.GAME_OVER) {
 
       pauseLoopGame = true;
       JavaFXGameTimerUtil.clear();
@@ -762,114 +762,105 @@ public class TacticViewController implements ScreenController {
             + activeTacticGame.getGameState());
 
     if (activeTacticGame != null
-        && (activeTacticGame.getGameState() == TacticGame.GameState.PLAYING
-            || activeTacticGame.getGameState() == TacticGame.GameState.PLAYING_NEW_EXERCISE)) {
+        && (activeTacticGame.getGameState() == TacticGame2.GameState.AWAITING_USER_MOVE)) {
 
       ChessBoard chessBoard = ChessBoardFactory.createFromFEN(getFenFromActiveBoard());
       ChessRules chessRules = new ChessRules();
 
-      System.out.println("ChessBoard:" + chessBoard.getFen().getStringValue());
       String move =
           pgnService.toAlgebraic(
               Pos.parseString(from), Pos.parseString(to), chessBoard, chessRules, null);
 
       pauseLoopGame = true;
-
-      System.out.println("Move to make:" + move);
-      // TODO: defend piece game: this is only for memory game, for defend game we need to change
-      // the piece on the board, so .. guessMove method better
       boolean result = activeTacticGame.submitMove(move);
-
-      System.out.println("Result of the move: " + result + " for move: " + move);
 
       if (result) {
 
         FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 2.0)
             .onFinished(
                 () -> {
+
                   lblBoardType.setText("¡Correcto!");
                   // boardPanes.get(event.getPos()).getChildren().add(imgOk);
                   boardPanes.get(Pos.parseString(to)).setStyle("-fx-background-color: #00E680;");
 
                   pnlStatusControl.setPlyState(
-                      activeTacticGame.getCurrentPlyNumber() - 2, TacticStatusController.STATE_OK);
+                      activeTacticGame.getCurrentPlyNumber()-1 , TacticStatusController.STATE_OK);
 
-                  if (activeTacticGame.getGameState() == TacticGame.GameState.GAME_OVER) {
-                    playTypeWriterEffect("Bien hecho, ejercicio terminado!", lblGhostMsg, 0.02);
-                    runLater(
+                  if (activeTacticGame.getGameState() == TacticGame2.GameState.GAME_OVER) {
+
+                      playTypeWriterEffect("Bien hecho, ejercicio terminado!", lblGhostMsg, 0.02);
+
+                      runLater(
                         () ->
                             soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
 
-                    pnlStatusControl.setExerciseState(
+
+                      pnlStatusControl.setExerciseState(
                         activeTacticGame.getCurrentExerciseNumber() - 2,
                         TacticStatusController.STATE_OK);
-                    pnlStatusControl.setCurrentExercise(
+
+                      pnlStatusControl.setCurrentExercise(
                         activeTacticGame.getCurrentExerciseNumber() - 1);
 
                     return;
                   } else if (activeTacticGame.getGameState()
-                      == TacticGame.GameState.PLAYING_NEW_EXERCISE) {
+                      == TacticGame2.GameState.READY_FOR_NEXT_EXERCISE) {
 
-                    // TODO pasar al siguient ejercicio o al final
-                    pnlStatusControl.setExerciseState(
+                      //Publicamos en el tablero un nuevo ejercicio con su FEN position
+                      activeTacticGame.startNextExercise();
+
+                        pnlStatusControl.setExerciseState(
                         activeTacticGame.getCurrentExerciseNumber() - 2,
-                        TacticStatusController.STATE_OK);
-                    pnlStatusControl.setCurrentExercise(
-                        activeTacticGame.getCurrentExerciseNumber() - 1);
-                    GameState gameState = fenService.parseString(activeTacticGame.getFen());
-                    cleanPieces();
-                    showPiecesOnBoard(gameState);
+                            TacticStatusController.STATE_OK);
+
+                        pnlStatusControl.setCurrentExercise(
+                            activeTacticGame.getCurrentExerciseNumber() - 1);
+
+                        pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
+                        pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber() - 1);
+                        pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
+                        pnlStatusControl.resetAllPlyStates();
+
+                        GameState gameState = fenService.parseString(activeTacticGame.getFen());
+                        cleanPieces();
+                        showPiecesOnBoard(gameState);
 
                   } else {
 
-                    Pos fromPos = Pos.parseString(from);
-                    Pos toPos = Pos.parseString(to);
-                    PiecePosition movingPiece = chessBoard.getPiece(fromPos);
-                    chessBoard.movePiece(movingPiece.getPiece(), fromPos, toPos);
-                    chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
+                      if (activeTacticGame.hasPendingAutoMove()) {
 
-                    String[] nextMoves =
-                        activeTacticGame.getPlyMoves(
-                            activeTacticGame.getCurrentExerciseNumber() - 1,
-                            activeTacticGame.getCurrentPlyNumber() - 2);
+                          Pos fromPos = Pos.parseString(from);
+                          Pos toPos = Pos.parseString(to);
+                          PiecePosition movingPiece = chessBoard.getPiece(fromPos);
+                          chessBoard.movePiece(movingPiece.getPiece(), fromPos, toPos);
+                          chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
 
-                    System.out.println("Next moves:" + Arrays.toString(nextMoves));
+                          // La UI aplica el auto-move y lo consume
+                          String moveToMake = activeTacticGame.peekPendingAutoMove();
+                          System.out.println("Next move:" + moveToMake);
 
-                    String moveToMake = null;
-                    if (movingPiece.getPiece().getColor().opposite().equals(PieceColor.BLACK)) {
-                      moveToMake = nextMoves[1];
-                    } else {
-                      // TODO what happend whith this??
-                    }
-                    System.out.println("Next move:" + moveToMake);
+                          // now we should perform the move!
+                          GameMove gameMove = pgnService.fromAlgebraic(moveToMake, chessBoard);
 
-                    // now we should perform the move!
-                    GameMove gameMove = pgnService.fromAlgebraic(moveToMake, chessBoard);
+                          System.out.println("gameMove:" + gameMove);
 
-                    System.out.println("gameMove:" + gameMove);
+                          Pos nextMoveFrom = gameMove.getMoves().getFirst().getFrom();
+                          Pos nextMoveTo = gameMove.getMoves().getFirst().getTo();
+                          PiecePosition nextMovingPiece = chessBoard.getPiece(nextMoveFrom);
 
-                    Pos nextMoveFrom = gameMove.getMoves().getFirst().getFrom();
-                    Pos nextMoveTo = gameMove.getMoves().getFirst().getTo();
-                    PiecePosition nextMovingPiece = chessBoard.getPiece(nextMoveFrom);
-                    System.out.println(
-                        "Next move from:"
-                            + nextMoveFrom
-                            + " to:"
-                            + nextMoveTo
-                            + " piece:"
-                            + nextMovingPiece);
+                          chessBoard.movePiece(nextMovingPiece.getPiece(), nextMoveFrom, nextMoveTo);
+                          chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
 
-                    chessBoard.movePiece(nextMovingPiece.getPiece(), nextMoveFrom, nextMoveTo);
-                    chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
+                          activeTacticGame.setNewChessBoardState(chessBoard);
+                          cleanPieces();
+                          GameState gameState = fenService.parseString(chessBoard.getFen());
+                          showPiecesOnBoard(gameState);
 
-                    activeTacticGame.setCurrentFen(chessBoard.getFen());
-                    cleanPieces();
-                    GameState gameState = fenService.parseString(chessBoard.getFen());
+                          activeTacticGame.consumePendingAutoMove();
+                          pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
 
-                    showPiecesOnBoard(gameState);
-
-                    // TODO pasar al siguiente ply
-                    pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
+                      }
                   }
 
                   playTypeWriterEffect("Bien hecho!", lblGhostMsg, 0.02);
@@ -913,6 +904,27 @@ public class TacticViewController implements ScreenController {
                   FXAnimationUtil.fadeIn(lblBoardType, 2.0)
                       .onFinished(() -> pauseLoopGame = false)
                       .buildAndPlay();
+
+                    if (activeTacticGame.getGameState() == TacticGame2.GameState.READY_FOR_NEXT_EXERCISE) {
+                        activeTacticGame.startNextExercise();
+                        pnlStatusControl.setExerciseState(
+                                activeTacticGame.getCurrentExerciseNumber() - 2,
+                                TacticStatusController.STATE_FAIL);
+
+                        pnlStatusControl.setCurrentExercise(
+                                activeTacticGame.getCurrentExerciseNumber() - 1);
+
+                        pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
+                        pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber() - 1);
+                        pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
+                        pnlStatusControl.resetAllPlyStates();
+
+                        GameState gameState = fenService.parseString(activeTacticGame.getFen());
+                        cleanPieces();
+                        showPiecesOnBoard(gameState);
+
+                    }
+
                 })
             .buildAndPlay();
       }

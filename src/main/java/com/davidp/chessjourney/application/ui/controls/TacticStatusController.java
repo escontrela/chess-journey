@@ -184,6 +184,13 @@ public class TacticStatusController extends Pane {
     }
   }
 
+  public void resetAllPlyStates() {
+    for (int i = 0; i < plyStates.size(); i++) {
+      plyStates.set(i, 0); // Reset to normal state
+      updatePlyRectangleColor(i);
+    }
+  }
+
   private void updateExerciseRectangles(int count) {
     // Clear existing rectangles
     hbExercises.getChildren().clear();

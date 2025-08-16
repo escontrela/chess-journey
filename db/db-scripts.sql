@@ -212,6 +212,16 @@ values ('R7/8/8/4k2p/8/8/8/3K4 w - - 0 1','1. Ra5+ Kf4 2. Rxh5',
 (SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
 (SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
 
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values ('8/6r1/8/4k3/8/2P5/1Q6/4K3 w - - 0 1','1. c4+ Ke6 2. Qxg7'
+(SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+
+
+
+
+
 
 +---------------+          +-------------------+          +-------------------+
 |    users      |          |    exercises      |          | difficulty_levels |
