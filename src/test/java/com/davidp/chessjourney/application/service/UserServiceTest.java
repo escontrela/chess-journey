@@ -1,23 +1,28 @@
 package com.davidp.chessjourney.application.service;
 
+import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
 import org.junit.Test;
 import org.junit.jupiter.api.Assertions;
 
 public class UserServiceTest {
 
   @Test
-  public void testUserServiceSingleton() {
-    // Test that getInstance returns the same instance
-    UserServiceImpl instance1 = UserServiceImpl.getInstance();
-    UserServiceImpl instance2 = UserServiceImpl.getInstance();
+  public void testUserServiceCreation() {
+    // Test that factory creates UserService instances correctly
+    UserService userService1 = ApplicationServiceFactory.createUserService();
+    UserService userService2 = ApplicationServiceFactory.createUserService();
     
-    Assertions.assertSame(instance1, instance2, "UserServiceImpl should return the same instance");
+    Assertions.assertNotNull(userService1, "UserService should not be null");
+    Assertions.assertNotNull(userService2, "UserService should not be null");
+    
+    // Since we're not using singleton anymore, instances should be different
+    Assertions.assertNotSame(userService1, userService2, "Different UserService instances should be created each time");
   }
 
   @Test
   public void testGetActiveUserIdDelegatesToAppProperties() {
     // Test that getActiveUserId method exists and delegates properly
-    UserServiceImpl userService = UserServiceImpl.getInstance();
+    UserService userService = ApplicationServiceFactory.createUserService();
     
     // This should not throw an exception and should delegate to AppProperties
     long userId = userService.getActiveUserId();

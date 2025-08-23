@@ -2,6 +2,7 @@ package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.service.UserServiceImpl;
+import com.davidp.chessjourney.domain.UserRepository;
 
 /**
  * Factory for creating application services.
@@ -19,6 +20,7 @@ public class ApplicationServiceFactory {
      * @return UserService implementation
      */
     public static UserService createUserService() {
-        return UserServiceImpl.getInstance();
+        UserRepository userRepository = RepositoryFactory.createUserRepository();
+        return new UserServiceImpl(userRepository);
     }
 }

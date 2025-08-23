@@ -1,7 +1,6 @@
 package com.davidp.chessjourney.application.service;
 
 import com.davidp.chessjourney.application.config.AppProperties;
-import com.davidp.chessjourney.application.factories.RepositoryFactory;
 import com.davidp.chessjourney.domain.User;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.UserElo;
@@ -12,19 +11,15 @@ import java.util.UUID;
 
 /**
  * Implementation of UserService that provides centralized access to user data.
- * Follows singleton pattern to ensure single instance across the application.
+ * Uses dependency injection for UserRepository.
  */
 public class UserServiceImpl implements UserService {
 
-  private static class Holder {
-    private static final UserServiceImpl INSTANCE = new UserServiceImpl();
-  }
+  private final UserRepository userRepository;
 
-  public static UserServiceImpl getInstance() {
-    return Holder.INSTANCE;
+  public UserServiceImpl(UserRepository userRepository) {
+    this.userRepository = userRepository;
   }
-
-  private UserServiceImpl() {}
 
   @Override
   public User getActiveUser() {
@@ -57,7 +52,6 @@ public class UserServiceImpl implements UserService {
       return null;
     }
     
-    UserRepository userRepository = RepositoryFactory.createUserRepository();
     return userRepository.getUserById(userId);
   }
 
@@ -67,7 +61,6 @@ public class UserServiceImpl implements UserService {
       return List.of(); // Return empty list if invalid user ID
     }
     
-    UserRepository userRepository = RepositoryFactory.createUserRepository();
     return userRepository.getAllUserElos(userId);
   }
 
@@ -77,7 +70,6 @@ public class UserServiceImpl implements UserService {
       return Optional.empty();
     }
     
-    UserRepository userRepository = RepositoryFactory.createUserRepository();
     return userRepository.getUserEloByType(userId, eloTypeId);
   }
 }
