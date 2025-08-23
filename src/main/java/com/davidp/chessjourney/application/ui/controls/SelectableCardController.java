@@ -12,7 +12,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class SelectableCardController extends Pane {
@@ -25,7 +24,6 @@ public class SelectableCardController extends Pane {
 
     public SelectableCardController() {
 
-        System.out.println("Cargando FXML: /com/davidp/chessjourney/selectable-card.fxml");
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/davidp/chessjourney/selectable-card.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);

@@ -151,6 +151,46 @@ public class ChessRules {
     }
   }
 
+    /**
+     * Validate if the position is checked or mate
+     * @param actualFen
+     * @return true if the position is checked or mate
+     */
+    public boolean isCheck(Fen actualFen) {
+
+        Position position = new Position(actualFen.getStringValue());
+
+        try {
+
+            return position.isCheck();
+
+        } catch (Exception e) {
+
+            logger.error("Error trying to isCheck on FEN:{}", actualFen);
+            throw new IllegalMoveException(e);
+        }
+    }
+
+    /**
+     * Validate if the position is checked or mate
+     * @param actualFen
+     * @return true if the position is checked or mate
+     */
+    public boolean isMate(Fen actualFen) {
+
+        Position position = new Position(actualFen.getStringValue());
+
+        try {
+
+            return position.isMate();
+
+        } catch (Exception e) {
+
+            logger.error("Error trying to isMate on FEN:{}", actualFen);
+            throw new IllegalMoveException(e);
+        }
+    }
+
   private static boolean isLegalMove(Position position, short move) {
     short[] legalMoves = position.getAllMoves();
     // TODO improve this code with a hashmap!

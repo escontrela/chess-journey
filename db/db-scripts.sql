@@ -196,6 +196,32 @@ values('r1bqkb1r/ppnp1ppp/4pn2/1B6/2NP4/1PP1PN2/3B1PPP/R2QK2R w KQkq - 0 1','Ba4
 (SELECT id FROM public.exercise_types WHERE name = 'defend_memory_game'),
 (SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
 
+-- tactic_game
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values ('8/8/4k3/3r4/8/3N4/4K3/8 w - - 0 1','1. Nf4+ Ke5 2. Nxd5',
+(SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values ('8/R5K1/8/3k4/8/8/3r4/8 w - - 0 2','1. Rd7+ Ke6 2. Rxd2',
+(SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values ('R7/8/8/4k2p/8/8/8/3K4 w - - 0 1','1. Ra5+ Kf4 2. Rxh5',
+(SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
+values ('8/6r1/8/4k3/8/2P5/1Q6/4K3 w - - 0 1','1. c4+ Ke6 2. Qxg7'
+(SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
+(SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+
+
+
+
+
 
 +---------------+          +-------------------+          +-------------------+
 |    users      |          |    exercises      |          | difficulty_levels |
@@ -274,4 +300,19 @@ CREATE TABLE user_exercise_stats (
     attempts INT DEFAULT 1,               -- Número de intentos hasta resolverlo
     difficulty_id UUID NOT NULL REFERENCES difficulty_levels(id) ON DELETE CASCADE  -- Dificultad del ejercicio
 );
+
+CREATE TABLE IF NOT EXISTS quotes (
+    id SERIAL PRIMARY KEY,
+    text VARCHAR(500) NOT NULL,
+    author VARCHAR(100) NOT NULL
+);
+
+-- Insertar algunas quotes iniciales
+INSERT INTO quotes (text, author) VALUES
+('Some people think that if their opponent plays a beautiful game, it''s okay to lose. I don''t. You have to be merciless.', 'Magnus Carlsen'),
+('Chess is life in miniature. Chess is struggle, chess is battles.', 'Garry Kasparov'),
+('Every chess master was once a beginner.', 'Irving Chernev'),
+('Chess is the gymnasium of the mind.', 'Blaise Pascal'),
+('When you see a good move, look for a better one.', 'Emanuel Lasker');
+
 

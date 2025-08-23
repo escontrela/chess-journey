@@ -111,6 +111,11 @@
     -fx-border-color: #b3b3b3;
 }
 
+.button-regular-pressed {
+    -fx-background-color: #404040;
+    -fx-border-color: #b3b3b3;
+}
+
 /* Imagen dentro del botón */
 .button-regular .image-view {
     -fx-opacity: 0.8;                    /* ícono un poco más visible */
@@ -400,6 +405,31 @@
     -fx-spacing: 12;
 }
 
+.popup-section-2 {
+     -fx-background-color: #262626;
+        -fx-padding: 16;
+        -fx-spacing: 12;
+
+    /* Bordes redondeados */
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+
+    /* Borde fino y suave */
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 1;
+
+
+    /* Sombra para dar sensación de flotante */
+    /*-fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 14, 0, 0, 2);*/
+}
+
+/* Contenedor de campos */
+.popup-section-square{
+    -fx-background-color: #262626;
+    -fx-padding: 20;
+    -fx-spacing: 12;
+}
+
 /* Etiquetas */
 .popup-label {
     -fx-text-fill: #E0E0E0;
@@ -417,13 +447,36 @@
     -fx-border-width: 1;
     -fx-padding: 6 10;
 }
-/* Color del prompt text (texto de sugerencia) */
-.popup-text-field .text {
-    -fx-fill: #ffffff;
+
+/* Estilos específicos para TextArea con la misma apariencia */
+.popup-text-field.text-area {
+    -fx-background-color: #1C1C1C;
 }
 
-.popup-text-field:focused {
-    -fx-border-color: #3A86FF;
+.popup-text-field.text-area .content {
+    -fx-background-color: #1C1C1C;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.popup-text-field.text-area .scroll-pane {
+    -fx-background-color: transparent;
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+}
+
+.popup-text-field.text-area .viewport {
+    -fx-background-color: transparent;
+}
+
+.popup-text-field.text-area .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+}
+
+.popup-text-field.text-area .scroll-bar:vertical .thumb {
+    -fx-background-color: #3A3A3A;
+    -fx-background-radius: 6;
 }
 
 /* Botón rojo con estilo premium tipo degradado */
@@ -718,9 +771,311 @@
 .chessboard-square-black {
     -fx-background-color: #618AB3;
 }
+.chessboard-square-black-gemini {
+    /* Capa 0: color base sólido para tapar juntas */
+    /* Capa 1: degradado suave diagonal */
+    /* Capa 2: brillo muy sutil radial para textura */
+    -fx-background-color:
+        #8B6B3F,
+        linear-gradient(from 0% 0% to 100% 100%, #8B6B3F 0%, #6F5430 100%),
+        radial-gradient(center 50% 50%, radius 80%, rgba(255,255,255,0.06) 0%, transparent 100%);
+    -fx-background-insets: 0, 1, 1;
+    -fx-background-radius: 0, 0, 0; /* sin bordes redondeados para encajar con el resto */
+}
+
+.chessboard-square-white-gemini {
+    /* Base crema suave */
+    -fx-background-color:
+        #F1E3C9,
+        radial-gradient(center 50% 50%, radius 95%, rgba(255,255,255,0.18), transparent);
+    -fx-background-insets: 0, 1;
+    -fx-background-radius: 0, 0;
+}
+.text-board-gemini {
+    -fx-text-fill: #4A4A4A; /* Gris oscuro neutro, menos contraste que el negro */
+    -fx-font-size: 14px;
+    -fx-font-family: "Alatsi";
+    -fx-font-weight: bold;
+    -fx-font-smoothing-type: lcd;
+    -fx-opacity: 0.85; /* Un toque de suavidad extra */
+}
+
+/* Contenedor de campos */
+.popup-section-square{
+    /*-fx-background-color: #262626;*/
+    -fx-background-color: transparent;
+}
+
+.board-gemini-style {
+    /* Fondo con foco central */
+    -fx-background-color: radial-gradient(
+        center 50% 50%, radius 60%,
+        #2a2a2a,
+        #0d0d0d
+    );
+    /* Borde redondeado con degradado tipo neón */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+}
+
+.chessboard-border {
+    -fx-background-color: transparent;
+    -fx-border-width: 2;
+    -fx-border-color: transparent;
+    -fx-effect: dropshadow(gaussian, rgba(255, 255, 255, 0.25), 30, 0.3, 0, 0);
+}
+
 /* end: system design - button 3 */
+
+/** Start: avatar for chessboard **/
+.chat-bubble {
+    -fx-background-color: linear-gradient(to bottom, #1C1C22, #17171C);
+    -fx-background-radius: 14;
+    -fx-border-radius: 14;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 1;
+    -fx-padding: 10 14;
+    -fx-effect: dropshadow(three-pass-box, rgba(0,0,0,0.35), 14, 0, 0, 2);
+}
+
+
+
+/* Cola del globo (usa un Region con esta clase y lo colocas abajo-izda del bubble) */
+.chat-bubble-tail {
+    -fx-background-color: linear-gradient(to bottom, #1C1C22, #17171C);
+    -fx-shape: "M0,0 L12,10 L0,20 Z"; /* triangulito */
+    -fx-background-insets: 0;
+    -fx-pref-width: 12;
+    -fx-pref-height: 20;
+}
+
+/* Texto dentro del globo (mensajes del bot) */
+.chat-bubble-text {
+    -fx-text-fill: #E6EAF2; /* casi blanco, legible en dark */
+    -fx-font-size: 13px;
+}
+
+/* INPUT estilo ChatGPT dark (TextField o TextArea) */
+.prompt-input,
+.text-area.prompt-input .content {
+    -fx-background-color: #0F1115, #0F1115; /* capa base + content para TextArea */
+    -fx-background-radius: 12;
+    -fx-border-radius: 12;
+    -fx-border-color: rgba(255,255,255,0.10);
+    -fx-border-width: 1;
+    -fx-text-fill: #F2F5FF;
+    -fx-prompt-text-fill: rgba(226,232,240,0.45);
+    -fx-padding: 10 12;
+}
+
+/* Para TextArea específicamente (quita borde interior gris) */
+.text-area.prompt-input {
+    -fx-background-insets: 0;
+}
+.text-area.prompt-input .content {
+    -fx-background-insets: 0;
+}
+
+/* Hover sutil */
+.prompt-input:hover,
+.text-area.prompt-input:hover .content {
+    -fx-border-color: rgba(255,255,255,0.18);
+}
+
+/* Focus con glow azulado tipo Gemini/ChatGPT */
+.prompt-input:focused,
+.text-area:focused.prompt-input .content {
+    -fx-border-color: #3B82F6;
+    -fx-effect: dropshadow(three-pass-box, rgba(59,130,246,0.35), 18, 0.25, 0, 0);
+}
+
+
+/* Botón “enviar” circular minimal (si lo colocas dentro o al lado) */
+.prompt-send {
+    -fx-background-color: rgba(255,255,255,0.06);
+    -fx-border-color: rgba(255,255,255,0.12);
+    -fx-border-width: 1;
+    -fx-background-radius: 999;
+    -fx-border-radius: 999;
+    -fx-padding: 6 8;
+}
+.prompt-send:hover {
+    -fx-background-color: rgba(59,130,246,0.12);
+    -fx-border-color: rgba(59,130,246,0.45);
+}
+.prompt-send:pressed {
+    -fx-background-color: rgba(59,130,246,0.18);
+}
+/** End: avatar for chessboard **/
+
+/** Start: board panel strip **/
+/* Contenedor principal de la franja inferior */
+.score-strip {
+    -fx-background-color: linear-gradient(to bottom, #1a1a1a, #0f0f0f);
+    -fx-background-radius: 6;
+    -fx-border-radius: 6;
+    -fx-border-color: rgba(255,255,255,0.08);
+    -fx-border-width: 1;
+}
+
+/* Pastillas de victorias */
+.score-pill {
+    -fx-background-color: #4A5D23;
+   /* -fx-background-radius: 50%; */
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+/* Nombre del jugador */
+.score-name {
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-weight: bold;
+}
+
+/* Nombre del jugador */
+.score-name-white {
+    -fx-text-fill: black;
+    -fx-font-size: 16px;
+    -fx-font-family: "Alatsi";
+    -fx-font-weight: bold;
+}
+
+.score-name-left {
+    -fx-font-size: 18px;              /* tamaño de fuente más grande */
+    -fx-font-weight: bold;            /* texto en negrita */
+    -fx-text-fill: black;           /* color blanco */
+    -fx-text-alignment: center;       /* centra el texto si es multilínea */
+    -fx-wrap-text: true;              /* permite saltos de línea */
+    -fx-text-transform: uppercase;    /* convierte el texto a mayúsculas */
+}
+
+.score-name-right {
+    -fx-font-size: 18px;              /* tamaño de fuente más grande */
+    -fx-font-weight: bold;            /* texto en negrita */
+    -fx-text-fill: white;           /* color blanco */
+    -fx-text-alignment: center;       /* centra el texto si es multilínea */
+    -fx-wrap-text: true;              /* permite saltos de línea */
+    -fx-text-transform: uppercase;    /* convierte el texto a mayúsculas */
+}
+
+/* Reloj (tiempo) */
+.score-clock {
+    -fx-text-fill: #f0ebd8;
+    -fx-font-size:28px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Alatsi";
+}
+/* Reloj (tiempo) para piezas negras */
+.score-clock-black {
+    -fx-text-fill: #7A7E83; /* Gris oscuro con matiz frío */
+    -fx-font-size: 28px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Alatsi";
+}
+/* Texto pequeño tipo "RATING" o "Heart rate" */
+.score-caption {
+    -fx-text-fill: white;
+    -fx-font-size: 10px;
+    -fx-font-family: "Alatsi";
+}
+.score-caption-right {
+    -fx-text-fill: rgba(0,0,0,0.6);
+    -fx-font-size: 10px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Valor numérico (rating, BPM...) */
+.score-value {
+    -fx-text-fill: black;
+    -fx-font-size: 12px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Valor numérico (rating, BPM...) */
+.score-value-white {
+    -fx-text-fill: white;
+    -fx-font-size: 12px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Divisor vertical central */
+.score-divider {
+    -fx-background-color: rgba(255,255,255,0.15);
+}
+/** End: board panel strip **/
+
+/** Start: board panel PGN **/
+/* Etiqueta de cabecera PGN */
+.popup-label {
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+}
+
+/* Panel gris para texto (como el recuadro PGN) */
+.panel-gray-for-text {
+    -fx-background-color: #1E1E1E;
+    -fx-background-radius: 10;
+    -fx-padding: 8;
+}
+
+/* Estilo para índice de jugada */
+.pgn-index {
+    -fx-text-fill: #888888;
+    -fx-font-size: 13px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Estilo para jugada de blancas */
+.pgn-move-white {
+    -fx-text-fill: #E6E6E6;
+    -fx-font-size: 14px;
+    -fx-font-family: "Alatsi";
+}
+
+.pgn-box {
+    -fx-background-color: transparent;      /* fondo exterior */
+    -fx-background-insets: 0;
+    -fx-padding: 0;
+}
+
+/* Quitar el fondo de la zona de scroll */
+.pgn-box .viewport {
+    -fx-background-color: transparent;      /* fondo del viewport */
+}
+/* Quitar bordes visibles */
+.pgn-content {
+    -fx-background-color: transparent;
+}
+/* Estilo para jugada de negras */
+.pgn-move-black {
+    -fx-text-fill: #C8C8C8;
+    -fx-font-size: 14px;
+    -fx-font-family: "Alatsi";
+}
+
+/* Botón regular para navegación */
+.button-regular {
+    -fx-background-color: #2C2C2C;
+    -fx-background-radius: 6;
+    -fx-border-color: #3A3A3A;
+    -fx-border-radius: 6;
+    -fx-cursor: hand;
+}
+.button-regular:hover {
+    -fx-background-color: #3A3A3A;
+}
+.button-regular:pressed {
+    -fx-background-color: #1A1A1A;
+}
+/** End: board panel PGN **/
 
 
 /******************************************/
 /** END: NEW SYSTEM DESIGN  10-01-2025 **/
-/******************************************/
+/******************************************

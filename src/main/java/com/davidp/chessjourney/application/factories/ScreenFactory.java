@@ -3,6 +3,7 @@ package com.davidp.chessjourney.application.factories;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.board.BoardViewController;
 import com.davidp.chessjourney.application.ui.board.ExerciseResultViewController;
+import com.davidp.chessjourney.application.ui.board.TacticViewController;
 import com.davidp.chessjourney.application.ui.main.MainSceneController;
 import com.davidp.chessjourney.application.ui.menu.MenuViewController;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewController;
@@ -28,6 +29,7 @@ public class ScreenFactory {
     BOARD("/com/davidp/chessjourney/board-view-2.fxml"),
     MEMORY_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
     DEFEND_GAME("/com/davidp/chessjourney/board-view-2.fxml"),
+    TACTIC_GAME("/com/davidp/chessjourney/board-view-3.fxml"),
     EXERCISE_RESULTS_PANEL("/com/davidp/chessjourney/exercise-result-view.fxml"),
     PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml"),
     CHANGE_USER("/com/davidp/chessjourney/user-change.fxml"),
@@ -76,6 +78,8 @@ public class ScreenFactory {
         return getMemoryGameScreen();
       case DEFEND_GAME:
         return getDefendGameScreen();
+      case TACTIC_GAME:
+        return getTacticGameScreen();
       case PROMOTE_PANEL:
         return getPromotePanelScreen();
       case EXERCISE_RESULTS_PANEL:
@@ -150,6 +154,15 @@ public class ScreenFactory {
     FxmlBundle<BoardViewController> objectFxmlBundle = loadFxml(Screens.MEMORY_GAME.resourceName());
     var controller = objectFxmlBundle.getController();
     controller.setMemoryGameUseCase(UseCaseFactory.createGuessMemoryGameUseCase());
+    controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
+    return objectFxmlBundle.getController();
+  }
+
+  protected ScreenController getTacticGameScreen() {
+
+    FxmlBundle<TacticViewController> objectFxmlBundle = loadFxml(Screens.TACTIC_GAME.resourceName());
+    var controller = objectFxmlBundle.getController();
+    controller.setTacticGameUseCase(UseCaseFactory.createTacticGameUseCase());
     controller.setSaveUserExerciseStatsUseCase(UseCaseFactory.createSaveUserExerciseStatsUseCase());
     return objectFxmlBundle.getController();
   }

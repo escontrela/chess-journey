@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.davidp.chessjourney.application.ui.controls.PGNEditorController?>
+<?import com.davidp.chessjourney.application.ui.controls.TacticStatusController?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
-<?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
@@ -12,7 +13,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1260.0" styleClass="board-gemini-style" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.BoardViewController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1260.0" styleClass="board-gemini-style" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.TacticViewController">
    <children>
       <Pane layoutX="260.0" layoutY="47.0" prefHeight="640.0" prefWidth="640.0" styleClass="chessboard-border" stylesheets="@custom-styles.css">
          <children>
@@ -166,7 +167,7 @@
          </children>
       </Pane>
 
-      <Pane fx:id="pnlTime" layoutX="930.0" layoutY="47.0" prefHeight="472.0" prefWidth="303.0" styleClass="popup-section-2">
+      <Pane fx:id="pnlTime" layoutX="930.0" layoutY="47.0" prefHeight="640.0" prefWidth="303.0" styleClass="popup-section-2">
          <!-- CONTENIDO DEL PANEL DERECHA SUPERIOR (pnlTime) -->
          <children>
             <!-- Cabecera -->
@@ -178,7 +179,7 @@
             <Label layoutX="168.0" layoutY="44.0" styleClass="text-gray-small" text="Black" />
 
             <!-- Lista PGN con scroll -->
-            <ScrollPane fx:id="pgnScroll" fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="64.0" prefHeight="289.0" prefWidth="279.0" styleClass="pgn-box">
+            <ScrollPane fx:id="pgnScroll" fitToWidth="true" hbarPolicy="NEVER" layoutX="12.0" layoutY="64.0" prefHeight="455.0" prefWidth="279.0" styleClass="pgn-box">
                <content>
                   <VBox fx:id="pgnList" fillWidth="true" spacing="6.0" style="-fx-padding: 8;">
                      <!-- Fila de ejemplo (puedes borrarla en runtime) -->
@@ -197,7 +198,7 @@
             </ScrollPane>
 
             <!-- Botonera navegación -->
-            <HBox alignment="CENTER" layoutX="12.0" layoutY="370.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="544.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
                <Button fx:id="btnFirst" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                   <graphic>
                      <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
@@ -236,9 +237,9 @@
                   </graphic>
                </Button>
             </HBox>
-            <HBox alignment="CENTER" layoutX="12.0" layoutY="420.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
+            <HBox alignment="CENTER" layoutX="12.0" layoutY="594.0" prefHeight="32.0" prefWidth="277.0" spacing="10.0">
                <children>
-                  <Button fx:id="btnFirst1" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
+                  <Button fx:id="btnPGNEditor" onAction="#buttonAction" prefHeight="32.0" prefWidth="40.0" styleClass="button-regular">
                      <graphic>
                         <ImageView fitHeight="16.0" fitWidth="16.0" preserveRatio="true">
                            <image>
@@ -269,21 +270,6 @@
             </HBox>
          </children>
       </Pane>
-      <Pane layoutX="930.0" layoutY="526.0" prefHeight="161.0" prefWidth="303.0" styleClass="popup-section-2">
-         <children>
-            <Label layoutX="21.0" layoutY="83.0" styleClass="popup-label" text="PGN" />
-            <Label layoutX="21.0" layoutY="19.0" styleClass="popup-label" text="FEN" />
-            <TextField fx:id="inFen" layoutX="12.0" layoutY="37.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="277.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="r3k2r/ppp1qppp/4bn2/n1bpp3/2B1P3/1PNPBN2/P1P1QPPP/R3K2R w KQkq - 0 9">
-               <font>
-                  <Font name="Alatsi Regular" size="12.0" />
-               </font>
-            </TextField>
-            <TextField fx:id="inPGN" layoutX="14.0" layoutY="104.0" onKeyPressed="#handleKeyPress" prefHeight="35.0" prefWidth="204.0" promptText="this is a input text box" styleClass="popup-text-field" stylesheets="@custom-styles.css" text="Bb5+">
-               <font>
-                  <Font name="Alatsi Regular" size="12.0" />
-               </font>
-            </TextField>
-         </children></Pane>
       <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1230.0" layoutY="4.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
@@ -300,7 +286,7 @@
          <children>
             <ImageView fitHeight="229.0" fitWidth="177.0" layoutX="32.0" layoutY="-26.0" pickOnBounds="true" preserveRatio="true">
                <image>
-                  <Image url="@avatar/cappuccino-assasino-avatar-2.png" />
+                  <Image url="@avatar/bombardino-crocodilo-avatar.png" />
                </image>
             </ImageView>
             <Pane layoutX="10.0" layoutY="168.0" prefHeight="116.0" prefWidth="212.0" styleClass="popup-section-2">
@@ -319,102 +305,20 @@
             </ImageView>
          </children>
       </Pane>
-      <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="27.0" layoutY="656.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="37.0" prefWidth="35.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="1" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
-      <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="80.0" layoutY="656.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="prompt-send" stylesheets="@custom-styles.css" text="2" textFill="WHITE">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
       <Label fx:id="lblExerciseNum" layoutX="871.0" layoutY="16.0" styleClass="popup-label" text="..." />
       <Label fx:id="lblStatus" layoutX="274.0" layoutY="16.0" styleClass="popup-label" text="..." />
-      <Label layoutX="27.0" layoutY="620.0" styleClass="popup-label" text="Difficulty level" />
       <Button fx:id="btStart" alignment="BASELINE_CENTER" layoutX="71.0" layoutY="381.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="121.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Start" textFill="WHITE" visible="false">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
       </Button>
       <Label fx:id="lblBoardType" layoutX="551.0" layoutY="16.0" styleClass="popup-label" text="..." />
+      <Label layoutX="93.0" layoutY="17.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text=" |    TACTIC GAME" />
+       <TacticStatusController fx:id="pnlStatusControl" layoutX="16.0" layoutY="710.0">
+      </TacticStatusController>
 
-      <!-- ===== Bottom score/time strip ===== -->
-      <Pane fx:id="pnlScoreStrip" layoutX="16.0" layoutY="720.0" prefHeight="72.0" prefWidth="1228.0" styleClass="score-strip">
-
-         <!-- LADO BLANCAS (IZQ) -->
-         <Pane layoutX="12.0" layoutY="10.0" prefHeight="52.0" prefWidth="560.0">
-            <!-- Victorias -->
-            <Label fx:id="lblWhiteWins" alignment="CENTER" layoutX="0.0" layoutY="-3.0" prefHeight="60.0" prefWidth="36.0" styleClass="score-pill" text="0" />
-            <Pane layoutX="36.0" layoutY="-3.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #C7C2B3;">
-               <children>
-                  <!-- Rating -->
-                  <Label layoutX="20.0" layoutY="5.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
-                  <Label layoutX="23.0" layoutY="17.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="1470" textFill="#f0ebd8">
-                     <font>
-                        <Font size="14.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Pane layoutX="116.0" layoutY="-3.0" prefHeight="60.0" prefWidth="242.0" style="-fx-background-color: white;">
-               <children>
-                  <Label layoutX="57.0" layoutY="1.0" prefHeight="52.0" prefWidth="121.0" styleClass="score-name-left" stylesheets="@custom-styles.css" text="ABRAHAM PEREIRA" textFill="#f0ebd8">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-            <Label layoutX="493.0" layoutY="12.0" styleClass="score-caption" text="Heart rate" />
-            <Label fx:id="lblWhiteHR" layoutX="495.0" layoutY="30.0" styleClass="score-value-white" text="92 BPM" />
-            <Label fx:id="lblBlackTime" layoutX="384.0" layoutY="9.0" styleClass="score-clock" text="24:32" textFill="#1d2d44">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="6.0" layoutY="1.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="LEVEL" />
-         </Pane>
-
-         <!-- DIVISOR CENTRAL (opcional) -->
-         <Pane layoutX="606.0" layoutY="6.0" prefHeight="60.0" prefWidth="1.0" styleClass="score-divider" />
-
-         <!-- LADO NEGRAS (DCHA) -->
-         <Pane layoutX="656.0" layoutY="10.0" prefHeight="52.0" prefWidth="560.0">
-            <Label layoutX="14.0" layoutY="12.0" styleClass="score-caption" text="Heart rate" />
-            <Label fx:id="lblBlackHR" layoutX="18.0" layoutY="28.0" styleClass="score-value-white" text="113 BPM" />
-
-            <!-- Victorias del rival (a la derecha) -->
-            <Label fx:id="lblBlackWins" alignment="CENTER" layoutX="520.0" layoutY="-3.0" prefHeight="60.0" prefWidth="36.0" styleClass="score-pill" text="0" />
-            <Label layoutX="97.0" layoutY="8.0" styleClass="score-clock-black" text="24:32" textFill="#f0ebd8">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="527.0" layoutY="1.0" prefHeight="13.0" prefWidth="33.0" styleClass="score-caption-right" text="LEVEL" />
-            <Pane layoutX="198.0" layoutY="-3.0" prefHeight="60.0" prefWidth="242.0" style="-fx-background-color: transparent;">
-               <children>
-                  <Label layoutX="76.0" layoutY="2.0" prefHeight="56.0" prefWidth="105.0" styleClass="score-name-right" stylesheets="@custom-styles.css" text="MARTIN PEREIRA" textFill="#f0ebd8" wrapText="true">
-                     <font>
-                        <Font size="18.0" />
-                     </font>
-                  </Label>
-               </children>
-            </Pane>
-         </Pane>
-         <Pane layoutX="1096.0" layoutY="7.0" prefHeight="60.0" prefWidth="80.0" style="-fx-background-color: #C7C2B3;">
-            <children>
-               <Label layoutX="20.0" layoutY="5.0" prefHeight="13.0" prefWidth="38.0" styleClass="score-caption-right" text="RATING" />
-               <Label layoutX="23.0" layoutY="17.0" prefHeight="23.0" prefWidth="55.0" styleClass="score-value" stylesheets="@custom-styles.css" text="1440" textFill="#f0ebd8">
-                  <font>
-                     <Font size="14.0" />
-                  </font>
-               </Label>
-            </children>
-         </Pane>
-      </Pane>
-      <Label layoutX="93.0" layoutY="17.0" prefHeight="13.0" prefWidth="77.0" styleClass="score-caption" text=" |    FOCUS GAME" />
-
+            <PGNEditorController fx:id="pnlPGNControl" layoutX="16.0" layoutY="710.0" visible="false">
+      </PGNEditorController>
    </children>
    <stylesheets>
       <URL value="@custom-styles.css" />

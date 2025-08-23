@@ -1,5 +1,6 @@
 package com.davidp.chessjourney.application.factories;
 
+import com.davidp.chessjourney.domain.QuoteRepository;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.DifficultyLevelRepository;
 import com.davidp.chessjourney.domain.common.ExerciseRepository;
@@ -9,9 +10,7 @@ import com.davidp.chessjourney.infrastructure.database.*;
 
 public class RepositoryFactory {
 
-  private RepositoryFactory() {
-
-  }
+  private RepositoryFactory() {}
 
   public static UserRepository createUserRepository() {
 
@@ -31,7 +30,11 @@ public class RepositoryFactory {
     return new DifficultyLevelRepositoryImpl(DBHikariDataSource.getInstance().getDataSource());
   }
 
-    public static ExerciseTypeRepository createExerciseTypeRepository() {
+  public static ExerciseTypeRepository createExerciseTypeRepository() {
     return new ExerciseTypeRepositoryImpl(DBHikariDataSource.getInstance().getDataSource());
-    }
+  }
+
+  public static QuoteRepository createQuoteRepository() {
+    return new QuoteRepositoryImpl(DBHikariDataSource.getInstance().getDataSource());
+  }
 }

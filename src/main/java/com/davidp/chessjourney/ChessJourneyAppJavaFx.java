@@ -1,6 +1,7 @@
 package com.davidp.chessjourney;
 
 import com.davidp.chessjourney.api.ActiveUserController;
+import com.davidp.chessjourney.api.ApiConfig;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
@@ -11,6 +12,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.io.IOException;
 
 /** @see <a href="https://github.com/AlmasB/FXGL">FXGL framework</a> */
 /**
@@ -27,6 +30,8 @@ public class ChessJourneyAppJavaFx extends Application {
 
   private static Stage primaryStage;
   private ActiveUserController activeUserController;
+  private ApiConfig apiConfig;
+  private static final int API_PORT = 8080;
 
   /** Old Code * */
   public static void main(String[] args) {
@@ -38,7 +43,7 @@ public class ChessJourneyAppJavaFx extends Application {
   public void start(Stage stage) throws Exception {
 
     try {
-      // Iniciar el servidor REST
+
       initializeRestServer();
 
       primaryStage = stage;
@@ -54,14 +59,6 @@ public class ChessJourneyAppJavaFx extends Application {
       primaryStage.setScene(scene);
       scene.setFill(Color.TRANSPARENT);
 
-      // Efecto niebla al iniciar
-      /*
-      root.layoutBoundsProperty().addListener((obs, oldVal, newVal) -> {
-        if (newVal.getWidth() > 0 && newVal.getHeight() > 0) {
-           JavaFXAnimationUtil.playFogEffect(root, 10.0);
-        }
-      });
-       */
       primaryStage.show();
 
       System.out.println(
@@ -75,15 +72,19 @@ public class ChessJourneyAppJavaFx extends Application {
 
   private void initializeRestServer() {
 
-    activeUserController = new ActiveUserController(UseCaseFactory.createGetUserByIdUseCase());
-    activeUserController.start(8080); // Puerto 8080 para el servidor REST
+
+    apiConfig = ApiConfig.getInstance();
+    apiConfig.start(API_PORT);
+
   }
 
   @Override
   public void stop() throws Exception {
-    if (activeUserController != null) {
-      activeUserController.stop();
+
+    if (apiConfig != null) {
+      apiConfig.stop();
     }
+
     super.stop();
   }
 }
