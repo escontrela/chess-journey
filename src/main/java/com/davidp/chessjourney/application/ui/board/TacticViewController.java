@@ -4,6 +4,7 @@ import static javafx.application.Platform.runLater;
 
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
+import com.davidp.chessjourney.application.factories.RepositoryFactory;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
@@ -17,9 +18,7 @@ import com.davidp.chessjourney.application.usecases.SaveUserExerciseStatsUseCase
 import com.davidp.chessjourney.application.usecases.TacticGameUseCase;
 import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
 import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
-import com.davidp.chessjourney.domain.ChessBoard;
-import com.davidp.chessjourney.domain.ChessBoardFactory;
-import com.davidp.chessjourney.domain.ChessRules;
+import com.davidp.chessjourney.domain.*;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.games.tactic.TacticGame;
 import com.davidp.chessjourney.domain.services.FenService;
@@ -44,13 +43,12 @@ import javafx.util.Duration;
 
 public class TacticViewController implements ScreenController {
 
-  private enum BoardType {
-    CHESS,
-    MEMORY,
-    TACTIC
+  protected enum BoardType {
+      DO_TACTIC,
+      DO_STUDY
   }
 
-  protected BoardType boardType = BoardType.CHESS;
+  protected BoardType boardType = BoardType.DO_TACTIC;
 
   private final FenService fenService = FenServiceFactory.getFenService();
   private final PGNService pgnService = PGNServiceFactory.getPGNService();
@@ -107,84 +105,94 @@ public class TacticViewController implements ScreenController {
   public void initialize() {
 
     GlobalEventBus.get().register(this);
-
     status = ScreenController.ScreenStatus.INITIALIZED;
+
     initializeBoardPanes();
 
-
-    pnlPGNControl.setPGNEditorKeyListener(
-        new PGNEditorController.PGNEditorKeyListener() {
-          @Override
-          public void onFenChanged(String newFen) {
-
-            cleanPieces();
-
-            final GameState fenParserResponse =
-                fenService.parseString(Fen.createCustom(pnlPGNControl.fenProperty().get()));
-
-            showPiecesOnBoard(fenParserResponse);
-          }
-
-          @Override
-          public void onSANChanged(String newSAN) {
-            PGNMove();
-          }
-
-          @Override
-          public void onPGNChanged(String newPGN) {
-            // TODO place the new PGN on the board
-            // This is not implemented yet, but we can use the PGNService to parse
-          }
-        });
-
-    pnlPGNControl.setPGNEditorActionListener(
-        new PGNEditorController.PGNEditorActionListener() {
-          @Override
-          public void onCloseButtonClicked() {
-            pnlPGNControl.setVisible(false);
-          }
-
-          @Override
-          public void onFenCopyClicked() {
-            // No hacer nada
-          }
-
-          @Override
-          public void onPGNCopyClicked() {
-            // No hacer nada
-          }
-
-          @Override
-          public void onMaxMinButtonClicked() {
-            boolean newMaximizedState = !pnlPGNControl.isMaximized();
-            pnlPGNControl.setMaximized(newMaximizedState);
-            if (newMaximizedState) {
-              pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() - 80);
-            } else {
-              pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() + 80);
-            }
-          }
-        });
-
-    // Inicializa el estilo del botón según el estado del panel
-    updatePGNEditorButtonStyle();
-
-    pnlPGNControl
-        .visibleProperty()
-        .addListener(
-            (obs, oldVal, newVal) -> {
-              updatePGNEditorButtonStyle();
-            });
+    initializePGNEditorPanes();
 
     setStatusPanelState();
   }
 
-  private void setStatusPanelState() {
+    private void initializePGNEditorPanes() {
+
+        pnlPGNControl.setPGNEditorKeyListener(
+            new PGNEditorController.PGNEditorKeyListener() {
+              @Override
+              public void onFenChanged(String newFen) {
+
+                cleanPieces();
+
+                final GameState fenParserResponse =
+                    fenService.parseString(Fen.createCustom(pnlPGNControl.fenProperty().get()));
+
+                showPiecesOnBoard(fenParserResponse);
+              }
+
+              @Override
+              public void onSANChanged(String newSAN) {
+                PGNMove();
+              }
+
+              @Override
+              public void onPGNChanged(String newPGN) {
+                // TODO place the new PGN on the board
+                // This is not implemented yet, but we can use the PGNService to parse
+              }
+            });
+
+        pnlPGNControl.setPGNEditorActionListener(
+            new PGNEditorController.PGNEditorActionListener() {
+              @Override
+              public void onCloseButtonClicked() {
+                pnlPGNControl.setVisible(false);
+              }
+
+              @Override
+              public void onFenCopyClicked() {
+                // No hacer nada
+              }
+
+              @Override
+              public void onPGNCopyClicked() {
+                // No hacer nada
+              }
+
+              @Override
+              public void onMaxMinButtonClicked() {
+                boolean newMaximizedState = !pnlPGNControl.isMaximized();
+                pnlPGNControl.setMaximized(newMaximizedState);
+                if (newMaximizedState) {
+                  pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() - 80);
+                } else {
+                  pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() + 80);
+                }
+              }
+            });
+
+        updatePGNEditorButtonStyle();
+
+        pnlPGNControl
+            .visibleProperty()
+            .addListener(
+                (obs, oldVal, newVal) -> {
+                  updatePGNEditorButtonStyle();
+                });
+    }
+
+    private void setStatusPanelState() {
+
+
+    // This should be give by constructor on a service interface.
+    long userId =  AppProperties.getInstance().getActiveUserId();
+    UserRepository userRepository = RepositoryFactory.createUserRepository();
+    User user = userRepository.getUserById(userId);
+
 
     pnlStatusControl.setExerciseAvgTime("1.5 s.");
     pnlStatusControl.setExerciseLevel("5");
     pnlStatusControl.setExerciseRating("85%");
-    pnlStatusControl.setUserName("MARTIN PEREIRA :)");
+    pnlStatusControl.setUserName(user.getFirstname() + " " + user.getLastname());
     pnlStatusControl.setUserRating("1470");
     pnlStatusControl.setExerciseTime("00:32");
 
@@ -384,17 +392,19 @@ public class TacticViewController implements ScreenController {
       // GlobalEventBus.get().post(new UserSavedAppEvent(settingsViewData.getUserId()));
     }
 
-    if (boardType == BoardType.MEMORY) {
+    if (isButtonStartClicked(event)) {
 
-      btStart.setDisable(true);
+      if (boardType == BoardType.DO_TACTIC) {
 
-      // looking for
-      activeTacticGame =
-          tacticGameUseCase.execute(AppProperties.getInstance().getActiveUserId(), difficulty);
+        btStart.setDisable(true);
 
-      startTacticGame();
+        // looking for
+        activeTacticGame =
+            tacticGameUseCase.execute(AppProperties.getInstance().getActiveUserId(), difficulty);
+
+        startTacticGame();
+      }
     }
-
     if (isButtonPGNEditorClicked(event)) {
 
       pnlPGNControl.setVisible(!pnlPGNControl.isVisible());
@@ -482,36 +492,6 @@ public class TacticViewController implements ScreenController {
       return;
     }
 
-    // TODO review the GAME LOOP for tactic game
-    /*
-    if (activeTacticGame.getGameState() == MemoryGame.GameState.GUESSING_PIECES) {
-
-      // TODO: Improve this logic, the activeMemoryGame should be responsible to manage the game
-      // state
-      // TODO: defend piece game: gesspieces count should be guess steps count, and hiddenpieces
-      // positions should be total steps positions
-      if (activeTacticGame.isTimeToMoveToNextExercise()) {
-
-        matchedPieces = 0;
-        piecesHided = false;
-        activeTacticGame.nextExercise();
-        runLater(() -> soundService.playSound(SoundServiceFactory.SoundType.NEW_GAME));
-        GameState gameState = fenService.parseString(activeTacticGame.getFen());
-        cleanPieces();
-        showPiecesOnBoard(gameState);
-        lblExerciseNum.setText(
-            String.valueOf(activeTacticGame.getCurrentExerciseNumber())
-                + " - "
-                + String.valueOf(
-                    activeTacticGame
-                        .getTotalStepsPerExercise()) // TODO: defend piece game: total hidde pieces
-            // could be total moves , so .. steps
-            );
-      }
-    }
-    */
-
-
     pnlStatusControl.setExerciseTime(activeTacticGame.getFormattedElapsedTime());
   }
 
@@ -545,6 +525,7 @@ public class TacticViewController implements ScreenController {
   private void handleKeyPress(KeyEvent event) {}
 
   private void PGNMove() {
+
     ChessBoard chessBoard =
         ChessBoardFactory.createFromFEN(Fen.createCustom(pnlPGNControl.fenProperty().get()));
 
@@ -739,7 +720,7 @@ public class TacticViewController implements ScreenController {
   public void setTacticGameUseCase(TacticGameUseCase memoryGameUseCase) {
 
     this.tacticGameUseCase = memoryGameUseCase;
-    this.boardType = BoardType.MEMORY;
+    this.boardType = BoardType.DO_TACTIC;
     this.btStart.setVisible(true);
     this.lblBoardType.setText("The tactics game!");
     playTypeWriterEffect(
