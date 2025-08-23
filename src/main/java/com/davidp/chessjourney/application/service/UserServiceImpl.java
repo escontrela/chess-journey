@@ -1,7 +1,6 @@
 package com.davidp.chessjourney.application.service;
 
 import com.davidp.chessjourney.application.config.AppProperties;
-import com.davidp.chessjourney.application.factories.RepositoryFactory;
 import com.davidp.chessjourney.domain.User;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.UserElo;
@@ -9,27 +8,16 @@ import com.davidp.chessjourney.domain.common.UserElo;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+
 /**
- * Implementation of UserService that provides centralized access to user data. Follows singleton
- * pattern to ensure single instance across the application.
+ * <<<<<<< HEAD Implementation of UserService that provides centralized access to user data. Follows
+ * singleton pattern to ensure single instance across the application.
  */
 public class UserServiceImpl implements UserService {
 
-  private static class Holder {
+  private final UserRepository userRepository;
 
-    private static final UserServiceImpl INSTANCE =
-        new UserServiceImpl(RepositoryFactory.createUserRepository());
-  }
-
-  UserRepository userRepository;
-
-  public static UserServiceImpl getInstance() {
-
-    return Holder.INSTANCE;
-  }
-
-  private UserServiceImpl(UserRepository userRepository) {
-
+  public UserServiceImpl(UserRepository userRepository) {
     this.userRepository = userRepository;
   }
 
@@ -82,7 +70,6 @@ public class UserServiceImpl implements UserService {
     if (isNanUserOnProperties(userId)) {
       return List.of();
     }
-
     return userRepository.getAllUserElos(userId);
   }
 
@@ -92,7 +79,6 @@ public class UserServiceImpl implements UserService {
     if (isNanUserOnProperties(userId)) {
       return Optional.empty();
     }
-
     return userRepository.getUserEloByType(userId, eloTypeId);
   }
 }
