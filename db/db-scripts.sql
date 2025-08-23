@@ -290,6 +290,34 @@ CREATE TABLE user_elo (
     UNIQUE (user_id, elo_type_id)  -- Un ELO por tipo para cada usuario
 );
 
+
+-- datos para el user_elo:
+-- Usuario 1037049559867817985
+INSERT INTO user_elo (user_id, elo_type_id, current_elo, last_updated)
+VALUES
+(1037049559867817985, '5adcf1be-5bda-4be9-a4e9-b926875f2f69', 1470, NOW()), -- rapid
+(1037049559867817985, '89d5f01e-bac0-4991-856d-86cc23271a21', 1470, NOW()), -- blitz
+(1037049559867817985, '9f0b376e-c69b-4758-a05b-bcc4fef43e49', 1470, NOW()), -- exercises
+(1037049559867817985, 'c7f8226f-e306-484a-95cf-1c125cd8e8fc', 1470, NOW()); -- standard
+
+-- Usuario 1037049617650024449
+INSERT INTO user_elo (user_id, elo_type_id, current_elo, last_updated)
+VALUES
+(1037049617650024449, '5adcf1be-5bda-4be9-a4e9-b926875f2f69', 1470, NOW()),
+(1037049617650024449, '89d5f01e-bac0-4991-856d-86cc23271a21', 1470, NOW()),
+(1037049617650024449, '9f0b376e-c69b-4758-a05b-bcc4fef43e49', 1470, NOW()),
+(1037049617650024449, 'c7f8226f-e306-484a-95cf-1c125cd8e8fc', 1470, NOW());
+
+-- Usuario 1037049677512474625
+INSERT INTO user_elo (user_id, elo_type_id, current_elo, last_updated)
+VALUES
+(1037049677512474625, '5adcf1be-5bda-4be9-a4e9-b926875f2f69', 1470, NOW()),
+(1037049677512474625, '89d5f01e-bac0-4991-856d-86cc23271a21', 1470, NOW()),
+(1037049677512474625, '9f0b376e-c69b-4758-a05b-bcc4fef43e49', 1470, NOW()),
+(1037049677512474625, 'c7f8226f-e306-484a-95cf-1c125cd8e8fc', 1470, NOW());
+
+insert into user_elo (user_id,elo_type_id,current_elo,last_updated) values ( 1037049559867817985,'select * from elo_types;',1470,now());
+
 CREATE TABLE user_exercise_stats (
     id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
     user_id INT8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -307,6 +335,7 @@ CREATE TABLE IF NOT EXISTS quotes (
     author VARCHAR(100) NOT NULL
 );
 
+
 -- Insertar algunas quotes iniciales
 INSERT INTO quotes (text, author) VALUES
 ('Some people think that if their opponent plays a beautiful game, it''s okay to lose. I don''t. You have to be merciless.', 'Magnus Carlsen'),
@@ -314,5 +343,8 @@ INSERT INTO quotes (text, author) VALUES
 ('Every chess master was once a beginner.', 'Irving Chernev'),
 ('Chess is the gymnasium of the mind.', 'Blaise Pascal'),
 ('When you see a good move, look for a better one.', 'Emanuel Lasker');
+
+
+
 
 
