@@ -401,7 +401,74 @@ public class PGNServiceImpl implements PGNService {
               .orElseThrow(() -> new IllegalArgumentException("Invalid move notation: " + move));
     }
 
-    // Pawn move: c3
+    // Pawn captures: exd5, gxf8=Q+
+    if (groups.containsKey(PGNRegExprGroups.DESTINATION_GROUP_6)
+        && groups.containsKey(PGNRegExprGroups.DISAMBIGUATION_GROUP_4)
+        && groups.containsKey(PGNRegExprGroups.CAPTURE_GROUP_5)
+        && !groups.containsKey(PGNRegExprGroups.PIECE_GROUP_3)) {
+
+      isCapture = true;
+
+      // Verificar promoción si está presente
+      if (groups.containsKey(PGNRegExprGroups.PROMOTION_GROUP_7)) {
+        isPromotion = true;
+        String promotionPieceStr = groups.get(PGNRegExprGroups.PROMOTION_GROUP_7);
+        promotionPiece = mapPGNLetterToPieceType(promotionPieceStr.toLowerCase());
+      }
+
+      // Verificar jaque/mate si está presente
+      if (groups.containsKey(PGNRegExprGroups.CHECK_OR_MATE_GROUP_8)) {
+        String checkOrMate = groups.get(PGNRegExprGroups.CHECK_OR_MATE_GROUP_8);
+        if ("+".equals(checkOrMate)) {
+          isCheck = true;
+        } else if ("#".equals(checkOrMate)) {
+          isMate = true;
+        }
+      }
+
+      // Procesar el movimiento de captura de peón
+      String originFile = groups.get(PGNRegExprGroups.DISAMBIGUATION_GROUP_4);
+      String destination = groups.get(PGNRegExprGroups.DESTINATION_GROUP_6);
+      Pos destinationPos = Pos.parseString(destination);
+      
+      // Find pawns that can capture from the specified file
+      List<Pos> possiblePawnPositions =
+          board.getAllPiecePositionsOfType(PieceType.PAWN, activeColor)
+              .stream()
+              .filter(pos -> pos.getCol().name().toLowerCase().equals(originFile.toLowerCase()))
+              .collect(java.util.stream.Collectors.toList());
+      
+      ChessRules chessRules = new ChessRules();
+
+      boolean finalIsCheck = isCheck;
+      boolean finalIsMate = isMate;
+      boolean finalIsPromotion = isPromotion;
+      boolean finalIsCapture = isCapture;
+      PieceType finalPromotionPiece = promotionPiece;
+
+      toret =
+          possiblePawnPositions.stream()
+              .filter(p -> chessRules.isValidMove(p, destinationPos, board.getFen()))
+              .findFirst()
+              .map(p -> {
+                // Check if this is an en passant move
+                if (isEnPassantMove(p, destinationPos, board.getPiece(p).getPiece(), board)) {
+                  return GameMoveFactory.createEnPassantMove(
+                      new BoardMove(p, destinationPos), finalIsCheck, finalIsMate);
+                } else if (finalIsPromotion) {
+                  return GameMoveFactory.createPromotionMove(
+                      new BoardMove(p, destinationPos),
+                      finalPromotionPiece,
+                      finalIsCapture,
+                      finalIsCheck,
+                      finalIsMate);
+                } else {
+                  return GameMoveFactory.createNormalMove(
+                      new BoardMove(p, destinationPos), finalIsCapture, finalIsCheck, finalIsMate);
+                }
+              })
+              .orElseThrow(() -> new IllegalArgumentException("Invalid pawn capture notation: " + move));
+    }
 
     // Pawn move: c3 - versión más concisa
     if (groups.containsKey(PGNRegExprGroups.DESTINATION_GROUP_6)

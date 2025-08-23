@@ -190,6 +190,40 @@ public class PGNServiceTest {
   }
 
   @Test
+  public void testPawnCaptureGroupExtraction() {
+    Pattern regularNotationPattern =
+        Pattern.compile(
+            "^(?:(O-O(?:-O)?)([+#])?|([NBRQK])?([a-h1-8])?(x)?([a-h][1-8])(?:=([NBRQK]))?([+#])?)$");
+
+    // Test case: "exd5" - basic pawn capture
+    Map<PGNServiceImpl.PGNRegExprGroups, String> groups =
+        extractAllValuableGroups("exd5", regularNotationPattern);
+
+    assertEquals("e", groups.get(PGNServiceImpl.PGNRegExprGroups.DISAMBIGUATION_GROUP_4));
+    assertEquals("x", groups.get(PGNServiceImpl.PGNRegExprGroups.CAPTURE_GROUP_5));
+    assertEquals("d5", groups.get(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
+    assertEquals(3, groups.size());
+
+    // Test case: "gxf8=Q+" - pawn capture with promotion and check
+    groups = extractAllValuableGroups("gxf8=Q+", regularNotationPattern);
+
+    assertEquals("g", groups.get(PGNServiceImpl.PGNRegExprGroups.DISAMBIGUATION_GROUP_4));
+    assertEquals("x", groups.get(PGNServiceImpl.PGNRegExprGroups.CAPTURE_GROUP_5));
+    assertEquals("f8", groups.get(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
+    assertEquals("Q", groups.get(PGNServiceImpl.PGNRegExprGroups.PROMOTION_GROUP_7));
+    assertEquals("+", groups.get(PGNServiceImpl.PGNRegExprGroups.CHECK_OR_MATE_GROUP_8));
+    assertEquals(5, groups.size());
+
+    // Test case: "cxb6" - potential en passant capture
+    groups = extractAllValuableGroups("cxb6", regularNotationPattern);
+
+    assertEquals("c", groups.get(PGNServiceImpl.PGNRegExprGroups.DISAMBIGUATION_GROUP_4));
+    assertEquals("x", groups.get(PGNServiceImpl.PGNRegExprGroups.CAPTURE_GROUP_5));
+    assertEquals("b6", groups.get(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
+    assertEquals(3, groups.size());
+  }
+
+  @Test
   public void fromAlgebraicTestRegularExpressionUseCases_2() {
 
     Pattern regularNotationPatter =
