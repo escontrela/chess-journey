@@ -1,11 +1,12 @@
 package com.davidp.chessjourney.application.ui.main;
 
-import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.*;
+import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.ScreenFactory.Screens;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
+import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
@@ -93,6 +94,7 @@ public class MainSceneController implements ScreenController {
 
   // This map is used to cache the screens that are created.
   private final Map<Screens, ScreenController> screenManager = new HashMap<>();
+  private UserService userService;
   private static final Point MENU_POSITION = new Point(20, 320);
   private static final Point SETTINGS_POSITION = new Point(320, 180);
   private static final Point BOARD_POSITION = new Point(10, 10);
@@ -159,7 +161,7 @@ public class MainSceneController implements ScreenController {
 
     SettingsViewInputScreenData inputData =
         new SettingsViewInputScreenData(
-            AppProperties.getInstance().getActiveUserId(), SETTINGS_POSITION);
+            userService.getActiveUserId(), SETTINGS_POSITION);
 
     settingMenuController.show(inputData);
   }
@@ -254,7 +256,7 @@ public class MainSceneController implements ScreenController {
 
     SettingsViewInputScreenData inputData =
             new SettingsViewInputScreenData(
-                    AppProperties.getInstance().getActiveUserId(), TACTIC_GAME_POSITION);
+                    userService.getActiveUserId(), TACTIC_GAME_POSITION);
     defendGameController.show(inputData);
   }
 
@@ -269,7 +271,7 @@ public class MainSceneController implements ScreenController {
 
     SettingsViewInputScreenData inputData =
             new SettingsViewInputScreenData(
-                    AppProperties.getInstance().getActiveUserId(), DEFEND_GAME_POSITION);
+                    userService.getActiveUserId(), DEFEND_GAME_POSITION);
     defendGameController.show(inputData);
   }
 
@@ -285,7 +287,7 @@ public class MainSceneController implements ScreenController {
 
     SettingsViewInputScreenData inputData =
         new SettingsViewInputScreenData(
-            AppProperties.getInstance().getActiveUserId(), MEMORY_GAME_POSITION);
+            userService.getActiveUserId(), MEMORY_GAME_POSITION);
     memoryGameController.show(inputData);
   }
 
@@ -300,7 +302,7 @@ public class MainSceneController implements ScreenController {
 
     SettingsViewInputScreenData inputData =
         new SettingsViewInputScreenData(
-            AppProperties.getInstance().getActiveUserId(), BOARD_POSITION);
+            userService.getActiveUserId(), BOARD_POSITION);
     boardController.show(inputData);
   }
 
@@ -315,7 +317,7 @@ public class MainSceneController implements ScreenController {
 
     SettingsViewInputScreenData inputData =
             new SettingsViewInputScreenData(
-                    AppProperties.getInstance().getActiveUserId(), CHANGE_USER_POSITION);
+                    userService.getActiveUserId(), CHANGE_USER_POSITION);
     changeUserController.show(inputData);
   }
 
@@ -330,7 +332,7 @@ public class MainSceneController implements ScreenController {
 
     UserStatsInputScreenData inputData =
             new UserStatsInputScreenData(
-                    AppProperties.getInstance().getActiveUserId(), USER_STATS_POSITION);
+                    userService.getActiveUserId(), USER_STATS_POSITION);
     userStatsController.show(inputData);
   }
 
@@ -343,9 +345,10 @@ public class MainSceneController implements ScreenController {
   @FXML
   public void initialize() {
 
+    userService = ApplicationServiceFactory.createUserService();
     initializeTaskBarBehaviour();
     moveMainWindowsSetUp();
-    reloadUserInitials(AppProperties.getInstance().getActiveUserId());
+    reloadUserInitials(userService.getActiveUserId());
     showTextAnimation();
   }
 
