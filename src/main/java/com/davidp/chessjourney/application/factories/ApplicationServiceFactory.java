@@ -10,7 +10,7 @@ import com.davidp.chessjourney.application.service.UserServiceImpl;
 public class ApplicationServiceFactory {
 
     private ApplicationServiceFactory() {
-        // Prevent instantiation
+
     }
 
     /**
@@ -19,6 +19,7 @@ public class ApplicationServiceFactory {
      * @return UserService implementation
      */
     public static UserService createUserService() {
+
         return UserServiceImpl.getInstance();
     }
 }
