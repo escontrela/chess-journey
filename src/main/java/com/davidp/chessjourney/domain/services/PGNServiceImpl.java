@@ -436,7 +436,7 @@ public class PGNServiceImpl implements PGNService {
           board.getAllPiecePositionsOfType(PieceType.PAWN, activeColor)
               .stream()
               .filter(pos -> pos.getCol().name().toLowerCase().equals(originFile.toLowerCase()))
-              .collect(java.util.stream.Collectors.toList());
+              .collect(Collectors.toList());
       
       ChessRules chessRules = new ChessRules();
 
@@ -524,6 +524,10 @@ public class PGNServiceImpl implements PGNService {
                               new BoardMove(p, destinationPos), false, finalIsCheck, finalIsMate))
               .orElseThrow(
                   () -> new IllegalArgumentException("Invalid pawn move notation: " + move));
+    }
+
+    if (toret == null) {
+      throw new IllegalArgumentException("Unhandled move notation: " + move + " with groups: " + groups);
     }
 
     return toret;
