@@ -1,8 +1,9 @@
 package com.davidp.chessjourney.application.ui.user;
 
-import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.*;
+import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
+import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.board.PromoteViewInputScreenData;
 import com.davidp.chessjourney.application.ui.controls.SelectableCardController;
@@ -29,6 +30,7 @@ public class UserViewController implements ScreenController {
 
   private GetUsersUseCase getUsersUseCase;
   private SaveActiveUserUseCase saveUserUseCase;
+  private UserService userService;
 
   private ScreenStatus status;
 
@@ -47,6 +49,7 @@ public class UserViewController implements ScreenController {
   public void initialize() {
 
     status = ScreenStatus.INITIALIZED;
+    userService = ApplicationServiceFactory.createUserService();
   }
 
   @Override
@@ -58,7 +61,7 @@ public class UserViewController implements ScreenController {
     }
 
     List<User> users = getUsersUseCase.execute();
-    long activeUserId = AppProperties.getInstance().getActiveUserId();
+    long activeUserId = userService.getActiveUserId();
     showUsersWithAnimation(users,activeUserId);
   }
 

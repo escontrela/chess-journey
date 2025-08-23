@@ -2,11 +2,12 @@ package com.davidp.chessjourney.application.ui.board;
  
 import static javafx.application.Platform.runLater;
 
-import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.domain.PromoteSelectedPieceEvent;
+import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
+import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
@@ -107,6 +108,7 @@ public class BoardViewController implements ScreenController {
 
   protected MemoryGameUseCase memoryGameUseCase;
   protected SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase;
+  private UserService userService;
 
   protected boolean pauseLoopGame = false;
 
@@ -115,6 +117,7 @@ public class BoardViewController implements ScreenController {
   public void initialize() {
 
     GlobalEventBus.get().register(this);
+    userService = ApplicationServiceFactory.createUserService();
 
     status = ScreenController.ScreenStatus.INITIALIZED;
     initializeBoardPanes();
@@ -384,7 +387,7 @@ public class BoardViewController implements ScreenController {
         // TODO: defend piece game: the use case should accept the kind of memory game that we are
         // looking for
         activeMemoryGameOld =
-            memoryGameUseCase.execute(AppProperties.getInstance().getActiveUserId(), difficulty);
+            memoryGameUseCase.execute(userService.getActiveUserId(), difficulty);
 
         startMemoryGame();
       }
@@ -940,7 +943,7 @@ public class BoardViewController implements ScreenController {
     UserExerciseStats userExerciseStats =
         new UserExerciseStats(
             UUID.randomUUID(),
-            AppProperties.getInstance().getActiveUserId(),
+            userService.getActiveUserId(),
             activeMemoryGameOld.getCurrentExerciseId(),
             LocalDateTime.now(),
             result,
