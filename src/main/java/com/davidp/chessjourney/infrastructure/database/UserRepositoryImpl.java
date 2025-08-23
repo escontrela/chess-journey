@@ -3,12 +3,15 @@ package com.davidp.chessjourney.infrastructure.database;
 import com.davidp.chessjourney.domain.User;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.AggregatedStats;
+import com.davidp.chessjourney.domain.common.EloType;
+import com.davidp.chessjourney.domain.common.UserElo;
 import com.davidp.chessjourney.domain.common.UserExerciseStats;
 
 import java.sql.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import javax.sql.DataSource;
 
@@ -216,5 +219,81 @@ public class UserRepositoryImpl implements UserRepository {
       default:
         throw new IllegalArgumentException("Periodo inválido: " + period);
     }
+  }
+
+  @Override
+  public Optional<UserElo> getUserEloByType(long userId, UUID eloTypeId) {
+    String sql = "SELECT ue.id, ue.user_id, ue.current_elo, ue.last_updated, " +
+                 "et.id as elo_type_id, et.type_name, et.description " +
+                 "FROM user_elo ue " +
+                 "JOIN elo_types et ON ue.elo_type_id = et.id " +
+                 "WHERE ue.user_id = ? AND ue.elo_type_id = ?";
+
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+      
+      ps.setLong(1, userId);
+      ps.setObject(2, eloTypeId);
+
+      try (ResultSet rs = ps.executeQuery()) {
+        if (rs.next()) {
+          UUID id = (UUID) rs.getObject("id");
+          int currentElo = rs.getInt("current_elo");
+          Timestamp lastUpdated = rs.getTimestamp("last_updated");
+          
+          // Create EloType object
+          UUID eloTypeUuid = (UUID) rs.getObject("elo_type_id");
+          String typeName = rs.getString("type_name");
+          String description = rs.getString("description");
+          EloType eloType = new EloType(eloTypeUuid, typeName, description);
+          
+          UserElo userElo = new UserElo(id, userId, eloType, currentElo, lastUpdated.toLocalDateTime());
+          return Optional.of(userElo);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      // In case of error, return empty Optional
+    }
+    
+    return Optional.empty();
+  }
+
+  @Override
+  public List<UserElo> getAllUserElos(long userId) {
+    List<UserElo> result = new ArrayList<>();
+    String sql = "SELECT ue.id, ue.user_id, ue.current_elo, ue.last_updated, " +
+                 "et.id as elo_type_id, et.type_name, et.description " +
+                 "FROM user_elo ue " +
+                 "JOIN elo_types et ON ue.elo_type_id = et.id " +
+                 "WHERE ue.user_id = ?";
+
+    try (Connection conn = dataSource.getConnection();
+         PreparedStatement ps = conn.prepareStatement(sql)) {
+      
+      ps.setLong(1, userId);
+
+      try (ResultSet rs = ps.executeQuery()) {
+        while (rs.next()) {
+          UUID id = (UUID) rs.getObject("id");
+          int currentElo = rs.getInt("current_elo");
+          Timestamp lastUpdated = rs.getTimestamp("last_updated");
+          
+          // Create EloType object
+          UUID eloTypeUuid = (UUID) rs.getObject("elo_type_id");
+          String typeName = rs.getString("type_name");
+          String description = rs.getString("description");
+          EloType eloType = new EloType(eloTypeUuid, typeName, description);
+          
+          UserElo userElo = new UserElo(id, userId, eloType, currentElo, lastUpdated.toLocalDateTime());
+          result.add(userElo);
+        }
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+      // In case of error, return empty list
+    }
+    
+    return result;
   }
 }

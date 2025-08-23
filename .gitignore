@@ -42,3 +42,7 @@ build/
 ### FXGL ###
 logs/
 system/
+
+### Compiled classes ###
+*.class
+javac.*.args

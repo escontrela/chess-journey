@@ -7,6 +7,7 @@ import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.factories.RepositoryFactory;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
+import com.davidp.chessjourney.application.service.UserServiceImpl;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
@@ -182,18 +183,30 @@ public class TacticViewController implements ScreenController {
 
     private void setStatusPanelState() {
 
-
-    // This should be give by constructor on a service interface.
-    long userId =  AppProperties.getInstance().getActiveUserId();
-    UserRepository userRepository = RepositoryFactory.createUserRepository();
-    User user = userRepository.getUserById(userId);
-
+    // Use UserService to get active user data
+    User user = UserServiceImpl.getInstance().getActiveUser();
+    if (user == null) {
+      // Handle case where no active user is found
+      pnlStatusControl.setUserName("No User");
+      pnlStatusControl.setUserRating("N/A");
+    } else {
+      pnlStatusControl.setUserName(user.getFirstname() + " " + user.getLastname());
+      
+      // Try to get exercises ELO for the user
+      List<UserElo> userElos = UserServiceImpl.getInstance().getActiveUserElos();
+      String eloRating = "N/A";
+      for (UserElo elo : userElos) {
+        if ("exercises".equals(elo.getEloType().getTypeName())) {
+          eloRating = String.valueOf(elo.getCurrentElo());
+          break;
+        }
+      }
+      pnlStatusControl.setUserRating(eloRating);
+    }
 
     pnlStatusControl.setExerciseAvgTime("1.5 s.");
     pnlStatusControl.setExerciseLevel("5");
     pnlStatusControl.setExerciseRating("85%");
-    pnlStatusControl.setUserName(user.getFirstname() + " " + user.getLastname());
-    pnlStatusControl.setUserRating("1470");
     pnlStatusControl.setExerciseTime("00:32");
 
     // Configurar número de rectángulos
@@ -400,7 +413,7 @@ public class TacticViewController implements ScreenController {
 
         // looking for
         activeTacticGame =
-            tacticGameUseCase.execute(AppProperties.getInstance().getActiveUserId(), difficulty);
+            tacticGameUseCase.execute(UserServiceImpl.getInstance().getActiveUserId(), difficulty);
 
         startTacticGame();
       }
@@ -922,7 +935,7 @@ public class TacticViewController implements ScreenController {
     UserExerciseStats userExerciseStats =
         new UserExerciseStats(
             UUID.randomUUID(),
-            AppProperties.getInstance().getActiveUserId(),
+            UserServiceImpl.getInstance().getActiveUserId(),
             activeTacticGame.getCurrentExerciseId(),
             LocalDateTime.now(),
             result,
