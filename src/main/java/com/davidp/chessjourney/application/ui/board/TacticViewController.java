@@ -7,7 +7,8 @@ import com.davidp.chessjourney.application.config.GlobalEventBus;
 import com.davidp.chessjourney.application.factories.RepositoryFactory;
 import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.factories.SoundServiceFactory;
-import com.davidp.chessjourney.application.service.UserServiceImpl;
+import com.davidp.chessjourney.application.service.UserService;
+import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.chess.PieceView;
 import com.davidp.chessjourney.application.ui.chess.PieceViewFactory;
@@ -183,8 +184,9 @@ public class TacticViewController implements ScreenController {
 
     private void setStatusPanelState() {
 
-    // Use UserService to get active user data
-    User user = UserServiceImpl.getInstance().getActiveUser();
+    // Use UserService from factory to get active user data
+    UserService userService = ApplicationServiceFactory.createUserService();
+    User user = userService.getActiveUser();
     if (user == null) {
       // Handle case where no active user is found
       pnlStatusControl.setUserName("No User");
@@ -193,7 +195,7 @@ public class TacticViewController implements ScreenController {
       pnlStatusControl.setUserName(user.getFirstname() + " " + user.getLastname());
       
       // Try to get exercises ELO for the user
-      List<UserElo> userElos = UserServiceImpl.getInstance().getActiveUserElos();
+      List<UserElo> userElos = userService.getActiveUserElos();
       String eloRating = "N/A";
       for (UserElo elo : userElos) {
         if ("exercises".equals(elo.getEloType().getTypeName())) {
@@ -412,8 +414,9 @@ public class TacticViewController implements ScreenController {
         btStart.setDisable(true);
 
         // looking for
+        UserService userService = ApplicationServiceFactory.createUserService();
         activeTacticGame =
-            tacticGameUseCase.execute(UserServiceImpl.getInstance().getActiveUserId(), difficulty);
+            tacticGameUseCase.execute(userService.getActiveUserId(), difficulty);
 
         startTacticGame();
       }
@@ -932,10 +935,11 @@ public class TacticViewController implements ScreenController {
 
   protected void insertUserStatsForThisExercise(boolean result) {
 
+    UserService userService = ApplicationServiceFactory.createUserService();
     UserExerciseStats userExerciseStats =
         new UserExerciseStats(
             UUID.randomUUID(),
-            UserServiceImpl.getInstance().getActiveUserId(),
+            userService.getActiveUserId(),
             activeTacticGame.getCurrentExerciseId(),
             LocalDateTime.now(),
             result,

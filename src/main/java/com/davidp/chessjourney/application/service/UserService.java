@@ -41,4 +41,31 @@ public interface UserService {
    * @return the active user ID
    */
   long getActiveUserId();
+
+  // Generic methods for any user ID
+
+  /**
+   * Gets user data by ID.
+   *
+   * @param userId the user ID
+   * @return the user, or null if not found
+   */
+  User getUser(long userId);
+
+  /**
+   * Gets all ELO ratings for a specific user.
+   *
+   * @param userId the user ID
+   * @return list of UserElo for the user, may be empty if user has no ELOs
+   */
+  List<UserElo> getUserElos(long userId);
+
+  /**
+   * Gets a specific ELO rating for a user by ELO type.
+   *
+   * @param userId the user ID
+   * @param eloTypeId the ID of the ELO type
+   * @return the UserElo if it exists, Optional.empty() otherwise
+   */
+  Optional<UserElo> getUserEloByType(long userId, UUID eloTypeId);
 }

@@ -29,6 +29,30 @@ public class UserServiceImpl implements UserService {
   @Override
   public User getActiveUser() {
     long userId = getActiveUserId();
+    return getUser(userId);
+  }
+
+  @Override
+  public List<UserElo> getActiveUserElos() {
+    long userId = getActiveUserId();
+    return getUserElos(userId);
+  }
+
+  @Override
+  public Optional<UserElo> getActiveUserEloByType(UUID eloTypeId) {
+    long userId = getActiveUserId();
+    return getUserEloByType(userId, eloTypeId);
+  }
+
+  @Override
+  public long getActiveUserId() {
+    return AppProperties.getInstance().getActiveUserId();
+  }
+
+  // Generic methods for any user ID
+
+  @Override
+  public User getUser(long userId) {
     if (userId == 0L) {
       return null;
     }
@@ -38,10 +62,9 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public List<UserElo> getActiveUserElos() {
-    long userId = getActiveUserId();
+  public List<UserElo> getUserElos(long userId) {
     if (userId == 0L) {
-      return List.of(); // Return empty list if no active user
+      return List.of(); // Return empty list if invalid user ID
     }
     
     UserRepository userRepository = RepositoryFactory.createUserRepository();
@@ -49,18 +72,12 @@ public class UserServiceImpl implements UserService {
   }
 
   @Override
-  public Optional<UserElo> getActiveUserEloByType(UUID eloTypeId) {
-    long userId = getActiveUserId();
+  public Optional<UserElo> getUserEloByType(long userId, UUID eloTypeId) {
     if (userId == 0L) {
       return Optional.empty();
     }
     
     UserRepository userRepository = RepositoryFactory.createUserRepository();
     return userRepository.getUserEloByType(userId, eloTypeId);
-  }
-
-  @Override
-  public long getActiveUserId() {
-    return AppProperties.getInstance().getActiveUserId();
   }
 }
