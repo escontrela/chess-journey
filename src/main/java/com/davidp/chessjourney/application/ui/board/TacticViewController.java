@@ -780,9 +780,10 @@ public class TacticViewController implements ScreenController {
           // Remove captured piece if any
           chessBoard.dropPieceFromPosition(promotionMove.getMoves().getFirst().getTo());
         }
-        
+
         // Add the promoted piece on the destination square
-        Piece promotedPiece = Piece.of(promotionMove.getPromotionPiece(), pieceToMove.getPiece().getColor());
+        Piece promotedPiece =
+            new Piece(promotionMove.getPromotionPiece(), pieceToMove.getPiece().getColor());
         chessBoard.addPiece(promotedPiece, promotionMove.getMoves().getFirst().getTo());
         
         chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
