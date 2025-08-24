@@ -61,6 +61,15 @@ public class MenuViewController implements ScreenController {
   @FXML
   private ImageView imgUserStats;
 
+  @FXML
+  private Pane pnlOptionUserSuites;
+
+  @FXML
+  private Text txtUserSuites;
+
+  @FXML
+  private ImageView imgUserSuites;
+
 
   public void initialize() {
 
@@ -216,9 +225,6 @@ public class MenuViewController implements ScreenController {
   }
 
   protected boolean isUserSuitesClicked(MouseEvent event) {
-    // For now, this will be a placeholder since no UI element is specifically defined
-    // In a real implementation, this would check against a specific menu panel and text element
-    // return event.getSource() == pnlOptionUserSuites || event.getSource() == txtUserSuites;
-    return false; // Placeholder - would need UI element to trigger this
+    return event.getSource() == pnlOptionUserSuites || event.getSource() == txtUserSuites;
   }
 }
