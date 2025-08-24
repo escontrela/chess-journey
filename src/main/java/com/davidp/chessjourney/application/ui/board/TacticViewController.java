@@ -18,6 +18,7 @@ import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.SaveUserExerciseStatsUseCase;
 import com.davidp.chessjourney.application.usecases.TacticGameUseCase;
+import com.davidp.chessjourney.application.usecases.TacticSuiteGameUseCase;
 import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
 import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
 import com.davidp.chessjourney.domain.*;
@@ -97,6 +98,7 @@ public class TacticViewController implements ScreenController {
   private ScreenController.ScreenStatus status;
 
   protected TacticGameUseCase tacticGameUseCase;
+  protected TacticSuiteGameUseCase tacticSuiteGameUseCase;
   protected TacticGame activeTacticGame;
   protected SaveUserExerciseStatsUseCase saveUserExerciseStatsUseCase;
 
@@ -415,8 +417,15 @@ public class TacticViewController implements ScreenController {
 
         // looking for
         UserService userService = ApplicationServiceFactory.createUserService();
-        activeTacticGame =
-            tacticGameUseCase.execute(userService.getActiveUserId(), difficulty);
+        
+        // Use TacticSuiteGameUseCase for random type if available, otherwise fall back to TacticGameUseCase
+        if (tacticSuiteGameUseCase != null) {
+          activeTacticGame =
+              tacticSuiteGameUseCase.executeRandom(userService.getActiveUserId(), difficulty);
+        } else {
+          activeTacticGame =
+              tacticGameUseCase.execute(userService.getActiveUserId(), difficulty);
+        }
 
         startTacticGame();
       }
@@ -771,9 +780,10 @@ public class TacticViewController implements ScreenController {
           // Remove captured piece if any
           chessBoard.dropPieceFromPosition(promotionMove.getMoves().getFirst().getTo());
         }
-        
+
         // Add the promoted piece on the destination square
-        Piece promotedPiece = Piece.of(promotionMove.getPromotionPiece(), pieceToMove.getPiece().getColor());
+        Piece promotedPiece =
+            new Piece(promotionMove.getPromotionPiece(), pieceToMove.getPiece().getColor());
         chessBoard.addPiece(promotedPiece, promotionMove.getMoves().getFirst().getTo());
         
         chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
@@ -887,6 +897,15 @@ public class TacticViewController implements ScreenController {
     this.lblBoardType.setText("The tactics game!");
     playTypeWriterEffect(
         "¿Preparado para una sesión de táctica?, pulsa en el botón de inicio.", lblGhostMsg, 0.02);
+  }
+
+  public void setTacticSuiteGameUseCase(TacticSuiteGameUseCase tacticSuiteGameUseCase) {
+    this.tacticSuiteGameUseCase = tacticSuiteGameUseCase;
+    this.boardType = BoardType.DO_TACTIC;
+    this.btStart.setVisible(true);
+    this.lblBoardType.setText("The tactic suite game!");
+    playTypeWriterEffect(
+        "¿Preparado para una sesión de táctica con suite?, pulsa en el botón de inicio.", lblGhostMsg, 0.02);
   }
 
   public void setSaveUserExerciseStatsUseCase(

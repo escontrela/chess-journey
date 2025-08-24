@@ -213,9 +213,42 @@ values ('R7/8/8/4k2p/8/8/8/3K4 w - - 0 1','1. Ra5+ Kf4 2. Rxh5',
 (SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
 
 insert into public.exercises (fen,pgn,type_id,difficulty_id,created_at,updated_at)
-values ('8/6r1/8/4k3/8/2P5/1Q6/4K3 w - - 0 1','1. c4+ Ke6 2. Qxg7'
+values ('8/6r1/8/4k3/8/2P5/1Q6/4K3 w - - 0 1','1. c4+ Ke6 2. Qxg7',
 (SELECT id FROM public.exercise_types WHERE name = 'tactic_game'),
 (SELECT id FROM public.difficulty_levels WHERE level_name = 'easy'),now(),now());
+
+-- TacticSuiteGame tables
+CREATE TABLE public.tactic_suite_games (
+    id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    type VARCHAR(10) NOT NULL CHECK (type IN ('RANDOM', 'FIXED')),
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
+-- Junction table for TacticSuiteGame and Exercise (for FIXED type suites)
+CREATE TABLE public.tactic_suite_game_exercises (
+    tactic_suite_game_id UUID NOT NULL REFERENCES tactic_suite_games(id) ON DELETE CASCADE,
+    exercise_id UUID NOT NULL REFERENCES exercises(id) ON DELETE CASCADE,
+    sequence_order INT NOT NULL,
+    PRIMARY KEY (tactic_suite_game_id, exercise_id),
+    UNIQUE (tactic_suite_game_id, sequence_order)
+);
+
+-- Junction table for TacticSuiteGame and User (many-to-many relationship)
+CREATE TABLE public.tactic_suite_game_users (
+    tactic_suite_game_id UUID NOT NULL REFERENCES tactic_suite_games(id) ON DELETE CASCADE,
+    user_id INT8 NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    created_at TIMESTAMP DEFAULT NOW(),
+    PRIMARY KEY (tactic_suite_game_id, user_id)
+);
+
+-- Sample data for testing
+INSERT INTO public.tactic_suite_games (name, type) VALUES
+    ('Random Tactics Easy', 'RANDOM'),
+    ('Random Tactics Medium', 'RANDOM'),
+    ('French Defense Failed Exercises', 'FIXED'),
+    ('Endgame Tactics Collection', 'FIXED');
 
 
 
