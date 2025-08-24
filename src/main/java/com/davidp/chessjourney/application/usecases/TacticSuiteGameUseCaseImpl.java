@@ -77,7 +77,7 @@ public class TacticSuiteGameUseCaseImpl implements TacticSuiteGameUseCase {
         }
 
         // Use the difficulty level from the first exercise
-        DifficultyLevel level = exercises.get(0).getDifficultyLevel();
+        DifficultyLevel level = exercises.getFirst().getDifficultyLevel();
         TimeControl timeControl = TimeControl.fivePlusThree();
 
         return new TacticGame(player, timeControl, level, exercises);
