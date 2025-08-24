@@ -4,6 +4,7 @@ import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
+import com.davidp.chessjourney.domain.games.tactic.TacticSuiteGameRepository;
 
 /** Factoría para instanciar casos de uso (UseCases). */
 public class UseCaseFactory {
@@ -97,5 +98,16 @@ public class UseCaseFactory {
 
     public static SaveQuoteUseCase createSaveQuoteUseCase() {
         return new SaveQuoteUseCase(RepositoryFactory.createQuoteRepository());
+    }
+
+    public static TacticSuiteGameUseCase createTacticSuiteGameUseCase() {
+        UserRepository userRepo = RepositoryFactory.createUserRepository();
+        ExerciseRepository exerciseRepository = RepositoryFactory.createExerciseRepository();
+        DifficultyLevelRepository difficultyLevelRepository = RepositoryFactory.createDifficultyLevelRepository();
+        ExerciseTypeRepository exerciseTypeRepository = RepositoryFactory.createExerciseTypeRepository();
+        TacticSuiteGameRepository tacticSuiteGameRepository = RepositoryFactory.createTacticSuiteGameRepository();
+
+        return new TacticSuiteGameUseCaseImpl(
+            userRepo, exerciseRepository, difficultyLevelRepository, exerciseTypeRepository, tacticSuiteGameRepository);
     }
 }
