@@ -4,7 +4,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.controls.SelectableCardController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
-import com.davidp.chessjourney.application.ui.util.JavaFXAnimationUtil;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.GetUserTacticSuiteGamesUseCase;
 import com.davidp.chessjourney.domain.games.tactic.TacticSuiteGame;
 import javafx.animation.PauseTransition;
