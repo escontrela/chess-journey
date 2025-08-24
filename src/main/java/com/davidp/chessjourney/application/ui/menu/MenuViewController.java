@@ -175,6 +175,9 @@ public class MenuViewController implements ScreenController {
     if (isDefendGameClicked(event)){
       GlobalEventBus.get().post(new OpenDefendGameEvent());
     }
+    if (isUserSuitesClicked(event)){
+      GlobalEventBus.get().post(new OpenUserSuitesEvent());
+    }
   }
 
   private boolean isDefendGameClicked(MouseEvent event) {
@@ -210,5 +213,12 @@ public class MenuViewController implements ScreenController {
   protected  boolean isUserStatsClicked(MouseEvent event) {
 
     return event.getSource() == pnlOptionUserStats || event.getSource() == txtUserStats;
+  }
+
+  protected boolean isUserSuitesClicked(MouseEvent event) {
+    // For now, this will be a placeholder since no UI element is specifically defined
+    // In a real implementation, this would check against a specific menu panel and text element
+    // return event.getSource() == pnlOptionUserSuites || event.getSource() == txtUserSuites;
+    return false; // Placeholder - would need UI element to trigger this
   }
 }

@@ -110,4 +110,9 @@ public class UseCaseFactory {
         return new TacticSuiteGameUseCaseImpl(
             userRepo, exerciseRepository, difficultyLevelRepository, exerciseTypeRepository, tacticSuiteGameRepository);
     }
+
+    public static GetUserTacticSuiteGamesUseCase createGetUserTacticSuiteGamesUseCase() {
+        TacticSuiteGameRepository tacticSuiteGameRepository = RepositoryFactory.createTacticSuiteGameRepository();
+        return new GetUserTacticSuiteGamesUseCaseImpl(tacticSuiteGameRepository);
+    }
 }
