@@ -644,10 +644,156 @@ public class TacticViewController implements ScreenController {
           System.out.println("Error on PGN input, is it not check or mate!");
         }
       }
+    }
 
-      // TODO validar si es promotionMove!!! -> podría ser el caso anterior (un c8) pero con
-      // promoción!!
-      // TODO el caso de promotionMove puede interferiro con otros...
+    if (posChessMove instanceof EnPassantMove enPassantMove) {
+
+      boolean validMove =
+          chessrules.isValidMove(
+              enPassantMove.getMoves().getFirst().getFrom(),
+              enPassantMove.getMoves().getFirst().getTo(),
+              chessBoard.getFen());
+
+      System.out.println(
+          "Is it a valid move enPassantMove:"
+              + validMove
+              + " check:"
+              + enPassantMove.isCheck()
+              + " mate:"
+              + enPassantMove.isMate());
+
+      if (!validMove) {
+        throw new RuntimeException("Is not a valid en passant move:" + enPassantMove);
+      }
+
+      PiecePosition pieceToMove = chessBoard.getPiece(enPassantMove.getMoves().getFirst().getFrom());
+
+      Pane fromPane = boardPanes.get(enPassantMove.getMoves().getFirst().getFrom());
+      Pane toPane = boardPanes.get(enPassantMove.getMoves().getFirst().getTo());
+
+      PieceView pieceView = (PieceView) fromPane.getChildren().getFirst();
+
+      freeSquare(fromPane);
+
+      // En passant capture: remove the captured pawn from the adjacent square
+      Pos capturedPawnPos = Pos.of(
+          enPassantMove.getMoves().getFirst().getTo().getCol(),
+          enPassantMove.getMoves().getFirst().getFrom().getRow());
+      Pane capturedPawnPane = boardPanes.get(capturedPawnPos);
+      freeSquare(capturedPawnPane);
+
+      addPiece(toPane, pieceView, enPassantMove.getMoves().getFirst().getTo());
+
+      if (enPassantMove.isCheck() || enPassantMove.isMate()) {
+
+        PieceColor preMoveMotActiveColor = chessBoard.getGameState().getNotActiveColor();
+
+        // Apply the move to the board for check/mate validation
+        chessBoard.movePiece(
+            pieceToMove.getPiece(),
+            enPassantMove.getMoves().getFirst().getFrom(),
+            enPassantMove.getMoves().getFirst().getTo());
+        chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
+
+        System.out.println("new FEN after en passant:" + chessBoard.getFen().getStringValue());
+
+        if (chessrules.isCheckOrMate(chessBoard.getFen())) {
+          System.out.println("en passant resulted in check or mate!");
+          // Highlight the opponent king
+          Pos opponentKingPos =
+              chessBoard
+                  .getAllPiecePositionsOfType(PieceType.KING, preMoveMotActiveColor)
+                  .getFirst();
+          Pane opponentKingPane = boardPanes.get(opponentKingPos);
+
+          opponentKingPane.setStyle("-fx-background-color: #FF0000;");
+        } else {
+          System.out.println("Error on PGN input, en passant move should result in check or mate!");
+        }
+      }
+    }
+
+    if (posChessMove instanceof PromotionMove promotionMove) {
+
+      boolean isCapture = promotionMove.isCapture();
+      boolean validMove =
+          chessrules.isValidMoveWithCapture(
+              promotionMove.getMoves().getFirst().getFrom(),
+              promotionMove.getMoves().getFirst().getTo(),
+              chessBoard.getFen(),
+              isCapture);
+
+      System.out.println(
+          "Is it a valid move promotionMove:"
+              + validMove
+              + " check:"
+              + promotionMove.isCheck()
+              + " mate:"
+              + promotionMove.isMate()
+              + " isCapture:"
+              + isCapture
+              + " promotionPiece:"
+              + promotionMove.getPromotionPiece());
+
+      if (!validMove) {
+        throw new RuntimeException("Is not a valid promotion move:" + promotionMove);
+      }
+
+      PiecePosition pieceToMove = chessBoard.getPiece(promotionMove.getMoves().getFirst().getFrom());
+
+      Pane fromPane = boardPanes.get(promotionMove.getMoves().getFirst().getFrom());
+      Pane toPane = boardPanes.get(promotionMove.getMoves().getFirst().getTo());
+
+      PieceView pieceView = (PieceView) fromPane.getChildren().getFirst();
+
+      freeSquare(fromPane);
+
+      if (isCapture) {
+        // Remove captured piece
+        freeSquare(toPane);
+      }
+
+      // Create the promoted piece instead of moving the original pawn
+      PieceView promotedPieceView = PieceViewFactory.getPiece(
+          promotionMove.getPromotionPiece(), 
+          pieceToMove.getPiece().getColor());
+      
+      addPiece(toPane, promotedPieceView, promotionMove.getMoves().getFirst().getTo());
+
+      if (promotionMove.isCheck() || promotionMove.isMate()) {
+
+        PieceColor preMoveMotActiveColor = chessBoard.getGameState().getNotActiveColor();
+
+        // Apply the promotion move to the board
+        chessBoard.dropPieceFromPosition(promotionMove.getMoves().getFirst().getFrom());
+        
+        if (isCapture) {
+          // Remove captured piece if any
+          chessBoard.dropPieceFromPosition(promotionMove.getMoves().getFirst().getTo());
+        }
+        
+        // Add the promoted piece on the destination square
+        Piece promotedPiece = Piece.of(promotionMove.getPromotionPiece(), pieceToMove.getPiece().getColor());
+        chessBoard.addPiece(promotedPiece, promotionMove.getMoves().getFirst().getTo());
+        
+        chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
+
+        System.out.println("new FEN after promotion:" + chessBoard.getFen().getStringValue());
+
+        if (chessrules.isCheckOrMate(chessBoard.getFen())) {
+          System.out.println("promotion resulted in check or mate!");
+          // Highlight the opponent king
+          Pos opponentKingPos =
+              chessBoard
+                  .getAllPiecePositionsOfType(PieceType.KING, preMoveMotActiveColor)
+                  .getFirst();
+          Pane opponentKingPane = boardPanes.get(opponentKingPos);
+
+          opponentKingPane.setStyle("-fx-background-color: #FF0000;");
+        } else {
+          System.out.println("Error on PGN input, promotion move should result in check or mate!");
+        }
+      }
     }
   }
 
