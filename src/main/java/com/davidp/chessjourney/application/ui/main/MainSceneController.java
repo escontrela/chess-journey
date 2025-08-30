@@ -103,7 +103,7 @@ public class MainSceneController implements ScreenController {
   private static final Point TACTIC_GAME_POSITION = new Point(10, 10);
   private static final Point CHANGE_USER_POSITION = new Point(120, 180);
   private static final Point USER_STATS_POSITION = new Point(210, 120);
-  private static final Point USER_SUITES_POSITION = new Point(110, 120);
+  private static final Point USER_SUITES_POSITION = new Point(14, 111);
 
 
   @FXML

@@ -369,6 +369,18 @@
     -fx-effect: none;  /* quita cualquier sombra */
 }
 
+/* Panel principal del popup con efecto glass */
+.popup-root-glass {
+    -fx-background-color: rgba(28, 28, 28, 0.92);
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: rgba(255, 255, 255, 0.2);
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.4), 20, 0.3, 0, 5),
+                innershadow(gaussian, rgba(255, 255, 255, 0.1), 2, 0.2, 0, 1);
+}
+
 /* Cabecera de popup */
 .popup-header {
     -fx-font-size: 26px;

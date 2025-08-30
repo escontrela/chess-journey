@@ -8,11 +8,10 @@
 <?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-<?import javafx.scene.text.Text?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="604.0" prefWidth="1104.0" styleClass="popup-root" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserTacticSuiteGamesController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1260.0" styleClass="popup-root-glass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserTacticSuiteGamesController">
    <children>
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1049.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1220.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
@@ -24,13 +23,8 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label layoutX="33.0" layoutY="14.0" styleClass="popup-header" text="Your Tactic Suite Games" />
-      <FlowPane fx:id="tacticSuitesFlowPanel" layoutX="33.0" layoutY="97.0" prefHeight="458.0" prefWidth="1036.0" />
-      <Text fx:id="lblPractice" fill="#686b75" layoutX="33.0" layoutY="588.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-gray-small" text="&lt; click on a tactic suite to view details &gt;" wrappingWidth="540.9999694824219">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Text>
+      <Label layoutX="33.0" layoutY="14.0" styleClass="popup-header" text="Tactic Suites Games" />
+      <FlowPane fx:id="tacticSuitesFlowPanel" layoutX="33.0" layoutY="97.0" prefHeight="546.0" prefWidth="1202.0" />
 
    </children>
    <stylesheets>

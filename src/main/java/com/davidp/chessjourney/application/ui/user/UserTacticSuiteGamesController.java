@@ -41,8 +41,12 @@ public class UserTacticSuiteGamesController implements ScreenController {
 
     @Override
     public void setData(InputScreenData inputData) {
+
         this.inputScreenData = (SettingsViewInputScreenData) inputData;
-        
+
+        if (inputData != null) {
+            setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+        }
         if (getUserTacticSuiteGamesUseCase != null) {
             List<TacticSuiteGame> tacticSuiteGames = getUserTacticSuiteGamesUseCase.execute(this.inputScreenData.getUserId());
             showTacticSuiteGamesWithAnimation(tacticSuiteGames);
@@ -50,7 +54,13 @@ public class UserTacticSuiteGamesController implements ScreenController {
     }
 
     private void showTacticSuiteGamesWithAnimation(List<TacticSuiteGame> tacticSuiteGames) {
+
         tacticSuitesFlowPanel.getChildren().clear();
+
+        tacticSuitesFlowPanel.setHgap(20);  // espacio horizontal entre tarjetas
+        tacticSuitesFlowPanel.setVgap(20);  // espacio vertical entre filas
+        tacticSuitesFlowPanel.setPrefWrapLength(400); // ancho máximo antes de crear una nueva fila
+
 
         for (int i = 0; i < tacticSuiteGames.size(); i++) {
             TacticSuiteGame tacticSuiteGame = tacticSuiteGames.get(i);
