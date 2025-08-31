@@ -10,8 +10,10 @@ import com.davidp.chessjourney.application.ui.controls.SelectableCardController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.GetUsersUseCase;
 import com.davidp.chessjourney.application.usecases.SaveActiveUserUseCase;
+import com.davidp.chessjourney.application.usecases.GetUserTacticSuiteGamesUseCase;
 import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.domain.User;
+import com.davidp.chessjourney.domain.games.tactic.TacticSuiteGame;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +32,7 @@ public class UserViewController implements ScreenController {
 
   private GetUsersUseCase getUsersUseCase;
   private SaveActiveUserUseCase saveUserUseCase;
+  private GetUserTacticSuiteGamesUseCase getUserTacticSuiteGamesUseCase;
   private UserService userService;
 
   private ScreenStatus status;
@@ -63,6 +66,12 @@ public class UserViewController implements ScreenController {
     List<User> users = getUsersUseCase.execute();
     long activeUserId = userService.getActiveUserId();
     showUsersWithAnimation(users,activeUserId);
+    
+    // Enhanced functionality: also load and display TacticSuiteGames for the active user
+    if (getUserTacticSuiteGamesUseCase != null) {
+      List<TacticSuiteGame> tacticSuiteGames = getUserTacticSuiteGamesUseCase.execute(activeUserId);
+      showTacticSuiteGamesWithAnimation(tacticSuiteGames);
+    }
   }
 
   private void showUsersWithAnimation(List<User> users, long activeUserId) {
@@ -263,5 +272,51 @@ public class UserViewController implements ScreenController {
     GlobalEventBus.get().post(new UserSavedAppEvent(selectedUser.getId()));
     //TODO animación del OK al nuevo usuario seleccionado
     hide();
+  }
+
+  private void showTacticSuiteGamesWithAnimation(List<TacticSuiteGame> tacticSuiteGames) {
+    // Add TacticSuiteGame cards to the same flow panel (after users)
+    for (int i = 0; i < tacticSuiteGames.size(); i++) {
+      TacticSuiteGame tacticSuiteGame = tacticSuiteGames.get(i);
+      SelectableCardController tacticSuitePane = createTacticSuiteGamePane(tacticSuiteGame);
+
+      PauseTransition delay = new PauseTransition(Duration.seconds(0.5 * (i + 1))); // Offset after users
+      delay.setOnFinished(e -> {
+        usersFlowPanel.getChildren().add(tacticSuitePane);
+
+        JavaFXAnimationUtil.animationBuilder()
+            .duration(Duration.seconds(0.5))
+            .fadeIn(tacticSuitePane)
+            .buildAndPlay();
+      });
+
+      delay.play();
+    }
+  }
+
+  private SelectableCardController createTacticSuiteGamePane(TacticSuiteGame tacticSuiteGame) {
+    SelectableCardController card = new SelectableCardController();
+    card.setTitle(tacticSuiteGame.getName());
+    card.getSubtitles().add("Type: " + tacticSuiteGame.getType().name());
+    card.getSubtitles().add("Created: " + tacticSuiteGame.getCreatedAt().toLocalDate().toString());
+    card.setUserData(tacticSuiteGame);
+    card.getStyleClass().add("selectable-card");
+    
+    // Set a different icon for tactic suites to distinguish from users
+    String iconPath = "/com/davidp/chessjourney/avatar/robot-avatar-0.png";
+    card.setImageUrl(iconPath);
+    
+    card.setCardClickListener(this::onTacticSuiteGameCardClicked);
+
+    return card;
+  }
+
+  private void onTacticSuiteGameCardClicked(SelectableCardController card) {
+    TacticSuiteGame selectedTacticSuiteGame = (TacticSuiteGame) card.getUserData();
+    System.out.println(selectedTacticSuiteGame);
+  }
+
+  public void setGetUserTacticSuiteGamesUseCase(GetUserTacticSuiteGamesUseCase getUserTacticSuiteGamesUseCase) {
+    this.getUserTacticSuiteGamesUseCase = getUserTacticSuiteGamesUseCase;
   }
 }

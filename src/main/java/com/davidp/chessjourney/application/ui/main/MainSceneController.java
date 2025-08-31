@@ -103,6 +103,7 @@ public class MainSceneController implements ScreenController {
   private static final Point TACTIC_GAME_POSITION = new Point(10, 10);
   private static final Point CHANGE_USER_POSITION = new Point(120, 180);
   private static final Point USER_STATS_POSITION = new Point(210, 120);
+  private static final Point USER_SUITES_POSITION = new Point(14, 111);
 
 
   @FXML
@@ -245,6 +246,13 @@ public class MainSceneController implements ScreenController {
     manageUserStatsVisibility();
   }
 
+  @Subscribe
+  public void onUserSuitesClicked(OpenUserSuitesEvent event) {
+
+    manageContextMenuVisibility();
+    manageUserSuitesVisibility();
+  }
+
   private void manageTacticGameVisibility() {
 
     ScreenController defendGameController = getScreen(Screens.TACTIC_GAME);
@@ -334,6 +342,21 @@ public class MainSceneController implements ScreenController {
             new UserStatsInputScreenData(
                     userService.getActiveUserId(), USER_STATS_POSITION);
     userStatsController.show(inputData);
+  }
+
+  private void manageUserSuitesVisibility() {
+
+    ScreenController userSuitesController = getScreen(Screens.USER_SUITES);
+    if (userSuitesController.isVisible() && !userSuitesController.isInitialized()) {
+
+      userSuitesController.hide();
+      return;
+    }
+
+    SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    userService.getActiveUserId(), USER_SUITES_POSITION);
+    userSuitesController.show(inputData);
   }
 
   public MainSceneController() {

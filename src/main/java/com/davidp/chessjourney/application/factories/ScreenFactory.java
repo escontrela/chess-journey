@@ -12,6 +12,7 @@ import java.net.URL;
 
 import com.davidp.chessjourney.application.ui.user.UserStatsController;
 import com.davidp.chessjourney.application.ui.user.UserViewController;
+import com.davidp.chessjourney.application.ui.user.UserTacticSuiteGamesController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -33,7 +34,8 @@ public class ScreenFactory {
     EXERCISE_RESULTS_PANEL("/com/davidp/chessjourney/exercise-result-view.fxml"),
     PROMOTE_PANEL("/com/davidp/chessjourney/promote-view-2.fxml"),
     CHANGE_USER("/com/davidp/chessjourney/user-change.fxml"),
-    USER_STATS("/com/davidp/chessjourney/user-stats.fxml");;;
+    USER_STATS("/com/davidp/chessjourney/user-stats.fxml"),
+    USER_SUITES("/com/davidp/chessjourney/user-tactic-suite-games.fxml");;;
 
     private final String resourcePath;
 
@@ -88,6 +90,8 @@ public class ScreenFactory {
         return getChangeUserScreen();
       case USER_STATS:
         return getUserStatsScreen();
+      case USER_SUITES:
+        return getUserSuites();
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
@@ -111,11 +115,19 @@ public class ScreenFactory {
     return objectFxmlBundle.getController();
   }
 
+  private ScreenController getUserSuites() {
+    FxmlBundle<UserTacticSuiteGamesController> objectFxmlBundle = loadFxml(Screens.USER_SUITES.resourceName());
+    var controller = objectFxmlBundle.getController();
+    controller.setGetUserTacticSuiteGamesUseCase(UseCaseFactory.createGetUserTacticSuiteGamesUseCase());
+    return objectFxmlBundle.getController();
+  }
+
   private ScreenController getChangeUserScreen() {
     FxmlBundle<UserViewController> objectFxmlBundle = loadFxml(Screens.CHANGE_USER.resourceName());
     var controller = objectFxmlBundle.getController();
     controller.setGetUsersUseCase(UseCaseFactory.createGetUsersUseCase());
     controller.setSaveUserUseCase(UseCaseFactory.createSaveActiveUserUseCase());
+    controller.setGetUserTacticSuiteGamesUseCase(UseCaseFactory.createGetUserTacticSuiteGamesUseCase());
     return objectFxmlBundle.getController();
   }
 

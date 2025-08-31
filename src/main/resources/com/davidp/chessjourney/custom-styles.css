@@ -369,6 +369,20 @@
     -fx-effect: none;  /* quita cualquier sombra */
 }
 
+/* Panel principal del popup con efecto glass */
+.popup-root-glass {
+    -fx-background-color: #1C1C1C;               /* mismo fondo que note-panel */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-color: #3A3A3A;                  /* borde sutil gris */
+    -fx-border-width: 1;
+    -fx-padding: 20;
+    -fx-effect: none;  /* quita cualquier sombra */
+     -fx-background-image: url("background/smooth-background.png");
+    -fx-background-size: cover;                /* ajusta la imagen para cubrir todo el fondo */
+    -fx-background-position: center;           /* centra la imagen */
+}
+
 /* Cabecera de popup */
 .popup-header {
     -fx-font-size: 26px;
@@ -817,6 +831,19 @@
     -fx-background-radius: 20;
     -fx-border-radius: 20;
     -fx-border-width: 2;
+}
+
+.board-gemini-style-with-background {
+    /* Borde redondeado con degradado tipo neón */
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+
+    -fx-effect: none;  /* quita cualquier sombra */
+    /* Imagen de fondo */
+    -fx-background-image: url("background/smooth-background.png");
+    -fx-background-size: cover;
+    -fx-background-position: center;
 }
 
 .chessboard-border {
