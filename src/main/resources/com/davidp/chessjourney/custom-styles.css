@@ -1102,6 +1102,25 @@
 }
 /** End: board panel PGN **/
 
+/* start: 2D Chart Control */
+.chart-2d {
+    -fx-background-color: radial-gradient(
+        center 50% 50%, radius 60%,
+        #2a2a2a,
+        #0d0d0d
+    );
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-border-width: 2;
+    -fx-border-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+    -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.3), 15, 0.2, 0, 0);
+}
+
+.chart-2d-canvas {
+    -fx-background-color: transparent;
+}
+/* end: 2D Chart Control */
+
 
 /******************************************/
 /** END: NEW SYSTEM DESIGN  10-01-2025 **/

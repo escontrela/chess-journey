@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.canvas.Canvas?>
+<?import javafx.scene.layout.Pane?>
+
+<fx:root prefHeight="400.0" prefWidth="600.0" styleClass="chart-2d" type="Pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+    <children>
+        <Canvas fx:id="chartCanvas" height="400.0" width="600.0" styleClass="chart-2d-canvas" />
+    </children>
+    <stylesheets>
+        <URL value="@custom-styles.css" />
+    </stylesheets>
+</fx:root>
