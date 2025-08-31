@@ -1,7 +1,7 @@
 package com.davidp.chessjourney.application.factories;
 
-import com.davidp.chessjourney.application.service.LichessService;
-import com.davidp.chessjourney.application.service.LichessServiceImpl;
+import com.davidp.chessjourney.domain.services.LichessService;
+import com.davidp.chessjourney.infrastructure.LichessServiceImpl;
 import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.service.UserServiceImpl;
 import com.davidp.chessjourney.domain.UserRepository;

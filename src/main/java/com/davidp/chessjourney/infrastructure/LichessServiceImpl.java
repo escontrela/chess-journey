@@ -1,6 +1,7 @@
-package com.davidp.chessjourney.application.service;
+package com.davidp.chessjourney.infrastructure;
 
 import com.davidp.chessjourney.application.config.AppProperties;
+import com.davidp.chessjourney.domain.services.LichessService;
 import com.davidp.chessjourney.domain.lichess.LichessUser;
 import com.davidp.chessjourney.domain.lichess.LichessPreferences;
 import com.davidp.chessjourney.domain.lichess.LichessStats;
@@ -33,9 +34,10 @@ public class LichessServiceImpl implements LichessService {
   }
 
   @Override
-  public Optional<LichessUser> getCurrentUser(String accessToken) {
+  public Optional<LichessUser> getCurrentUser(long userId) {
+    String accessToken = appProperties.getLichessAccessToken(userId);
     if (accessToken == null || accessToken.trim().isEmpty()) {
-      System.out.println("⚠️ No Lichess access token provided");
+      System.out.println("⚠️ No Lichess access token configured for user " + userId);
       return Optional.empty();
     }
 
@@ -65,8 +67,8 @@ public class LichessServiceImpl implements LichessService {
   }
 
   @Override
-  public boolean isLichessAvailable() {
-    String token = appProperties.getLichessAccessToken();
+  public boolean isLichessAvailable(long userId) {
+    String token = appProperties.getLichessAccessToken(userId);
     return token != null && !token.trim().isEmpty();
   }
 
