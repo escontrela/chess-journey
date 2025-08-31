@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- 
+Sample integration showing how to add MessagePanelController to an existing FXML file.
+This demonstrates adding the control to a game scene where it might be used for confirmations.
+-->
+
+<?import com.davidp.chessjourney.application.ui.controls.MessagePanelController?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="root-gemini-style" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.controls.examples.SampleIntegrationController">
+   <children>
+      <!-- Main content area -->
+      <VBox layoutX="50.0" layoutY="50.0" spacing="20.0">
+         <children>
+            <Label styleClass="text-blue-gradient-big" text="Chess Journey - Sample Integration">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </Label>
+            <Label styleClass="text-menu-white" text="This demonstrates how to integrate the MessagePanelController" />
+            
+            <!-- Sample action buttons that would trigger the message panel -->
+            <Button fx:id="btnShowSaveConfirmation" onAction="#showSaveConfirmation" styleClass="button-regular" text="Show Save Confirmation" />
+            <Button fx:id="btnShowDeleteConfirmation" onAction="#showDeleteConfirmation" styleClass="button-regular" text="Show Delete Confirmation" />
+            <Button fx:id="btnShowExitConfirmation" onAction="#showExitConfirmation" styleClass="button-regular" text="Show Exit Confirmation" />
+         </children>
+      </VBox>
+      
+      <!-- Message Panel - positioned as an overlay -->
+      <!-- This would typically be hidden by default and shown when needed -->
+      <MessagePanelController fx:id="messagePanel" layoutX="150.0" layoutY="400.0" visible="true" />
+      
+      <!-- Another message panel example with different positioning -->
+      <MessagePanelController fx:id="secondaryMessagePanel" layoutX="50.0" layoutY="500.0" visible="false" />
+   </children>
+</AnchorPane>
