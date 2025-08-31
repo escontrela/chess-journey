@@ -8,6 +8,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.board.PromoteViewInputScreenData;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
+import com.davidp.chessjourney.application.ui.controls.Chart2DController;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserStatsForLastNDaysUseCase;
 import com.davidp.chessjourney.application.usecases.GetUsersUseCase;
@@ -18,13 +19,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.ArrayList;
 
 import com.davidp.chessjourney.domain.common.AggregatedStats;
 import javafx.animation.PauseTransition;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.chart.BarChart;
-import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -71,7 +71,7 @@ public class UserStatsController implements ScreenController {
   private Label lblPlayer;
 
   @FXML
-  private BarChart<String, Number> barCharUserStats;
+  private Chart2DController chartUserStats;
 
   UserStatsInputScreenData userStatsInputScreenData;
 
@@ -99,7 +99,7 @@ public class UserStatsController implements ScreenController {
   }
 
   /**
-   * 📊 Método para obtener y mostrar las estadísticas de usuario en el gráfico de barras.
+   * 📊 Método para obtener y mostrar las estadísticas de usuario en el gráfico 2D.
    */
   private void displayUserStats(final Long userId,final String exerciseType) {
 
@@ -139,23 +139,19 @@ public class UserStatsController implements ScreenController {
     List<AggregatedStats> userStats = getUserStatsForLastNDaysUseCase.execute(userId, gameType, difficultyLevel, lastNDays);
 
     // 🛑 Limpiar datos previos en el gráfico
-    barCharUserStats.getData().clear();
+    chartUserStats.resetDataset();
 
-    // 🏷️ Crear una nueva serie de datos para el gráfico
-    XYChart.Series<String, Number> series = new XYChart.Series<>();
-    series.setName("Éxito Promedio (%)");
-
-    // 🔄 Formateador de fecha (día/mes)
-    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
-
-    // 📊 Agregar cada dato a la serie
-    for (AggregatedStats stat : userStats) {
-      String formattedDate = stat.getDate().format(formatter);
-      series.getData().add(new XYChart.Data<>(formattedDate, stat.getValue() * 100)); // Convertimos a %
+    // 📊 Convertir datos para Chart2DController
+    List<Chart2DController.DataPoint2D> chartData = new ArrayList<>();
+    
+    for (int i = 0; i < userStats.size(); i++) {
+      AggregatedStats stat = userStats.get(i);
+      // Usar índice como X (días) y el valor como Y (porcentaje de éxito)
+      chartData.add(new Chart2DController.DataPoint2D(i, stat.getValue() * 100)); // Convertimos a %
     }
 
-    // 🎯 Añadir la serie al gráfico
-    barCharUserStats.getData().add(series);
+    // 🎯 Establecer los datos en el gráfico
+    chartUserStats.setDataset(chartData);
   }
 
   private void displayUserData(final Long userId) {
