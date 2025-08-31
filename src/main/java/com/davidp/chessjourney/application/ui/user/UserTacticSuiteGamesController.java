@@ -91,7 +91,7 @@ public class UserTacticSuiteGamesController implements ScreenController {
         card.getStyleClass().add("selectable-card");
         
         // Set a default icon for tactic suites
-        String iconPath = "/com/davidp/chessjourney/avatar/robot-avatar-0.png";
+        String iconPath = "/com/davidp/chessjourney/images/tactics-card.png";
         card.setImageUrl(iconPath);
         
         card.setCardClickListener(this::onTacticSuiteGameCardClicked);
