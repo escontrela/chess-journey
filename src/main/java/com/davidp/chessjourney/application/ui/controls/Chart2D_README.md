@@ -13,7 +13,7 @@ A custom 2D chart control for the Chess Journey application that allows visualiz
 
 ## Usage
 
-### Basic Usage
+### Basic Programmatic Usage
 
 ```java
 // Create the chart control
@@ -31,6 +31,44 @@ chart.setDataset(data);
 
 // Add to your scene
 container.getChildren().add(chart);
+```
+
+### FXML Usage
+
+You can use the chart control directly in FXML:
+
+```xml
+<!-- Direct usage in FXML -->
+<Chart2DController fx:id="myChart" prefWidth="600" prefHeight="400" />
+```
+
+Then access it in your controller:
+
+```java
+@FXML private Chart2DController myChart;
+
+@FXML
+private void initialize() {
+    // Use the chart
+    myChart.addDataPoint(10, 20);
+}
+```
+
+### Integration with Existing Data
+
+For integration with existing Chess Journey data sources like `AggregatedStats`:
+
+```java
+public void updateChartWithStats(List<AggregatedStats> stats) {
+    List<Chart2DController.DataPoint2D> chartData = new ArrayList<>();
+    
+    for (int i = 0; i < stats.size(); i++) {
+        AggregatedStats stat = stats.get(i);
+        chartData.add(new Chart2DController.DataPoint2D(i, stat.getValue()));
+    }
+    
+    customChart.setDataset(chartData);
+}
 ```
 
 ### Methods
@@ -73,3 +111,28 @@ The demo shows:
 - Adding random points
 - Resetting the chart
 - Real-time updates as data changes
+
+### Example Files
+
+- `Chart2DDemo.java` - Standalone demo application
+- `UserStatsChart2DIntegration.java` - Integration example with existing UserStats data
+- `chart-2d-demo.fxml` - FXML example with programmatic chart creation
+- `chart-2d-simple.fxml` - Simple FXML example with direct chart declaration
+
+## Implementation Details
+
+The control follows the Chess Journey pattern:
+- Extends `Pane` for container functionality
+- Uses `FXMLLoader` to load associated FXML layout
+- Implements `@FXML` initialization method
+- Uses `Canvas` for custom drawing instead of built-in JavaFX charts
+- Automatically handles resizing through property binding
+- Maintains dataset as `ObservableList` for reactive updates
+
+## Integration Notes
+
+The chart can be easily integrated into existing Chess Journey screens like `UserStatsController` by:
+1. Adding the chart to the existing FXML layout
+2. Converting `AggregatedStats` data to `DataPoint2D` format
+3. Using existing styling classes and color scheme
+4. Following the same event handling patterns as other controls
