@@ -8,6 +8,7 @@ import com.davidp.chessjourney.application.factories.ScreenFactory.Screens;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.ui.ScreenController;
+import com.davidp.chessjourney.application.ui.controls.MessagePanelController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
@@ -56,7 +57,7 @@ public class MainSceneController implements ScreenController {
 
   @FXML private Pane mainPane;
 
-  @FXML private Pane pnlMessage;
+  @FXML private MessagePanelController pnlMessage;
 
   @FXML private StackPane pnlMenu;
 
@@ -373,6 +374,25 @@ public class MainSceneController implements ScreenController {
     moveMainWindowsSetUp();
     reloadUserInitials(userService.getActiveUserId());
     showTextAnimation();
+    initializeMessagePanel();
+  }
+
+  private void initializeMessagePanel() {
+    // Set up the message panel with default text and event handling
+    pnlMessage.setMessage("This is a note that you have to confirm, or not?");
+    pnlMessage.setMessagePanelActionListener(new MessagePanelController.MessagePanelActionListener() {
+      @Override
+      public void onOkButtonClicked() {
+        // Handle OK button click - hide the panel
+        pnlMessage.setVisible(false);
+      }
+      
+      @Override
+      public void onCancelButtonClicked() {
+        // Handle Cancel button click - hide the panel
+        pnlMessage.setVisible(false);
+      }
+    });
   }
 
   private void initializeTaskBarBehaviour(){
