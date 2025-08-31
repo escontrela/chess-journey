@@ -115,4 +115,11 @@ public class UseCaseFactory {
         TacticSuiteGameRepository tacticSuiteGameRepository = RepositoryFactory.createTacticSuiteGameRepository();
         return new GetUserTacticSuiteGamesUseCaseImpl(tacticSuiteGameRepository);
     }
+
+    public static GetUserDataUseCase createGetUserDataUseCase() {
+        return new GetUserDataUseCaseImpl(
+            ApplicationServiceFactory.createUserService(),
+            ApplicationServiceFactory.createLichessService()
+        );
+    }
 }

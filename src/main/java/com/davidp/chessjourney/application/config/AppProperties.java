@@ -105,4 +105,21 @@ public class AppProperties {
   public void setActiveUserId(long userId) {
     setProperty("myapp.user.active.id", String.valueOf(userId));
   }
+
+  /**
+   * Gets the Lichess access token from environment variables or properties.
+   * Priority: Environment variable LICHESS_ACCESS_TOKEN, then property lichess.access.token
+   *
+   * @return the Lichess access token, or null if not configured
+   */
+  public String getLichessAccessToken() {
+    // First try environment variable
+    String token = System.getenv("LICHESS_ACCESS_TOKEN");
+    if (token != null && !token.trim().isEmpty()) {
+      return token.trim();
+    }
+    
+    // Fallback to properties file
+    return getProperty("lichess.access.token");
+  }
 }

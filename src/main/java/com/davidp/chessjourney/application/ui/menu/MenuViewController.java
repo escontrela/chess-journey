@@ -70,6 +70,15 @@ public class MenuViewController implements ScreenController {
   @FXML
   private ImageView imgUserSuites;
 
+  @FXML
+  private Pane pnlOptionUserData;
+
+  @FXML
+  private Text txtUserData;
+
+  @FXML
+  private ImageView imgUserData;
+
 
   public void initialize() {
 
@@ -187,6 +196,9 @@ public class MenuViewController implements ScreenController {
     if (isUserSuitesClicked(event)){
       GlobalEventBus.get().post(new OpenUserSuitesEvent());
     }
+    if (isUserDataClicked(event)){
+      GlobalEventBus.get().post(new OpenUserDataEvent());
+    }
   }
 
   private boolean isDefendGameClicked(MouseEvent event) {
@@ -226,5 +238,9 @@ public class MenuViewController implements ScreenController {
 
   protected boolean isUserSuitesClicked(MouseEvent event) {
     return event.getSource() == pnlOptionUserSuites || event.getSource() == txtUserSuites;
+  }
+
+  protected boolean isUserDataClicked(MouseEvent event) {
+    return event.getSource() == pnlOptionUserData || event.getSource() == txtUserData;
   }
 }
