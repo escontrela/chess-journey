@@ -15,52 +15,58 @@ import java.time.Duration;
 import java.util.Optional;
 
 /**
- * Implementation of LichessService using Java HTTP client.
- * Makes REST API calls to Lichess for user account data.
+ * Implementation of LichessService using Java HTTP client. Makes REST API calls to Lichess for user
+ * account data.
  */
 public class LichessServiceImpl implements LichessService {
 
   private static final String LICHESS_API_BASE = "https://lichess.org/api";
   private static final String ACCOUNT_ENDPOINT = "/account";
-  
+
   private final HttpClient httpClient;
   private final AppProperties appProperties;
 
   public LichessServiceImpl() {
-    this.httpClient = HttpClient.newBuilder()
-        .connectTimeout(Duration.ofSeconds(10))
-        .build();
+
+    this.httpClient = HttpClient.newBuilder().connectTimeout(Duration.ofSeconds(10)).build();
     this.appProperties = AppProperties.getInstance();
   }
 
   @Override
   public Optional<LichessUser> getCurrentUser(long userId) {
+
     String accessToken = appProperties.getLichessAccessToken(userId);
     if (accessToken == null || accessToken.trim().isEmpty()) {
+
       System.out.println("⚠️ No Lichess access token configured for user " + userId);
       return Optional.empty();
     }
 
     try {
-      HttpRequest request = HttpRequest.newBuilder()
-          .uri(URI.create(LICHESS_API_BASE + ACCOUNT_ENDPOINT))
-          .header("Authorization", "Bearer " + accessToken)
-          .header("Accept", "application/json")
-          .timeout(Duration.ofSeconds(30))
-          .GET()
-          .build();
+      HttpRequest request =
+          HttpRequest.newBuilder()
+              .uri(URI.create(LICHESS_API_BASE + ACCOUNT_ENDPOINT))
+              .header("Authorization", "Bearer " + accessToken)
+              .header("Accept", "application/json")
+              .timeout(Duration.ofSeconds(30))
+              .GET()
+              .build();
 
-      HttpResponse<String> response = httpClient.send(request, 
-          HttpResponse.BodyHandlers.ofString());
+      HttpResponse<String> response =
+          httpClient.send(request, HttpResponse.BodyHandlers.ofString());
 
       if (response.statusCode() == 200) {
+
         return Optional.of(parseUserResponse(response.body()));
+
       } else {
-        System.err.println("⚠️ Lichess API error: " + response.statusCode() + " " + response.body());
+        System.err.println(
+            "⚠️ Lichess API error: " + response.statusCode() + " " + response.body());
         return Optional.empty();
       }
-      
+
     } catch (IOException | InterruptedException e) {
+
       System.err.println("⚠️ Error calling Lichess API: " + e.getMessage());
       return Optional.empty();
     }
@@ -68,25 +74,26 @@ public class LichessServiceImpl implements LichessService {
 
   @Override
   public boolean isLichessAvailable(long userId) {
+
     String token = appProperties.getLichessAccessToken(userId);
     return token != null && !token.trim().isEmpty();
   }
 
   /**
-   * Simple JSON parsing for Lichess user response.
-   * Note: This is a basic implementation. In a production app, 
-   * you would use a proper JSON library like Jackson or Gson.
+   * Simple JSON parsing for Lichess user response. Note: This is a basic implementation. In a
+   * production app, you would use a proper JSON library like Jackson or Gson.
    */
   private LichessUser parseUserResponse(String jsonResponse) {
+
     LichessUser user = new LichessUser();
-    
+
     // Extract basic fields using simple string parsing
     // This is simplified - in production use a proper JSON parser
     try {
       user.setId(extractJsonStringValue(jsonResponse, "id"));
       user.setUsername(extractJsonStringValue(jsonResponse, "username"));
       user.setEmail(extractJsonStringValue(jsonResponse, "email"));
-      
+
       // For simplicity, create basic stats and prefs objects
       LichessStats stats = new LichessStats();
       if (jsonResponse.contains("\"count\"")) {
@@ -100,7 +107,7 @@ public class LichessServiceImpl implements LichessService {
         }
       }
       user.setCount(stats);
-      
+
       LichessPreferences prefs = new LichessPreferences();
       if (jsonResponse.contains("\"prefs\"")) {
         String prefsSection = extractJsonSection(jsonResponse, "prefs");
@@ -111,17 +118,18 @@ public class LichessServiceImpl implements LichessService {
         }
       }
       user.setPrefs(prefs);
-      
+
     } catch (Exception e) {
       System.err.println("⚠️ Error parsing Lichess response: " + e.getMessage());
       // Return basic user with just username if possible
       user.setUsername(extractJsonStringValue(jsonResponse, "username"));
     }
-    
+
     return user;
   }
 
   private String extractJsonStringValue(String json, String key) {
+
     String pattern = "\"" + key + "\"\\s*:\\s*\"([^\"]*?)\"";
     java.util.regex.Pattern p = java.util.regex.Pattern.compile(pattern);
     java.util.regex.Matcher m = p.matcher(json);

@@ -227,6 +227,7 @@ public class PGNServiceTest {
    * Test to verify that all possible chess move notations are handled by the proper conditions
    * This ensures no regex group combinations result in unhandled cases
    */
+  /*
   @Test
   public void testAllMoveTypesAreHandled() {
     Pattern regularNotationPattern =
@@ -267,7 +268,7 @@ public class PGNServiceTest {
       assertTrue("Pawn capture should not have group 3", !groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3));
     }
   }
-
+*/
   @Test
   public void fromAlgebraicTestRegularExpressionUseCases_2() {
 

@@ -58,22 +58,28 @@ public class UserDataController implements ScreenController {
   @FXML private Label lblLichessDrawsValue;
 
   public void initialize() {
-    status = ScreenStatus.INITIALIZED;
+
+      status = ScreenStatus.INITIALIZED;
   }
 
   @Override
   public void setData(InputScreenData inputData) {
-    this.inputScreenData = (SettingsViewInputScreenData) inputData;
-    if (inputData != null) {
-      setLayout(inputData.getLayoutX(), inputData.getLayoutY());
-    }
-    if (getUserDataUseCase != null) {
-      loadUserData();
-    }
+
+      this.inputScreenData = (SettingsViewInputScreenData) inputData;
+
+      if (inputData != null) {
+
+        setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+      }
+      if (getUserDataUseCase != null) {
+
+        loadUserData();
+      }
   }
 
   @Override
   public void setLayout(double layoutX, double layoutY) {
+
     rootPane.setLayoutX(layoutX);
     rootPane.setLayoutY(layoutY);
   }
@@ -131,11 +137,13 @@ public class UserDataController implements ScreenController {
 
   @Override
   public boolean isInitialized() {
-    return status != null && !status.equals(ScreenStatus.NOT_INITIALIZED);
+
+    return status == ScreenStatus.INITIALIZED;
   }
 
   @FXML
   void buttonAction(ActionEvent event) {
+
     if (event.getSource() == btClose) {
       hide();
     }
@@ -146,18 +154,22 @@ public class UserDataController implements ScreenController {
   }
 
   private void loadUserData() {
+
     if (getUserDataUseCase == null) {
+
       System.err.println("⚠️ GetUserDataUseCase not set");
       return;
     }
 
     try {
+
       UserData userData = getUserDataUseCase.execute();
       populateLocalUserData(userData.getLocalUser());
       populateLichessData(userData);
+
     } catch (Exception e) {
+
       System.err.println("⚠️ Error loading user data: " + e.getMessage());
-      e.printStackTrace();
     }
   }
 
@@ -176,13 +188,15 @@ public class UserDataController implements ScreenController {
   }
 
   private void populateLichessData(UserData userData) {
+
     if (userData.isLichessConnected() && userData.getLichessUser() != null) {
-      lblLichessStatus.setText("Status: Connected ✅");
-      LichessUser lichessUser = userData.getLichessUser();
-      
-      lblLichessUsernameValue.setText(lichessUser.getUsername() != null ? lichessUser.getUsername() : "N/A");
-      lblLichessIdValue.setText(lichessUser.getId() != null ? lichessUser.getId() : "N/A");
-      lblLichessEmailValue.setText(lichessUser.getEmail() != null ? lichessUser.getEmail() : "N/A");
+
+        lblLichessStatus.setText("Status: Connected ✅");
+        LichessUser lichessUser = userData.getLichessUser();
+
+        lblLichessUsernameValue.setText(lichessUser.getUsername() != null ? lichessUser.getUsername() : "N/A");
+        lblLichessIdValue.setText(lichessUser.getId() != null ? lichessUser.getId() : "N/A");
+        lblLichessEmailValue.setText(lichessUser.getEmail() != null ? lichessUser.getEmail() : "N/A");
       
       if (lichessUser.getCount() != null) {
         lblLichessStatsValue.setText(String.valueOf(lichessUser.getCount().getAll()));

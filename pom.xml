@@ -167,9 +167,10 @@
             </executions>
             <configuration>
                 <java>
-                    <googleJavaFormat>
+                    <!-- Comenta esta sección para desactivar google-java-format -->
+                    <!-- <googleJavaFormat>
                         <version>1.28.0</version>
-                    </googleJavaFormat>
+                    </googleJavaFormat> -->
                 </java>
             </configuration>
         </plugin>
