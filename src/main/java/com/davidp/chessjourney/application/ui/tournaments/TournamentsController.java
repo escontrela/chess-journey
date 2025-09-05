@@ -7,74 +7,53 @@ import com.davidp.chessjourney.application.usecases.ManageTournamentsUseCase;
 import com.davidp.chessjourney.domain.Tournament;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
+import javafx.scene.layout.Pane;
 
-import java.net.URL;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Controller for the tournaments screen.
  */
-public class TournamentsController implements ScreenController, Initializable {
-
-    @FXML
-    private Button btClose;
-
-    @FXML
-    private Button btRefresh;
-
-    @FXML
-    private TableView<Tournament> tournamentTable;
-
-    @FXML
-    private TableColumn<Tournament, String> colProvincia;
-
-    @FXML
-    private TableColumn<Tournament, String> colConcejo;
-
-    @FXML
-    private TableColumn<Tournament, String> colTorneo;
-
-    @FXML
-    private TableColumn<Tournament, LocalDate> colInicio;
-
-    @FXML
-    private TableColumn<Tournament, LocalDate> colFin;
-
-    @FXML
-    private TableColumn<Tournament, String> colRitmo;
+public class TournamentsController implements ScreenController {
 
     private ManageTournamentsUseCase manageTournamentsUseCase;
-    private ScreenController.ScreenStatus status;
+    private ScreenStatus status;
+
+    @FXML private Button btClose;
+    @FXML private Button btRefresh;
+    @FXML private Pane rootPane;
+    @FXML private TableView<Tournament> tournamentTable;
+    @FXML private TableColumn<Tournament, String> colProvincia;
+    @FXML private TableColumn<Tournament, String> colConcejo;
+    @FXML private TableColumn<Tournament, String> colTorneo;
+    @FXML private TableColumn<Tournament, LocalDate> colInicio;
+    @FXML private TableColumn<Tournament, LocalDate> colFin;
+    @FXML private TableColumn<Tournament, String> colRitmo;
 
     @Override
     public void setData(InputScreenData inputData) {
-        // No specific data needed for tournaments screen
+        if (inputData != null) {
+            setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+        }
     }
 
     @Override
     public void setLayout(double layoutX, double layoutY) {
-        if (tournamentTable.getParent() instanceof Pane parent) {
-            parent.setLayoutX(layoutX);
-            parent.setLayoutY(layoutY);
-        }
+        rootPane.setLayoutX(layoutX);
+        rootPane.setLayoutY(layoutY);
     }
 
     @Override
     public void show() {
-        if (tournamentTable.getParent() instanceof Pane parent) {
-            parent.setVisible(true);
-            status = ScreenController.ScreenStatus.VISIBLE;
-        }
+        rootPane.setVisible(true);
+        status = ScreenStatus.VISIBLE;
     }
 
     @Override
@@ -85,25 +64,23 @@ public class TournamentsController implements ScreenController, Initializable {
 
     @Override
     public void hide() {
-        if (tournamentTable.getParent() instanceof Pane parent) {
-            parent.setVisible(false);
-            status = ScreenController.ScreenStatus.HIDDEN;
-        }
+        rootPane.setVisible(false);
+        status = ScreenStatus.HIDDEN;
     }
 
     @Override
     public Pane getRootPane() {
-        return (Pane) tournamentTable.getParent();
+        return rootPane;
     }
 
     @Override
     public boolean isInitialized() {
-        return status == ScreenController.ScreenStatus.INITIALIZED;
+        return status == ScreenStatus.INITIALIZED;
     }
 
     @Override
     public boolean isVisible() {
-        return tournamentTable.getParent() != null && tournamentTable.getParent().isVisible();
+        return rootPane != null && rootPane.isVisible();
     }
 
     @Override
@@ -111,8 +88,7 @@ public class TournamentsController implements ScreenController, Initializable {
         return !isVisible();
     }
 
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
+    public void initialize() {
         // Initialize use case
         this.manageTournamentsUseCase = UseCaseFactory.createManageTournamentsUseCase();
 
@@ -124,14 +100,17 @@ public class TournamentsController implements ScreenController, Initializable {
         colFin.setCellValueFactory(new PropertyValueFactory<>("fin"));
         colRitmo.setCellValueFactory(new PropertyValueFactory<>("ritmo"));
 
+        // Set status
+        status = ScreenStatus.INITIALIZED;
+
         // Load initial data
         loadTournaments();
     }
 
     @FXML
-    void buttonAction(MouseEvent event) {
+    void buttonAction(ActionEvent event) {
         if (event.getSource() == btClose) {
-            closeWindow();
+            hide();
         } else if (event.getSource() == btRefresh) {
             refreshTournaments();
         }
@@ -170,17 +149,8 @@ public class TournamentsController implements ScreenController, Initializable {
         }
     }
 
-    private void closeWindow() {
-        Stage stage = (Stage) btClose.getScene().getWindow();
-        stage.close();
-    }
-
     @Override
-    public ScreenController.ScreenStatus getStatus() {
+    public ScreenStatus getStatus() {
         return status;
-    }
-
-    public void setStatus(ScreenController.ScreenStatus status) {
-        this.status = status;
     }
 }
