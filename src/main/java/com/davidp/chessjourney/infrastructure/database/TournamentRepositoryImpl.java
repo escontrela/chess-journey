@@ -21,6 +21,16 @@ public class TournamentRepositoryImpl implements TournamentRepository {
         this.dataSource = dataSource;
     }
 
+    /**
+     * Trunca un string para que no exceda la longitud máxima especificada.
+     */
+    private String truncateString(String value, int maxLength) {
+        if (value == null) {
+            return null;
+        }
+        return value.length() > maxLength ? value.substring(0, maxLength) : value;
+    }
+
     @Override
     public Tournament save(Tournament tournament) {
         String sql = """
@@ -33,15 +43,16 @@ public class TournamentRepositoryImpl implements TournamentRepository {
              PreparedStatement ps = conn.prepareStatement(sql)) {
 
             ps.setString(1, tournament.getHashId());
-            ps.setString(2, tournament.getProvincia());
-            ps.setString(3, tournament.getConcejo());
-            ps.setString(4, tournament.getTorneo());
+            ps.setString(2, truncateString(tournament.getProvincia(), 100));
+            ps.setString(3, truncateString(tournament.getConcejo(), 100));
+            ps.setString(4, truncateString(tournament.getTorneo(), 255));
             ps.setDate(5, Date.valueOf(tournament.getInicio()));
             ps.setDate(6, Date.valueOf(tournament.getFin()));
-            ps.setString(7, tournament.getRitmo());
+            ps.setString(7, truncateString(tournament.getRitmo(), 50));
 
             ps.executeUpdate();
         } catch (SQLException e) {
+            System.out.println(e);
             throw new RuntimeException("Error saving tournament", e);
         }
 
@@ -56,7 +67,8 @@ public class TournamentRepositoryImpl implements TournamentRepository {
                 save(tournament);
                 savedTournaments.add(tournament);
             } catch (Exception e) {
-                // Log error but continue with other tournaments
+
+                System.out.println(e);
                 System.err.println("Error saving tournament: " + tournament.getTorneo() + " - " + e.getMessage());
             }
         }
