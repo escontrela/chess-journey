@@ -23,11 +23,13 @@ public class Chart2DController extends Pane {
     private final ObservableList<DataPoint2D> dataset = FXCollections.observableArrayList();
     
     // Chart styling constants matching the app theme
-    private static final Color BACKGROUND_COLOR = Color.web("#2a2a2a");
+    private static final Color BACKGROUND_COLOR = Color.web("#232232"); // panel-gray background
     private static final Color GRID_COLOR = Color.web("#404040");
     private static final Color AXIS_COLOR = Color.web("#b3b3b3");
-    private static final Color DATA_POINT_COLOR = Color.web("#3b82f6");
+    private static final Color DATA_POINT_COLOR = Color.web("#3b82f6"); // Blue gradient from theme
+    private static final Color BAR_BORDER_COLOR = Color.web("#4f46e5"); // Darker blue for contrast
     private static final Color TEXT_COLOR = Color.web("#ffffff");
+    private static final Color CHART_AREA_COLOR = Color.web("#161620"); // panel-menu background
     
     // Chart margins and padding
     private static final double MARGIN_LEFT = 60;
@@ -158,7 +160,7 @@ public class Chart2DController extends Pane {
         double chartWidth = width - MARGIN_LEFT - MARGIN_RIGHT;
         double chartHeight = height - MARGIN_TOP - MARGIN_BOTTOM;
         
-        gc.setFill(Color.web("#1a1a1a"));
+        gc.setFill(CHART_AREA_COLOR);
         gc.fillRoundRect(MARGIN_LEFT, MARGIN_TOP, chartWidth, chartHeight, 10, 10);
         
         // Draw grid
@@ -176,17 +178,19 @@ public class Chart2DController extends Pane {
     
     private void drawGrid(GraphicsContext gc, double chartWidth, double chartHeight) {
         gc.setStroke(GRID_COLOR);
-        gc.setLineWidth(0.5);
+        gc.setLineWidth(0.3); // Make grid lines more subtle
         
         // Vertical grid lines
-        int verticalLines = 10;
-        for (int i = 0; i <= verticalLines; i++) {
-            double x = MARGIN_LEFT + (chartWidth * i / verticalLines);
-            gc.strokeLine(x, MARGIN_TOP, x, MARGIN_TOP + chartHeight);
+        int verticalLines = Math.min(10, dataset.size()); // Match data points
+        if (verticalLines > 0) {
+            for (int i = 0; i <= verticalLines; i++) {
+                double x = MARGIN_LEFT + (chartWidth * i / verticalLines);
+                gc.strokeLine(x, MARGIN_TOP, x, MARGIN_TOP + chartHeight);
+            }
         }
         
         // Horizontal grid lines
-        int horizontalLines = 8;
+        int horizontalLines = 4; // Match Y-axis labels
         for (int i = 0; i <= horizontalLines; i++) {
             double y = MARGIN_TOP + (chartHeight * i / horizontalLines);
             gc.strokeLine(MARGIN_LEFT, y, MARGIN_LEFT + chartWidth, y);
@@ -208,7 +212,7 @@ public class Chart2DController extends Pane {
         if (dataset.isEmpty()) return;
         
         gc.setFill(DATA_POINT_COLOR);
-        gc.setStroke(Color.web("#4f46e5")); // Darker blue for bar borders
+        gc.setStroke(BAR_BORDER_COLOR);
         gc.setLineWidth(1);
         
         // Calculate bar width based on available space and number of data points
