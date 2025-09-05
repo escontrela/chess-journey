@@ -227,6 +227,7 @@ public class PGNServiceTest {
    * Test to verify that all possible chess move notations are handled by the proper conditions
    * This ensures no regex group combinations result in unhandled cases
    */
+
   @Test
   public void testAllMoveTypesAreHandled() {
     Pattern regularNotationPattern =
@@ -242,29 +243,29 @@ public class PGNServiceTest {
     // Verify each move type has the expected group patterns
     for (String move : castlingMoves) {
       Map<PGNServiceImpl.PGNRegExprGroups, String> groups = extractAllValuableGroups(move, regularNotationPattern);
-      assertTrue("Castling move should have group 1", groups.containsKey(PGNServiceImpl.PGNRegExprGroups.CASTLING_GROUP_1));
+      assertTrue(groups.containsKey(PGNServiceImpl.PGNRegExprGroups.CASTLING_GROUP_1), "Castling move should have group 1");
     }
 
     for (String move : pieceMoves) {
       Map<PGNServiceImpl.PGNRegExprGroups, String> groups = extractAllValuableGroups(move, regularNotationPattern);
-      assertTrue("Piece move should have group 3", groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3));
-      assertTrue("Piece move should have group 6", groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
+      assertTrue(groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3), "Piece move should have group 3");
+      assertTrue(groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6), "Piece move should have group 6");
     }
 
     for (String move : pawnMoves) {
       Map<PGNServiceImpl.PGNRegExprGroups, String> groups = extractAllValuableGroups(move, regularNotationPattern);
-      assertTrue("Pawn move should have group 6", groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
-      assertTrue("Pawn move should not have group 3", !groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3));
-      assertTrue("Pawn move should not have group 4", !groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DISAMBIGUATION_GROUP_4));
-      assertTrue("Pawn move should not have group 5", !groups.containsKey(PGNServiceImpl.PGNRegExprGroups.CAPTURE_GROUP_5));
+      assertTrue(groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6), "Pawn move should have group 6");
+      assertTrue(!groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3), "Pawn move should not have group 3");
+      assertTrue(!groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DISAMBIGUATION_GROUP_4), "Pawn move should not have group 4");
+      assertTrue(!groups.containsKey(PGNServiceImpl.PGNRegExprGroups.CAPTURE_GROUP_5), "Pawn move should not have group 5");
     }
 
     for (String move : pawnCaptures) {
       Map<PGNServiceImpl.PGNRegExprGroups, String> groups = extractAllValuableGroups(move, regularNotationPattern);
-      assertTrue("Pawn capture should have group 4", groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DISAMBIGUATION_GROUP_4));
-      assertTrue("Pawn capture should have group 5", groups.containsKey(PGNServiceImpl.PGNRegExprGroups.CAPTURE_GROUP_5));
-      assertTrue("Pawn capture should have group 6", groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6));
-      assertTrue("Pawn capture should not have group 3", !groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3));
+      assertTrue(groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DISAMBIGUATION_GROUP_4), "Pawn capture should have group 4");
+      assertTrue(groups.containsKey(PGNServiceImpl.PGNRegExprGroups.CAPTURE_GROUP_5), "Pawn capture should have group 5");
+      assertTrue(groups.containsKey(PGNServiceImpl.PGNRegExprGroups.DESTINATION_GROUP_6), "Pawn capture should have group 6");
+      assertTrue(!groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3), "Pawn capture should not have group 3");
     }
   }
 
