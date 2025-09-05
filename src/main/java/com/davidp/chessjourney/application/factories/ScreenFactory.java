@@ -14,6 +14,7 @@ import com.davidp.chessjourney.application.ui.user.UserStatsController;
 import com.davidp.chessjourney.application.ui.user.UserViewController;
 import com.davidp.chessjourney.application.ui.user.UserTacticSuiteGamesController;
 import com.davidp.chessjourney.application.ui.user.UserDataController;
+import com.davidp.chessjourney.application.ui.tournaments.TournamentsController;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 
@@ -37,7 +38,8 @@ public class ScreenFactory {
     CHANGE_USER("/com/davidp/chessjourney/user-change.fxml"),
     USER_STATS("/com/davidp/chessjourney/user-stats.fxml"),
     USER_SUITES("/com/davidp/chessjourney/user-tactic-suite-games.fxml"),
-    USER_DATA("/com/davidp/chessjourney/user-data.fxml");;;
+    USER_DATA("/com/davidp/chessjourney/user-data.fxml"),
+    TOURNAMENTS("/com/davidp/chessjourney/tournaments.fxml");;;
 
     private final String resourcePath;
 
@@ -96,6 +98,8 @@ public class ScreenFactory {
         return getUserSuites();
       case USER_DATA:
         return getUserDataScreen();
+      case TOURNAMENTS:
+        return getTournamentsScreen();
       default:
         throw new IllegalArgumentException("Screen not supported: " + screen);
     }
@@ -130,6 +134,13 @@ public class ScreenFactory {
     FxmlBundle<UserDataController> objectFxmlBundle = loadFxml(Screens.USER_DATA.resourceName());
     var controller = objectFxmlBundle.getController();
     controller.setGetUserDataUseCase(UseCaseFactory.createGetUserDataUseCase());
+    return objectFxmlBundle.getController();
+  }
+
+  private ScreenController getTournamentsScreen() {
+    FxmlBundle<TournamentsController> objectFxmlBundle = loadFxml(Screens.TOURNAMENTS.resourceName());
+    var controller = objectFxmlBundle.getController();
+    // TournamentsController uses factory method internally, no use case injection needed
     return objectFxmlBundle.getController();
   }
 

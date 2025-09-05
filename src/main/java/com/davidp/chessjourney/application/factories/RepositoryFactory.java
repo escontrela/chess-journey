@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.domain.QuoteRepository;
+import com.davidp.chessjourney.domain.TournamentRepository;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.DifficultyLevelRepository;
 import com.davidp.chessjourney.domain.common.ExerciseRepository;
@@ -41,5 +42,9 @@ public class RepositoryFactory {
 
   public static TacticSuiteGameRepository createTacticSuiteGameRepository() {
     return new TacticSuiteGameRepositoryImpl(DBHikariDataSource.getInstance().getDataSource());
+  }
+
+  public static TournamentRepository createTournamentRepository() {
+    return new TournamentRepositoryImpl(DBHikariDataSource.getInstance().getDataSource());
   }
 }

@@ -1,5 +1,6 @@
 package com.davidp.chessjourney.application.factories;
 
+import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
 import com.davidp.chessjourney.domain.UserRepository;
@@ -121,6 +122,14 @@ public class UseCaseFactory {
         return new GetUserDataUseCaseImpl(
             ApplicationServiceFactory.createUserService(),
             ApplicationServiceFactory.createLichessService()
+        );
+    }
+
+    public static ManageTournamentsUseCase createManageTournamentsUseCase() {
+        return new ManageTournamentsUseCase(
+            ApplicationServiceFactory.createLookUpTournamentsService(),
+            ApplicationServiceFactory.createTournamentsManagementService(),
+            AppProperties.getInstance()
         );
     }
 }

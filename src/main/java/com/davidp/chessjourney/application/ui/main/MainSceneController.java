@@ -262,6 +262,13 @@ public class MainSceneController implements ScreenController {
     manageUserDataVisibility();
   }
 
+  @Subscribe
+  public void onTournamentsClicked(OpenTournamentsEvent event) {
+
+    manageContextMenuVisibility();
+    manageTournamentsVisibility();
+  }
+
   private void manageTacticGameVisibility() {
 
     ScreenController defendGameController = getScreen(Screens.TACTIC_GAME);
@@ -381,6 +388,21 @@ public class MainSceneController implements ScreenController {
             new SettingsViewInputScreenData(
                     userService.getActiveUserId(), USER_DATA_POSITION);
     userDataController.show(inputData);
+  }
+
+  private void manageTournamentsVisibility() {
+
+    ScreenController tournamentsController = getScreen(Screens.TOURNAMENTS);
+    if (tournamentsController.isVisible() && !tournamentsController.isInitialized()) {
+
+      tournamentsController.hide();
+      return;
+    }
+
+    SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    userService.getActiveUserId(), USER_DATA_POSITION);
+    tournamentsController.show(inputData);
   }
 
   public MainSceneController() {
