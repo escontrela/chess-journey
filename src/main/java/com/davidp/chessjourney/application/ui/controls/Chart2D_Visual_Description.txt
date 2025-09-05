@@ -1,0 +1,40 @@
+/**
+ * Visual Description of Chart2DController
+ * 
+ * The Chart2DController creates a custom 2D visualization that would look like this:
+ * 
+ * ┌─────────────────────────────────────────────────────────────────────────┐
+ * │  Chart2D Control - Chess Journey Style                                 │
+ * │  ┌───────────────────────────────────────────────────────────────────┐  │
+ * │  │ Y │                                                             │  │
+ * │  │ 100│  ·                                            ·          │  │
+ * │  │    │                              ·                         │  │
+ * │  │ 80 │                    ·                    ·               │  │
+ * │  │    │                                                        │  │
+ * │  │ 60 │           ·                                   ·        │  │
+ * │  │    │     ·              ·              ·                    │  │
+ * │  │ 40 │                         ·                ·             │  │
+ * │  │    │                               ·                        │  │
+ * │  │ 20 │  ·        ·        ·                                   │  │
+ * │  │    │                                                        │  │
+ * │  │  0 └────┬────┬────┬────┬────┬────┬────┬────┬────┬────┬─────│  │
+ * │  │     0   10   20   30   40   50   60   70   80   90  100 X │  │
+ * │  └───────────────────────────────────────────────────────────────────┐  │
+ * └─────────────────────────────────────────────────────────────────────────┘
+ * 
+ * Features visible:
+ * - Dark gradient background (#2a2a2a to #0d0d0d)
+ * - Blue gradient border (#3b82f6 to #8b5cf6)
+ * - Grid lines in dark gray (#404040)
+ * - White axes with labels using Alatsi font
+ * - Blue data points (#3b82f6) with white borders
+ * - Rounded corners (20px radius)
+ * - Subtle glow effect
+ * - Resizable canvas that adapts to container size
+ * - Automatic data range calculation with padding
+ * - Axis labels showing min/max values
+ * 
+ * The control integrates seamlessly with Chess Journey's existing dark theme
+ * and can be used alongside other controls like SelectableCardController
+ * and TacticStatusController.
+ */
