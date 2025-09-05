@@ -159,9 +159,8 @@
             <version>2.23.0</version>
             <configuration>
                 <java>
-                    <!-- Comenta o elimina esta sección para desactivar google-java-format -->
                     <!-- <googleJavaFormat>
-                        <version>1.15.0</version>
+                        <version>1.28.0</version>
                     </googleJavaFormat> -->
                 </java>
             </configuration>

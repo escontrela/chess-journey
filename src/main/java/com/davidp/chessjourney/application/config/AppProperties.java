@@ -105,4 +105,49 @@ public class AppProperties {
   public void setActiveUserId(long userId) {
     setProperty("myapp.user.active.id", String.valueOf(userId));
   }
+
+  /**
+   * Gets the Lichess access token from environment variables or properties.
+   * Priority: Environment variable LICHESS_ACCESS_TOKEN, then property lichess.access.token
+   *
+   * @return the Lichess access token, or null if not configured
+   * @deprecated Use getLichessAccessToken(long userId) instead for per-user tokens
+   */
+  @Deprecated
+  public String getLichessAccessToken() {
+    // First try environment variable
+    String token = System.getenv("LICHESS_ACCESS_TOKEN");
+    if (token != null && !token.trim().isEmpty()) {
+      return token.trim();
+    }
+    
+    // Fallback to properties file
+    return getProperty("lichess.access.token");
+  }
+
+  /**
+   * Gets the Lichess access token for a specific user from environment variables or properties.
+   * Priority: Environment variable LICHESS_ACCESS_TOKEN_USER_{userId}, then property lichess.access.token.user.{userId}
+   *
+   * @param userId the user ID to get the token for
+   * @return the Lichess access token for the specified user, or null if not configured
+   */
+  public String getLichessAccessToken(long userId) {
+
+    // First try user-specific environment variable
+    String token = System.getenv("LICHESS_ACCESS_TOKEN_USER_" + userId);
+    if (token != null && !token.trim().isEmpty()) {
+      return token.trim();
+    }
+    
+    // Fallback to user-specific property
+    String userToken = getProperty("lichess.access.token.user." + userId);
+    System.out.println("🔑 Lichess token for user " + userId + ": " + (userToken != null ? userToken : "not set"));
+    if (userToken != null && !userToken.trim().isEmpty()) {
+      return userToken.trim();
+    }
+    
+    // Final fallback to global token for backward compatibility
+    return  getLichessAccessToken();
+  }
 }
