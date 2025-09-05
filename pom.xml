@@ -156,20 +156,12 @@
         <plugin>
             <groupId>com.diffplug.spotless</groupId>
             <artifactId>spotless-maven-plugin</artifactId>
-            <version>2.17.5</version>
-            <executions>
-                <execution>
-                    <goals>
-                        <goal>apply</goal>
-                    </goals>
-                    <phase>verify</phase>
-                </execution>
-            </executions>
+            <version>2.23.0</version>
             <configuration>
                 <java>
-                    <googleJavaFormat>
+                    <!-- <googleJavaFormat>
                         <version>1.28.0</version>
-                    </googleJavaFormat>
+                    </googleJavaFormat> -->
                 </java>
             </configuration>
         </plugin>

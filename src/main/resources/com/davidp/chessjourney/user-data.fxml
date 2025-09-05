@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1260.0" styleClass="popup-root-glass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserDataController">
+   <children>
+      <Separator layoutX="630.0" layoutY="118.0" orientation="VERTICAL" prefHeight="552.0" prefWidth="3.0">
+         <effect>
+            <ColorAdjust brightness="-0.62" contrast="-0.47" hue="-1.0" saturation="-1.0" />
+         </effect>
+      </Separator>
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1220.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/close_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      <Label layoutX="33.0" layoutY="29.0" styleClass="popup-header" text="User Data" />
+      
+      <!-- Local User Data Section -->
+      <Label layoutX="33.0" layoutY="90.0" styleClass="score-caption" text="LOCAL USER" />
+      <Label fx:id="lblLocalUserName" layoutX="33.0" layoutY="130.0" styleClass="score-name" text="User Name:" />
+      <Label fx:id="lblLocalUserNameValue" layoutX="33.0" layoutY="160.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLocalUserEmail" layoutX="33.0" layoutY="200.0" styleClass="score-name" text="Email:" />
+      <Label fx:id="lblLocalUserEmailValue" layoutX="33.0" layoutY="230.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLocalUserId" layoutX="33.0" layoutY="270.0" styleClass="score-name" text="User ID:" />
+      <Label fx:id="lblLocalUserIdValue" layoutX="33.0" layoutY="300.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLocalUserInitials" layoutX="33.0" layoutY="340.0" styleClass="score-name" text="Initials:" />
+      <Label fx:id="lblLocalUserInitialsValue" layoutX="33.0" layoutY="370.0" styleClass="popup-label" text="-" />
+
+      <!-- Lichess User Data Section -->
+      <Label layoutX="670.0" layoutY="90.0" styleClass="score-caption" text="LICHESS DATA" />
+      <Label fx:id="lblLichessStatus" layoutX="670.0" layoutY="120.0" styleClass="popup-label" text="Status: Not Connected" />
+      
+      <Label fx:id="lblLichessUsername" layoutX="670.0" layoutY="160.0" styleClass="score-name" text="Username:" />
+      <Label fx:id="lblLichessUsernameValue" layoutX="670.0" layoutY="190.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLichessId" layoutX="670.0" layoutY="230.0" styleClass="score-name" text="Lichess ID:" />
+      <Label fx:id="lblLichessIdValue" layoutX="670.0" layoutY="260.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLichessEmail" layoutX="670.0" layoutY="300.0" styleClass="score-name" text="Email:" />
+      <Label fx:id="lblLichessEmailValue" layoutX="670.0" layoutY="330.0" styleClass="popup-label" text="-" />
+      
+      <!-- Lichess Stats -->
+      <Label fx:id="lblLichessStats" layoutX="670.0" layoutY="380.0" styleClass="score-name" text="Games Played:" />
+      <Label fx:id="lblLichessStatsValue" layoutX="670.0" layoutY="410.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLichessWins" layoutX="670.0" layoutY="450.0" styleClass="score-name" text="Wins:" />
+      <Label fx:id="lblLichessWinsValue" layoutX="670.0" layoutY="480.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLichessLosses" layoutX="670.0" layoutY="520.0" styleClass="score-name" text="Losses:" />
+      <Label fx:id="lblLichessLossesValue" layoutX="670.0" layoutY="550.0" styleClass="popup-label" text="-" />
+      
+      <Label fx:id="lblLichessDraws" layoutX="670.0" layoutY="590.0" styleClass="score-name" text="Draws:" />
+      <Label fx:id="lblLichessDrawsValue" layoutX="670.0" layoutY="620.0" styleClass="popup-label" text="-" />
+
+   </children>
+   <stylesheets>
+      <URL value="@custom-styles.css" />
+   </stylesheets>
+</Pane>

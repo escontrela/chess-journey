@@ -268,7 +268,6 @@ public class PGNServiceTest {
       assertTrue(!groups.containsKey(PGNServiceImpl.PGNRegExprGroups.PIECE_GROUP_3), "Pawn capture should not have group 3");
     }
   }
-
   @Test
   public void fromAlgebraicTestRegularExpressionUseCases_2() {
 

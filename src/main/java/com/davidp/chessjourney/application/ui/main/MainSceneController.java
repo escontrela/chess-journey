@@ -8,6 +8,7 @@ import com.davidp.chessjourney.application.factories.ScreenFactory.Screens;
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.ui.ScreenController;
+import com.davidp.chessjourney.application.ui.controls.MessagePanelController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
@@ -56,7 +57,7 @@ public class MainSceneController implements ScreenController {
 
   @FXML private Pane mainPane;
 
-  @FXML private Pane pnlMessage;
+  @FXML private MessagePanelController pnlMessage;
 
   @FXML private StackPane pnlMenu;
 
@@ -104,6 +105,7 @@ public class MainSceneController implements ScreenController {
   private static final Point CHANGE_USER_POSITION = new Point(120, 180);
   private static final Point USER_STATS_POSITION = new Point(210, 120);
   private static final Point USER_SUITES_POSITION = new Point(14, 111);
+  private static final Point USER_DATA_POSITION = new Point(14, 111);
 
 
   @FXML
@@ -253,6 +255,13 @@ public class MainSceneController implements ScreenController {
     manageUserSuitesVisibility();
   }
 
+  @Subscribe
+  public void onUserDataClicked(OpenUserDataEvent event) {
+
+    manageContextMenuVisibility();
+    manageUserDataVisibility();
+  }
+
   private void manageTacticGameVisibility() {
 
     ScreenController defendGameController = getScreen(Screens.TACTIC_GAME);
@@ -359,6 +368,21 @@ public class MainSceneController implements ScreenController {
     userSuitesController.show(inputData);
   }
 
+  private void manageUserDataVisibility() {
+
+    ScreenController userDataController = getScreen(Screens.USER_DATA);
+    if (userDataController.isVisible() && !userDataController.isInitialized()) {
+
+      userDataController.hide();
+      return;
+    }
+
+    SettingsViewInputScreenData inputData =
+            new SettingsViewInputScreenData(
+                    userService.getActiveUserId(), USER_DATA_POSITION);
+    userDataController.show(inputData);
+  }
+
   public MainSceneController() {
 
     GlobalEventBus.get().register(this);
@@ -373,6 +397,25 @@ public class MainSceneController implements ScreenController {
     moveMainWindowsSetUp();
     reloadUserInitials(userService.getActiveUserId());
     showTextAnimation();
+    initializeMessagePanel();
+  }
+
+  private void initializeMessagePanel() {
+    // Set up the message panel with default text and event handling
+    pnlMessage.setMessage("This is a note that you have to confirm, or not?");
+    pnlMessage.setMessagePanelActionListener(new MessagePanelController.MessagePanelActionListener() {
+      @Override
+      public void onOkButtonClicked() {
+        // Handle OK button click - hide the panel
+        pnlMessage.setVisible(false);
+      }
+      
+      @Override
+      public void onCancelButtonClicked() {
+        // Handle Cancel button click - hide the panel
+        pnlMessage.setVisible(false);
+      }
+    });
   }
 
   private void initializeTaskBarBehaviour(){

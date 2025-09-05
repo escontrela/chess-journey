@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.application.factories;
 
 import com.davidp.chessjourney.application.usecases.*;
+import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
 import com.davidp.chessjourney.domain.UserRepository;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
@@ -114,5 +115,12 @@ public class UseCaseFactory {
     public static GetUserTacticSuiteGamesUseCase createGetUserTacticSuiteGamesUseCase() {
         TacticSuiteGameRepository tacticSuiteGameRepository = RepositoryFactory.createTacticSuiteGameRepository();
         return new GetUserTacticSuiteGamesUseCaseImpl(tacticSuiteGameRepository);
+    }
+
+    public static GetUserDataUseCase createGetUserDataUseCase() {
+        return new GetUserDataUseCaseImpl(
+            ApplicationServiceFactory.createUserService(),
+            ApplicationServiceFactory.createLichessService()
+        );
     }
 }
