@@ -2,6 +2,7 @@ package com.davidp.chessjourney.application.ui.tournaments;
 
 import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
+import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.usecases.ManageTournamentsUseCase;
 import com.davidp.chessjourney.domain.Tournament;
 import javafx.collections.FXCollections;
@@ -54,6 +55,61 @@ public class TournamentsController implements ScreenController, Initializable {
 
     private ManageTournamentsUseCase manageTournamentsUseCase;
     private ScreenController.ScreenStatus status;
+
+    @Override
+    public void setData(InputScreenData inputData) {
+        // No specific data needed for tournaments screen
+    }
+
+    @Override
+    public void setLayout(double layoutX, double layoutY) {
+        if (tournamentTable.getParent() instanceof Pane parent) {
+            parent.setLayoutX(layoutX);
+            parent.setLayoutY(layoutY);
+        }
+    }
+
+    @Override
+    public void show() {
+        if (tournamentTable.getParent() instanceof Pane parent) {
+            parent.setVisible(true);
+            status = ScreenController.ScreenStatus.VISIBLE;
+        }
+    }
+
+    @Override
+    public void show(InputScreenData inputData) {
+        setData(inputData);
+        show();
+    }
+
+    @Override
+    public void hide() {
+        if (tournamentTable.getParent() instanceof Pane parent) {
+            parent.setVisible(false);
+            status = ScreenController.ScreenStatus.HIDDEN;
+        }
+    }
+
+    @Override
+    public Pane getRootPane() {
+        return (Pane) tournamentTable.getParent();
+    }
+
+    @Override
+    public boolean isInitialized() {
+        return status == ScreenController.ScreenStatus.INITIALIZED;
+    }
+
+    @Override
+    public boolean isVisible() {
+        return tournamentTable.getParent() != null && tournamentTable.getParent().isVisible();
+    }
+
+    @Override
+    public boolean isHidden() {
+        return !isVisible();
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -124,7 +180,6 @@ public class TournamentsController implements ScreenController, Initializable {
         return status;
     }
 
-    @Override
     public void setStatus(ScreenController.ScreenStatus status) {
         this.status = status;
     }
