@@ -208,17 +208,24 @@ public class Chart2DController extends Pane {
         if (dataset.isEmpty()) return;
         
         gc.setFill(DATA_POINT_COLOR);
-        gc.setStroke(Color.web("#ffffff"));
+        gc.setStroke(Color.web("#4f46e5")); // Darker blue for bar borders
         gc.setLineWidth(1);
         
-        for (DataPoint2D point : dataset) {
-            double x = MARGIN_LEFT + ((point.getX() - minX) / (maxX - minX)) * chartWidth;
-            double y = MARGIN_TOP + chartHeight - ((point.getY() - minY) / (maxY - minY)) * chartHeight;
+        // Calculate bar width based on available space and number of data points
+        double barWidth = (chartWidth * 0.8) / dataset.size(); // Use 80% of chart width
+        double barSpacing = (chartWidth * 0.2) / (dataset.size() + 1); // Remaining 20% for spacing
+        
+        for (int i = 0; i < dataset.size(); i++) {
+            DataPoint2D point = dataset.get(i);
             
-            // Draw point as circle
-            double radius = 4;
-            gc.fillOval(x - radius, y - radius, radius * 2, radius * 2);
-            gc.strokeOval(x - radius, y - radius, radius * 2, radius * 2);
+            // Calculate bar position
+            double x = MARGIN_LEFT + barSpacing + (i * (barWidth + barSpacing));
+            double barHeight = ((point.getY() - minY) / (maxY - minY)) * chartHeight;
+            double y = MARGIN_TOP + chartHeight - barHeight;
+            
+            // Draw bar with rounded corners
+            gc.fillRoundRect(x, y, barWidth, barHeight, 4, 4);
+            gc.strokeRoundRect(x, y, barWidth, barHeight, 4, 4);
         }
     }
     
@@ -226,21 +233,23 @@ public class Chart2DController extends Pane {
         gc.setFill(TEXT_COLOR);
         gc.setFont(Font.font("Alatsi", 12));
         
-        // X axis labels
-        int xLabels = 5;
-        for (int i = 0; i <= xLabels; i++) {
-            double x = MARGIN_LEFT + (chartWidth * i / xLabels);
-            double value = minX + ((maxX - minX) * i / xLabels);
-            String label = String.format("%.1f", value);
-            gc.fillText(label, x - 15, height - MARGIN_BOTTOM + 20);
+        // X axis labels - show day indices as integers
+        int maxXLabels = Math.min(10, dataset.size()); // Limit to 10 labels to avoid crowding
+        if (maxXLabels > 0) {
+            for (int i = 0; i <= maxXLabels; i++) {
+                double x = MARGIN_LEFT + (chartWidth * i / maxXLabels);
+                double value = minX + ((maxX - minX) * i / maxXLabels);
+                String label = String.format("%.0f", value); // Show as integer
+                gc.fillText(label, x - 10, height - MARGIN_BOTTOM + 20);
+            }
         }
         
-        // Y axis labels
+        // Y axis labels - show percentages
         int yLabels = 4;
         for (int i = 0; i <= yLabels; i++) {
             double y = MARGIN_TOP + chartHeight - (chartHeight * i / yLabels);
             double value = minY + ((maxY - minY) * i / yLabels);
-            String label = String.format("%.1f", value);
+            String label = String.format("%.0f%%", value); // Show as percentage
             gc.fillText(label, MARGIN_LEFT - 45, y + 5);
         }
     }
