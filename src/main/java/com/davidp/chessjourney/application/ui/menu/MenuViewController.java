@@ -6,10 +6,17 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import javafx.fxml.FXML;
+import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+
+import java.time.Instant;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Locale;
 
 public class MenuViewController implements ScreenController {
 
@@ -38,6 +45,9 @@ public class MenuViewController implements ScreenController {
   @FXML private Text txtDefendGame;
 
   @FXML private Text txtTacticGame;
+
+  @FXML private Label lblDate;
+  @FXML private Label lblWhiteTime;
 
   @FXML
   private Pane pnlOptionUser;
@@ -88,8 +98,14 @@ public class MenuViewController implements ScreenController {
   @FXML
   private ImageView imgTournaments;
 
+    private static final DateTimeFormatter SPANISH_FMT =
+            DateTimeFormatter.ofPattern("EEEE d 'de' MMMM 'del' yyyy", new Locale("es", "ES"));
 
-  public void initialize() {
+    private static final DateTimeFormatter TIME_FMT =
+            DateTimeFormatter.ofPattern("HH:mm", new Locale("es", "ES"));
+
+
+    public void initialize() {
 
     status = ScreenController.ScreenStatus.INITIALIZED;
   }
@@ -98,8 +114,9 @@ public class MenuViewController implements ScreenController {
   public void setData(InputScreenData inputData) {
 
     if (inputData.isLayoutInfoValid()) {
-
-      setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+        lblDate.setText(formatInstant(Instant.now()));
+        lblWhiteTime.setText(formatTime(Instant.now()));
+        setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
   }
 
@@ -260,4 +277,19 @@ public class MenuViewController implements ScreenController {
   protected boolean isTournamentsClicked(MouseEvent event) {
     return event.getSource() == pnlOptionTournaments || event.getSource() == txtTournaments;
   }
+
+    private String formatInstant(Instant instant) {
+        String formatted = SPANISH_FMT.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
+        return capitalize(formatted);
+    }
+
+    private String capitalize(String s) {
+        if (s == null || s.isEmpty()) return s;
+        return s.substring(0, 1).toUpperCase() + s.substring(1);
+    }
+
+    // Añade este método:
+    private String formatTime(Instant instant) {
+        return TIME_FMT.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
+    }
 }

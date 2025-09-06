@@ -96,7 +96,7 @@ public class MainSceneController implements ScreenController {
   // This map is used to cache the screens that are created.
   private final Map<Screens, ScreenController> screenManager = new HashMap<>();
   private UserService userService;
-  private static final Point MENU_POSITION = new Point(20, 320);
+  private static final Point MENU_POSITION = new Point(45, 110);
   private static final Point SETTINGS_POSITION = new Point(320, 180);
   private static final Point BOARD_POSITION = new Point(10, 10);
   private static final Point MEMORY_GAME_POSITION = new Point(10, 10);
