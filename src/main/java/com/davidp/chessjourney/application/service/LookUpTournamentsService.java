@@ -46,8 +46,8 @@ public class LookUpTournamentsService {
                     Element row = rows.get(i);
                     Elements cols = row.select("td");
                     
-                    // Expecting 6 columns: provincia, concejo, torneo, inicio, fin, local
-                    if (cols.size() >= 6) {
+                    // Expecting 7 columns: provincia, concejo, torneo, inicio, fin, local, ritmo
+                    if (cols.size() >= 7) {
                         try {
                             String provincia = cleanText(cols.get(0).text());
                             String concejo = cleanText(cols.get(1).text());
@@ -55,6 +55,7 @@ public class LookUpTournamentsService {
                             String inicioStr = cleanText(cols.get(3).text());
                             String finStr = cleanText(cols.get(4).text());
                             String local = cleanText(cols.get(5).text());
+                            String ritmo = cleanText(cols.get(6).text());
 
                             // Skip empty or invalid rows
                             if (provincia.isEmpty() || concejo.isEmpty() || torneo.isEmpty()) {
@@ -66,7 +67,7 @@ public class LookUpTournamentsService {
 
                             if (inicio != null && fin != null) {
                                 Tournament tournament = new Tournament(
-                                    provincia, concejo, torneo, inicio, fin, local
+                                    provincia, concejo, torneo, inicio, fin, local, ritmo
                                 );
                                 tournaments.add(tournament);
                             }

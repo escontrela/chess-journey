@@ -10,6 +10,7 @@ public class TournamentTest {
     
     public static void main(String[] args) {
         testTournamentCreation();
+        testTournamentCreationWithRitmo();
         testTournamentHash();
         System.out.println("All tournament tests passed!");
     }
@@ -36,6 +37,31 @@ public class TournamentTest {
         assert tournament.getHashId() != null && !tournament.getHashId().isEmpty();
         
         System.out.println("✓ Tournament creation test passed");
+    }
+    
+    private static void testTournamentCreationWithRitmo() {
+        System.out.println("Testing tournament creation with ritmo...");
+        
+        Tournament tournament = new Tournament(
+            "A Coruña", 
+            "Santiago", 
+            "Torneo de Ajedrez Santiago 2024", 
+            LocalDate.of(2024, 3, 15), 
+            LocalDate.of(2024, 3, 17), 
+            "Centro Cultural",
+            "90+30"
+        );
+        
+        assert tournament.getProvincia().equals("A Coruña");
+        assert tournament.getConcejo().equals("Santiago");
+        assert tournament.getTorneo().equals("Torneo de Ajedrez Santiago 2024");
+        assert tournament.getInicio().equals(LocalDate.of(2024, 3, 15));
+        assert tournament.getFin().equals(LocalDate.of(2024, 3, 17));
+        assert tournament.getLocal().equals("Centro Cultural");
+        assert tournament.getRitmo().equals("90+30");
+        assert tournament.getHashId() != null && !tournament.getHashId().isEmpty();
+        
+        System.out.println("✓ Tournament creation with ritmo test passed");
     }
     
     private static void testTournamentHash() {

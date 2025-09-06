@@ -22,7 +22,8 @@ public class MockLookUpTournamentsService extends LookUpTournamentsService {
             "Open Internacional de Ajedrez Santiago", 
             LocalDate.now().plusDays(5), 
             LocalDate.now().plusDays(7), 
-            "Hotel Compostela"
+            "Hotel Compostela",
+            "90+30"
         ));
         
         mockTournaments.add(new Tournament(
@@ -31,7 +32,8 @@ public class MockLookUpTournamentsService extends LookUpTournamentsService {
             "Torneo de Ajedrez Rápido Vigo 2024", 
             LocalDate.now().plusDays(12), 
             LocalDate.now().plusDays(12), 
-            "Club de Ajedrez Vigo"
+            "Club de Ajedrez Vigo",
+            "15+10"
         ));
         
         mockTournaments.add(new Tournament(
@@ -40,7 +42,8 @@ public class MockLookUpTournamentsService extends LookUpTournamentsService {
             "Memorial Xadrez Lugo", 
             LocalDate.now().plusDays(20), 
             LocalDate.now().plusDays(22), 
-            "Palacio de Deportes"
+            "Palacio de Deportes",
+            "90+30"
         ));
         
         mockTournaments.add(new Tournament(
@@ -49,7 +52,8 @@ public class MockLookUpTournamentsService extends LookUpTournamentsService {
             "Campeonato Provincial de Ajedrez", 
             LocalDate.now().plusDays(35), 
             LocalDate.now().plusDays(37), 
-            "Centro Cultural Ourense"
+            "Centro Cultural Ourense",
+            "120+30"
         ));
         
         mockTournaments.add(new Tournament(
@@ -58,7 +62,8 @@ public class MockLookUpTournamentsService extends LookUpTournamentsService {
             "Torneo Juvenil de Ferrol", 
             LocalDate.now().plusDays(50), 
             LocalDate.now().plusDays(52), 
-            "IES de Ferrol"
+            "IES de Ferrol",
+            "90+30"
         ));
         
         System.out.println("Mock scraping completed - found " + mockTournaments.size() + " tournaments");

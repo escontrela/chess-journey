@@ -29,6 +29,17 @@ public class Tournament {
         this.hashId = generateHash();
     }
 
+    public Tournament(String provincia, String concejo, String torneo, LocalDate inicio, LocalDate fin, String local, String ritmo) {
+        this.provincia = provincia;
+        this.concejo = concejo;
+        this.torneo = torneo;
+        this.inicio = inicio;
+        this.fin = fin;
+        this.local = local;
+        this.ritmo = ritmo;
+        this.hashId = generateHash();
+    }
+
     public Tournament(String hashId, String provincia, String concejo, String torneo, LocalDate inicio, LocalDate fin, String local) {
         this.hashId = hashId;
         this.provincia = provincia;
@@ -56,6 +67,8 @@ public class Tournament {
      */
     private String generateHash() {
         try {
+            // Use core tournament data for hash generation to ensure uniqueness
+            // ritmo is supplementary information and shouldn't affect deduplication
             String data = provincia + "|" + concejo + "|" + torneo + "|" + inicio + "|" + fin + "|" + local;
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
