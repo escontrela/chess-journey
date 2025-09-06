@@ -23,7 +23,7 @@ public class TournamentTest {
             "Torneo de Ajedrez Santiago 2024", 
             LocalDate.of(2024, 3, 15), 
             LocalDate.of(2024, 3, 17), 
-            "Clásico"
+            "Centro Cultural"
         );
         
         assert tournament.getProvincia().equals("A Coruña");
@@ -31,7 +31,8 @@ public class TournamentTest {
         assert tournament.getTorneo().equals("Torneo de Ajedrez Santiago 2024");
         assert tournament.getInicio().equals(LocalDate.of(2024, 3, 15));
         assert tournament.getFin().equals(LocalDate.of(2024, 3, 17));
-        assert tournament.getRitmo().equals("Clásico");
+        assert tournament.getLocal().equals("Centro Cultural");
+        assert tournament.getRitmo() == null; // Default null since not provided from HTML table
         assert tournament.getHashId() != null && !tournament.getHashId().isEmpty();
         
         System.out.println("✓ Tournament creation test passed");
@@ -42,17 +43,17 @@ public class TournamentTest {
         
         Tournament tournament1 = new Tournament(
             "A Coruña", "Santiago", "Torneo Test", 
-            LocalDate.of(2024, 3, 15), LocalDate.of(2024, 3, 17), "Clásico"
+            LocalDate.of(2024, 3, 15), LocalDate.of(2024, 3, 17), "Centro Cultural"
         );
         
         Tournament tournament2 = new Tournament(
             "A Coruña", "Santiago", "Torneo Test", 
-            LocalDate.of(2024, 3, 15), LocalDate.of(2024, 3, 17), "Clásico"
+            LocalDate.of(2024, 3, 15), LocalDate.of(2024, 3, 17), "Centro Cultural"
         );
         
         Tournament tournament3 = new Tournament(
             "A Coruña", "Santiago", "Torneo Test Diferente", 
-            LocalDate.of(2024, 3, 15), LocalDate.of(2024, 3, 17), "Clásico"
+            LocalDate.of(2024, 3, 15), LocalDate.of(2024, 3, 17), "Centro Cultural"
         );
         
         // Same tournaments should have same hash

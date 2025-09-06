@@ -42,7 +42,7 @@
             <TableColumn fx:id="colTorneo" prefWidth="400.0" text="Torneo" />
             <TableColumn fx:id="colInicio" prefWidth="120.0" text="Inicio" />
             <TableColumn fx:id="colFin" prefWidth="120.0" text="Fin" />
-            <TableColumn fx:id="colRitmo" prefWidth="150.0" text="Ritmo" />
+            <TableColumn fx:id="colLocal" prefWidth="150.0" text="Local" />
          </columns>
       </TableView>
 

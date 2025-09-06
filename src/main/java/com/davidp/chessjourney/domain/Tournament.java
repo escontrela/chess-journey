@@ -15,25 +15,39 @@ public class Tournament {
     private String torneo;
     private LocalDate inicio;
     private LocalDate fin;
-    private String ritmo;
+    private String local;
+    private String ritmo; // Optional field - may be null if not available
 
-    public Tournament(String provincia, String concejo, String torneo, LocalDate inicio, LocalDate fin, String ritmo) {
+    public Tournament(String provincia, String concejo, String torneo, LocalDate inicio, LocalDate fin, String local) {
         this.provincia = provincia;
         this.concejo = concejo;
         this.torneo = torneo;
         this.inicio = inicio;
         this.fin = fin;
-        this.ritmo = ritmo;
+        this.local = local;
+        this.ritmo = null; // Default to null since it's not in the HTML table
         this.hashId = generateHash();
     }
 
-    public Tournament(String hashId, String provincia, String concejo, String torneo, LocalDate inicio, LocalDate fin, String ritmo) {
+    public Tournament(String hashId, String provincia, String concejo, String torneo, LocalDate inicio, LocalDate fin, String local) {
         this.hashId = hashId;
         this.provincia = provincia;
         this.concejo = concejo;
         this.torneo = torneo;
         this.inicio = inicio;
         this.fin = fin;
+        this.local = local;
+        this.ritmo = null; // Default to null since it's not in the HTML table
+    }
+
+    public Tournament(String hashId, String provincia, String concejo, String torneo, LocalDate inicio, LocalDate fin, String local, String ritmo) {
+        this.hashId = hashId;
+        this.provincia = provincia;
+        this.concejo = concejo;
+        this.torneo = torneo;
+        this.inicio = inicio;
+        this.fin = fin;
+        this.local = local;
         this.ritmo = ritmo;
     }
 
@@ -42,7 +56,7 @@ public class Tournament {
      */
     private String generateHash() {
         try {
-            String data = provincia + "|" + concejo + "|" + torneo + "|" + inicio + "|" + fin + "|" + ritmo;
+            String data = provincia + "|" + concejo + "|" + torneo + "|" + inicio + "|" + fin + "|" + local;
             MessageDigest digest = MessageDigest.getInstance("SHA-256");
             byte[] hash = digest.digest(data.getBytes(StandardCharsets.UTF_8));
             
@@ -67,6 +81,7 @@ public class Tournament {
     public String getTorneo() { return torneo; }
     public LocalDate getInicio() { return inicio; }
     public LocalDate getFin() { return fin; }
+    public String getLocal() { return local; }
     public String getRitmo() { return ritmo; }
 
     public void setProvincia(String provincia) { this.provincia = provincia; }
@@ -74,6 +89,7 @@ public class Tournament {
     public void setTorneo(String torneo) { this.torneo = torneo; }
     public void setInicio(LocalDate inicio) { this.inicio = inicio; }
     public void setFin(LocalDate fin) { this.fin = fin; }
+    public void setLocal(String local) { this.local = local; }
     public void setRitmo(String ritmo) { this.ritmo = ritmo; }
 
     @Override
@@ -85,6 +101,7 @@ public class Tournament {
                 ", torneo='" + torneo + '\'' +
                 ", inicio=" + inicio +
                 ", fin=" + fin +
+                ", local='" + local + '\'' +
                 ", ritmo='" + ritmo + '\'' +
                 '}';
     }

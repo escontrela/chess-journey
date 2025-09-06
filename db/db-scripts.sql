@@ -341,7 +341,8 @@ CREATE TABLE public.tournaments (
     torneo VARCHAR(255) NOT NULL,
     inicio DATE NOT NULL,
     fin DATE NOT NULL,
-    ritmo VARCHAR(50) NOT NULL,
+    local VARCHAR(255), -- Location/venue where tournament is held
+    ritmo VARCHAR(50), -- Optional: Rhythm/time control (may not be available from HTML table)
     created_at TIMESTAMP DEFAULT NOW(),
     updated_at TIMESTAMP DEFAULT NOW()
 );

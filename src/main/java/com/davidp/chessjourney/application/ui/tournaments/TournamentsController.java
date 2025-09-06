@@ -35,7 +35,7 @@ public class TournamentsController implements ScreenController {
     @FXML private TableColumn<Tournament, String> colTorneo;
     @FXML private TableColumn<Tournament, LocalDate> colInicio;
     @FXML private TableColumn<Tournament, LocalDate> colFin;
-    @FXML private TableColumn<Tournament, String> colRitmo;
+    @FXML private TableColumn<Tournament, String> colLocal;
 
     @Override
     public void setData(InputScreenData inputData) {
@@ -98,7 +98,7 @@ public class TournamentsController implements ScreenController {
         colTorneo.setCellValueFactory(new PropertyValueFactory<>("torneo"));
         colInicio.setCellValueFactory(new PropertyValueFactory<>("inicio"));
         colFin.setCellValueFactory(new PropertyValueFactory<>("fin"));
-        colRitmo.setCellValueFactory(new PropertyValueFactory<>("ritmo"));
+        colLocal.setCellValueFactory(new PropertyValueFactory<>("local"));
 
         // Set status
         status = ScreenStatus.INITIALIZED;

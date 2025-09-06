@@ -34,8 +34,8 @@ public class TournamentRepositoryImpl implements TournamentRepository {
     @Override
     public Tournament save(Tournament tournament) {
         String sql = """
-            INSERT INTO tournaments (hash_id, provincia, concejo, torneo, inicio, fin, ritmo, created_at, updated_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
+            INSERT INTO tournaments (hash_id, provincia, concejo, torneo, inicio, fin, local, ritmo, created_at, updated_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, NOW(), NOW())
             ON CONFLICT (hash_id) DO NOTHING
             """;
 
@@ -48,7 +48,8 @@ public class TournamentRepositoryImpl implements TournamentRepository {
             ps.setString(4, truncateString(tournament.getTorneo(), 255));
             ps.setDate(5, Date.valueOf(tournament.getInicio()));
             ps.setDate(6, Date.valueOf(tournament.getFin()));
-            ps.setString(7, truncateString(tournament.getRitmo(), 50));
+            ps.setString(7, truncateString(tournament.getLocal(), 255));
+            ps.setString(8, truncateString(tournament.getRitmo(), 50));
 
             ps.executeUpdate();
         } catch (SQLException e) {
@@ -77,7 +78,7 @@ public class TournamentRepositoryImpl implements TournamentRepository {
 
     @Override
     public Optional<Tournament> findByHashId(String hashId) {
-        String sql = "SELECT hash_id, provincia, concejo, torneo, inicio, fin, ritmo FROM tournaments WHERE hash_id = ?";
+        String sql = "SELECT hash_id, provincia, concejo, torneo, inicio, fin, local, ritmo FROM tournaments WHERE hash_id = ?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement ps = conn.prepareStatement(sql)) {
@@ -98,7 +99,7 @@ public class TournamentRepositoryImpl implements TournamentRepository {
 
     @Override
     public List<Tournament> findAll() {
-        String sql = "SELECT hash_id, provincia, concejo, torneo, inicio, fin, ritmo FROM tournaments ORDER BY inicio ASC";
+        String sql = "SELECT hash_id, provincia, concejo, torneo, inicio, fin, local, ritmo FROM tournaments ORDER BY inicio ASC";
         List<Tournament> tournaments = new ArrayList<>();
 
         try (Connection conn = dataSource.getConnection();
@@ -118,7 +119,7 @@ public class TournamentRepositoryImpl implements TournamentRepository {
     @Override
     public List<Tournament> findUpcomingTournaments(LocalDate fromDate, int limit) {
         String sql = """
-            SELECT hash_id, provincia, concejo, torneo, inicio, fin, ritmo 
+            SELECT hash_id, provincia, concejo, torneo, inicio, fin, local, ritmo 
             FROM tournaments 
             WHERE inicio >= ? 
             ORDER BY inicio ASC 
@@ -182,6 +183,7 @@ public class TournamentRepositoryImpl implements TournamentRepository {
             rs.getString("torneo"),
             rs.getDate("inicio").toLocalDate(),
             rs.getDate("fin").toLocalDate(),
+            rs.getString("local"),
             rs.getString("ritmo")
         );
     }
