@@ -235,6 +235,8 @@
     -fx-alignment: center-left;    /* Contenido alineado a la izquierda */
 }
 
+
+
 /* Texto de la nota */
 .note-label {
     -fx-font-size: 15px;
@@ -250,6 +252,45 @@
 /* End: notify pannels */
 
 
+/* Start: menu panel */
+.menu-panel {
+    -fx-background-color: #1C1C1C; /* Fondo oscuro elegante */
+    -fx-background-radius: 12;     /* Bordes redondeados */
+    -fx-border-radius: 12;         /* Bordes redondeados del borde */
+    -fx-border-color: #3a3a3a;     /* Borde gris sutil */
+    -fx-border-width: 1;           /* Grosor del borde */
+    -fx-padding: 12;               /* Relleno interno */
+    -fx-spacing: 8;                /* Espaciado entre hijos */
+    -fx-alignment: center-left;    /* Contenido alineado a la izquierda */
+}
+
+/* Cabecera de popup */
+.menu-text-header {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Cabecera de popup */
+.menu-text-sub-header {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to bottom, #3a86ff, #6ea8ff);;
+}
+
+.menu-text-menu-item {
+     -fx-font-size: 18px;
+     -fx-font-family: "Alatsi";
+     -fx-fill: #E0E0E0;
+}
+
+.menu-text-menu-lbl-date {
+     -fx-font-size: 14px;
+     -fx-font-family: "Alatsi";
+     -fx-fill: gray;
+}
+
+/* End: menu panel */
 
 /* start: system design - text */
 .text-blue-gradient-big {
