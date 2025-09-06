@@ -150,4 +150,23 @@ public class AppProperties {
     // Final fallback to global token for backward compatibility
     return  getLichessAccessToken();
   }
+
+  /**
+   * Gets the last tournament access date.
+   * 
+   * @return the last tournament access date as a string (yyyy-MM-dd format)
+   */
+  public String getLastTournamentAccessDate() {
+    return getProperty("tournament.last.access.date");
+  }
+
+  /**
+   * Sets the last tournament access date.
+   * 
+   * @param date the last tournament access date in yyyy-MM-dd format
+   */
+  public void setLastTournamentAccessDate(String date) {
+    setProperty("tournament.last.access.date", date);
+    saveProperties();
+  }
 }

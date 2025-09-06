@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.effect.ColorAdjust?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1260.0" styleClass="popup-root-glass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.tournaments.TournamentsController">
+   <children>
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1220.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgClose" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-gray/close_18dp_gray.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+      
+      <Button fx:id="btRefresh" alignment="BASELINE_CENTER" layoutX="1175.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="40.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE" text="⟳">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+      </Button>
+      
+      <Label layoutX="33.0" layoutY="29.0" styleClass="popup-header" text="Galicia Tournaments" />
+      <Label layoutX="33.0" layoutY="65.0" styleClass="popup-label" text="Upcoming tournaments in Galicia (max 10)" />
+      
+      <TableView fx:id="tournamentTable" layoutX="33.0" layoutY="100.0" prefHeight="550.0" prefWidth="1194.0" styleClass="table-view">
+         <columns>
+            <TableColumn fx:id="colProvincia" prefWidth="100.0" text="Provincia" />
+            <TableColumn fx:id="colConcejo" prefWidth="120.0" text="Concello" />
+            <TableColumn fx:id="colTorneo" prefWidth="350.0" text="Torneo" />
+            <TableColumn fx:id="colInicio" prefWidth="100.0" text="Inicio" />
+            <TableColumn fx:id="colFin" prefWidth="100.0" text="Fin" />
+            <TableColumn fx:id="colLocal" prefWidth="180.0" text="Local" />
+            <TableColumn fx:id="colRitmo" prefWidth="120.0" text="Ritmo" />
+         </columns>
+      </TableView>
+
+   </children>
+   <stylesheets>
+      <URL value="@custom-styles.css" />
+   </stylesheets>
+</Pane>

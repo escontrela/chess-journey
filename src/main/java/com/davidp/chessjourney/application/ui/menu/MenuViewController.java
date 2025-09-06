@@ -79,6 +79,15 @@ public class MenuViewController implements ScreenController {
   @FXML
   private ImageView imgUserData;
 
+  @FXML
+  private Pane pnlOptionTournaments;
+
+  @FXML
+  private Text txtTournaments;
+
+  @FXML
+  private ImageView imgTournaments;
+
 
   public void initialize() {
 
@@ -184,6 +193,10 @@ public class MenuViewController implements ScreenController {
       GlobalEventBus.get().post(new OpenTacticGameEvent());
     }
 
+    if (isTournamentsClicked(event)) {
+      GlobalEventBus.get().post(new OpenTournamentsEvent());
+    }
+
     if (isUserChangedClicked(event)){
       GlobalEventBus.get().post(new ChangeUserEvent());
     }
@@ -242,5 +255,9 @@ public class MenuViewController implements ScreenController {
 
   protected boolean isUserDataClicked(MouseEvent event) {
     return event.getSource() == pnlOptionUserData || event.getSource() == txtUserData;
+  }
+
+  protected boolean isTournamentsClicked(MouseEvent event) {
+    return event.getSource() == pnlOptionTournaments || event.getSource() == txtTournaments;
   }
 }

@@ -333,6 +333,20 @@ VALUES
 (1037049559867817985, '9f0b376e-c69b-4758-a05b-bcc4fef43e49', 1470, NOW()), -- exercises
 (1037049559867817985, 'c7f8226f-e306-484a-95cf-1c125cd8e8fc', 1470, NOW()); -- standard
 
+-- Tournaments table for Galicia tournament management
+CREATE TABLE public.tournaments (
+    hash_id VARCHAR(64) PRIMARY KEY, -- SHA-256 hash of tournament data for deduplication
+    provincia VARCHAR(100) NOT NULL,
+    concejo VARCHAR(100) NOT NULL,
+    torneo VARCHAR(255) NOT NULL,
+    inicio DATE NOT NULL,
+    fin DATE NOT NULL,
+    local VARCHAR(255), -- Location/venue where tournament is held
+    ritmo VARCHAR(50), -- Optional: Rhythm/time control (may not be available from HTML table)
+    created_at TIMESTAMP DEFAULT NOW(),
+    updated_at TIMESTAMP DEFAULT NOW()
+);
+
 -- Usuario 1037049617650024449
 INSERT INTO user_elo (user_id, elo_type_id, current_elo, last_updated)
 VALUES
