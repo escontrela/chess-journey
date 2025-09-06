@@ -123,7 +123,6 @@
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="4.0" layoutY="542.0" stroke="#2a293a" />
       <Pane fx:id="pnlOptionTacticGame" layoutX="267.0" layoutY="150.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtTacticGame" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="menu-text-menu-item" text="Tactic Game">
