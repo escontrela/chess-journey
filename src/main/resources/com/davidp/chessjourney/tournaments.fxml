@@ -38,7 +38,7 @@
       <TableView fx:id="tournamentTable" layoutX="33.0" layoutY="100.0" prefHeight="550.0" prefWidth="1194.0" styleClass="table-view">
          <columns>
             <TableColumn fx:id="colProvincia" prefWidth="100.0" text="Provincia" />
-            <TableColumn fx:id="colConcejo" prefWidth="120.0" text="Concejo" />
+            <TableColumn fx:id="colConcejo" prefWidth="120.0" text="Concello" />
             <TableColumn fx:id="colTorneo" prefWidth="350.0" text="Torneo" />
             <TableColumn fx:id="colInicio" prefWidth="100.0" text="Inicio" />
             <TableColumn fx:id="colFin" prefWidth="100.0" text="Fin" />
