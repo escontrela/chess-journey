@@ -100,7 +100,14 @@ public class LookUpTournamentsService {
      * @return the next upcoming tournament, or null if no future tournaments are available
      */
     public Tournament getNextUpcomingTournament() {
-        List<Tournament> tournaments = scrapeTournaments();
+        List<Tournament> tournaments;
+        try {
+            tournaments = scrapeTournaments();
+        } catch (Exception e) {
+            System.err.println("Error scraping tournaments for next tournament: " + e.getMessage());
+            return null; // Return null if scraping fails
+        }
+        
         LocalDate today = LocalDate.now();
         
         return tournaments.stream()

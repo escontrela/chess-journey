@@ -161,22 +161,28 @@ public class MenuViewController implements ScreenController {
 
   private void loadNextTournament() {
     if (getNextTournamentUseCase != null && lblNextTournament != null) {
-      try {
-        Tournament nextTournament = getNextTournamentUseCase.execute();
-        if (nextTournament != null) {
-          String tournamentText = formatTournamentText(nextTournament);
-          // Use typewriter effect for the tournament text
-          JavaFXSchedulerUtil.runOnce(
-              () -> playTypeWriterEffect(tournamentText, lblNextTournament, 0.05),
-              javafx.util.Duration.seconds(1.5) // Delay to start after main title
-          );
-        } else {
-          lblNextTournament.setText(""); // Hide if no tournament
-        }
-      } catch (Exception e) {
-        System.err.println("Error loading next tournament: " + e.getMessage());
-        lblNextTournament.setText(""); // Hide on error
-      }
+      // Load tournament asynchronously to avoid blocking UI
+      JavaFXSchedulerUtil.runOnce(
+          () -> {
+            try {
+              Tournament nextTournament = getNextTournamentUseCase.execute();
+              if (nextTournament != null) {
+                String tournamentText = formatTournamentText(nextTournament);
+                // Use typewriter effect for the tournament text
+                JavaFXSchedulerUtil.runOnce(
+                    () -> playTypeWriterEffect(tournamentText, lblNextTournament, 0.05),
+                    javafx.util.Duration.seconds(0.5) // Small delay for the typewriter effect
+                );
+              } else {
+                lblNextTournament.setText(""); // Hide if no tournament
+              }
+            } catch (Exception e) {
+              System.err.println("Error loading next tournament: " + e.getMessage());
+              lblNextTournament.setText(""); // Hide on error
+            }
+          },
+          javafx.util.Duration.seconds(1.5) // Delay to start after main title
+      );
     }
   }
 

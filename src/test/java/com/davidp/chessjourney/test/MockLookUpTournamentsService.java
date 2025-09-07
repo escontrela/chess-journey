@@ -69,4 +69,10 @@ public class MockLookUpTournamentsService extends LookUpTournamentsService {
         System.out.println("Mock scraping completed - found " + mockTournaments.size() + " tournaments");
         return mockTournaments;
     }
+    
+    @Override
+    public Tournament getNextUpcomingTournament() {
+        // Test the method by calling the parent implementation with mock data
+        return super.getNextUpcomingTournament();
+    }
 }

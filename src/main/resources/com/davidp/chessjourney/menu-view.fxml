@@ -203,7 +203,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <Label fx:id="lblNextTournament" layoutX="267.0" layoutY="490.0" prefHeight="30.0" prefWidth="600.0" styleClass="menu-text-menu-lbl-date" text="" textFill="#888888" wrapText="true">
+      <Label fx:id="lblNextTournament" layoutX="267.0" layoutY="470.0" prefHeight="40.0" prefWidth="600.0" styleClass="menu-text-menu-lbl-date" text="" textFill="#888888" wrapText="true">
          <font>
             <Font name="Alatsi Regular" size="14.0" />
          </font>
