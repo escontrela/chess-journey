@@ -5,9 +5,13 @@ import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
+import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
@@ -17,6 +21,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Locale;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class MenuViewController implements ScreenController {
 
@@ -49,63 +54,49 @@ public class MenuViewController implements ScreenController {
   @FXML private Label lblDate;
   @FXML private Label lblWhiteTime;
 
-  @FXML
-  private Pane pnlOptionUser;
+  @FXML private Pane pnlOptionUser;
 
-  @FXML
-  private ImageView imgUser;
+  @FXML private ImageView imgUser;
 
+  @FXML private Text txtUser;
 
-  @FXML
-  private Text txtUser;
+  @FXML private Text txtUserStats;
 
+  @FXML private Pane pnlOptionUserStats;
 
-  @FXML
-  private Text txtUserStats;
+  @FXML private ImageView imgUserStats;
 
+  @FXML private Pane pnlOptionUserSuites;
 
-  @FXML
-  private Pane pnlOptionUserStats;
+  @FXML private Text txtUserSuites;
 
+  @FXML private ImageView imgUserSuites;
 
-  @FXML
-  private ImageView imgUserStats;
+  @FXML private Pane pnlOptionUserData;
 
-  @FXML
-  private Pane pnlOptionUserSuites;
+  @FXML private Text txtUserData;
 
-  @FXML
-  private Text txtUserSuites;
+  @FXML private ImageView imgUserData;
 
-  @FXML
-  private ImageView imgUserSuites;
+  @FXML private Pane pnlOptionTournaments;
 
-  @FXML
-  private Pane pnlOptionUserData;
+  @FXML private Text txtTournaments;
 
-  @FXML
-  private Text txtUserData;
+  private Timeline timer;
 
-  @FXML
-  private ImageView imgUserData;
+  @FXML private Label lblTitle;
 
-  @FXML
-  private Pane pnlOptionTournaments;
+  @FXML private ImageView imgRightPiece;
 
-  @FXML
-  private Text txtTournaments;
+  @FXML private ImageView imgTournaments;
 
-  @FXML
-  private ImageView imgTournaments;
+  private static final DateTimeFormatter SPANISH_FMT =
+      DateTimeFormatter.ofPattern("EEEE d 'de' MMMM 'del' yyyy", Locale.forLanguageTag("es-ES"));
 
-    private static final DateTimeFormatter SPANISH_FMT =
-            DateTimeFormatter.ofPattern("EEEE d 'de' MMMM 'del' yyyy", new Locale("es", "ES"));
+  private static final DateTimeFormatter TIME_FMT =
+      DateTimeFormatter.ofPattern("HH:mm:ss", Locale.forLanguageTag("es-ES"));
 
-    private static final DateTimeFormatter TIME_FMT =
-            DateTimeFormatter.ofPattern("HH:mm", new Locale("es", "ES"));
-
-
-    public void initialize() {
+  public void initialize() {
 
     status = ScreenController.ScreenStatus.INITIALIZED;
   }
@@ -114,9 +105,9 @@ public class MenuViewController implements ScreenController {
   public void setData(InputScreenData inputData) {
 
     if (inputData.isLayoutInfoValid()) {
-        lblDate.setText(formatInstant(Instant.now()));
-        lblWhiteTime.setText(formatTime(Instant.now()));
-        setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+      lblDate.setText(formatInstant(Instant.now()));
+      lblWhiteTime.setText(formatTime(Instant.now()));
+      setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
   }
 
@@ -127,19 +118,48 @@ public class MenuViewController implements ScreenController {
     rootPane.setLayoutY(layoutY);
   }
 
+  public void startTimer() {
+
+    if (timer != null) {
+
+      timer.play();
+      return;
+    }
+    timer =
+        new Timeline(
+            new KeyFrame(
+                javafx.util.Duration.seconds(1),
+                e -> {
+                  lblDate.setText(formatInstant(Instant.now()));
+                  lblWhiteTime.setText(formatTime(Instant.now()));
+                }));
+    timer.setCycleCount(Timeline.INDEFINITE);
+    timer.play();
+  }
+
+  public void stopTimer() {
+
+    if (timer != null) {
+      timer.stop();
+    }
+  }
+
   @Override
   public void show() {
 
-    FXAnimationUtil.fadeIn(rootPane, 0.2)
-            .repeat(1)
-            .autoReverse(false)
-            .onFinished(() -> {
+    // Set a random right piece image each time the view is shown
+    setRandomRightPieceImage();
 
+    FXAnimationUtil.fadeIn(rootPane, 0.2)
+        .repeat(1)
+        .autoReverse(false)
+        .onFinished(
+            () -> {
               rootPane.setVisible(true);
               rootPane.toFront();
+              playTypeWriterEffect("Chess Journey", lblTitle, 0.02);
             })
-            .buildAndPlay();
-
+        .buildAndPlay();
   }
 
   public void show(InputScreenData inputData) {
@@ -147,21 +167,21 @@ public class MenuViewController implements ScreenController {
     setData(inputData);
     status = ScreenController.ScreenStatus.VISIBLE;
     show();
+    startTimer();
   }
 
   @Override
   public void hide() {
     FXAnimationUtil.fadeIn(rootPane, 0.2)
-            .repeat(1)
-            .autoReverse(false)
-            .onFinished(() -> {
-
+        .repeat(1)
+        .autoReverse(false)
+        .onFinished(
+            () -> {
               rootPane.setVisible(false);
               status = ScreenController.ScreenStatus.HIDDEN;
+              stopTimer();
             })
-            .buildAndPlay();
-
-
+        .buildAndPlay();
   }
 
   @Override
@@ -214,19 +234,19 @@ public class MenuViewController implements ScreenController {
       GlobalEventBus.get().post(new OpenTournamentsEvent());
     }
 
-    if (isUserChangedClicked(event)){
+    if (isUserChangedClicked(event)) {
       GlobalEventBus.get().post(new ChangeUserEvent());
     }
-    if (isUserStatsClicked(event)){
+    if (isUserStatsClicked(event)) {
       GlobalEventBus.get().post(new OpenUserStatsEvent());
     }
-    if (isDefendGameClicked(event)){
+    if (isDefendGameClicked(event)) {
       GlobalEventBus.get().post(new OpenDefendGameEvent());
     }
-    if (isUserSuitesClicked(event)){
+    if (isUserSuitesClicked(event)) {
       GlobalEventBus.get().post(new OpenUserSuitesEvent());
     }
-    if (isUserDataClicked(event)){
+    if (isUserDataClicked(event)) {
       GlobalEventBus.get().post(new OpenUserDataEvent());
     }
   }
@@ -261,7 +281,7 @@ public class MenuViewController implements ScreenController {
     return event.getSource() == pnlOptionUser || event.getSource() == txtUser;
   }
 
-  protected  boolean isUserStatsClicked(MouseEvent event) {
+  protected boolean isUserStatsClicked(MouseEvent event) {
 
     return event.getSource() == pnlOptionUserStats || event.getSource() == txtUserStats;
   }
@@ -278,18 +298,66 @@ public class MenuViewController implements ScreenController {
     return event.getSource() == pnlOptionTournaments || event.getSource() == txtTournaments;
   }
 
-    private String formatInstant(Instant instant) {
-        String formatted = SPANISH_FMT.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
-        return capitalize(formatted);
-    }
+  private String formatInstant(Instant instant) {
+    String formatted = SPANISH_FMT.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
+    return capitalize(formatted);
+  }
 
-    private String capitalize(String s) {
-        if (s == null || s.isEmpty()) return s;
-        return s.substring(0, 1).toUpperCase() + s.substring(1);
-    }
+  private String capitalize(String s) {
 
-    // Añade este método:
-    private String formatTime(Instant instant) {
-        return TIME_FMT.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
+    if (s == null || s.isEmpty()) {
+
+      return s;
     }
+    return s.substring(0, 1).toUpperCase() + s.substring(1);
+  }
+
+  private String formatTime(Instant instant) {
+
+    return TIME_FMT.format(ZonedDateTime.ofInstant(instant, ZoneId.systemDefault()));
+  }
+
+  // new helper: set a random image from /com/davidp/chessjourney/images/chess-creativity-1..7.png
+  private void setRandomRightPieceImage() {
+    if (imgRightPiece == null) {
+      return;
+    }
+    int n = ThreadLocalRandom.current().nextInt(1, 8); // 1..7 inclusive
+    String path = "/com/davidp/chessjourney/images/chess-creativity-" + n + ".png";
+    try {
+      java.io.InputStream is = getClass().getResourceAsStream(path);
+      if (is != null) {
+        Image img = new Image(is);
+        imgRightPiece.setImage(img);
+      } else {
+        // fallback: clear image if resource missing
+        imgRightPiece.setImage(null);
+        System.out.println("Resource not found: " + path);
+      }
+    } catch (Exception ex) {
+      imgRightPiece.setImage(null);
+      System.err.println("Failed to load image " + path + ": " + ex.getMessage());
+    }
+  }
+
+  private void playTypeWriterEffect(String text, Label textNode, double charInterval) {
+
+    textNode.setText("");
+    if (text == null || text.isEmpty()) return;
+
+    StringBuilder currentText = new StringBuilder();
+
+    currentText.append(text.charAt(0));
+    textNode.setText(currentText.toString());
+
+    for (int i = 1; i < text.length(); i++) {
+      int index = i;
+      JavaFXSchedulerUtil.runOnce(
+          () -> {
+            currentText.append(text.charAt(index));
+            textNode.setText(currentText.toString());
+          },
+          javafx.util.Duration.seconds(index * charInterval));
+    }
+  }
 }

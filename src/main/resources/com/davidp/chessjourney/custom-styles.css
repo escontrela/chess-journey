@@ -290,6 +290,12 @@
      -fx-fill: gray;
 }
 
+.menu-text-menu-lbl-date-white {
+     -fx-font-size: 14px;
+     -fx-font-family: "Alatsi";
+     -fx-text-fill: white;
+}
+
 /* End: menu panel */
 
 /* start: system design - text */
@@ -702,10 +708,34 @@
 .panel-gray-for-menu{
     -fx-background-color: transparent;
 }
+/**
 .panel-gray-for-menu:hover{
     -fx-background-color:  #22222C;
 }
+*/
+/* css */
+.panel-gray-for-menu:hover {
+    -fx-border-color: #3a86ff;      /* nuevo color del borde */
+    -fx-border-width: 1.5;          /* ancho del borde */
+    -fx-border-radius: 20;          /* borde redondeado */
+    -fx-background-radius: 20;      /* asegura que el fondo siga la misma curvatura */
+    -fx-effect: dropshadow(gaussian, rgba(58,134,255,0.08), 8, 0.2, 0, 0); /* opcional: glow sutil */
+}
 
+.panel-gray-for-menu:hover Label {
+    -fx-text-fill: white;           /* mantiene texto blanco en hover */
+}
+.panel-gray-for-menu:hover Label {
+    -fx-text-fill: white;
+}
+
+/* Estado seleccionado */
+.task-item.selected {
+    -fx-background-color: #2a2a2a;   /* fondo ligeramente más claro */
+    -fx-border-color: #b3b3b3;       /* borde gris claro */
+    -fx-border-width: 1.5;
+    -fx-border-radius: 20;           /* bordes redondeados */
+}
 
 .panel-gray-for-text{
     -fx-background-color: #555467;
