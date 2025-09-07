@@ -15,8 +15,10 @@ import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.GetRandomQuoteUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
+import com.davidp.chessjourney.application.usecases.GetNextTournamentUseCase;
 import com.davidp.chessjourney.domain.Quote;
 import com.davidp.chessjourney.domain.User;
+import com.davidp.chessjourney.domain.Tournament;
 import com.google.common.eventbus.Subscribe;
 import java.awt.*;
 import java.util.Arrays;
@@ -81,7 +83,12 @@ public class MainSceneController implements ScreenController {
 
   @FXML private StackPane taskOption_settings;
 
-  // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
+    @FXML
+    private Pane pnlMessages;
+    @FXML
+    private Label lblMainMsg;
+
+    // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
 
@@ -401,6 +408,7 @@ public class MainSceneController implements ScreenController {
     moveMainWindowsSetUp();
     reloadUserInitials(userService.getActiveUserId());
     showTextAnimation();
+    showNextTournament();
     initializeMessagePanel();
 
     // Marcar como inicializado al final
@@ -489,6 +497,41 @@ public class MainSceneController implements ScreenController {
 
     playTypeWriterEffect(randomQuote.getText(), lblChessboard, 0.04);
     playTypeWriterEffect("— " + randomQuote.getAuthor(), lblPractice, 0.1);
+  }
+
+  private void showNextTournament() {
+    // Run in a separate thread to avoid blocking the main scene
+    Platform.runLater(() -> {
+      try {
+        GetNextTournamentUseCase getNextTournamentUseCase = UseCaseFactory.createGetNextTournamentUseCase();
+        Tournament nextTournament = getNextTournamentUseCase.execute();
+        
+        if (nextTournament != null) {
+          String tournamentText = formatTournamentText(nextTournament);
+          // Apply tournament text with typewriter effect
+          playTypeWriterEffect(tournamentText, lblMainMsg, 0.05);
+        } else {
+          lblMainMsg.setText(""); // Hide if no tournament
+        }
+      } catch (Exception e) {
+        System.err.println("Error loading next tournament: " + e.getMessage());
+        lblMainMsg.setText(""); // Hide on error
+      }
+    });
+  }
+
+  private String formatTournamentText(Tournament tournament) {
+    if (tournament == null) return "";
+    
+    String formattedDate = tournament.getInicio().format(
+        java.time.format.DateTimeFormatter.ofPattern("d 'de' MMMM", 
+        java.util.Locale.forLanguageTag("es-ES"))
+    );
+    
+    return String.format("Próximo torneo: %s - %s (%s)", 
+        tournament.getTorneo(), 
+        formattedDate,
+        tournament.getConcejo());
   }
 
   private void moveMainWindowsSetUp() {
@@ -625,6 +668,28 @@ public class MainSceneController implements ScreenController {
               e -> {
                 currentText.append(text.charAt(index));
                 textNode.setText(currentText.toString());
+              });
+      timeline.getKeyFrames().add(keyFrame);
+    }
+    timeline.play();
+  }
+
+  private void playTypeWriterEffect(String text, Label labelNode, double charInterval) {
+
+    labelNode.setText("");
+    if (text == null || text.isEmpty()) return;
+
+    StringBuilder currentText = new StringBuilder();
+
+    javafx.animation.Timeline timeline = new javafx.animation.Timeline();
+    for (int i = 0; i < text.length(); i++) {
+      final int index = i;
+      javafx.animation.KeyFrame keyFrame =
+          new javafx.animation.KeyFrame(
+              javafx.util.Duration.seconds(index * charInterval),
+              e -> {
+                currentText.append(text.charAt(index));
+                labelNode.setText(currentText.toString());
               });
       timeline.getKeyFrames().add(keyFrame);
     }

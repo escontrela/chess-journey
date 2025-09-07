@@ -5,6 +5,7 @@ import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
+
 import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -93,6 +94,8 @@ public class MenuViewController implements ScreenController {
   @FXML private ImageView imgTournaments;
 
 
+
+
     @FXML
     private Button btRight;
     @FXML
@@ -152,6 +155,8 @@ public class MenuViewController implements ScreenController {
       timer.stop();
     }
   }
+
+
 
   @Override
   public void show() {
@@ -218,6 +223,8 @@ public class MenuViewController implements ScreenController {
 
     return status == ScreenController.ScreenStatus.INITIALIZED;
   }
+
+
 
   @FXML
   void optionClicked(MouseEvent event) {

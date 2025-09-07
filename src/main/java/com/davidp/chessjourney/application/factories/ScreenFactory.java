@@ -173,7 +173,8 @@ public class ScreenFactory {
   protected ScreenController getMenuScreen() {
 
     FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
-    return objectFxmlBundle.getController();
+    var controller = objectFxmlBundle.getController();
+    return controller;
   }
 
   protected ScreenController getBoardScreen() {

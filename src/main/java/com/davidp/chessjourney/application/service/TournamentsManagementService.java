@@ -58,6 +58,17 @@ public class TournamentsManagementService {
     }
 
     /**
+     * Gets the next upcoming tournament (closest future tournament from today).
+     * 
+     * @return the next upcoming tournament, or null if no future tournaments are available
+     */
+    public Tournament getNextUpcomingTournament() {
+        LocalDate today = LocalDate.now();
+        List<Tournament> upcomingTournaments = tournamentRepository.findUpcomingTournaments(today, 1);
+        return upcomingTournaments.isEmpty() ? null : upcomingTournaments.get(0);
+    }
+
+    /**
      * Deletes all tournaments from the database.
      * Mainly for testing purposes.
      */
