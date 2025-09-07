@@ -89,6 +89,7 @@ public class MainSceneController implements ScreenController {
   @FXML
   private StackPane taskOption_settings;
 
+
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
