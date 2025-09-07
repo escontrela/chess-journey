@@ -253,7 +253,7 @@
       </ImageView>
       <Pane fx:id="pnlMessages" layoutX="52.0" layoutY="746.0" prefHeight="56.0" prefWidth="1187.0" styleClass="note-panel">
          <children>
-            <Label fx:id="lblMainMsg" layoutX="14.0" layoutY="19.0" styleClass="note-label" text="..." textFill="#8389de">
+            <Label fx:id="lblMainMsg" alignment="CENTER_RIGHT" layoutX="108.0" layoutY="19.0" prefHeight="19.0" prefWidth="1058.0" styleClass="note-label" text="..." textAlignment="RIGHT" textFill="#8389de">
                <font>
                   <Font size="16.0" />
                </font>
