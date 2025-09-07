@@ -95,6 +95,21 @@ public class LookUpTournamentsService {
     }
 
     /**
+     * Gets the next upcoming tournament (closest future tournament from today).
+     * 
+     * @return the next upcoming tournament, or null if no future tournaments are available
+     */
+    public Tournament getNextUpcomingTournament() {
+        List<Tournament> tournaments = scrapeTournaments();
+        LocalDate today = LocalDate.now();
+        
+        return tournaments.stream()
+                .filter(tournament -> tournament.getInicio().isAfter(today))
+                .min((t1, t2) -> t1.getInicio().compareTo(t2.getInicio()))
+                .orElse(null);
+    }
+
+    /**
      * Parses date string in dd/MM/yyyy format.
      */
     private LocalDate parseDate(String dateStr) {

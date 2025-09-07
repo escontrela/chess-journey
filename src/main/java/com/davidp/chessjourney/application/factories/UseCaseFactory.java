@@ -132,4 +132,10 @@ public class UseCaseFactory {
             AppProperties.getInstance()
         );
     }
+
+    public static GetNextTournamentUseCase createGetNextTournamentUseCase() {
+        return new GetNextTournamentUseCaseImpl(
+            ApplicationServiceFactory.createLookUpTournamentsService()
+        );
+    }
 }
