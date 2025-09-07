@@ -174,7 +174,6 @@ public class ScreenFactory {
 
     FxmlBundle<MenuViewController> objectFxmlBundle = loadFxml(Screens.MENU.resourceName());
     var controller = objectFxmlBundle.getController();
-    controller.setGetNextTournamentUseCase(UseCaseFactory.createGetNextTournamentUseCase());
     return controller;
   }
 

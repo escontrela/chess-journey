@@ -5,9 +5,7 @@ import com.davidp.chessjourney.application.domain.*;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
-import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
-import com.davidp.chessjourney.application.usecases.GetNextTournamentUseCase;
-import com.davidp.chessjourney.domain.Tournament;
+
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
@@ -94,9 +92,7 @@ public class MenuViewController implements ScreenController {
 
   @FXML private ImageView imgTournaments;
 
-  @FXML private Label lblNextTournament;
 
-  private GetNextTournamentUseCase getNextTournamentUseCase;
 
 
     @FXML
@@ -159,55 +155,13 @@ public class MenuViewController implements ScreenController {
     }
   }
 
-  private void loadNextTournament() {
-    if (getNextTournamentUseCase != null && lblNextTournament != null) {
-      // Load tournament asynchronously to avoid blocking UI
-      JavaFXSchedulerUtil.runOnce(
-          () -> {
-            try {
-              Tournament nextTournament = getNextTournamentUseCase.execute();
-              if (nextTournament != null) {
-                String tournamentText = formatTournamentText(nextTournament);
-                // Use typewriter effect for the tournament text
-                JavaFXSchedulerUtil.runOnce(
-                    () -> playTypeWriterEffect(tournamentText, lblNextTournament, 0.05),
-                    javafx.util.Duration.seconds(0.5) // Small delay for the typewriter effect
-                );
-              } else {
-                lblNextTournament.setText(""); // Hide if no tournament
-              }
-            } catch (Exception e) {
-              System.err.println("Error loading next tournament: " + e.getMessage());
-              lblNextTournament.setText(""); // Hide on error
-            }
-          },
-          javafx.util.Duration.seconds(1.5) // Delay to start after main title
-      );
-    }
-  }
 
-  private String formatTournamentText(Tournament tournament) {
-    if (tournament == null) return "";
-    
-    String formattedDate = tournament.getInicio().format(
-        java.time.format.DateTimeFormatter.ofPattern("d 'de' MMMM", 
-        java.util.Locale.forLanguageTag("es-ES"))
-    );
-    
-    return String.format("Próximo torneo: %s - %s (%s)", 
-        tournament.getTorneo(), 
-        formattedDate,
-        tournament.getConcejo());
-  }
 
   @Override
   public void show() {
 
     // Set a random right piece image each time the view is shown
     setRandomRightPieceImage();
-
-    // Load and display next tournament
-    loadNextTournament();
 
     FXAnimationUtil.fadeIn(rootPane, 0.2)
         .repeat(1)
@@ -269,9 +223,7 @@ public class MenuViewController implements ScreenController {
     return status == ScreenController.ScreenStatus.INITIALIZED;
   }
 
-  public void setGetNextTournamentUseCase(GetNextTournamentUseCase getNextTournamentUseCase) {
-    this.getNextTournamentUseCase = getNextTournamentUseCase;
-  }
+
 
   @FXML
   void optionClicked(MouseEvent event) {
