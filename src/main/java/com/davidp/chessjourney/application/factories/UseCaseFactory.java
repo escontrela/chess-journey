@@ -135,7 +135,7 @@ public class UseCaseFactory {
 
     public static GetNextTournamentUseCase createGetNextTournamentUseCase() {
         return new GetNextTournamentUseCaseImpl(
-            ApplicationServiceFactory.createLookUpTournamentsService()
+            ApplicationServiceFactory.createTournamentsManagementService()
         );
     }
 }

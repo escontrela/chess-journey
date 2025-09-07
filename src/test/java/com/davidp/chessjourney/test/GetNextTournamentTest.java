@@ -12,7 +12,7 @@ public class GetNextTournamentTest {
         System.out.println("Testing GetNextTournament functionality...");
         
         // Create mock service
-        MockLookUpTournamentsService mockService = new MockLookUpTournamentsService();
+        MockTournamentsManagementService mockService = new MockTournamentsManagementService();
         
         // Create use case with mock service
         GetNextTournamentUseCaseImpl useCase = new GetNextTournamentUseCaseImpl(mockService);
