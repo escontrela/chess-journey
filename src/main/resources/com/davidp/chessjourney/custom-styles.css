@@ -235,6 +235,8 @@
     -fx-alignment: center-left;    /* Contenido alineado a la izquierda */
 }
 
+
+
 /* Texto de la nota */
 .note-label {
     -fx-font-size: 15px;
@@ -250,6 +252,51 @@
 /* End: notify pannels */
 
 
+/* Start: menu panel */
+.menu-panel {
+    -fx-background-color: #1C1C1C; /* Fondo oscuro elegante */
+    -fx-background-radius: 12;     /* Bordes redondeados */
+    -fx-border-radius: 12;         /* Bordes redondeados del borde */
+    -fx-border-color: #3a3a3a;     /* Borde gris sutil */
+    -fx-border-width: 1;           /* Grosor del borde */
+    -fx-padding: 12;               /* Relleno interno */
+    -fx-spacing: 8;                /* Espaciado entre hijos */
+    -fx-alignment: center-left;    /* Contenido alineado a la izquierda */
+}
+
+/* Cabecera de popup */
+.menu-text-header {
+    -fx-font-size: 22px;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+}
+
+/* Cabecera de popup */
+.menu-text-sub-header {
+    -fx-font-size: 20px;
+    -fx-font-weight: bold;
+    -fx-text-fill: linear-gradient(to bottom, #3a86ff, #6ea8ff);;
+}
+
+.menu-text-menu-item {
+     -fx-font-size: 18px;
+     -fx-font-family: "Alatsi";
+     -fx-fill: #E0E0E0;
+}
+
+.menu-text-menu-lbl-date {
+     -fx-font-size: 14px;
+     -fx-font-family: "Alatsi";
+     -fx-fill: gray;
+}
+
+.menu-text-menu-lbl-date-white {
+     -fx-font-size: 14px;
+     -fx-font-family: "Alatsi";
+     -fx-text-fill: white;
+}
+
+/* End: menu panel */
 
 /* start: system design - text */
 .text-blue-gradient-big {
@@ -661,10 +708,34 @@
 .panel-gray-for-menu{
     -fx-background-color: transparent;
 }
+/**
 .panel-gray-for-menu:hover{
     -fx-background-color:  #22222C;
 }
+*/
+/* css */
+.panel-gray-for-menu:hover {
+    -fx-border-color: #3a86ff;      /* nuevo color del borde */
+    -fx-border-width: 1.5;          /* ancho del borde */
+    -fx-border-radius: 20;          /* borde redondeado */
+    -fx-background-radius: 20;      /* asegura que el fondo siga la misma curvatura */
+    -fx-effect: dropshadow(gaussian, rgba(58,134,255,0.08), 8, 0.2, 0, 0); /* opcional: glow sutil */
+}
 
+.panel-gray-for-menu:hover Label {
+    -fx-text-fill: white;           /* mantiene texto blanco en hover */
+}
+.panel-gray-for-menu:hover Label {
+    -fx-text-fill: white;
+}
+
+/* Estado seleccionado */
+.task-item.selected {
+    -fx-background-color: #2a2a2a;   /* fondo ligeramente más claro */
+    -fx-border-color: #b3b3b3;       /* borde gris claro */
+    -fx-border-width: 1.5;
+    -fx-border-radius: 20;           /* bordes redondeados */
+}
 
 .panel-gray-for-text{
     -fx-background-color: #555467;

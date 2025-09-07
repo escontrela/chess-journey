@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
-<?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="184.0" styleClass="panel-menu" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.menu.MenuViewController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="537.0" prefWidth="1200.0" styleClass="menu-panel" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.menu.MenuViewController">
    <children>
-      <Line endX="171.5" layoutX="5.0" layoutY="40.0" stroke="#2a293a" />
-      <Text fill="#8578f4" layoutX="30.0" layoutY="30.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-purple" text="Options">
-         <font>
-            <Font name="Alatsi Regular" size="16.0" />
-         </font>
-      </Text>
-      <Pane fx:id="pnlOptionSettings" layoutY="113.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionSettings" layoutX="665.0" layoutY="120.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtSettings" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Settings">
                <font>
@@ -24,42 +19,40 @@
             </Text>
             <ImageView fx:id="imgSettings" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/settings_18dp_gray.png" />
+                  <Image url="@img-white/settings_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="5.0" layoutY="99.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionAnalysisBoard" layoutY="53.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionAnalysisBoard" layoutX="269.0" layoutY="320.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtAnalysisBoard" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Analysis Board">
                <font>
                   <Font name="Alatsi Regular" size="16.0" />
                </font>
             </Text>
-            <ImageView fx:id="imgSettings1" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+            <ImageView fx:id="imgSettings1" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="7.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/chess_pawn_18dp.png" />
+                  <Image url="@img-white/strategy_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="7.0" layoutY="158.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionMemoryGame" layoutY="175.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionMemoryGame" layoutX="267.0" layoutY="120.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtMemoryGame" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Memory Game">
                <font>
                   <Font name="Alatsi Regular" size="16.0" />
                </font>
             </Text>
-            <ImageView fx:id="imgSettings11" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+            <ImageView fx:id="imgSettings11" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="7.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/chess_pawn_18dp.png" />
+                  <Image url="@img-white/memory_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Pane fx:id="pnlOptionUser" layoutX="2.0" layoutY="380.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionUser" layoutX="665.0" layoutY="160.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtUser" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="User Selection">
                <font>
@@ -68,14 +61,12 @@
             </Text>
             <ImageView fx:id="imgUser" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/settings_18dp_gray.png" />
+                  <Image url="@img-white/settings_account_box_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="7.0" layoutY="218.0" stroke="#2a293a" />
-      <Line endX="171.5" layoutX="7.0" layoutY="360.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionUserStats" layoutX="2.0" layoutY="440.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionUserStats" layoutX="451.0" layoutY="200.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtUserStats" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="User Stats">
                <font>
@@ -84,28 +75,26 @@
             </Text>
             <ImageView fx:id="imgUserStats" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/settings_18dp_gray.png" />
+                  <Image url="@img-white/bar_chart_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="7.0" layoutY="392.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionUserSuites" layoutX="2.0" layoutY="410.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionUserSuites" layoutX="451.0" layoutY="120.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtUserSuites" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="User Suites">
                <font>
                   <Font name="Alatsi Regular" size="16.0" />
                </font>
             </Text>
-            <ImageView fx:id="imgUserSuites" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+            <ImageView fx:id="imgUserSuites" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="7.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/settings_18dp_gray.png" />
+                  <Image url="@img-white/home_storage_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="7.0" layoutY="417.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionUserData" layoutX="2.0" layoutY="500.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionUserData" layoutX="451.0" layoutY="160.0" onMouseClicked="#optionClicked" prefHeight="30.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtUserData" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="User Data">
                <font>
@@ -114,28 +103,26 @@
             </Text>
             <ImageView fx:id="imgUserData" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/settings_18dp_gray.png" />
+                  <Image url="@img-white/data_object_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="7.0" layoutY="275.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionDefendGame" layoutX="1.0" layoutY="231.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionDefendGame" layoutX="267.0" layoutY="200.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtDefendGame" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Defend Game">
                <font>
                   <Font name="Alatsi Regular" size="16.0" />
                </font>
             </Text>
-            <ImageView fx:id="imgSettings111" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+            <ImageView fx:id="imgSettings111" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="7.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/chess_pawn_18dp.png" />
+                  <Image url="@img-white/security_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
-      <Line endX="171.5" layoutX="4.0" layoutY="542.0" stroke="#2a293a" />
-      <Pane fx:id="pnlOptionTacticGame" layoutX="1.0" layoutY="287.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionTacticGame" layoutX="267.0" layoutY="160.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtTacticGame" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Tactic Game">
                <font>
@@ -144,25 +131,77 @@
             </Text>
             <ImageView fx:id="imgSettings1111" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/chess_pawn_18dp.png" />
+                  <Image url="@img-white/tactic_24dp_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
       
-      <Pane fx:id="pnlOptionTournaments" layoutX="1.0" layoutY="323.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
+      <Pane fx:id="pnlOptionTournaments" layoutX="450.0" layoutY="320.0" onMouseClicked="#optionClicked" prefHeight="31.0" prefWidth="184.0" styleClass="panel-gray-for-menu">
          <children>
             <Text fx:id="txtTournaments" fill="WHITE" layoutX="33.0" layoutY="21.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="text-menu-white" text="Tournaments">
                <font>
                   <Font name="Alatsi Regular" size="16.0" />
                </font>
             </Text>
-            <ImageView fx:id="imgTournaments" fitHeight="16.0" fitWidth="25.0" layoutX="10.0" layoutY="8.0" preserveRatio="true">
+            <ImageView fx:id="imgTournaments" fitHeight="16.0" fitWidth="25.0" layoutX="11.0" layoutY="8.0" preserveRatio="true">
                <image>
-                  <Image url="@img-gray/chess_pawn_18dp.png" />
+                  <Image url="@img-white/social_leaderboard_white.png" />
                </image>
             </ImageView>
          </children>
       </Pane>
+      <Label fx:id="lblTitle" layoutX="36.0" layoutY="59.0" styleClass="menu-text-header" text="Chess Journey">
+         <font>
+            <Font size="11.0" />
+         </font></Label>
+      <Label layoutX="267.0" layoutY="65.0" styleClass="menu-text-sub-header" text="Focus">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Label layoutX="451.0" layoutY="65.0" styleClass="menu-text-sub-header" text="User">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Label layoutX="665.0" layoutY="65.0" styleClass="menu-text-sub-header" text="Settings">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Label layoutX="267.0" layoutY="269.0" styleClass="menu-text-sub-header" text="Training">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Label layoutX="451.0" layoutY="269.0" styleClass="menu-text-sub-header" text="Games">
+         <font>
+            <Font size="11.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblDate" alignment="CENTER_RIGHT" layoutX="785.0" layoutY="353.0" prefHeight="36.0" prefWidth="334.0" styleClass="menu-text-menu-lbl-date-white" text="Label" textAlignment="RIGHT" wrapText="true" />
+      <Label fx:id="lblWhiteTime" alignment="CENTER_RIGHT" layoutX="950.0" layoutY="317.0" prefHeight="36.0" prefWidth="169.0" styleClass="score-clock" text="00:00:00" textAlignment="RIGHT" textFill="#1d2d44">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Label>
+      <ImageView fx:id="imgRightPiece" fitHeight="262.0" fitWidth="254.0" layoutX="940.0" layoutY="73.0" opacity="0.58" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@images/chess-creativity-3.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="btRight" alignment="BASELINE_CENTER" layoutX="19.0" layoutY="472.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgRight" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/chevron_left_18dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
    </children>
 </Pane>

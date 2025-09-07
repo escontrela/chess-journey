@@ -119,13 +119,17 @@ public class TournamentsController implements ScreenController {
     }
 
     private void loadTournaments() {
+
         try {
+
             List<Tournament> tournaments = manageTournamentsUseCase.getUpcomingTournaments(10);
             ObservableList<Tournament> tournamentData = FXCollections.observableArrayList(tournaments);
             tournamentTable.setItems(tournamentData);
             
             System.out.println("Loaded " + tournaments.size() + " upcoming tournaments");
+
         } catch (Exception e) {
+
             System.err.println("Error loading tournaments: " + e.getMessage());
             e.printStackTrace();
         }
@@ -143,11 +147,12 @@ public class TournamentsController implements ScreenController {
             loadTournaments();
             
         } catch (Exception e) {
+
             System.err.println("Error refreshing tournaments: " + e.getMessage());
-            e.printStackTrace();
+
         } finally {
+
             btRefresh.setDisable(false);
-            btRefresh.setText("Refresh");
         }
     }
 
