@@ -6,6 +6,7 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 
+import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
