@@ -67,32 +67,26 @@ public class MainSceneController implements ScreenController {
 
   @FXML private ImageView imgLogo;
 
+  @FXML private Text lblPractice;
 
-  @FXML
-  private Text lblPractice;
+  @FXML private Text lblChessboard;
 
-  @FXML
-  private Text lblChessboard;
+  @FXML private HBox taskBar;
 
-  @FXML
-  private HBox taskBar;
+  @FXML private StackPane taskOption_analysis;
 
-  @FXML
-  private StackPane taskOption_analysis;
+  @FXML private StackPane taskOption_games;
 
-  @FXML
-  private StackPane taskOption_games;
+  @FXML private StackPane taskOption_stats;
 
-  @FXML
-  private StackPane taskOption_stats;
-
-  @FXML
-  private StackPane taskOption_settings;
-
+  @FXML private StackPane taskOption_settings;
 
   // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
   private double yOffset = 0;
+
+  // Variable de control para la inicialización
+  private boolean isControllerInitialized = false;
 
   // This map is used to cache the screens that are created.
   private final Map<Screens, ScreenController> screenManager = new HashMap<>();
@@ -107,7 +101,6 @@ public class MainSceneController implements ScreenController {
   private static final Point USER_STATS_POSITION = new Point(210, 120);
   private static final Point USER_SUITES_POSITION = new Point(14, 111);
   private static final Point USER_DATA_POSITION = new Point(14, 111);
-
 
   @FXML
   void buttonAction(ActionEvent event) {
@@ -127,7 +120,6 @@ public class MainSceneController implements ScreenController {
     if (event.getSource() == btLeft || event.getSource() == btRight) {
 
       showInfoPanel(pnlMessage);
-
     }
   }
 
@@ -164,8 +156,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-        new SettingsViewInputScreenData(
-            userService.getActiveUserId(), SETTINGS_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), SETTINGS_POSITION);
 
     settingMenuController.show(inputData);
   }
@@ -280,8 +271,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    userService.getActiveUserId(), TACTIC_GAME_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), TACTIC_GAME_POSITION);
     defendGameController.show(inputData);
   }
 
@@ -295,11 +285,9 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    userService.getActiveUserId(), DEFEND_GAME_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), DEFEND_GAME_POSITION);
     defendGameController.show(inputData);
   }
-
 
   private void manageMemoryGameVisibility() {
 
@@ -311,8 +299,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-        new SettingsViewInputScreenData(
-            userService.getActiveUserId(), MEMORY_GAME_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), MEMORY_GAME_POSITION);
     memoryGameController.show(inputData);
   }
 
@@ -326,8 +313,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-        new SettingsViewInputScreenData(
-            userService.getActiveUserId(), BOARD_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), BOARD_POSITION);
     boardController.show(inputData);
   }
 
@@ -341,8 +327,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    userService.getActiveUserId(), CHANGE_USER_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), CHANGE_USER_POSITION);
     changeUserController.show(inputData);
   }
 
@@ -356,8 +341,7 @@ public class MainSceneController implements ScreenController {
     }
 
     UserStatsInputScreenData inputData =
-            new UserStatsInputScreenData(
-                    userService.getActiveUserId(), USER_STATS_POSITION);
+        new UserStatsInputScreenData(userService.getActiveUserId(), USER_STATS_POSITION);
     userStatsController.show(inputData);
   }
 
@@ -371,8 +355,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    userService.getActiveUserId(), USER_SUITES_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), USER_SUITES_POSITION);
     userSuitesController.show(inputData);
   }
 
@@ -386,8 +369,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    userService.getActiveUserId(), USER_DATA_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), USER_DATA_POSITION);
     userDataController.show(inputData);
   }
 
@@ -401,8 +383,7 @@ public class MainSceneController implements ScreenController {
     }
 
     SettingsViewInputScreenData inputData =
-            new SettingsViewInputScreenData(
-                    userService.getActiveUserId(), USER_DATA_POSITION);
+        new SettingsViewInputScreenData(userService.getActiveUserId(), USER_DATA_POSITION);
     tournamentsController.show(inputData);
   }
 
@@ -421,47 +402,93 @@ public class MainSceneController implements ScreenController {
     reloadUserInitials(userService.getActiveUserId());
     showTextAnimation();
     initializeMessagePanel();
+
+    // Marcar como inicializado al final
+    isControllerInitialized = true;
   }
 
   private void initializeMessagePanel() {
     // Set up the message panel with default text and event handling
     pnlMessage.setMessage("This is a note that you have to confirm, or not?");
-    pnlMessage.setMessagePanelActionListener(new MessagePanelController.MessagePanelActionListener() {
-      @Override
-      public void onOkButtonClicked() {
-        // Handle OK button click - hide the panel
-        pnlMessage.setVisible(false);
-      }
-      
-      @Override
-      public void onCancelButtonClicked() {
-        // Handle Cancel button click - hide the panel
-        pnlMessage.setVisible(false);
-      }
-    });
+    pnlMessage.setMessagePanelActionListener(
+        new MessagePanelController.MessagePanelActionListener() {
+          @Override
+          public void onOkButtonClicked() {
+            // Handle OK button click - hide the panel
+            pnlMessage.setVisible(false);
+          }
+
+          @Override
+          public void onCancelButtonClicked() {
+            // Handle Cancel button click - hide the panel
+            pnlMessage.setVisible(false);
+          }
+        });
   }
 
-  private void initializeTaskBarBehaviour(){
+  private void initializeTaskBarBehaviour() {
 
-    List<StackPane> items = Arrays.asList(taskOption_analysis, taskOption_games, taskOption_stats,taskOption_settings);
+    List<StackPane> items =
+        Arrays.asList(taskOption_analysis, taskOption_games, taskOption_stats, taskOption_settings);
 
     for (StackPane item : items) {
-      item.setOnMouseClicked(e -> {
-        items.forEach(i -> i.getStyleClass().remove("selected"));
-        if (!item.getStyleClass().contains("selected")) {
-          item.getStyleClass().add("selected");
-        }
-      });
+      item.setOnMouseClicked(
+          e -> {
+            items.forEach(i -> i.getStyleClass().remove("selected"));
+            if (!item.getStyleClass().contains("selected")) {
+              item.getStyleClass().add("selected");
+            }
+          });
+
+      // Agregar hover para mostrar menú contextual
+      item.setOnMouseEntered(
+          e -> {
+
+            showContextMenuOnHover();
+          });
     }
 
+    // Agregar hover para la taskbar completa
+    taskBar.setOnMouseEntered(
+        e -> {
+
+          showContextMenuOnHover();
+        });
   }
+
+  /** Muestra el menú contextual cuando se hace hover */
+  private void showContextMenuOnHover() {
+    // Solo mostrar si el controlador ya está inicializado
+    if (!isControllerInitialized) {
+      return;
+    }
+
+    ScreenController contextMenuController = getScreen(Screens.MENU);
+
+    if (contextMenuController.isVisible() && !contextMenuController.isInitialized()) {
+      contextMenuController.hide();
+    }
+
+    contextMenuController.show(InputScreenData.fromPosition(MENU_POSITION));
+  }
+
+  /** Oculta el menú contextual cuando se pierde el foco */
+  private void hideContextMenuOnExit() {
+    ScreenController contextMenuController = getScreen(Screens.MENU);
+
+    // Solo ocultar si está visible y no está inicializado (no hay interacción activa)
+    if (contextMenuController.isVisible() && !contextMenuController.isInitialized()) {
+      contextMenuController.hide();
+    }
+  }
+
   private void showTextAnimation() {
 
-      GetRandomQuoteUseCase getRandomQuoteUseCase = UseCaseFactory.createGetRandomQuoteUseCase();
-      Quote randomQuote = getRandomQuoteUseCase.execute();
+    GetRandomQuoteUseCase getRandomQuoteUseCase = UseCaseFactory.createGetRandomQuoteUseCase();
+    Quote randomQuote = getRandomQuoteUseCase.execute();
 
-      playTypeWriterEffect(randomQuote.getText(), lblChessboard, 0.04);
-      playTypeWriterEffect("— " + randomQuote.getAuthor(), lblPractice, 0.1);
+    playTypeWriterEffect(randomQuote.getText(), lblChessboard, 0.04);
+    playTypeWriterEffect("— " + randomQuote.getAuthor(), lblPractice, 0.1);
   }
 
   private void moveMainWindowsSetUp() {
@@ -510,10 +537,7 @@ public class MainSceneController implements ScreenController {
     User loggedUser = getUserByIdUseCase.execute(userId);
     lbUserInitials.setText(loggedUser.getInitials());
 
-    FXAnimationUtil.fadeOut(lbUserInitials, 0.5)
-            .repeat(2)
-            .autoReverse(true)
-            .buildAndPlay();
+    FXAnimationUtil.fadeOut(lbUserInitials, 0.5).repeat(2).autoReverse(true).buildAndPlay();
   }
 
   private Stage stage;
@@ -587,24 +611,23 @@ public class MainSceneController implements ScreenController {
     stage.setIconified(true);
   }
 
-
   private void playTypeWriterEffect(String text, Text textNode, double charInterval) {
 
-      textNode.setText("");
-      StringBuilder currentText = new StringBuilder();
+    textNode.setText("");
+    StringBuilder currentText = new StringBuilder();
 
-      javafx.animation.Timeline timeline = new javafx.animation.Timeline();
-      for (int i = 0; i < text.length(); i++) {
-          final int index = i;
-          javafx.animation.KeyFrame keyFrame = new javafx.animation.KeyFrame(
+    javafx.animation.Timeline timeline = new javafx.animation.Timeline();
+    for (int i = 0; i < text.length(); i++) {
+      final int index = i;
+      javafx.animation.KeyFrame keyFrame =
+          new javafx.animation.KeyFrame(
               javafx.util.Duration.seconds(index * charInterval),
               e -> {
-                  currentText.append(text.charAt(index));
-                  textNode.setText(currentText.toString());
-              }
-          );
-          timeline.getKeyFrames().add(keyFrame);
-      }
-      timeline.play();
+                currentText.append(text.charAt(index));
+                textNode.setText(currentText.toString());
+              });
+      timeline.getKeyFrames().add(keyFrame);
+    }
+    timeline.play();
   }
 }

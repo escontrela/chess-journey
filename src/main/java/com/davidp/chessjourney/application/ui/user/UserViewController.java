@@ -66,12 +66,7 @@ public class UserViewController implements ScreenController {
     List<User> users = getUsersUseCase.execute();
     long activeUserId = userService.getActiveUserId();
     showUsersWithAnimation(users,activeUserId);
-    
-    // Enhanced functionality: also load and display TacticSuiteGames for the active user
-    if (getUserTacticSuiteGamesUseCase != null) {
-      List<TacticSuiteGame> tacticSuiteGames = getUserTacticSuiteGamesUseCase.execute(activeUserId);
-      showTacticSuiteGamesWithAnimation(tacticSuiteGames);
-    }
+
   }
 
   private void showUsersWithAnimation(List<User> users, long activeUserId) {
@@ -274,25 +269,6 @@ public class UserViewController implements ScreenController {
     hide();
   }
 
-  private void showTacticSuiteGamesWithAnimation(List<TacticSuiteGame> tacticSuiteGames) {
-    // Add TacticSuiteGame cards to the same flow panel (after users)
-    for (int i = 0; i < tacticSuiteGames.size(); i++) {
-      TacticSuiteGame tacticSuiteGame = tacticSuiteGames.get(i);
-      SelectableCardController tacticSuitePane = createTacticSuiteGamePane(tacticSuiteGame);
-
-      PauseTransition delay = new PauseTransition(Duration.seconds(0.5 * (i + 1))); // Offset after users
-      delay.setOnFinished(e -> {
-        usersFlowPanel.getChildren().add(tacticSuitePane);
-
-        JavaFXAnimationUtil.animationBuilder()
-            .duration(Duration.seconds(0.5))
-            .fadeIn(tacticSuitePane)
-            .buildAndPlay();
-      });
-
-      delay.play();
-    }
-  }
 
   private SelectableCardController createTacticSuiteGamePane(TacticSuiteGame tacticSuiteGame) {
     SelectableCardController card = new SelectableCardController();

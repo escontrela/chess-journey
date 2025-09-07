@@ -8,7 +8,9 @@ import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.util.JavaFXSchedulerUtil;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.image.Image;
@@ -90,7 +92,14 @@ public class MenuViewController implements ScreenController {
 
   @FXML private ImageView imgTournaments;
 
-  private static final DateTimeFormatter SPANISH_FMT =
+
+    @FXML
+    private Button btRight;
+    @FXML
+    private ImageView imgRight;
+
+
+    private static final DateTimeFormatter SPANISH_FMT =
       DateTimeFormatter.ofPattern("EEEE d 'de' MMMM 'del' yyyy", Locale.forLanguageTag("es-ES"));
 
   private static final DateTimeFormatter TIME_FMT =
@@ -360,4 +369,19 @@ public class MenuViewController implements ScreenController {
           javafx.util.Duration.seconds(index * charInterval));
     }
   }
+
+  @FXML
+  void buttonAction(ActionEvent event) {
+
+    if (isButtonCloseClicked(event)) {
+
+      hide();
+      return;
+    }
 }
+
+    private boolean isButtonCloseClicked(ActionEvent event) {
+
+        return event.getSource() == btRight || event.getSource() == imgRight;
+    }
+    }

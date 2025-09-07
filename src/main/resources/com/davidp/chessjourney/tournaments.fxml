@@ -5,7 +5,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
-<?import javafx.scene.effect.ColorAdjust?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
@@ -26,12 +25,6 @@
          </graphic>
       </Button>
       
-      <Button fx:id="btRefresh" alignment="BASELINE_CENTER" layoutX="1175.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="40.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE" text="⟳">
-         <font>
-            <Font name="Alatsi Regular" size="18.0" />
-         </font>
-      </Button>
-      
       <Label layoutX="33.0" layoutY="29.0" styleClass="popup-header" text="Galicia Tournaments" />
       <Label layoutX="33.0" layoutY="65.0" styleClass="popup-label" text="Upcoming tournaments in Galicia (max 10)" />
       
@@ -46,6 +39,18 @@
             <TableColumn fx:id="colRitmo" prefWidth="120.0" text="Ritmo" />
          </columns>
       </TableView>
+      <Button fx:id="btRefresh" alignment="BASELINE_CENTER" layoutX="1173.0" layoutY="46.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fx:id="imgRight" fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/cached_24dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
 
    </children>
    <stylesheets>
