@@ -18,6 +18,11 @@ public class SettingsViewInputScreenData extends InputScreenData {
     this.userId = userId;
   }
 
+    public SettingsViewInputScreenData(Long userId, Point point, String additionalInfo) {
+
+        super(point.getX(), point.getY(), additionalInfo);
+        this.userId = userId;
+    }
   public Long getUserId() {
 
     return userId;

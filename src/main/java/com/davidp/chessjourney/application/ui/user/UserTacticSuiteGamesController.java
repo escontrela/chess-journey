@@ -1,5 +1,8 @@
 package com.davidp.chessjourney.application.ui.user;
 
+import com.davidp.chessjourney.application.config.GlobalEventBus;
+import com.davidp.chessjourney.application.domain.OpenTacticGameEvent;
+import com.davidp.chessjourney.application.factories.ScreenFactory;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.controls.SelectableCardController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
@@ -113,8 +116,10 @@ public class UserTacticSuiteGamesController implements ScreenController {
     }
 
     private void optionClicked(TacticSuiteGame selectedTacticSuiteGame) {
-        System.out.println(selectedTacticSuiteGame);
-        // Future: Could trigger navigation to specific tactic suite game
+
+        System.out.println(selectedTacticSuiteGame.getId());
+
+        GlobalEventBus.get().post(new OpenTacticGameEvent(selectedTacticSuiteGame.getId().toString()));
     }
 
     @FXML

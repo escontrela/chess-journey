@@ -30,4 +30,9 @@ public interface ScreenController {
   boolean isVisible();
 
   boolean isHidden();
+
+  default void reset() {
+    // Optional method to reset the screen to its default state
+  }
+
 }

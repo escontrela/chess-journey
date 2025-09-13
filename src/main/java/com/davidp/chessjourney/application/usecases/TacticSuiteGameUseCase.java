@@ -3,10 +3,14 @@ package com.davidp.chessjourney.application.usecases;
 import com.davidp.chessjourney.domain.games.tactic.TacticGame;
 import com.davidp.chessjourney.domain.games.tactic.TacticSuiteGame;
 
+import java.util.UUID;
+
 /**
  * Use case for creating and managing tactic suite games.
  */
 public interface TacticSuiteGameUseCase {
+
+    TacticGame execute(long userId, UUID tacticSuiteGameId, String difficulty, int numberOfExercises);
 
     /**
      * Creates a tactic game from a random type suite with default number of exercises (10).

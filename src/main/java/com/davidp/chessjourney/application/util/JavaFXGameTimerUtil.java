@@ -8,23 +8,37 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class JavaFXGameTimerUtil {
-    private static final List<Animation> activeTimers = new ArrayList<>();
+  private static final List<Animation> activeTimers = new ArrayList<>();
 
-    public static void runLoop(Runnable action, Duration interval) {
-        Timeline timeline = new Timeline(new KeyFrame(interval, e -> action.run()));
-        timeline.setCycleCount(Timeline.INDEFINITE);
-        timeline.play();
-        addTimer(timeline);
-    }
+  public static Animation runLoop(Runnable action, Duration interval) {
 
-    public static void addTimer(Animation timer) {
-        activeTimers.add(timer);
-    }
+    Timeline timeline = new Timeline(new KeyFrame(interval, e -> action.run()));
+    timeline.setCycleCount(Timeline.INDEFINITE);
+    timeline.play();
+    addTimer(timeline);
+    return timeline;
+  }
 
-    public static void clear() {
-        for (Animation timer : activeTimers) {
-            timer.stop();
-        }
-        activeTimers.clear();
+  public static void addTimer(Animation timer) {
+
+    activeTimers.add(timer);
+  }
+
+  public static void clear() {
+    for (Animation timer : activeTimers) {
+      timer.stop();
     }
+    activeTimers.clear();
+  }
+
+  public static void stopLoop(Animation timer) {
+    if (timer == null) {
+      return;
+    }
+    try {
+      timer.stop();
+    } finally {
+      activeTimers.remove(timer);
+    }
+  }
 }
