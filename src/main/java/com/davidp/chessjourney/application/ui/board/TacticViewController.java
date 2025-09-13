@@ -49,8 +49,8 @@ import javafx.util.Duration;
 public class TacticViewController implements ScreenController {
 
   protected enum BoardType {
-      DO_TACTIC,
-      DO_STUDY
+    DO_TACTIC,
+    DO_STUDY
   }
 
   protected BoardType boardType = BoardType.DO_TACTIC;
@@ -123,73 +123,73 @@ public class TacticViewController implements ScreenController {
     setStatusPanelState();
   }
 
-    private void initializePGNEditorPanes() {
+  private void initializePGNEditorPanes() {
 
-        pnlPGNControl.setPGNEditorKeyListener(
-            new PGNEditorController.PGNEditorKeyListener() {
-              @Override
-              public void onFenChanged(String newFen) {
+    pnlPGNControl.setPGNEditorKeyListener(
+        new PGNEditorController.PGNEditorKeyListener() {
+          @Override
+          public void onFenChanged(String newFen) {
 
-                cleanPieces();
+            cleanPieces();
 
-                final GameState fenParserResponse =
-                    fenService.parseString(Fen.createCustom(pnlPGNControl.fenProperty().get()));
+            final GameState fenParserResponse =
+                fenService.parseString(Fen.createCustom(pnlPGNControl.fenProperty().get()));
 
-                showPiecesOnBoard(fenParserResponse);
-              }
+            showPiecesOnBoard(fenParserResponse);
+          }
 
-              @Override
-              public void onSANChanged(String newSAN) {
-                PGNMove();
-              }
+          @Override
+          public void onSANChanged(String newSAN) {
+            PGNMove();
+          }
 
-              @Override
-              public void onPGNChanged(String newPGN) {
-                // TODO place the new PGN on the board
-                // This is not implemented yet, but we can use the PGNService to parse
-              }
+          @Override
+          public void onPGNChanged(String newPGN) {
+            // TODO place the new PGN on the board
+            // This is not implemented yet, but we can use the PGNService to parse
+          }
+        });
+
+    pnlPGNControl.setPGNEditorActionListener(
+        new PGNEditorController.PGNEditorActionListener() {
+          @Override
+          public void onCloseButtonClicked() {
+            pnlPGNControl.setVisible(false);
+          }
+
+          @Override
+          public void onFenCopyClicked() {
+            // No hacer nada
+          }
+
+          @Override
+          public void onPGNCopyClicked() {
+            // No hacer nada
+          }
+
+          @Override
+          public void onMaxMinButtonClicked() {
+            boolean newMaximizedState = !pnlPGNControl.isMaximized();
+            pnlPGNControl.setMaximized(newMaximizedState);
+            if (newMaximizedState) {
+              pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() - 80);
+            } else {
+              pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() + 80);
+            }
+          }
+        });
+
+    updatePGNEditorButtonStyle();
+
+    pnlPGNControl
+        .visibleProperty()
+        .addListener(
+            (obs, oldVal, newVal) -> {
+              updatePGNEditorButtonStyle();
             });
+  }
 
-        pnlPGNControl.setPGNEditorActionListener(
-            new PGNEditorController.PGNEditorActionListener() {
-              @Override
-              public void onCloseButtonClicked() {
-                pnlPGNControl.setVisible(false);
-              }
-
-              @Override
-              public void onFenCopyClicked() {
-                // No hacer nada
-              }
-
-              @Override
-              public void onPGNCopyClicked() {
-                // No hacer nada
-              }
-
-              @Override
-              public void onMaxMinButtonClicked() {
-                boolean newMaximizedState = !pnlPGNControl.isMaximized();
-                pnlPGNControl.setMaximized(newMaximizedState);
-                if (newMaximizedState) {
-                  pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() - 80);
-                } else {
-                  pnlPGNControl.setLayoutY(pnlPGNControl.getLayoutY() + 80);
-                }
-              }
-            });
-
-        updatePGNEditorButtonStyle();
-
-        pnlPGNControl
-            .visibleProperty()
-            .addListener(
-                (obs, oldVal, newVal) -> {
-                  updatePGNEditorButtonStyle();
-                });
-    }
-
-    private void setStatusPanelState() {
+  private void setStatusPanelState() {
 
     // Use UserService from factory to get active user data
     UserService userService = ApplicationServiceFactory.createUserService();
@@ -200,7 +200,7 @@ public class TacticViewController implements ScreenController {
       pnlStatusControl.setUserRating("N/A");
     } else {
       pnlStatusControl.setUserName(user.getFirstname() + " " + user.getLastname());
-      
+
       // Try to get exercises ELO for the user
       List<UserElo> userElos = userService.getActiveUserElos();
       String eloRating = "N/A";
@@ -239,8 +239,6 @@ public class TacticViewController implements ScreenController {
      * tacticStatus.numExercisesProperty().bind(countProperty);
      */
   }
-
-
 
   // TODO improve
   private void initializeBoardPanes() {
@@ -285,8 +283,6 @@ public class TacticViewController implements ScreenController {
             new EventHandler<DragEvent>() {
               public void handle(DragEvent event) {
 
-
-
                 Dragboard db = event.getDragboard();
                 boolean success = false;
                 if (db.hasString()) {
@@ -323,7 +319,6 @@ public class TacticViewController implements ScreenController {
     }
   }
 
-
   private void freeSquare(Pane pane) {
 
     pane.getChildren().clear();
@@ -333,9 +328,9 @@ public class TacticViewController implements ScreenController {
   @Override
   public void setData(InputScreenData inputData) {
 
-      this.inputData = inputData;
+    this.inputData = inputData;
 
-      if (inputData.isLayoutInfoValid()) {
+    if (inputData.isLayoutInfoValid()) {
 
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
@@ -405,23 +400,24 @@ public class TacticViewController implements ScreenController {
     return status == ScreenController.ScreenStatus.INITIALIZED;
   }
 
-    @Override
-    public void reset() {
+  @Override
+  public void reset() {
 
     if (activeTacticGame != null) {
 
-        cleanPieces();
-        JavaFXGameTimerUtil.clear();
-        activeTacticGame = null;
-        btStart.setDisable(false);
-        pauseLoopGame = true;
+      cleanPieces();
+      JavaFXGameTimerUtil.clear();
+      activeTacticGame = null;
+      btStart.setDisable(false);
+      pauseLoopGame = true;
 
-        if (this.gameLoopTimer != null) {
+      if (this.gameLoopTimer != null) {
 
-            JavaFXGameTimerUtil.stopLoop(this.gameLoopTimer);
-        }
+        JavaFXGameTimerUtil.stopLoop(this.gameLoopTimer);
+      }
     }
   }
+
   @FXML
   void buttonAction(ActionEvent event) {
 
@@ -437,38 +433,34 @@ public class TacticViewController implements ScreenController {
 
       if (boardType == BoardType.DO_TACTIC) {
 
+        UserService userService = ApplicationServiceFactory.createUserService();
         btStart.setDisable(true);
 
-        // looking for
-        UserService userService = ApplicationServiceFactory.createUserService();
-        
-        // Use TacticSuiteGameUseCase for random type if available, otherwise fall back to TacticGameUseCase
-        if (tacticSuiteGameUseCase != null) {
+        if (inputData.isAdditionalInfoValid()) {
 
-            if (inputData.isAdditionalInfoValid()){
+          playTypeWriterEffect("Ejecicio: " + inputData.getAdditionalInfo(), lblGhostMsg, 0.02);
+        }
 
-                playTypeWriterEffect(
-                        "Ejecicio: " + inputData.getAdditionalInfo(), lblGhostMsg, 0.02);
-             activeTacticGame =
-                     tacticSuiteGameUseCase.executeFixed(userService.getActiveUserId(), UUID.fromString(inputData.getAdditionalInfo()));
+          activeTacticGame = tacticSuiteGameUseCase.execute(
+            userService.getActiveUserId(),
+            inputData.isAdditionalInfoValid()
+                ? UUID.fromString(inputData.getAdditionalInfo())
+                : null,
+            difficulty,
+            10);
 
-         }else{
+        if (activeTacticGame == null) {
 
-            activeTacticGame =
-                tacticSuiteGameUseCase.executeRandom(userService.getActiveUserId(), difficulty);
-          }
-        } else {
-          activeTacticGame =
-              tacticGameUseCase.execute(userService.getActiveUserId(), difficulty);
+          throw new RuntimeException("Error starting Tactic Game, activeTacticGame is null");
         }
 
         startTacticGame();
       }
     }
+
     if (isButtonPGNEditorClicked(event)) {
 
       pnlPGNControl.setVisible(!pnlPGNControl.isVisible());
-      // El listener de visibleProperty se encarga de actualizar el estilo
     }
   }
 
@@ -521,8 +513,6 @@ public class TacticViewController implements ScreenController {
           addPieceFromPosition(pane, piece.getPiece(), piece.getPosition());
         });
   }
-
-
 
   /** Bucle de juego que controla la lógica del MemoryGame. */
   private void gameLoop() {
@@ -710,7 +700,8 @@ public class TacticViewController implements ScreenController {
         throw new RuntimeException("Is not a valid en passant move:" + enPassantMove);
       }
 
-      PiecePosition pieceToMove = chessBoard.getPiece(enPassantMove.getMoves().getFirst().getFrom());
+      PiecePosition pieceToMove =
+          chessBoard.getPiece(enPassantMove.getMoves().getFirst().getFrom());
 
       Pane fromPane = boardPanes.get(enPassantMove.getMoves().getFirst().getFrom());
       Pane toPane = boardPanes.get(enPassantMove.getMoves().getFirst().getTo());
@@ -720,9 +711,10 @@ public class TacticViewController implements ScreenController {
       freeSquare(fromPane);
 
       // En passant capture: remove the captured pawn from the adjacent square
-      Pos capturedPawnPos = Pos.of(
-          enPassantMove.getMoves().getFirst().getTo().getCol(),
-          enPassantMove.getMoves().getFirst().getFrom().getRow());
+      Pos capturedPawnPos =
+          Pos.of(
+              enPassantMove.getMoves().getFirst().getTo().getCol(),
+              enPassantMove.getMoves().getFirst().getFrom().getRow());
       Pane capturedPawnPane = boardPanes.get(capturedPawnPos);
       freeSquare(capturedPawnPane);
 
@@ -783,7 +775,8 @@ public class TacticViewController implements ScreenController {
         throw new RuntimeException("Is not a valid promotion move:" + promotionMove);
       }
 
-      PiecePosition pieceToMove = chessBoard.getPiece(promotionMove.getMoves().getFirst().getFrom());
+      PiecePosition pieceToMove =
+          chessBoard.getPiece(promotionMove.getMoves().getFirst().getFrom());
 
       Pane fromPane = boardPanes.get(promotionMove.getMoves().getFirst().getFrom());
       Pane toPane = boardPanes.get(promotionMove.getMoves().getFirst().getTo());
@@ -798,10 +791,10 @@ public class TacticViewController implements ScreenController {
       }
 
       // Create the promoted piece instead of moving the original pawn
-      PieceView promotedPieceView = PieceViewFactory.getPiece(
-          promotionMove.getPromotionPiece(), 
-          pieceToMove.getPiece().getColor());
-      
+      PieceView promotedPieceView =
+          PieceViewFactory.getPiece(
+              promotionMove.getPromotionPiece(), pieceToMove.getPiece().getColor());
+
       addPiece(toPane, promotedPieceView, promotionMove.getMoves().getFirst().getTo());
 
       if (promotionMove.isCheck() || promotionMove.isMate()) {
@@ -810,7 +803,7 @@ public class TacticViewController implements ScreenController {
 
         // Apply the promotion move to the board
         chessBoard.dropPieceFromPosition(promotionMove.getMoves().getFirst().getFrom());
-        
+
         if (isCapture) {
           // Remove captured piece if any
           chessBoard.dropPieceFromPosition(promotionMove.getMoves().getFirst().getTo());
@@ -820,7 +813,7 @@ public class TacticViewController implements ScreenController {
         Piece promotedPiece =
             new Piece(promotionMove.getPromotionPiece(), pieceToMove.getPiece().getColor());
         chessBoard.addPiece(promotedPiece, promotionMove.getMoves().getFirst().getTo());
-        
+
         chessBoard.setTurn(chessBoard.getGameState().getNotActiveColor());
 
         System.out.println("new FEN after promotion:" + chessBoard.getFen().getStringValue());
@@ -940,7 +933,9 @@ public class TacticViewController implements ScreenController {
     this.btStart.setVisible(true);
     this.lblBoardType.setText("The tactic suite game!");
     playTypeWriterEffect(
-        "¿Preparado para una sesión de táctica con suite?, pulsa en el botón de inicio.", lblGhostMsg, 0.02);
+        "¿Preparado para una sesión de táctica con suite?, pulsa en el botón de inicio.",
+        lblGhostMsg,
+        0.02);
   }
 
   public void setSaveUserExerciseStatsUseCase(
@@ -976,88 +971,85 @@ public class TacticViewController implements ScreenController {
         FXAnimationUtil.fadeIn(boardPanes.get(Pos.parseString(to)), 1.0)
             .onFinished(
                 () -> {
-
                   lblBoardType.setText("¡Correcto!");
                   // boardPanes.get(event.getPos()).getChildren().add(imgOk);
                   boardPanes.get(Pos.parseString(to)).setStyle("-fx-background-color: #00E680;");
 
                   pnlStatusControl.setPlyState(
-                      activeTacticGame.getCurrentPlyNumber()-1 , TacticStatusController.STATE_OK);
+                      activeTacticGame.getCurrentPlyNumber() - 1, TacticStatusController.STATE_OK);
 
                   if (activeTacticGame.getGameState() == TacticGame.GameState.GAME_OVER) {
 
-                      playTypeWriterEffect("Bien hecho, ejercicio terminado!", lblGhostMsg, 0.02);
+                    playTypeWriterEffect("Bien hecho, ejercicio terminado!", lblGhostMsg, 0.02);
 
-                      runLater(
+                    runLater(
                         () ->
                             soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
 
-
-                      pnlStatusControl.setExerciseState(
+                    pnlStatusControl.setExerciseState(
                         activeTacticGame.getCurrentExerciseNumber() - 2,
                         TacticStatusController.STATE_OK);
 
-                      pnlStatusControl.setCurrentExercise(
+                    pnlStatusControl.setCurrentExercise(
                         activeTacticGame.getCurrentExerciseNumber() - 1);
 
                     return;
                   } else if (activeTacticGame.getGameState()
                       == TacticGame.GameState.READY_FOR_NEXT_EXERCISE) {
 
-                      //Publicamos en el tablero un nuevo ejercicio con su FEN position
-                      activeTacticGame.startNextExercise();
+                    // Publicamos en el tablero un nuevo ejercicio con su FEN position
+                    activeTacticGame.startNextExercise();
 
-                        pnlStatusControl.setExerciseState(
+                    pnlStatusControl.setExerciseState(
                         activeTacticGame.getCurrentExerciseNumber() - 2,
-                            TacticStatusController.STATE_OK);
+                        TacticStatusController.STATE_OK);
 
-                        pnlStatusControl.setCurrentExercise(
-                            activeTacticGame.getCurrentExerciseNumber() - 1);
+                    pnlStatusControl.setCurrentExercise(
+                        activeTacticGame.getCurrentExerciseNumber() - 1);
 
-                        pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
-                        pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber() - 1);
-                        pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
-                        pnlStatusControl.resetAllPlyStates();
+                    pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
+                    pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber() - 1);
+                    pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
+                    pnlStatusControl.resetAllPlyStates();
 
-                        GameState gameState = fenService.parseString(activeTacticGame.getFen());
-                        cleanPieces();
-                        showPiecesOnBoard(gameState);
+                    GameState gameState = fenService.parseString(activeTacticGame.getFen());
+                    cleanPieces();
+                    showPiecesOnBoard(gameState);
 
                   } else {
 
-                      if (activeTacticGame.hasPendingAutoMove()) {
+                    if (activeTacticGame.hasPendingAutoMove()) {
 
-                          Pos fromPos = Pos.parseString(from);
-                          Pos toPos = Pos.parseString(to);
-                          PiecePosition movingPiece = chessBoard.getPiece(fromPos);
-                          chessBoard.movePiece(movingPiece.getPiece(), fromPos, toPos);
-                          chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
+                      Pos fromPos = Pos.parseString(from);
+                      Pos toPos = Pos.parseString(to);
+                      PiecePosition movingPiece = chessBoard.getPiece(fromPos);
+                      chessBoard.movePiece(movingPiece.getPiece(), fromPos, toPos);
+                      chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
 
-                          // La UI aplica el auto-move y lo consume
-                          String moveToMake = activeTacticGame.peekPendingAutoMove();
-                          System.out.println("Next move:" + moveToMake);
+                      // La UI aplica el auto-move y lo consume
+                      String moveToMake = activeTacticGame.peekPendingAutoMove();
+                      System.out.println("Next move:" + moveToMake);
 
-                          // now we should perform the move!
-                          GameMove gameMove = pgnService.fromAlgebraic(moveToMake, chessBoard);
+                      // now we should perform the move!
+                      GameMove gameMove = pgnService.fromAlgebraic(moveToMake, chessBoard);
 
-                          System.out.println("gameMove:" + gameMove);
+                      System.out.println("gameMove:" + gameMove);
 
-                          Pos nextMoveFrom = gameMove.getMoves().getFirst().getFrom();
-                          Pos nextMoveTo = gameMove.getMoves().getFirst().getTo();
-                          PiecePosition nextMovingPiece = chessBoard.getPiece(nextMoveFrom);
+                      Pos nextMoveFrom = gameMove.getMoves().getFirst().getFrom();
+                      Pos nextMoveTo = gameMove.getMoves().getFirst().getTo();
+                      PiecePosition nextMovingPiece = chessBoard.getPiece(nextMoveFrom);
 
-                          chessBoard.movePiece(nextMovingPiece.getPiece(), nextMoveFrom, nextMoveTo);
-                          chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
+                      chessBoard.movePiece(nextMovingPiece.getPiece(), nextMoveFrom, nextMoveTo);
+                      chessBoard.setTurn(movingPiece.getPiece().getColor().opposite());
 
-                          activeTacticGame.setNewChessBoardState(chessBoard);
-                          cleanPieces();
-                          GameState gameState = fenService.parseString(chessBoard.getFen());
-                          showPiecesOnBoard(gameState);
+                      activeTacticGame.setNewChessBoardState(chessBoard);
+                      cleanPieces();
+                      GameState gameState = fenService.parseString(chessBoard.getFen());
+                      showPiecesOnBoard(gameState);
 
-                          activeTacticGame.consumePendingAutoMove();
-                          pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
-
-                      }
+                      activeTacticGame.consumePendingAutoMove();
+                      pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber());
+                    }
                   }
 
                   playTypeWriterEffect("Bien hecho!", lblGhostMsg, 0.02);
@@ -1102,26 +1094,25 @@ public class TacticViewController implements ScreenController {
                       .onFinished(() -> pauseLoopGame = false)
                       .buildAndPlay();
 
-                    if (activeTacticGame.getGameState() == TacticGame.GameState.READY_FOR_NEXT_EXERCISE) {
-                        activeTacticGame.startNextExercise();
-                        pnlStatusControl.setExerciseState(
-                                activeTacticGame.getCurrentExerciseNumber() - 2,
-                                TacticStatusController.STATE_FAIL);
+                  if (activeTacticGame.getGameState()
+                      == TacticGame.GameState.READY_FOR_NEXT_EXERCISE) {
+                    activeTacticGame.startNextExercise();
+                    pnlStatusControl.setExerciseState(
+                        activeTacticGame.getCurrentExerciseNumber() - 2,
+                        TacticStatusController.STATE_FAIL);
 
-                        pnlStatusControl.setCurrentExercise(
-                                activeTacticGame.getCurrentExerciseNumber() - 1);
+                    pnlStatusControl.setCurrentExercise(
+                        activeTacticGame.getCurrentExerciseNumber() - 1);
 
-                        pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
-                        pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber() - 1);
-                        pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
-                        pnlStatusControl.resetAllPlyStates();
+                    pnlStatusControl.setNumPly(activeTacticGame.getTotalPliesInCurrentExercise());
+                    pnlStatusControl.setCurrentPly(activeTacticGame.getCurrentPlyNumber() - 1);
+                    pnlStatusControl.setPlyState(0, TacticStatusController.STATE_NORMAL);
+                    pnlStatusControl.resetAllPlyStates();
 
-                        GameState gameState = fenService.parseString(activeTacticGame.getFen());
-                        cleanPieces();
-                        showPiecesOnBoard(gameState);
-
-                    }
-
+                    GameState gameState = fenService.parseString(activeTacticGame.getFen());
+                    cleanPieces();
+                    showPiecesOnBoard(gameState);
+                  }
                 })
             .buildAndPlay();
       }

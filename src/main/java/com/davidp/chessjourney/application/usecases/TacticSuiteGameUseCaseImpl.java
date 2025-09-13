@@ -35,6 +35,28 @@ public class TacticSuiteGameUseCaseImpl implements TacticSuiteGameUseCase {
     }
 
     @Override
+    public TacticGame execute(long userId, UUID tacticSuiteGameId, String difficulty, int numberOfExercises){
+
+        if (tacticSuiteGameId == null) {
+
+            return executeRandom(userId, difficulty, numberOfExercises);
+        }
+
+        TacticSuiteGame suite = tacticSuiteGameRepository.getById(tacticSuiteGameId);
+
+        if (suite.getType() == TacticSuiteGame.Type.RANDOM) {
+
+            return executeRandom(userId, difficulty, numberOfExercises);
+
+        } else if (suite.getType() == TacticSuiteGame.Type.FIXED) {
+
+            return executeFixed(userId, tacticSuiteGameId);
+        }
+
+        throw new IllegalArgumentException("Unknown TacticSuiteGame type: " + suite.getType());
+    }
+
+    @Override
     public TacticGame executeRandom(long userId, String difficulty) {
         return executeRandom(userId, difficulty, 10); // Default 10 exercises
     }
