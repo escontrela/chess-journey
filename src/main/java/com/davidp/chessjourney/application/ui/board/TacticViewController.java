@@ -33,6 +33,8 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
 import java.util.List;
+
+import javafx.animation.Animation;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -85,6 +87,7 @@ public class TacticViewController implements ScreenController {
   @FXML private PGNEditorController pnlPGNControl;
   @FXML private TacticStatusController pnlStatusControl;
 
+  private InputScreenData inputData = null;
   private ImageView imgOk =
       new ImageView("com/davidp/chessjourney/img-white/ic_data_usage_white_24dp.png");
   private ImageView imgFail =
@@ -105,6 +108,8 @@ public class TacticViewController implements ScreenController {
   protected boolean pauseLoopGame = false;
 
   protected boolean idValidForELO = true;
+
+  protected Animation gameLoopTimer;
 
   public void initialize() {
 
@@ -328,7 +333,9 @@ public class TacticViewController implements ScreenController {
   @Override
   public void setData(InputScreenData inputData) {
 
-    if (inputData.isLayoutInfoValid()) {
+      this.inputData = inputData;
+
+      if (inputData.isLayoutInfoValid()) {
 
       setLayout(inputData.getLayoutX(), inputData.getLayoutY());
     }
@@ -398,6 +405,23 @@ public class TacticViewController implements ScreenController {
     return status == ScreenController.ScreenStatus.INITIALIZED;
   }
 
+    @Override
+    public void reset() {
+
+    if (activeTacticGame != null) {
+
+        cleanPieces();
+        JavaFXGameTimerUtil.clear();
+        activeTacticGame = null;
+        btStart.setDisable(false);
+        pauseLoopGame = true;
+
+        if (this.gameLoopTimer != null) {
+
+            JavaFXGameTimerUtil.stopLoop(this.gameLoopTimer);
+        }
+    }
+  }
   @FXML
   void buttonAction(ActionEvent event) {
 
@@ -420,8 +444,19 @@ public class TacticViewController implements ScreenController {
         
         // Use TacticSuiteGameUseCase for random type if available, otherwise fall back to TacticGameUseCase
         if (tacticSuiteGameUseCase != null) {
-          activeTacticGame =
-              tacticSuiteGameUseCase.executeRandom(userService.getActiveUserId(), difficulty);
+
+            if (inputData.isAdditionalInfoValid()){
+
+                playTypeWriterEffect(
+                        "Ejecicio: " + inputData.getAdditionalInfo(), lblGhostMsg, 0.02);
+             activeTacticGame =
+                     tacticSuiteGameUseCase.executeFixed(userService.getActiveUserId(), UUID.fromString(inputData.getAdditionalInfo()));
+
+         }else{
+
+            activeTacticGame =
+                tacticSuiteGameUseCase.executeRandom(userService.getActiveUserId(), difficulty);
+          }
         } else {
           activeTacticGame =
               tacticGameUseCase.execute(userService.getActiveUserId(), difficulty);
@@ -473,7 +508,7 @@ public class TacticViewController implements ScreenController {
 
         );
 
-    JavaFXGameTimerUtil.runLoop(this::gameLoop, Duration.millis(100));
+    this.gameLoopTimer = JavaFXGameTimerUtil.runLoop(this::gameLoop, Duration.millis(100));
   }
 
   private void showPiecesOnBoard(GameState gameState) {

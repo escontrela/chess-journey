@@ -186,6 +186,10 @@ public class MenuViewController implements ScreenController {
 
   @Override
   public void hide() {
+
+      rootPane.setVisible(false);
+      status = ScreenStatus.HIDDEN;
+      /*
     FXAnimationUtil.fadeIn(rootPane, 0.2)
         .repeat(1)
         .autoReverse(false)
@@ -196,6 +200,8 @@ public class MenuViewController implements ScreenController {
               stopTimer();
             })
         .buildAndPlay();
+
+       */
   }
 
   @Override
@@ -232,6 +238,7 @@ public class MenuViewController implements ScreenController {
     if (isSettingMenuClicked(event)) {
 
       GlobalEventBus.get().post(new OpenSettingsFromMenuEvent());
+      this.hide();
     }
     if (isAnalysisBoardClicked(event)) {
 
@@ -244,6 +251,7 @@ public class MenuViewController implements ScreenController {
 
     if (isTacticGameClicked(event)) {
       GlobalEventBus.get().post(new OpenTacticGameEvent());
+      this.hide();
     }
 
     if (isTournamentsClicked(event)) {
@@ -261,6 +269,7 @@ public class MenuViewController implements ScreenController {
     }
     if (isUserSuitesClicked(event)) {
       GlobalEventBus.get().post(new OpenUserSuitesEvent());
+      this.hide();
     }
     if (isUserDataClicked(event)) {
       GlobalEventBus.get().post(new OpenUserDataEvent());

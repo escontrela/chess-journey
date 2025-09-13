@@ -201,7 +201,7 @@ public class MainSceneController implements ScreenController {
   @Subscribe
   public void onMenuSettingsClicked(OpenSettingsFromMenuEvent event) {
 
-    manageContextMenuVisibility();
+   // manageContextMenuVisibility();
     manageSettingsMenuVisibility();
   }
 
@@ -236,8 +236,9 @@ public class MainSceneController implements ScreenController {
   @Subscribe
   public void onTacticGameClicked(OpenTacticGameEvent event) {
 
-    manageContextMenuVisibility();
-    manageTacticGameVisibility();
+    //manageContextMenuVisibility();
+    manageTacticGameVisibility(event);
+
   }
 
   @Subscribe
@@ -250,7 +251,7 @@ public class MainSceneController implements ScreenController {
   @Subscribe
   public void onUserSuitesClicked(OpenUserSuitesEvent event) {
 
-    manageContextMenuVisibility();
+    //manageContextMenuVisibility();
     manageUserSuitesVisibility();
   }
 
@@ -268,21 +269,33 @@ public class MainSceneController implements ScreenController {
     manageTournamentsVisibility();
   }
 
-  private void manageTacticGameVisibility() {
+  private void manageTacticGameVisibility(OpenTacticGameEvent event) {
 
-    ScreenController defendGameController = getScreen(Screens.TACTIC_GAME);
-    if (defendGameController.isVisible() && !defendGameController.isInitialized()) {
+    ScreenController tacticGameController = getScreen(Screens.TACTIC_GAME);
 
-      defendGameController.hide();
+    if (tacticGameController.isVisible() && !tacticGameController.isInitialized()) {
+
+      tacticGameController.hide();
       return;
     }
 
-    SettingsViewInputScreenData inputData =
-        new SettingsViewInputScreenData(userService.getActiveUserId(), TACTIC_GAME_POSITION);
-    defendGameController.show(inputData);
+    final SettingsViewInputScreenData inputData;
+
+    if (event.isTacticGameIdValid()){
+
+        inputData =  new SettingsViewInputScreenData(userService.getActiveUserId(), TACTIC_GAME_POSITION, event.getTacticGameId());
+    } else {
+
+        inputData = new SettingsViewInputScreenData(userService.getActiveUserId(), TACTIC_GAME_POSITION);
+    }
+
+      setToFront(tacticGameController);
+      tacticGameController.reset();
+      tacticGameController.show(inputData);
   }
 
-  private void manageDefendGameVisibility() {
+
+    private void manageDefendGameVisibility() {
 
     ScreenController defendGameController = getScreen(Screens.DEFEND_GAME);
     if (defendGameController.isVisible() && !defendGameController.isInitialized()) {
@@ -377,6 +390,8 @@ public class MainSceneController implements ScreenController {
 
     SettingsViewInputScreenData inputData =
         new SettingsViewInputScreenData(userService.getActiveUserId(), USER_DATA_POSITION);
+
+    setToFront(userDataController);
     userDataController.show(inputData);
   }
 
@@ -695,4 +710,14 @@ public class MainSceneController implements ScreenController {
     }
     timeline.play();
   }
+
+    private static void setToFront(ScreenController screenController) {
+
+        // Asegurar que el nodo esté en mainPane y llevarlo al frente
+        Platform.runLater(() -> {
+
+            Pane tacticRoot = screenController.getRootPane();
+            tacticRoot.toFront();
+        });
+    }
 }

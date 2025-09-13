@@ -9,6 +9,8 @@ target/
 .idea/compiler.xml
 .idea/libraries/
 .idea/cody_history.xml
+.idea/copilot.data.migration.agent.xml
+.idea/copilot.data.migration.edit.xml
 *.iws
 *.iml
 *.ipr
