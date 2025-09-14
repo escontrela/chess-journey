@@ -251,6 +251,52 @@
 }
 /* End: notify pannels */
 
+/* Start: Date Message Panel Styles */
+.date-square-panel {
+    -fx-background-color: #2C2C2C; /* Same color as button-gray */
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: #3a3a3a;
+    -fx-border-width: 1;
+}
+
+.date-month-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #CCCCCC;
+}
+
+.date-day-label {
+    -fx-font-size: 24px;
+    -fx-font-weight: bold;
+    -fx-text-fill: WHITE;
+}
+
+.tournament-title-label {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: WHITE;
+}
+
+.tournament-detail-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #CCCCCC;
+}
+
+.tournament-link-label {
+    -fx-font-size: 12px;
+    -fx-font-weight: normal;
+    -fx-text-fill: #686b75;
+    -fx-cursor: hand;
+}
+
+.tournament-link-label:hover {
+    -fx-text-fill: #a5aff0;
+    -fx-underline: true;
+}
+/* End: Date Message Panel Styles */
+
 
 /* Start: menu panel */
 .menu-panel {

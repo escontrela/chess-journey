@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+
+<fx:root prefHeight="95.0" prefWidth="502.0" styleClass="note-panel" stylesheets="@custom-styles.css" type="Pane" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <!-- Date Square Panel -->
+      <Pane fx:id="dateSquarePane" layoutX="12.0" layoutY="12.0" prefHeight="71.0" prefWidth="71.0" styleClass="date-square-panel" stylesheets="@custom-styles.css">
+         <children>
+            <Label fx:id="lblMonthAbbrev" alignment="CENTER" layoutX="0.0" layoutY="15.0" prefHeight="16.0" prefWidth="71.0" styleClass="date-month-label" text="Sep" textAlignment="CENTER" textFill="#CCCCCC">
+               <font>
+                  <Font name="Alatsi Regular" size="12.0" />
+               </font>
+            </Label>
+            <Label fx:id="lblDayNumber" alignment="CENTER" layoutX="0.0" layoutY="35.0" prefHeight="28.0" prefWidth="71.0" styleClass="date-day-label" text="15" textAlignment="CENTER" textFill="WHITE">
+               <font>
+                  <Font name="Alatsi Regular" size="24.0" />
+               </font>
+            </Label>
+         </children>
+      </Pane>
+      
+      <!-- Tournament Information Labels -->
+      <Label fx:id="lblTournamentTitle" layoutX="95.0" layoutY="18.0" styleClass="tournament-title-label" text="Torneo de Ajedrez Regional" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="14.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblConcejo" layoutX="95.0" layoutY="35.0" styleClass="tournament-detail-label" text="Gijón" textFill="#CCCCCC">
+         <font>
+            <Font name="Alatsi Regular" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblProvincia" layoutX="95.0" layoutY="50.0" styleClass="tournament-detail-label" text="Asturias" textFill="#CCCCCC">
+         <font>
+            <Font name="Alatsi Regular" size="12.0" />
+         </font>
+      </Label>
+      <Label fx:id="lblLocal" layoutX="95.0" layoutY="65.0" onMouseClicked="#localLinkAction" styleClass="tournament-link-label" text="Centro Cultural" textFill="#8389de">
+         <font>
+            <Font name="Alatsi Regular" size="12.0" />
+         </font>
+      </Label>
+      
+      <!-- Close Button -->
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="444.0" layoutY="27.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="18.0" />
+         </font>
+         <graphic>
+            <ImageView fitHeight="16.0" fitWidth="25.0" preserveRatio="true">
+               <image>
+                  <Image url="@img-white/close_18dp_white.png" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+   </children>
+</fx:root>

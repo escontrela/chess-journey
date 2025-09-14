@@ -9,6 +9,7 @@ import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.controls.MessagePanelController;
+import com.davidp.chessjourney.application.ui.controls.DateMessagePanelController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
@@ -16,6 +17,7 @@ import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.GetRandomQuoteUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.GetNextTournamentUseCase;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.domain.Quote;
 import com.davidp.chessjourney.domain.User;
 import com.davidp.chessjourney.domain.Tournament;
@@ -39,6 +41,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * This class is responsible for managing the main scene of the application, the main scene controls
@@ -84,9 +87,7 @@ public class MainSceneController implements ScreenController {
   @FXML private StackPane taskOption_settings;
 
     @FXML
-    private Pane pnlMessages;
-    @FXML
-    private Label lblMainMsg;
+    private DateMessagePanelController dateMessagePanel;
 
     // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
@@ -127,6 +128,7 @@ public class MainSceneController implements ScreenController {
     if (event.getSource() == btLeft || event.getSource() == btRight) {
 
       showInfoPanel(pnlMessage);
+      showInfoPanel(dateMessagePanel);
     }
   }
 
@@ -443,7 +445,6 @@ public class MainSceneController implements ScreenController {
 
           @Override
           public void onCancelButtonClicked() {
-            // Handle Cancel button click - hide the panel
             pnlMessage.setVisible(false);
           }
         });
@@ -522,31 +523,46 @@ public class MainSceneController implements ScreenController {
         Tournament nextTournament = getNextTournamentUseCase.execute();
         
         if (nextTournament != null) {
-          String tournamentText = formatTournamentText(nextTournament);
-          // Apply tournament text with typewriter effect
-          playTypeWriterEffect(tournamentText, lblMainMsg, 0.05);
+          // Populate the date message panel with tournament data
+          dateMessagePanel.setTournamentDate(nextTournament.getInicio());
+          dateMessagePanel.setTournamentTitle(nextTournament.getTorneo());
+          dateMessagePanel.setConcejo(nextTournament.getConcejo());
+          dateMessagePanel.setProvincia(nextTournament.getProvincia());
+          dateMessagePanel.setLocal(nextTournament.getLocal());
+          
+          // Set up the action listener for the close button
+          dateMessagePanel.setDateMessagePanelActionListener(new DateMessagePanelController.DateMessagePanelActionListener() {
+            @Override
+            public void onCloseButtonClicked() {
+              dateMessagePanel.setVisible(false);
+            }
+            
+            @Override
+            public void onLocalLinkClicked() {
+              // Handle local link click - could open venue details or map
+              System.out.println("Local link clicked: " + nextTournament.getLocal());
+            }
+          });
+
+            JavaFXAnimationUtil.animationBuilder()
+                    .duration(Duration.seconds(0.5))
+                    .onFinished(
+                            () -> {
+                                // Show the panel
+                                dateMessagePanel.setVisible(true);
+                            })
+                    .fadeIn(dateMessagePanel)
+                    .buildAndPlay();
+
+
         } else {
-          lblMainMsg.setText(""); // Hide if no tournament
+          dateMessagePanel.setVisible(false); // Hide if no tournament
         }
       } catch (Exception e) {
         System.err.println("Error loading next tournament: " + e.getMessage());
-        lblMainMsg.setText(""); // Hide on error
+        dateMessagePanel.setVisible(false); // Hide on error
       }
     });
-  }
-
-  private String formatTournamentText(Tournament tournament) {
-    if (tournament == null) return "";
-    
-    String formattedDate = tournament.getInicio().format(
-        java.time.format.DateTimeFormatter.ofPattern("d 'de' MMMM", 
-        java.util.Locale.forLanguageTag("es-ES"))
-    );
-    
-    return String.format("Próximo torneo: %s - %s (%s)", 
-        tournament.getTorneo(), 
-        formattedDate,
-        tournament.getConcejo());
   }
 
   private void moveMainWindowsSetUp() {
@@ -689,31 +705,9 @@ public class MainSceneController implements ScreenController {
     timeline.play();
   }
 
-  private void playTypeWriterEffect(String text, Label labelNode, double charInterval) {
-
-    labelNode.setText("");
-    if (text == null || text.isEmpty()) return;
-
-    StringBuilder currentText = new StringBuilder();
-
-    javafx.animation.Timeline timeline = new javafx.animation.Timeline();
-    for (int i = 0; i < text.length(); i++) {
-      final int index = i;
-      javafx.animation.KeyFrame keyFrame =
-          new javafx.animation.KeyFrame(
-              javafx.util.Duration.seconds(index * charInterval),
-              e -> {
-                currentText.append(text.charAt(index));
-                labelNode.setText(currentText.toString());
-              });
-      timeline.getKeyFrames().add(keyFrame);
-    }
-    timeline.play();
-  }
 
     private static void setToFront(ScreenController screenController) {
 
-        // Asegurar que el nodo esté en mainPane y llevarlo al frente
         Platform.runLater(() -> {
 
             Pane tacticRoot = screenController.getRootPane();
