@@ -253,7 +253,7 @@
 
 /* Start: Date Message Panel Styles */
 .date-square-panel {
-    -fx-background-color: #303040; /* Same color as button-gray */
+    -fx-background-color: #2C2C2C; /* Same color as button-gray */
     -fx-background-radius: 8;
     -fx-border-radius: 8;
     -fx-border-color: #3a3a3a;
@@ -287,7 +287,7 @@
 .tournament-link-label {
     -fx-font-size: 12px;
     -fx-font-weight: normal;
-    -fx-text-fill: #8389de;
+    -fx-text-fill: #686b75;
     -fx-cursor: hand;
 }
 

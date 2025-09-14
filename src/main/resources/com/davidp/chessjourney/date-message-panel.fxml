@@ -48,7 +48,7 @@
       </Label>
       
       <!-- Close Button -->
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="445.0" layoutY="19.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="444.0" layoutY="27.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="39.0" prefWidth="41.0" styleClass="button-regular" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>

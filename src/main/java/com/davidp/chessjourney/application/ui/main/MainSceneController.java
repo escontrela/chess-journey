@@ -17,6 +17,7 @@ import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.usecases.GetRandomQuoteUseCase;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
 import com.davidp.chessjourney.application.usecases.GetNextTournamentUseCase;
+import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.domain.Quote;
 import com.davidp.chessjourney.domain.User;
 import com.davidp.chessjourney.domain.Tournament;
@@ -40,6 +41,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * This class is responsible for managing the main scene of the application, the main scene controls
@@ -126,6 +128,7 @@ public class MainSceneController implements ScreenController {
     if (event.getSource() == btLeft || event.getSource() == btRight) {
 
       showInfoPanel(pnlMessage);
+      showInfoPanel(dateMessagePanel);
     }
   }
 
@@ -442,7 +445,6 @@ public class MainSceneController implements ScreenController {
 
           @Override
           public void onCancelButtonClicked() {
-            // Handle Cancel button click - hide the panel
             pnlMessage.setVisible(false);
           }
         });
@@ -541,9 +543,18 @@ public class MainSceneController implements ScreenController {
               System.out.println("Local link clicked: " + nextTournament.getLocal());
             }
           });
-          
-          // Show the panel
-          dateMessagePanel.setVisible(true);
+
+            JavaFXAnimationUtil.animationBuilder()
+                    .duration(Duration.seconds(0.5))
+                    .onFinished(
+                            () -> {
+                                // Show the panel
+                                dateMessagePanel.setVisible(true);
+                            })
+                    .fadeIn(dateMessagePanel)
+                    .buildAndPlay();
+
+
         } else {
           dateMessagePanel.setVisible(false); // Hide if no tournament
         }
@@ -694,31 +705,9 @@ public class MainSceneController implements ScreenController {
     timeline.play();
   }
 
-  private void playTypeWriterEffect(String text, Label labelNode, double charInterval) {
-
-    labelNode.setText("");
-    if (text == null || text.isEmpty()) return;
-
-    StringBuilder currentText = new StringBuilder();
-
-    javafx.animation.Timeline timeline = new javafx.animation.Timeline();
-    for (int i = 0; i < text.length(); i++) {
-      final int index = i;
-      javafx.animation.KeyFrame keyFrame =
-          new javafx.animation.KeyFrame(
-              javafx.util.Duration.seconds(index * charInterval),
-              e -> {
-                currentText.append(text.charAt(index));
-                labelNode.setText(currentText.toString());
-              });
-      timeline.getKeyFrames().add(keyFrame);
-    }
-    timeline.play();
-  }
 
     private static void setToFront(ScreenController screenController) {
 
-        // Asegurar que el nodo esté en mainPane y llevarlo al frente
         Platform.runLater(() -> {
 
             Pane tacticRoot = screenController.getRootPane();
