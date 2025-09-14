@@ -246,7 +246,7 @@
             </ImageView>
          </graphic>
       </Button>
-      <MessagePanelController fx:id="pnlMessage" layoutX="752.0" layoutY="134.0" />
+      <MessagePanelController fx:id="pnlMessage" layoutX="751.0" layoutY="720.0" visible="false" />
       <ImageView fx:id="imgLogo" fitHeight="125.0" fitWidth="189.0" layoutX="34.0" layoutY="11.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@logo/chess-journey-logo-modern.png" />

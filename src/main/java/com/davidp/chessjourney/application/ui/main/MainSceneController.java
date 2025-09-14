@@ -448,6 +448,16 @@ public class MainSceneController implements ScreenController {
             pnlMessage.setVisible(false);
           }
         });
+
+      JavaFXAnimationUtil.animationBuilder()
+              .duration(Duration.seconds(0.5))
+              .onFinished(
+                      () -> {
+                          // Show the panel
+                          pnlMessage.setVisible(true);
+                      })
+              .fadeIn(pnlMessage)
+              .buildAndPlay();
   }
 
   private void initializeTaskBarBehaviour() {
