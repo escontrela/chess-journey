@@ -5,19 +5,18 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-
-import java.util.Arrays;
-import java.util.List;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Polygon;
+import javafx.util.Duration;
 
 import static javafx.application.Platform.runLater;
 
@@ -33,34 +32,28 @@ public class ExerciseResultViewController implements ScreenController {
     private Button btOk;
 
     @FXML
-    private ImageView imgNotice;
-
-    @FXML
     private ImageView imgOk;
-
-    @FXML
-    private ImageView imgStar1;
-
-    @FXML
-    private ImageView imgStar2;
-
-    @FXML
-    private ImageView imgStar3;
-
-    @FXML
-    private ImageView imgStar4;
-
-    @FXML
-    private ImageView imgStar5;
-
-    @FXML
-    private ImageView imgStar6;
 
     @FXML
     private Label lblPercent;
 
     @FXML
+    private Label lblPercentageText;
+
+    @FXML
     private Pane rootPane;
+
+    @FXML
+    private Pane percentageSquarePane;
+
+    @FXML
+    private Pane progressBarContainer;
+
+    @FXML
+    private Pane progressBarBackground;
+
+    @FXML
+    private Polygon progressBarFill;
 
     @FXML
     void keyPressed(KeyEvent event) {
@@ -85,15 +78,14 @@ public class ExerciseResultViewController implements ScreenController {
             return;
         }
 
-
         lblPercent.setText("...");
+        progressBarFill.setOpacity(0.0);
 
         if (inputData.isLayoutInfoValid()) {
-
-                setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+            setLayout(inputData.getLayoutX(), inputData.getLayoutY());
         }
+        
         this.exerciseResultViewInputScreenData = (ExerciseResultViewInputScreenData) inputData;
-        lblPercent.setText(this.exerciseResultViewInputScreenData.getPercentage() + " %!");
         showStarsProgressively(this.exerciseResultViewInputScreenData.getPercentage());
     }
 
@@ -189,26 +181,54 @@ public class ExerciseResultViewController implements ScreenController {
     }
 
     /**
-     * Show stars progressively based on the percentage
-     * @param percent percentage of stars to show
+     * Show progress bar progressively based on the percentage
+     * @param percent percentage of success to show
      */
     private void showStarsProgressively(double percent) {
-
-        int starsToShow = (int) Math.round((percent / 100.0) * 6);
-        List<ImageView> stars = Arrays.asList(imgStar1, imgStar2, imgStar3, imgStar4, imgStar5, imgStar6);
-        stars.forEach(star -> star.setImage(new Image("com/davidp/chessjourney/img-gray/stars_48dp_gray.png")));
-
-        // Show stars progressively
-        for (int i = 0; i < starsToShow; i++) {
-            int starIndex = i;
-            JavaFXGameTimerUtil.runLoop(
-                    () -> {
-                        stars.get(starIndex).setImage(new Image("com/davidp/chessjourney/img-gray/stars_48dp_purple.png"));
-                        runLater(() -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
-                    },
-                    Duration.millis(400 * (i + 1))
-
-            );
-        }
+        
+        // Reset progress bar
+        progressBarFill.setOpacity(0.0);
+        progressBarFill.getPoints().clear();
+        
+        // Create rectangular progress bar shape (initially empty)
+        double barWidth = 316.0; // Total width minus margin
+        double barHeight = 31.0; // Total height minus margin
+        double fillWidth = (percent / 100.0) * barWidth;
+        
+        // Define the initial empty rectangle
+        progressBarFill.getPoints().addAll(new Double[]{
+            0.0, 0.0,
+            0.0, 0.0,
+            0.0, barHeight,
+            0.0, barHeight
+        });
+        
+        // Make progress bar visible
+        progressBarFill.setOpacity(1.0);
+        
+        // Animate the progress bar growth
+        Timeline progressAnimation = new Timeline();
+        progressAnimation.getKeyFrames().add(
+            new KeyFrame(Duration.millis(1500), e -> {
+                // Update the polygon to show full progress
+                progressBarFill.getPoints().clear();
+                progressBarFill.getPoints().addAll(new Double[]{
+                    0.0, 0.0,
+                    fillWidth, 0.0,
+                    fillWidth, barHeight,
+                    0.0, barHeight
+                });
+            })
+        );
+        
+        // After progress bar animation, show percentage and play sound
+        progressAnimation.setOnFinished(e -> {
+            runLater(() -> {
+                lblPercent.setText(String.format("%.0f%%", percent));
+                soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE);
+            });
+        });
+        
+        progressAnimation.play();
     }
 }
