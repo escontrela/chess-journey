@@ -78,8 +78,13 @@ public class ExerciseResultViewController implements ScreenController {
             return;
         }
 
-        lblPercent.setText("...");
+        lblPercent.setText("?");
         progressBarFill.setOpacity(0.0);
+
+        // Ocultar y desactivar el botón Ok mientras se ejecuta la animación
+        btOk.setVisible(false);
+        btOk.setDisable(true);
+        btOk.setOpacity(0.0);
 
         if (inputData.isLayoutInfoValid()) {
             setLayout(inputData.getLayoutX(), inputData.getLayoutY());
@@ -185,67 +190,103 @@ public class ExerciseResultViewController implements ScreenController {
 
     }
 
-    /**
-     * Show progress bar progressively based on the percentage
-     * @param percent percentage of success to show
-     */
     private void showProgressBarProgressively(double percent) {
-        
         // Reset progress bar
         progressBarFill.setOpacity(0.0);
         progressBarFill.getPoints().clear();
-        
-        // Create rectangular progress bar shape dimensions (with inner margin)
-        double barWidth = 312.0; // Total width minus margins (320 - 8 for inner margin)
-        double barHeight = 27.0; // Total height minus margins (35 - 8 for inner margin)
+
+        double barWidth = 312.0;
+        double barHeight = 27.0;
         double targetFillWidth = (percent / 100.0) * barWidth;
-        
-        // Start with empty rectangle
+
+        double cornerRadius = 8.0;
+        double arcSize = cornerRadius * 2.0;
+
+        // Start empty
         progressBarFill.getPoints().addAll(new Double[]{
-            0.0, 0.0,
-            0.0, 0.0,
-            0.0, barHeight,
-            0.0, barHeight
+                0.0, 0.0,
+                0.0, 0.0,
+                0.0, barHeight,
+                0.0, barHeight
         });
-        
-        // Make progress bar visible
+
+        // Ensure rounded clip
+        javafx.scene.shape.Rectangle clip;
+        if (progressBarFill.getClip() instanceof javafx.scene.shape.Rectangle) {
+            clip = (javafx.scene.shape.Rectangle) progressBarFill.getClip();
+        } else {
+            clip = new javafx.scene.shape.Rectangle(0, 0, 0, barHeight);
+            clip.setArcWidth(arcSize);
+            clip.setArcHeight(arcSize);
+            progressBarFill.setClip(clip);
+        }
+
+        // Gradiente izquierda->derecha: blanco -> color final (#3B82F6)
+        javafx.scene.paint.LinearGradient gradient = new javafx.scene.paint.LinearGradient(
+                0, 0, 1, 0, true,
+                javafx.scene.paint.CycleMethod.NO_CYCLE,
+                java.util.Arrays.asList(
+                        new javafx.scene.paint.Stop(0.0, javafx.scene.paint.Color.web("#FFFFFF")),
+                        new javafx.scene.paint.Stop(1.0, javafx.scene.paint.Color.web("#3B82F6"))
+                )
+        );
+        progressBarFill.setFill(gradient);
+
+        // Start blinking label (show "?" blinking until finished)
+        lblPercent.setText("?");
+        lblPercent.setVisible(true);
+        Timeline blinkTimeline = new Timeline(new KeyFrame(Duration.millis(500), e -> lblPercent.setVisible(!lblPercent.isVisible())));
+        blinkTimeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
+        blinkTimeline.play();
+
         progressBarFill.setOpacity(1.0);
-        
-        // Create smooth progress animation
+
         Timeline progressAnimation = new Timeline();
-        
-        // Number of animation steps for smooth progression
+
         int animationSteps = 30;
-        double stepDuration = 50; // milliseconds per step
-        
+        double stepDuration = 100; // <- aumentado a 100 ms por paso para una animación más lenta
+
         for (int i = 1; i <= animationSteps; i++) {
             final int step = i;
             double currentFillWidth = (targetFillWidth / animationSteps) * step;
-            
+
             KeyFrame keyFrame = new KeyFrame(
-                Duration.millis(stepDuration * step),
-                e -> {
-                    // Update the polygon to show current progress
-                    progressBarFill.getPoints().clear();
-                    progressBarFill.getPoints().addAll(new Double[]{
-                        0.0, 0.0,
-                        currentFillWidth, 0.0,
-                        currentFillWidth, barHeight,
-                        0.0, barHeight
-                    });
-                }
+                    Duration.millis(stepDuration * step),
+                    e -> {
+                        // Update polygon points (rectangular)
+                        progressBarFill.getPoints().setAll(
+                                0.0, 0.0,
+                                currentFillWidth, 0.0,
+                                currentFillWidth, barHeight,
+                                0.0, barHeight
+                        );
+                        // Update rounded clip so visible area has rounded corners
+                        clip.setWidth(Math.max(1e-6, currentFillWidth));
+                        clip.setHeight(barHeight);
+                    }
             );
             progressAnimation.getKeyFrames().add(keyFrame);
         }
-        
-        // After progress bar animation, show percentage and play sound
+
         progressAnimation.setOnFinished(e -> {
+            // Stop blinking and ensure label visible, then set final text and play sound
+            blinkTimeline.stop();
+            lblPercent.setVisible(true);
             runLater(() -> {
                 lblPercent.setText(String.format("%.0f%%", percent));
                 soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE);
+                // Habilitar y mostrar el botón OK con un fade-in
+                btOk.setDisable(false);
+                btOk.setVisible(true);
+                JavaFXAnimationUtil.animationBuilder()
+                        .duration(Duration.seconds(0.25))
+                        .fadeIn(btOk)
+                        .buildAndPlay();
             });
         });
-        
+
         progressAnimation.play();
     }
+
+
 }

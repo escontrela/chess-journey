@@ -8,17 +8,12 @@
 <?import javafx.scene.shape.Polygon?>
 <?import javafx.scene.text.Font?>
 
-<Pane fx:id="rootPane" prefHeight="95.0" prefWidth="502.0" styleClass="note-panel" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.ExerciseResultViewController">
+<Pane fx:id="rootPane" prefHeight="95.0" prefWidth="502.0" styleClass="note-panel-shadow-strong" stylesheets="@custom-styles.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.board.ExerciseResultViewController">
    <children>
       <!-- Percentage Square Panel (similar to date square) -->
       <Pane fx:id="percentageSquarePane" layoutX="12.0" layoutY="12.0" prefHeight="71.0" prefWidth="71.0" styleClass="date-square-panel" stylesheets="@custom-styles.css">
          <children>
-            <Label fx:id="lblPercentageText" alignment="CENTER" layoutX="0.0" layoutY="15.0" prefHeight="16.0" prefWidth="71.0" styleClass="date-month-label" text="Success" textAlignment="CENTER" textFill="#CCCCCC">
-               <font>
-                  <Font name="Alatsi Regular" size="10.0" />
-               </font>
-            </Label>
-            <Label fx:id="lblPercent" alignment="CENTER" layoutX="0.0" layoutY="35.0" prefHeight="28.0" prefWidth="71.0" styleClass="date-day-label" text="..." textAlignment="CENTER" textFill="WHITE">
+            <Label fx:id="lblPercent" alignment="CENTER" layoutY="20.0" prefHeight="28.0" prefWidth="71.0" styleClass="date-day-label" text="?" textAlignment="CENTER" textFill="WHITE">
                <font>
                   <Font name="Alatsi Regular" size="18.0" />
                </font>
