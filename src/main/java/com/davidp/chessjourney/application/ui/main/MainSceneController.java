@@ -9,6 +9,7 @@ import com.davidp.chessjourney.application.factories.UseCaseFactory;
 import com.davidp.chessjourney.application.service.UserService;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.controls.MessagePanelController;
+import com.davidp.chessjourney.application.ui.controls.DateMessagePanelController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.settings.SettingsViewInputScreenData;
 import com.davidp.chessjourney.application.ui.user.UserStatsInputScreenData;
@@ -84,9 +85,7 @@ public class MainSceneController implements ScreenController {
   @FXML private StackPane taskOption_settings;
 
     @FXML
-    private Pane pnlMessages;
-    @FXML
-    private Label lblMainMsg;
+    private DateMessagePanelController dateMessagePanel;
 
     // Variables para guardar la posición (offset) dentro de la ventana al pulsar el ratón
   private double xOffset = 0;
@@ -522,31 +521,37 @@ public class MainSceneController implements ScreenController {
         Tournament nextTournament = getNextTournamentUseCase.execute();
         
         if (nextTournament != null) {
-          String tournamentText = formatTournamentText(nextTournament);
-          // Apply tournament text with typewriter effect
-          playTypeWriterEffect(tournamentText, lblMainMsg, 0.05);
+          // Populate the date message panel with tournament data
+          dateMessagePanel.setTournamentDate(nextTournament.getInicio());
+          dateMessagePanel.setTournamentTitle(nextTournament.getTorneo());
+          dateMessagePanel.setConcejo(nextTournament.getConcejo());
+          dateMessagePanel.setProvincia(nextTournament.getProvincia());
+          dateMessagePanel.setLocal(nextTournament.getLocal());
+          
+          // Set up the action listener for the close button
+          dateMessagePanel.setDateMessagePanelActionListener(new DateMessagePanelController.DateMessagePanelActionListener() {
+            @Override
+            public void onCloseButtonClicked() {
+              dateMessagePanel.setVisible(false);
+            }
+            
+            @Override
+            public void onLocalLinkClicked() {
+              // Handle local link click - could open venue details or map
+              System.out.println("Local link clicked: " + nextTournament.getLocal());
+            }
+          });
+          
+          // Show the panel
+          dateMessagePanel.setVisible(true);
         } else {
-          lblMainMsg.setText(""); // Hide if no tournament
+          dateMessagePanel.setVisible(false); // Hide if no tournament
         }
       } catch (Exception e) {
         System.err.println("Error loading next tournament: " + e.getMessage());
-        lblMainMsg.setText(""); // Hide on error
+        dateMessagePanel.setVisible(false); // Hide on error
       }
     });
-  }
-
-  private String formatTournamentText(Tournament tournament) {
-    if (tournament == null) return "";
-    
-    String formattedDate = tournament.getInicio().format(
-        java.time.format.DateTimeFormatter.ofPattern("d 'de' MMMM", 
-        java.util.Locale.forLanguageTag("es-ES"))
-    );
-    
-    return String.format("Próximo torneo: %s - %s (%s)", 
-        tournament.getTorneo(), 
-        formattedDate,
-        tournament.getConcejo());
   }
 
   private void moveMainWindowsSetUp() {
