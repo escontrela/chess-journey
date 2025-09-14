@@ -244,7 +244,7 @@ public class ExerciseResultViewController implements ScreenController {
         Timeline progressAnimation = new Timeline();
 
         int animationSteps = 30;
-        double stepDuration = 100; // <- aumentado a 100 ms por paso para una animación más lenta
+        double stepDuration = 70; // <- aumentado a 100 ms por paso para una animación más lenta
 
         for (int i = 1; i <= animationSteps; i++) {
             final int step = i;
