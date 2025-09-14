@@ -235,7 +235,20 @@
     -fx-alignment: center-left;    /* Contenido alineado a la izquierda */
 }
 
-
+.note-panel-shadow-strong {
+    -fx-background-color: #1C1C1C;
+    -fx-background-radius: 12;
+    /* capa exterior transparente + borde interior más blanco */
+    -fx-border-color: transparent, rgba(255,255,255,0.22);
+    -fx-border-width: 0, 1;          /* solo la segunda capa tiene ancho */
+    -fx-border-insets: 0, 2;         /* desplaza la segunda capa hacia el interior */
+    -fx-border-radius: 12, 10;
+    -fx-padding: 12;
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.50), 22, 0.35, 0, 8);
+    -fx-background-insets: 0, 2;
+}
 
 /* Texto de la nota */
 .note-label {
@@ -445,6 +458,12 @@
 
 
 /* end: system design - text */
+
+/* start: progress bar gradient */
+.progress-bar-gradient {
+    -fx-fill: linear-gradient(to bottom, #3a86ff, #6ea8ff); /* mismo degradado que text-blue-gradient-big */
+}
+/* end: progress bar gradient */
 
 /******************************************/
 /** START: POPUP WINDOWS SYSTEM DESIGN   **/

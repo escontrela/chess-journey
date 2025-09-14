@@ -5,19 +5,18 @@ import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.util.JavaFXAnimationUtil;
 import com.davidp.chessjourney.application.util.JavaFXGameTimerUtil;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.image.Image;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Pane;
-import javafx.util.Duration;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
-
-import java.util.Arrays;
-import java.util.List;
+import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
+import javafx.scene.shape.Polygon;
+import javafx.util.Duration;
 
 import static javafx.application.Platform.runLater;
 
@@ -33,34 +32,28 @@ public class ExerciseResultViewController implements ScreenController {
     private Button btOk;
 
     @FXML
-    private ImageView imgNotice;
-
-    @FXML
     private ImageView imgOk;
-
-    @FXML
-    private ImageView imgStar1;
-
-    @FXML
-    private ImageView imgStar2;
-
-    @FXML
-    private ImageView imgStar3;
-
-    @FXML
-    private ImageView imgStar4;
-
-    @FXML
-    private ImageView imgStar5;
-
-    @FXML
-    private ImageView imgStar6;
 
     @FXML
     private Label lblPercent;
 
     @FXML
+    private Label lblPercentageText;
+
+    @FXML
     private Pane rootPane;
+
+    @FXML
+    private Pane percentageSquarePane;
+
+    @FXML
+    private Pane progressBarContainer;
+
+    @FXML
+    private Pane progressBarBackground;
+
+    @FXML
+    private Polygon progressBarFill;
 
     @FXML
     void keyPressed(KeyEvent event) {
@@ -85,16 +78,25 @@ public class ExerciseResultViewController implements ScreenController {
             return;
         }
 
+        lblPercent.setText("?");
+        progressBarFill.setOpacity(0.0);
 
-        lblPercent.setText("...");
+        // Ocultar y desactivar el botón Ok mientras se ejecuta la animación
+        btOk.setVisible(false);
+        btOk.setDisable(true);
+        btOk.setOpacity(0.0);
 
         if (inputData.isLayoutInfoValid()) {
-
-                setLayout(inputData.getLayoutX(), inputData.getLayoutY());
+            setLayout(inputData.getLayoutX(), inputData.getLayoutY());
         }
+        
         this.exerciseResultViewInputScreenData = (ExerciseResultViewInputScreenData) inputData;
-        lblPercent.setText(this.exerciseResultViewInputScreenData.getPercentage() + " %!");
-        showStarsProgressively(this.exerciseResultViewInputScreenData.getPercentage());
+        
+        // Add a small delay before starting the animation
+        Timeline startDelay = new Timeline(new KeyFrame(Duration.millis(300), e -> {
+            showProgressBarProgressively(this.exerciseResultViewInputScreenData.getPercentage());
+        }));
+        startDelay.play();
     }
 
     @Override
@@ -188,27 +190,103 @@ public class ExerciseResultViewController implements ScreenController {
 
     }
 
-    /**
-     * Show stars progressively based on the percentage
-     * @param percent percentage of stars to show
-     */
-    private void showStarsProgressively(double percent) {
+    private void showProgressBarProgressively(double percent) {
+        // Reset progress bar
+        progressBarFill.setOpacity(0.0);
+        progressBarFill.getPoints().clear();
 
-        int starsToShow = (int) Math.round((percent / 100.0) * 6);
-        List<ImageView> stars = Arrays.asList(imgStar1, imgStar2, imgStar3, imgStar4, imgStar5, imgStar6);
-        stars.forEach(star -> star.setImage(new Image("com/davidp/chessjourney/img-gray/stars_48dp_gray.png")));
+        double barWidth = 312.0;
+        double barHeight = 27.0;
+        double targetFillWidth = (percent / 100.0) * barWidth;
 
-        // Show stars progressively
-        for (int i = 0; i < starsToShow; i++) {
-            int starIndex = i;
-            JavaFXGameTimerUtil.runLoop(
-                    () -> {
-                        stars.get(starIndex).setImage(new Image("com/davidp/chessjourney/img-gray/stars_48dp_purple.png"));
-                        runLater(() -> soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE));
-                    },
-                    Duration.millis(400 * (i + 1))
+        double cornerRadius = 8.0;
+        double arcSize = cornerRadius * 2.0;
 
-            );
+        // Start empty
+        progressBarFill.getPoints().addAll(new Double[]{
+                0.0, 0.0,
+                0.0, 0.0,
+                0.0, barHeight,
+                0.0, barHeight
+        });
+
+        // Ensure rounded clip
+        javafx.scene.shape.Rectangle clip;
+        if (progressBarFill.getClip() instanceof javafx.scene.shape.Rectangle) {
+            clip = (javafx.scene.shape.Rectangle) progressBarFill.getClip();
+        } else {
+            clip = new javafx.scene.shape.Rectangle(0, 0, 0, barHeight);
+            clip.setArcWidth(arcSize);
+            clip.setArcHeight(arcSize);
+            progressBarFill.setClip(clip);
         }
+
+        // Gradiente izquierda->derecha: blanco -> color final (#3B82F6)
+        javafx.scene.paint.LinearGradient gradient = new javafx.scene.paint.LinearGradient(
+                0, 0, 1, 0, true,
+                javafx.scene.paint.CycleMethod.NO_CYCLE,
+                java.util.Arrays.asList(
+                        new javafx.scene.paint.Stop(0.0, javafx.scene.paint.Color.web("#FFFFFF")),
+                        new javafx.scene.paint.Stop(1.0, javafx.scene.paint.Color.web("#3B82F6"))
+                )
+        );
+        progressBarFill.setFill(gradient);
+
+        // Start blinking label (show "?" blinking until finished)
+        lblPercent.setText("?");
+        lblPercent.setVisible(true);
+        Timeline blinkTimeline = new Timeline(new KeyFrame(Duration.millis(500), e -> lblPercent.setVisible(!lblPercent.isVisible())));
+        blinkTimeline.setCycleCount(javafx.animation.Animation.INDEFINITE);
+        blinkTimeline.play();
+
+        progressBarFill.setOpacity(1.0);
+
+        Timeline progressAnimation = new Timeline();
+
+        int animationSteps = 30;
+        double stepDuration = 70; // <- aumentado a 100 ms por paso para una animación más lenta
+
+        for (int i = 1; i <= animationSteps; i++) {
+            final int step = i;
+            double currentFillWidth = (targetFillWidth / animationSteps) * step;
+
+            KeyFrame keyFrame = new KeyFrame(
+                    Duration.millis(stepDuration * step),
+                    e -> {
+                        // Update polygon points (rectangular)
+                        progressBarFill.getPoints().setAll(
+                                0.0, 0.0,
+                                currentFillWidth, 0.0,
+                                currentFillWidth, barHeight,
+                                0.0, barHeight
+                        );
+                        // Update rounded clip so visible area has rounded corners
+                        clip.setWidth(Math.max(1e-6, currentFillWidth));
+                        clip.setHeight(barHeight);
+                    }
+            );
+            progressAnimation.getKeyFrames().add(keyFrame);
+        }
+
+        progressAnimation.setOnFinished(e -> {
+            // Stop blinking and ensure label visible, then set final text and play sound
+            blinkTimeline.stop();
+            lblPercent.setVisible(true);
+            runLater(() -> {
+                lblPercent.setText(String.format("%.0f%%", percent));
+                soundService.playSound(SoundServiceFactory.SoundType.SUCCEED_EXERCISE);
+                // Habilitar y mostrar el botón OK con un fade-in
+                btOk.setDisable(false);
+                btOk.setVisible(true);
+                JavaFXAnimationUtil.animationBuilder()
+                        .duration(Duration.seconds(0.25))
+                        .fadeIn(btOk)
+                        .buildAndPlay();
+            });
+        });
+
+        progressAnimation.play();
     }
+
+
 }
