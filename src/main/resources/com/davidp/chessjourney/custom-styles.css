@@ -446,6 +446,12 @@
 
 /* end: system design - text */
 
+/* start: progress bar gradient */
+.progress-bar-gradient {
+    -fx-fill: linear-gradient(to bottom, #3a86ff, #6ea8ff); /* mismo degradado que text-blue-gradient-big */
+}
+/* end: progress bar gradient */
+
 /******************************************/
 /** START: POPUP WINDOWS SYSTEM DESIGN   **/
 /******************************************/

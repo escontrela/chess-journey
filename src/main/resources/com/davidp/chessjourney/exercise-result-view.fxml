@@ -31,8 +31,8 @@
          <children>
             <!-- Background for progress bar -->
             <Pane fx:id="progressBarBackground" prefHeight="35.0" prefWidth="320.0" styleClass="date-square-panel" />
-            <!-- Progress bar fill (Polygon) with inner margin -->
-            <Polygon fx:id="progressBarFill" fill="#3A86FF" layoutX="4.0" layoutY="4.0" opacity="0.0" />
+            <!-- Progress bar fill (Polygon) with inner margin and gradient -->
+            <Polygon fx:id="progressBarFill" layoutX="4.0" layoutY="4.0" opacity="0.0" styleClass="progress-bar-gradient" />
          </children>
       </Pane>
       
