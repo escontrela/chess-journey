@@ -30,12 +30,9 @@
       <Pane fx:id="progressBarContainer" layoutX="95.0" layoutY="30.0" prefHeight="35.0" prefWidth="320.0">
          <children>
             <!-- Background for progress bar -->
-            <Pane fx:id="progressBarBackground" prefHeight="35.0" prefWidth="320.0" styleClass="date-square-panel">
-            </Pane>
-            <!-- Progress bar fill (Polygon) -->
-            <Polygon fx:id="progressBarFill" fill="#3A86FF" layoutX="2.0" layoutY="2.0" opacity="0.0">
-               <!-- Initially empty, will be animated -->
-            </Polygon>
+            <Pane fx:id="progressBarBackground" prefHeight="35.0" prefWidth="320.0" styleClass="date-square-panel" />
+            <!-- Progress bar fill (Polygon) with inner margin -->
+            <Polygon fx:id="progressBarFill" fill="#3A86FF" layoutX="4.0" layoutY="4.0" opacity="0.0" />
          </children>
       </Pane>
       

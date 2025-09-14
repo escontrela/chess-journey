@@ -86,7 +86,12 @@ public class ExerciseResultViewController implements ScreenController {
         }
         
         this.exerciseResultViewInputScreenData = (ExerciseResultViewInputScreenData) inputData;
-        showStarsProgressively(this.exerciseResultViewInputScreenData.getPercentage());
+        
+        // Add a small delay before starting the animation
+        Timeline startDelay = new Timeline(new KeyFrame(Duration.millis(300), e -> {
+            showStarsProgressively(this.exerciseResultViewInputScreenData.getPercentage());
+        }));
+        startDelay.play();
     }
 
     @Override
@@ -190,12 +195,12 @@ public class ExerciseResultViewController implements ScreenController {
         progressBarFill.setOpacity(0.0);
         progressBarFill.getPoints().clear();
         
-        // Create rectangular progress bar shape (initially empty)
-        double barWidth = 316.0; // Total width minus margin
-        double barHeight = 31.0; // Total height minus margin
-        double fillWidth = (percent / 100.0) * barWidth;
+        // Create rectangular progress bar shape dimensions (with inner margin)
+        double barWidth = 312.0; // Total width minus margins (320 - 8 for inner margin)
+        double barHeight = 27.0; // Total height minus margins (35 - 8 for inner margin)
+        double targetFillWidth = (percent / 100.0) * barWidth;
         
-        // Define the initial empty rectangle
+        // Start with empty rectangle
         progressBarFill.getPoints().addAll(new Double[]{
             0.0, 0.0,
             0.0, 0.0,
@@ -206,20 +211,32 @@ public class ExerciseResultViewController implements ScreenController {
         // Make progress bar visible
         progressBarFill.setOpacity(1.0);
         
-        // Animate the progress bar growth
+        // Create smooth progress animation
         Timeline progressAnimation = new Timeline();
-        progressAnimation.getKeyFrames().add(
-            new KeyFrame(Duration.millis(1500), e -> {
-                // Update the polygon to show full progress
-                progressBarFill.getPoints().clear();
-                progressBarFill.getPoints().addAll(new Double[]{
-                    0.0, 0.0,
-                    fillWidth, 0.0,
-                    fillWidth, barHeight,
-                    0.0, barHeight
-                });
-            })
-        );
+        
+        // Number of animation steps for smooth progression
+        int animationSteps = 30;
+        double stepDuration = 50; // milliseconds per step
+        
+        for (int i = 1; i <= animationSteps; i++) {
+            final int step = i;
+            double currentFillWidth = (targetFillWidth / animationSteps) * step;
+            
+            KeyFrame keyFrame = new KeyFrame(
+                Duration.millis(stepDuration * step),
+                e -> {
+                    // Update the polygon to show current progress
+                    progressBarFill.getPoints().clear();
+                    progressBarFill.getPoints().addAll(new Double[]{
+                        0.0, 0.0,
+                        currentFillWidth, 0.0,
+                        currentFillWidth, barHeight,
+                        0.0, barHeight
+                    });
+                }
+            );
+            progressAnimation.getKeyFrames().add(keyFrame);
+        }
         
         // After progress bar animation, show percentage and play sound
         progressAnimation.setOnFinished(e -> {
