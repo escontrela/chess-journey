@@ -143,15 +143,28 @@ public class UserStatsController implements ScreenController {
 
     // 📊 Convertir datos para Chart2DController
     List<Chart2DController.DataPoint2D> chartData = new ArrayList<>();
+    List<String> dateLabels = new ArrayList<>();
     
-    for (int i = 0; i < userStats.size(); i++) {
+    // 📅 Limit to last 10 entries for better visualization
+    int maxEntries = Math.min(10, userStats.size());
+    int startIndex = Math.max(0, userStats.size() - maxEntries);
+    
+    DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
+    
+    for (int i = startIndex; i < userStats.size(); i++) {
       AggregatedStats stat = userStats.get(i);
+      int chartIndex = i - startIndex;
+      
       // Usar índice como X (días) y el valor como Y (porcentaje de éxito)
-      chartData.add(new Chart2DController.DataPoint2D(i, stat.getValue() * 100)); // Convertimos a %
+      chartData.add(new Chart2DController.DataPoint2D(chartIndex, stat.getValue() * 100)); // Convertimos a %
+      
+      // Crear etiqueta de fecha en formato día/mes
+      String dateLabel = stat.getDate().format(formatter);
+      dateLabels.add(dateLabel);
     }
 
-    // 🎯 Establecer los datos en el gráfico
-    chartUserStats.setDataset(chartData);
+    // 🎯 Establecer los datos en el gráfico con etiquetas de fecha
+    chartUserStats.setDataset(chartData, dateLabels);
   }
 
   private void displayUserData(final Long userId) {

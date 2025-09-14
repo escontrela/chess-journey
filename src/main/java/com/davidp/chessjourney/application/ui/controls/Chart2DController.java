@@ -11,6 +11,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import java.io.IOException;
 import java.util.List;
+import java.util.ArrayList;
 
 /**
  * A custom 2D chart control that displays data points in a 2D coordinate system.
@@ -21,6 +22,7 @@ public class Chart2DController extends Pane {
     @FXML private Canvas chartCanvas;
     
     private final ObservableList<DataPoint2D> dataset = FXCollections.observableArrayList();
+    private final List<String> xAxisLabels = new ArrayList<>();
     
     // Chart styling constants matching the app theme
     private static final Color BACKGROUND_COLOR = Color.web("#232232"); // panel-gray background
@@ -81,6 +83,24 @@ public class Chart2DController extends Pane {
     }
     
     /**
+     * Sets the dataset with custom X-axis labels for the chart and redraws it.
+     * @param dataPoints List of data points to display
+     * @param xLabels List of string labels for X-axis (should match dataPoints size)
+     */
+    public void setDataset(List<DataPoint2D> dataPoints, List<String> xLabels) {
+        dataset.clear();
+        xAxisLabels.clear();
+        if (dataPoints != null) {
+            dataset.addAll(dataPoints);
+            calculateDataRange();
+        }
+        if (xLabels != null) {
+            xAxisLabels.addAll(xLabels);
+        }
+        redrawChart();
+    }
+    
+    /**
      * Adds a single data point to the chart.
      * @param x X coordinate
      * @param y Y coordinate
@@ -96,6 +116,7 @@ public class Chart2DController extends Pane {
      */
     public void resetDataset() {
         dataset.clear();
+        xAxisLabels.clear();
         minX = 0; maxX = 100;
         minY = 0; maxY = 100;
         redrawChart();
@@ -237,14 +258,30 @@ public class Chart2DController extends Pane {
         gc.setFill(TEXT_COLOR);
         gc.setFont(Font.font("Alatsi", 12));
         
-        // X axis labels - show day indices as integers
-        int maxXLabels = Math.min(10, dataset.size()); // Limit to 10 labels to avoid crowding
-        if (maxXLabels > 0) {
-            for (int i = 0; i <= maxXLabels; i++) {
-                double x = MARGIN_LEFT + (chartWidth * i / maxXLabels);
-                double value = minX + ((maxX - minX) * i / maxXLabels);
-                String label = String.format("%.0f", value); // Show as integer
-                gc.fillText(label, x - 10, height - MARGIN_BOTTOM + 20);
+        // X axis labels - use custom labels if available, otherwise show day indices as integers
+        if (!xAxisLabels.isEmpty()) {
+            // Show up to 10 labels for better readability
+            int maxLabels = Math.min(10, xAxisLabels.size());
+            int step = Math.max(1, xAxisLabels.size() / maxLabels);
+            
+            for (int i = 0; i < xAxisLabels.size(); i += step) {
+                if (i >= maxLabels) break;
+                double x = MARGIN_LEFT + (chartWidth * i / Math.max(1, xAxisLabels.size() - 1));
+                String label = xAxisLabels.get(i);
+                // Center the label text
+                double textWidth = label.length() * 6; // Approximate character width
+                gc.fillText(label, x - textWidth / 2, height - MARGIN_BOTTOM + 20);
+            }
+        } else {
+            // Fallback to original behavior
+            int maxXLabels = Math.min(10, dataset.size()); // Limit to 10 labels to avoid crowding
+            if (maxXLabels > 0) {
+                for (int i = 0; i <= maxXLabels; i++) {
+                    double x = MARGIN_LEFT + (chartWidth * i / maxXLabels);
+                    double value = minX + ((maxX - minX) * i / maxXLabels);
+                    String label = String.format("%.0f", value); // Show as integer
+                    gc.fillText(label, x - 10, height - MARGIN_BOTTOM + 20);
+                }
             }
         }
         
