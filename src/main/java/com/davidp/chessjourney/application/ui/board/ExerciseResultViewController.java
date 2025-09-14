@@ -89,7 +89,7 @@ public class ExerciseResultViewController implements ScreenController {
         
         // Add a small delay before starting the animation
         Timeline startDelay = new Timeline(new KeyFrame(Duration.millis(300), e -> {
-            showStarsProgressively(this.exerciseResultViewInputScreenData.getPercentage());
+            showProgressBarProgressively(this.exerciseResultViewInputScreenData.getPercentage());
         }));
         startDelay.play();
     }
@@ -189,7 +189,7 @@ public class ExerciseResultViewController implements ScreenController {
      * Show progress bar progressively based on the percentage
      * @param percent percentage of success to show
      */
-    private void showStarsProgressively(double percent) {
+    private void showProgressBarProgressively(double percent) {
         
         // Reset progress bar
         progressBarFill.setOpacity(0.0);
