@@ -1247,8 +1247,8 @@
     );
     -fx-background-radius: 20;
     -fx-border-radius: 20;
-    -fx-border-width: 2;
-    -fx-border-color: linear-gradient(to right, #3b82f6, #8b5cf6);
+    -fx-border-width: 1;
+    -fx-border-color: rgba(255,255,255,0.12);
     -fx-effect: dropshadow(gaussian, rgba(59, 130, 246, 0.3), 15, 0.2, 0, 0);
 }
 

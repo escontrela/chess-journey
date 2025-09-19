@@ -106,7 +106,7 @@ public class MainSceneController implements ScreenController {
   private static final Point DEFEND_GAME_POSITION = new Point(10, 10);
   private static final Point TACTIC_GAME_POSITION = new Point(10, 10);
   private static final Point CHANGE_USER_POSITION = new Point(120, 180);
-  private static final Point USER_STATS_POSITION = new Point(50, 50);
+  private static final Point USER_STATS_POSITION = new Point(10, 10);
   private static final Point USER_SUITES_POSITION = new Point(14, 111);
   private static final Point USER_DATA_POSITION = new Point(14, 111);
 

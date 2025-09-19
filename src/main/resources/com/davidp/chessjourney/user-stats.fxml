@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.davidp.chessjourney.application.ui.controls.Chart2DController?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,12 +8,11 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
-<?import com.davidp.chessjourney.application.ui.controls.Chart2DController?>
 
-<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" styleClass="popup-root-glass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserStatsController">
+<Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1260.0" styleClass="popup-root-glass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserStatsController">
    <children>
       <!-- Close Button -->
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1160.0" layoutY="12.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1220.0" layoutY="2.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
@@ -34,42 +34,37 @@
             <Font size="18.0" />
          </font>
       </Label>
-      <ImageView fitHeight="17.0" fitWidth="21.0" layoutX="33.0" layoutY="100.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@flags/es_gl.png" />
-         </image>
-      </ImageView>
-      <Label fx:id="lblEloPlayer" layoutX="60.0" layoutY="100.0" styleClass="popup-label" text="(1470)">
+      <Label fx:id="lblEloPlayer" layoutX="163.0" layoutY="72.0" styleClass="popup-label" text="(1470)">
          <font>
             <Font size="14.0" />
          </font>
       </Label>
       
       <!-- Chart Section - Much larger, taking most of the width -->
-      <com.davidp.chessjourney.application.ui.controls.Chart2DController fx:id="chartUserStats" layoutX="33.0" layoutY="140.0" prefHeight="440.0" prefWidth="1134.0" />
+      <com.davidp.chessjourney.application.ui.controls.Chart2DController fx:id="chartUserStats" layoutX="33.0" layoutY="140.0" prefHeight="531.0" prefWidth="1191.0" />
       
       <!-- Control Buttons Section - Better organized -->
       <!-- Game Type Controls -->
-      <Label layoutX="33.0" layoutY="600.0" styleClass="score-name" text="Game Type:" />
-      <Button fx:id="btOptionGuess" alignment="BASELINE_CENTER" layoutX="33.0" layoutY="625.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="100.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Guess" textFill="WHITE">
+      <Label layoutX="33.0" layoutY="697.0" styleClass="score-name" text="Game Type:" />
+      <Button fx:id="btOptionGuess" alignment="BASELINE_CENTER" layoutX="32.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="100.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Guess" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="btOptionDefend" alignment="BASELINE_CENTER" layoutX="145.0" layoutY="625.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="100.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Defend" textFill="WHITE">
+      <Button fx:id="btOptionDefend" alignment="BASELINE_CENTER" layoutX="144.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="100.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Defend" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="16.0" />
          </font>
       </Button>
       
       <!-- Difficulty Level Controls -->
-      <Label layoutX="300.0" layoutY="600.0" styleClass="score-name" text="Difficulty:" />
-      <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="300.0" layoutY="625.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Easy" textFill="WHITE">
+      <Label layoutX="300.0" layoutY="697.0" styleClass="score-name" text="Difficulty:" />
+      <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="300.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Easy" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="392.0" layoutY="625.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-gray" stylesheets="@custom-styles.css" text="Medium" textFill="WHITE">
+      <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="392.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Medium" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="16.0" />
          </font>
