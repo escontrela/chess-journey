@@ -41,14 +41,13 @@ public class Chart2DController extends Pane {
     private final List<String> xAxisLabels = new ArrayList<>();
     
     // Chart styling constants matching the app theme
-    // Fondo general transparente
+
     private static final Color BACKGROUND_COLOR = Color.TRANSPARENT;
-    private static final Color GRID_COLOR = Color.web("#404040");
     private static final Color AXIS_COLOR = Color.web("#b3b3b3");
     private static final Color DATA_POINT_COLOR = Color.web("#3b82f6"); // Blue gradient from theme
     private static final Color BAR_BORDER_COLOR = Color.web("#4f46e5"); // Darker blue for contrast
     private static final Color TEXT_COLOR = Color.web("#ffffff");
-    // Área del chart transparente
+
     private static final Color CHART_AREA_COLOR = Color.TRANSPARENT;
 
     // Chart margins and padding
@@ -61,11 +60,12 @@ public class Chart2DController extends Pane {
     private double minX = 0, maxX = 100;
     private double minY = 0, maxY = 100;
     
-    // Animación: progreso 0..1 usado para escalar la altura de las barras
+    // Animation progress
     private final DoubleProperty animationProgress = new SimpleDoubleProperty(1.0);
     private Timeline showTimeline;
 
     public Chart2DController() {
+
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/com/davidp/chessjourney/chart-2d.fxml"));
         fxmlLoader.setRoot(this);
         fxmlLoader.setController(this);
@@ -99,8 +99,11 @@ public class Chart2DController extends Pane {
      * @param dataPoints List of data points to display
      */
     public void setDataset(List<DataPoint2D> dataPoints) {
+
         dataset.clear();
+
         if (dataPoints != null) {
+
             dataset.addAll(dataPoints);
             calculateDataRange();
         }
@@ -113,13 +116,16 @@ public class Chart2DController extends Pane {
      * @param xLabels List of string labels for X-axis (should match dataPoints size)
      */
     public void setDataset(List<DataPoint2D> dataPoints, List<String> xLabels) {
+
         dataset.clear();
         xAxisLabels.clear();
         if (dataPoints != null) {
+
             dataset.addAll(dataPoints);
             calculateDataRange();
         }
         if (xLabels != null) {
+
             xAxisLabels.addAll(xLabels);
         }
         playShowAnimation();
@@ -131,6 +137,7 @@ public class Chart2DController extends Pane {
      * @param y Y coordinate
      */
     public void addDataPoint(double x, double y) {
+
         dataset.add(new DataPoint2D(x, y));
         calculateDataRange();
         playShowAnimation();
@@ -152,6 +159,7 @@ public class Chart2DController extends Pane {
      * @return Observable list of data points
      */
     public ObservableList<DataPoint2D> getDataset() {
+
         return dataset;
     }
     
@@ -163,14 +171,19 @@ public class Chart2DController extends Pane {
      * @param maxY Maximum Y value
      */
     public void setDataRange(double minX, double maxX, double minY, double maxY) {
+
         this.minX = minX;
         this.maxX = maxX;
         this.minY = minY;
         this.maxY = maxY;
         redrawChart();
     }
-    
+
+    /**
+     * Calculates the data range based on the current dataset.
+     */
     private void calculateDataRange() {
+
         if (dataset.isEmpty()) {
             return;
         }
@@ -189,7 +202,7 @@ public class Chart2DController extends Pane {
         minY -= yPadding;
         maxY += yPadding;
 
-        // Evitar división por cero si los valores son iguales
+        // Avoid zero or negative ranges
         if (maxX <= minX) {
             maxX = minX + 1;
         }
@@ -197,10 +210,12 @@ public class Chart2DController extends Pane {
             maxY = minY + 1;
         }
     }
-    
+
+    /**
+     * Redraws the entire bar chart on the canvas.
+     */
     private void redrawChart() {
-        if (chartCanvas == null) return;
-        
+
         GraphicsContext gc = chartCanvas.getGraphicsContext2D();
         double width = chartCanvas.getWidth();
         double height = chartCanvas.getHeight();
@@ -226,56 +241,84 @@ public class Chart2DController extends Pane {
         // Draw axis labels
         drawAxisLabels(gc, width, height, chartWidth, chartHeight);
     }
-    
+
+    /**
+     * Draws the X and Y axes on the chart.
+     * @param gc is the GraphicsContext to draw on
+     * @param chartWidth is the width of the chart area
+     * @param chartHeight is the height of the chart area
+     */
     private void drawAxes(GraphicsContext gc, double chartWidth, double chartHeight) {
+
         gc.setStroke(AXIS_COLOR);
-        gc.setLineWidth(2);
-        
+        gc.setLineWidth(1);
         // X axis
         gc.strokeLine(MARGIN_LEFT, MARGIN_TOP + chartHeight, MARGIN_LEFT + chartWidth, MARGIN_TOP + chartHeight);
-        
         // Y axis
         gc.strokeLine(MARGIN_LEFT, MARGIN_TOP, MARGIN_LEFT, MARGIN_TOP + chartHeight);
     }
-    
+
+    /**
+     * Draws the data points as bars on the chart.
+     * @param gc is the GraphicsContext to draw on
+     * @param chartWidth is the width of the chart area
+     * @param chartHeight is the height of the chart area
+     */
     private void drawDataPoints(GraphicsContext gc, double chartWidth, double chartHeight) {
-        if (dataset.isEmpty()) return;
+
+        if (dataset.isEmpty()){
+            return;
+        }
         
         gc.setLineWidth(1);
-        // Hacer barras más estrechas: usar 60% del ancho para barras y 40% para espaciado
-        double barWidth = (chartWidth * 0.6) / Math.max(1, dataset.size());
-        double barSpacing = (chartWidth * 0.4) / (dataset.size() + 1);
+
+
+        double barWidth = (chartWidth * 0.5) / Math.max(1, dataset.size());
+        double barSpacing = (chartWidth * 0.5) / (dataset.size() + 1);
 
         for (int i = 0; i < dataset.size(); i++) {
+
             DataPoint2D point = dataset.get(i);
             
             // Calculate bar position
             double x = MARGIN_LEFT + barSpacing + (i * (barWidth + barSpacing));
             double rawBarHeight = ((point.getY() - minY) / (maxY - minY)) * chartHeight;
-            // Escalar la altura según el progreso de la animación (0..1)
+
+            // Scale  bar height by animation progress (0.0 to 1.0)
             double barHeight = rawBarHeight * animationProgress.get();
             double y = MARGIN_TOP + chartHeight - barHeight;
             
-            // Gradiente de abajo hacia arriba: color más oscuro en la base, más claro arriba
+            // Draw bar with gradient fill
             Stop[] stops = new Stop[] {
                 new Stop(0, BAR_BORDER_COLOR), // bottom
                 new Stop(1, DATA_POINT_COLOR)  // top
             };
+
             LinearGradient lg = new LinearGradient(0, 1, 0, 0, true, CycleMethod.NO_CYCLE, stops);
+
             gc.setFill(lg);
             gc.fillRoundRect(x, y, barWidth, barHeight, 4, 4);
             gc.setStroke(BAR_BORDER_COLOR);
             gc.strokeRoundRect(x, y, barWidth, barHeight, 4, 4);
         }
     }
-    
+
+    /**
+     * Draws the axis labels on the chart.
+     * @param gc is the GraphicsContext to draw on
+     * @param width is the total width of the canvas
+     * @param height is the total height of the canvas
+     * @param chartWidth is the width of the chart area
+     * @param chartHeight is the height of the chart area
+     */
     private void drawAxisLabels(GraphicsContext gc, double width, double height, double chartWidth, double chartHeight) {
+
         gc.setFill(TEXT_COLOR);
         gc.setFont(Font.font("Alatsi", 12));
         
         // Compute bar sizing to center labels
-        double barWidth = (chartWidth * 0.6) / Math.max(1, dataset.size());
-        double barSpacing = (chartWidth * 0.4) / (dataset.size() + 1);
+        double barWidth = (chartWidth * 0.5) / Math.max(1, dataset.size());
+        double barSpacing = (chartWidth * 0.5) / (dataset.size() + 1);
 
         // Decide if X values look like epoch timestamps (seconds or milliseconds)
         boolean epochMillis = (maxX > 1e11) || (minX > 1e11);
@@ -283,27 +326,34 @@ public class Chart2DController extends Pane {
 
         // X axis labels - use custom labels if available, otherwise show formatted values
         if (!xAxisLabels.isEmpty()) {
+
             // Show up to 10 labels for better readability
             int maxLabels = Math.min(10, xAxisLabels.size());
             int step = Math.max(1, xAxisLabels.size() / maxLabels);
             
             for (int i = 0; i < xAxisLabels.size(); i += step) {
-                if (i >= xAxisLabels.size()) break;
+
                 // Center label on the bar's center
                 double x = MARGIN_LEFT + barSpacing + (i * (barWidth + barSpacing)) + (barWidth / 2);
                 String label = xAxisLabels.get(i);
+
                 // Try to parse known numeric date formats (01/09) and convert to 01/Sep
                 String formatted = tryParseAndFormatLabel(label);
+
                 // Center the label text
                 double approxChar = gc.getFont().getSize() * 0.6;
                 double textWidth = formatted.length() * approxChar;
                 gc.fillText(formatted, x - textWidth / 2, height - MARGIN_BOTTOM + 20);
             }
+
         } else {
+
             // Fallback to original behavior but format as date when X looks like epoch
             int maxXLabels = Math.min(10, dataset.size()); // Limit to 10 labels to avoid crowding
             if (maxXLabels > 0) {
+
                 for (int i = 0; i <= maxXLabels; i++) {
+
                     // Choose an index to center over bars
                     int index = Math.min(dataset.size() - 1, Math.max(0, (int)Math.round((double)i * (dataset.size()-1) / maxXLabels)));
                     double x = MARGIN_LEFT + barSpacing + (index * (barWidth + barSpacing)) + (barWidth / 2);
@@ -326,24 +376,31 @@ public class Chart2DController extends Pane {
         // Y axis labels - show percentages
         int yLabels = 4;
         for (int i = 0; i <= yLabels; i++) {
+
             double y = MARGIN_TOP + chartHeight - (chartHeight * i / yLabels);
             double value = minY + ((maxY - minY) * i / yLabels);
+
             String label = String.format("%.0f%%", value); // Show as percentage
             gc.fillText(label, MARGIN_LEFT - 45, y + 5);
         }
     }
-    
-    // Crea y reproduce la animación de "elevación" de las barras
+
+    /**
+     * Plays the show animation for the chart bars.
+     */
     private void playShowAnimation() {
+
         if (showTimeline != null) {
             showTimeline.stop();
         }
         animationProgress.set(0.0);
+
         showTimeline = new Timeline(
             new KeyFrame(Duration.ZERO, new KeyValue(animationProgress, 0.0)),
             new KeyFrame(Duration.millis(650), new KeyValue(animationProgress, 1.0, Interpolator.EASE_OUT))
         );
-        // Redibujar en cada frame para actualizar las barras
+
+        // This listener will redraw the chart as the animation progresses
         animationProgress.addListener((obs, oldV, newV) -> redrawChart());
         showTimeline.play();
     }
@@ -352,6 +409,7 @@ public class Chart2DController extends Pane {
      * Data point class for 2D coordinates.
      */
     public static class DataPoint2D {
+
         private final double x;
         private final double y;
         

@@ -98,20 +98,19 @@ public class UserStatsController implements ScreenController {
     displayUserStats(userStatsInputScreenData.getUserId(),exerciseType);
   }
 
-  /**
-   * 📊 Método para obtener y mostrar las estadísticas de usuario en el gráfico 2D.
-   */
+    /**
+     * Show user stats in the chart
+     * @param userId
+     * @param exerciseType
+     */
   private void displayUserStats(final Long userId,final String exerciseType) {
 
     if (userId == null || userId <= 0) {
 
-      System.err.println("⚠️ Error: ID de usuario inválido.");
+      System.err.println(" Error. Invalid user ID: " + userId);
       return;
     }
 
-
-
-    // 🔹 Configuración de parámetros
     UUID gameType = UUID.fromString("7ad9f7dd-1e9a-44b6-a8ad-1bb36fb53a38");
 
     if (Objects.equals(exerciseType, "memory_game")){
@@ -125,40 +124,37 @@ public class UserStatsController implements ScreenController {
     }
 
 
-    //TODO fix the difficulty levels, should be retrieved as a dynamic way from the database
-
     UUID difficultyLevel = UUID.fromString("cd343e6e-12d7-4c79-9519-c95dc0546b5e");
 
     if (Objects.equals(difficulty, "medium")){
+
       difficultyLevel = UUID.fromString("903ec9bd-aeb1-4b01-8fbd-a3ec2dce976f");
     }
 
-    int lastNDays = 30; // 📆 Últimos 30 días
+    int lastNDays = 30;
 
-    // 🔍 Ejecutar el caso de uso para obtener los datos
+
     List<AggregatedStats> userStats = getUserStatsForLastNDaysUseCase.execute(userId, gameType, difficultyLevel, lastNDays);
-
-    // 🛑 Limpiar datos previos en el gráfico
     chartUserStats.resetDataset();
 
-    // 📊 Convertir datos para Chart2DController
     List<Chart2DController.DataPoint2D> chartData = new ArrayList<>();
     List<String> dateLabels = new ArrayList<>();
     
-    // 📅 Limit to last 10 entries for better visualization
+    // Limit to last 10 entries for better visualization
     int maxEntries = Math.min(10, userStats.size());
     int startIndex = Math.max(0, userStats.size() - maxEntries);
     
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
     
     for (int i = startIndex; i < userStats.size(); i++) {
+
       AggregatedStats stat = userStats.get(i);
       int chartIndex = i - startIndex;
       
-      // Usar índice como X (días) y el valor como Y (porcentaje de éxito)
-      chartData.add(new Chart2DController.DataPoint2D(chartIndex, stat.getValue() * 100)); // Convertimos a %
+      // The index X is the day number, Y is the percentage value (0-100)
+      chartData.add(new Chart2DController.DataPoint2D(chartIndex, stat.getValue() * 100));
       
-      // Crear etiqueta de fecha en formato día/mes
+      // Create date labels for the X axis
       String dateLabel = stat.getDate().format(formatter);
       dateLabels.add(dateLabel);
     }
