@@ -159,8 +159,11 @@ public class UserStatsController implements ScreenController {
       dateLabels.add(dateLabel);
     }
 
-    // 🎯 Establecer los datos en el gráfico con etiquetas de fecha
-    chartUserStats.setDataset(chartData, dateLabels);
+    // Set data to chart
+    // chartUserStats.setDataset(chartData, dateLabels)
+    chartUserStats.setChartTitle("Accuracy on focus exercises");
+    chartUserStats.setSeriesNames(List.of("Guess Accuracy", "Defend Accuracy"));
+    chartUserStats.setDatasets(List.of(chartData, chartData), dateLabels);
   }
 
   private void displayUserData(final Long userId) {
