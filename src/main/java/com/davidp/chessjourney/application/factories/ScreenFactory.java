@@ -121,6 +121,7 @@ public class ScreenFactory {
     controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
     controller.setGetUserStatsForLastNDaysUseCase(UseCaseFactory.createGetUserStatsForLastNDaysUseCase());
     controller.setExerciseService(ApplicationServiceFactory.createExerciseService());
+    controller.setDataStatsService(ApplicationServiceFactory.createDataStatsService());
     return objectFxmlBundle.getController();
   }
 

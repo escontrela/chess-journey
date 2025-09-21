@@ -1,6 +1,7 @@
 package com.davidp.chessjourney.application.ui.user;
 
 import com.davidp.chessjourney.application.domain.*;
+import com.davidp.chessjourney.application.service.DataStatsService;
 import com.davidp.chessjourney.application.service.ExerciseService;
 import com.davidp.chessjourney.application.ui.ScreenController;
 import com.davidp.chessjourney.application.ui.settings.InputScreenData;
@@ -64,6 +65,7 @@ public class UserStatsController implements ScreenController {
   private GetUserByIdUseCase getUserByIdUseCase;
   private GetUserStatsForLastNDaysUseCase getUserStatsForLastNDaysUseCase;
   private ExerciseService exerciseService;
+  private DataStatsService datastatsService;
 
   @FXML
   private Label lblEloPlayer;
@@ -80,7 +82,7 @@ public class UserStatsController implements ScreenController {
     protected String granularity = "month";
     protected String exerciseType = "memory_game";
 
-  public void initialize() {
+    public void initialize() {
 
     status = ScreenStatus.INITIALIZED;
   }
@@ -170,11 +172,11 @@ public class UserStatsController implements ScreenController {
     }
 
 {
-    // Reemplaza la construcci��n manual de chartData/labels por la lógica de alineado y regularización
-    ChartSeriesResult aligned = prepareAlignedSeries(dataset1, dataset2);
+    // Homogenization and alignment of datasets
+    DataStatsService.ChartSeriesResult aligned = datastatsService.prepareAlignedSeries(dataset1, dataset2);
 
-    List<String> dateLabels = aligned.getLabels();
-    List<List<Double>> seriesValues = aligned.getSeries();
+    List<String> dateLabels = aligned.labels();
+    List<List<Double>> seriesValues = aligned.series();
 
     // Convertir cada serie a List<DataPoint2D> (X=index, Y=value)
     List<List<Chart2DController.DataPoint2D>> seriesDataPoints = new ArrayList<>();
@@ -365,102 +367,10 @@ public class UserStatsController implements ScreenController {
 
         this.exerciseService = exerciseService;
     }
-
-    /**
-     * Prepara y alinea hasta dos series (dataset1 y dataset2) para el eje X:
-     * - Une las fechas presentes en ambos datasets.
-     * - Ordena y toma las últimas maxEntries entradas (por defecto 31).
-     * - Rellena con 0.0 los huecos en cada serie para que ambas tengan la misma longitud.
-     *
-     * Devuelve las series como List<List<Double>> (cada lista son los valores en el mismo orden que labels)
-     * y labels como List<String> con formato "dd/MM".
-     */
-    public static ChartSeriesResult prepareAlignedSeries(List<AggregatedStats> dataset1, List<AggregatedStats> dataset2, int maxEntries) {
-        if ((dataset1 == null || dataset1.isEmpty()) && (dataset2 == null || dataset2.isEmpty())) {
-            return new ChartSeriesResult(Collections.emptyList(), Collections.emptyList());
-        }
-
-        // Mapear fecha -> valor (multiplicamos por 100 para porcentaje si es necesario)
-        Map<java.time.LocalDate, Double> map1 = new HashMap<>();
-        if (dataset1 != null) {
-            for (AggregatedStats s : dataset1) {
-                if (s != null && s.getDate() != null) {
-                    map1.put(s.getDate(), s.getValue() * 100.0);
-                }
-            }
-        }
-
-        Map<java.time.LocalDate, Double> map2 = new HashMap<>();
-        boolean hasSecond = dataset2 != null && !dataset2.isEmpty();
-        if (hasSecond) {
-            for (AggregatedStats s : dataset2) {
-                if (s != null && s.getDate() != null) {
-                    map2.put(s.getDate(), s.getValue() * 100.0);
-                }
-            }
-        }
-
-        // Unir todas las fechas y ordenarlas
-        Set<java.time.LocalDate> allDates = new TreeSet<>();
-        allDates.addAll(map1.keySet());
-        if (hasSecond) allDates.addAll(map2.keySet());
-
-        List<java.time.LocalDate> sortedDates = new ArrayList<>(allDates);
-        if (sortedDates.isEmpty()) {
-            return new ChartSeriesResult(Collections.emptyList(), Collections.emptyList());
-        }
-
-        // Limitar a las últimas maxEntries fechas
-        int start = Math.max(0, sortedDates.size() - Math.max(1, maxEntries));
-        List<java.time.LocalDate> window = sortedDates.subList(start, sortedDates.size());
-
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
-
-        List<String> labels = new ArrayList<>(window.size());
-        List<Double> series1 = new ArrayList<>(window.size());
-        List<Double> series2 = new ArrayList<>(window.size());
-
-        for (java.time.LocalDate date : window) {
-            labels.add(date.format(formatter));
-            series1.add(map1.getOrDefault(date, 0.0));
-            if (hasSecond) {
-                series2.add(map2.getOrDefault(date, 0.0));
-            }
-        }
-
-        List<List<Double>> series = new ArrayList<>();
-        series.add(series1);
-        if (hasSecond) series.add(series2);
-
-        return new ChartSeriesResult(series, labels);
+    public void setDataStatsService(DataStatsService dataStatsService) {
+        this.datastatsService = dataStatsService;
     }
 
-    /**
-     * Sobrecarga con valor por defecto de 31 entradas.
-     */
-    public static ChartSeriesResult prepareAlignedSeries(List<AggregatedStats> dataset1, List<AggregatedStats> dataset2) {
-        return prepareAlignedSeries(dataset1, dataset2, 31);
-    }
 
-    /**
-     * Resultado auxiliar con las series alineadas y las etiquetas.
-     */
-    public static class ChartSeriesResult {
-        private final List<List<Double>> series;
-        private final List<String> labels;
-
-        public ChartSeriesResult(List<List<Double>> series, List<String> labels) {
-            this.series = series;
-            this.labels = labels;
-        }
-
-        public List<List<Double>> getSeries() {
-            return series;
-        }
-
-        public List<String> getLabels() {
-            return labels;
-        }
-    }
 
 }

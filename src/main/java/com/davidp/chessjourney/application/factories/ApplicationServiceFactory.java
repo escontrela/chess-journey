@@ -6,55 +6,65 @@ import com.davidp.chessjourney.infrastructure.LichessServiceImpl;
 import com.davidp.chessjourney.domain.UserRepository;
 
 /**
- * Factory for creating application services.
- * Provides centralized creation of application layer services.
+ * Factory for creating application services. Provides centralized creation of application layer
+ * services.
  */
 public class ApplicationServiceFactory {
 
-    private ApplicationServiceFactory() {
+  private ApplicationServiceFactory() {}
 
-    }
+  /**
+   * Creates a UserService instance.
+   *
+   * @return UserService implementation
+   */
+  public static UserService createUserService() {
 
-    /**
-     * Creates a UserService instance.
-     *
-     * @return UserService implementation
-     */
-    public static UserService createUserService() {
+    UserRepository userRepository = RepositoryFactory.createUserRepository();
+    return new UserServiceImpl(userRepository);
+  }
 
-        UserRepository userRepository = RepositoryFactory.createUserRepository();
-        return new UserServiceImpl(userRepository);
-    }
+  /**
+   * Creates a LichessService instance.
+   *
+   * @return LichessService implementation
+   */
+  public static LichessService createLichessService() {
+    return new LichessServiceImpl();
+  }
 
-    /**
-     * Creates a LichessService instance.
-     *
-     * @return LichessService implementation
-     */
-    public static LichessService createLichessService() {
-        return new LichessServiceImpl();
-    }
-
-    /**
-     * Creates a LookUpTournamentsService instance.
-     *
-     * @return LookUpTournamentsService implementation
-     */
-    public static LookUpTournamentsService createLookUpTournamentsService() {
-        return new LookUpTournamentsService();
-    }
+  /**
+   * Creates a LookUpTournamentsService instance.
+   *
+   * @return LookUpTournamentsService implementation
+   */
+  public static LookUpTournamentsService createLookUpTournamentsService() {
+    return new LookUpTournamentsService();
+  }
 
     /**
-     * Creates a TournamentsManagementService instance.
+     * Creates a DataStatsService instance.
      *
-     * @return TournamentsManagementService implementation
+     * @return DataStatsService implementation
      */
-    public static TournamentsManagementService createTournamentsManagementService() {
-        return new TournamentsManagementService(RepositoryFactory.createTournamentRepository());
-    }
+  public static DataStatsService createDataStatsService() {
 
-    public static ExerciseService createExerciseService() {
+      return new DataStatsServiceImpl();
+  }
 
-        return new ExerciseServiceImpl(RepositoryFactory.createExerciseTypeRepository(),RepositoryFactory.createDifficultyLevelRepository());
-    }
+  /**
+   * Creates a TournamentsManagementService instance.
+   *
+   * @return TournamentsManagementService implementation
+   */
+  public static TournamentsManagementService createTournamentsManagementService() {
+    return new TournamentsManagementService(RepositoryFactory.createTournamentRepository());
+  }
+
+  public static ExerciseService createExerciseService() {
+
+    return new ExerciseServiceImpl(
+        RepositoryFactory.createExerciseTypeRepository(),
+        RepositoryFactory.createDifficultyLevelRepository());
+  }
 }
