@@ -120,6 +120,7 @@ public class ScreenFactory {
     var controller = objectFxmlBundle.getController();
     controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
     controller.setGetUserStatsForLastNDaysUseCase(UseCaseFactory.createGetUserStatsForLastNDaysUseCase());
+    controller.setExerciseService(ApplicationServiceFactory.createExerciseService());
     return objectFxmlBundle.getController();
   }
 

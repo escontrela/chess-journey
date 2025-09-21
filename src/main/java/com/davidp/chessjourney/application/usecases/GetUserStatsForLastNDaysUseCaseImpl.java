@@ -18,7 +18,7 @@ public class GetUserStatsForLastNDaysUseCaseImpl implements GetUserStatsForLastN
   }
 
   @Override
-  public List<AggregatedStats> execute(long userId, UUID gameType, UUID difficultyId, int days) {
+  public List<AggregatedStats> execute(long userId, UUID gameType, UUID difficultyId, int days, Granularity granularity) {
 
     if (days <= 0) {
       throw new IllegalArgumentException("El número de días debe ser mayor a 0.");
@@ -38,11 +38,13 @@ public class GetUserStatsForLastNDaysUseCaseImpl implements GetUserStatsForLastN
             + days
             + " days.");
 
-    List<AggregatedStats> stats =
-        statsRepository.getSuccessRateByPeriod(
-            userId, gameType, difficultyId, startDate, endDate, "daily");
+    if (granularity == Granularity.MONTHLY) {
 
-    stats.forEach(e -> System.out.println(e.toString()));
-    return stats;
+        return statsRepository.getSuccessRateByPeriodByMonth(
+            userId, gameType, difficultyId, startDate, endDate, "monthly");
+    }
+
+      return statsRepository.getSuccessRateByPeriodByDay(
+          userId, gameType, difficultyId, startDate, endDate, "daily");
   }
 }

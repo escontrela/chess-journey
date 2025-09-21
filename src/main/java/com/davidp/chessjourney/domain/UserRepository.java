@@ -28,8 +28,12 @@ public interface UserRepository {
   /**
    * Obtiene la media de éxito de los ejercicios por día/mes/año para un usuario, tipo de juego y dificultad.
    */
-  List<AggregatedStats> getSuccessRateByPeriod(long userId, UUID gameType, UUID difficultyId,
-                                               LocalDate startDate, LocalDate endDate, String period);
+  List<AggregatedStats> getSuccessRateByPeriodByDay(long userId, UUID gameType, UUID difficultyId,
+                                                    LocalDate startDate, LocalDate endDate, String period);
+
+  List<AggregatedStats> getSuccessRateByPeriodByMonth(long userId, UUID gameType, UUID difficultyId,
+                                                      LocalDate startDate, LocalDate endDate, String period);
+
 
   /**
    * Obtiene el tiempo total consumido en ejercicios exitosos por día/mes/año para un usuario.

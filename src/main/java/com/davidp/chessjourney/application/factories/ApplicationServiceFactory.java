@@ -1,11 +1,8 @@
 package com.davidp.chessjourney.application.factories;
 
-import com.davidp.chessjourney.application.service.LookUpTournamentsService;
-import com.davidp.chessjourney.application.service.TournamentsManagementService;
+import com.davidp.chessjourney.application.service.*;
 import com.davidp.chessjourney.domain.services.LichessService;
 import com.davidp.chessjourney.infrastructure.LichessServiceImpl;
-import com.davidp.chessjourney.application.service.UserService;
-import com.davidp.chessjourney.application.service.UserServiceImpl;
 import com.davidp.chessjourney.domain.UserRepository;
 
 /**
@@ -54,5 +51,10 @@ public class ApplicationServiceFactory {
      */
     public static TournamentsManagementService createTournamentsManagementService() {
         return new TournamentsManagementService(RepositoryFactory.createTournamentRepository());
+    }
+
+    public static ExerciseService createExerciseService() {
+
+        return new ExerciseServiceImpl(RepositoryFactory.createExerciseTypeRepository(),RepositoryFactory.createDifficultyLevelRepository());
     }
 }

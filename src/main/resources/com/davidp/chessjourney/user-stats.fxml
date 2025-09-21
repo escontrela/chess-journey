@@ -12,7 +12,7 @@
 <Pane fx:id="rootPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1260.0" styleClass="popup-root-glass" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.davidp.chessjourney.application.ui.user.UserStatsController">
    <children>
       <!-- Close Button -->
-      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1220.0" layoutY="2.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
+      <Button fx:id="btClose" alignment="BASELINE_CENTER" layoutX="1215.0" layoutY="8.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="33.0" prefWidth="35.0" styleClass="button-simple" stylesheets="@custom-styles.css" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="18.0" />
          </font>
@@ -58,13 +58,36 @@
       </Button>
       
       <!-- Difficulty Level Controls -->
-      <Label layoutX="300.0" layoutY="697.0" styleClass="score-name" text="Difficulty:" />
-      <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="300.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Easy" textFill="WHITE">
+      <Label layoutX="541.0" layoutY="697.0" styleClass="score-name" text="Difficulty:" />
+      <Button fx:id="btOptEasy" alignment="BASELINE_CENTER" layoutX="535.0" layoutY="728.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Easy" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="16.0" />
          </font>
       </Button>
-      <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="392.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Medium" textFill="WHITE">
+      <Button fx:id="btOptionMid" alignment="BASELINE_CENTER" layoutX="630.0" layoutY="728.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Medium" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="btOptTactics" alignment="BASELINE_CENTER" layoutX="257.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="100.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Tactic" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="btOptAll" alignment="BASELINE_CENTER" layoutX="375.0" layoutY="727.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="100.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="All" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="16.0" />
+         </font>
+      </Button>
+      <Pane layoutX="507.0" layoutY="715.0" prefHeight="60.0" prefWidth="1.0" styleClass="score-divider" />
+      <Pane layoutX="753.0" layoutY="715.0" prefHeight="60.0" prefWidth="1.0" styleClass="score-divider" />
+      <Button fx:id="btOptYear" alignment="BASELINE_CENTER" layoutX="780.0" layoutY="728.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="80.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Year" textFill="WHITE">
+         <font>
+            <Font name="Alatsi Regular" size="16.0" />
+         </font>
+      </Button>
+      <Label layoutX="780.0" layoutY="697.0" prefWidth="53.0" styleClass="score-name" text="Period:" />
+      <Button fx:id="btOptMonth" alignment="BASELINE_CENTER" layoutX="876.0" layoutY="728.0" mnemonicParsing="false" onAction="#buttonAction" prefHeight="35.0" prefWidth="100.0" styleClass="button-regular" stylesheets="@custom-styles.css" text="Hard" textFill="WHITE">
          <font>
             <Font name="Alatsi Regular" size="16.0" />
          </font>

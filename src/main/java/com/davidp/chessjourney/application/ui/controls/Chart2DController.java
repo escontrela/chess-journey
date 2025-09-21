@@ -55,14 +55,16 @@ public class Chart2DController extends Pane {
 
     private static final Color CHART_AREA_COLOR = Color.TRANSPARENT;
 
-    // Colores por serie (2 series máximo: azul, verde)
+    // Colores por serie (hasta 3 series: azul, verde, rojo)
     private static final Color[] SERIES_FILL_COLORS = new Color[] {
         Color.web("#3b82f6"), // azul
-        Color.web("#10b981")  // verde
+        Color.web("#10b981"), // verde
+        Color.web("#ef4444")  // rojo
     };
     private static final Color[] SERIES_BORDER_COLORS = new Color[] {
         Color.web("#1d4ed8"), // azul oscuro
-        Color.web("#047857")  // verde oscuro
+        Color.web("#047857"), // verde oscuro
+        Color.web("#dc2626")  // rojo oscuro
     };
 
     // Chart margins and padding
@@ -168,7 +170,7 @@ public class Chart2DController extends Pane {
         datasets.clear();
 
         if (multi != null && !multi.isEmpty()) {
-            int take = Math.min(2, multi.size());
+            int take = Math.min(3, multi.size());
             for (int i = 0; i < take; i++) {
                 List<DataPoint2D> serie = multi.get(i);
                 if (serie != null) {
@@ -244,7 +246,7 @@ public class Chart2DController extends Pane {
     public void setSeriesNames(List<String> names) {
         seriesNames.clear();
         if (names != null) {
-            int take = Math.min(2, names.size());
+            int take = Math.min(3, names.size());
             for (int i = 0; i < take; i++) {
                 String n = names.get(i);
                 seriesNames.add(n != null ? n : "");
@@ -376,10 +378,10 @@ public class Chart2DController extends Pane {
      */
     private void drawDataPoints(GraphicsContext gc, double chartWidth, double chartHeight) {
 
-        // Modo multi-serie (hasta 2)
+        // Modo multi-serie (hasta 3)
         if (!datasets.isEmpty()) {
             // Número de puntos = máximo tamaño entre series
-            int numSeries = Math.min(2, datasets.size());
+            int numSeries = Math.min(3, datasets.size());
             int maxPoints = 0;
             for (int s = 0; s < numSeries; s++) {
                 maxPoints = Math.max(maxPoints, datasets.get(s).size());
@@ -390,8 +392,8 @@ public class Chart2DController extends Pane {
             double totalBarGroupWidth = (chartWidth * 0.8) / maxPoints; // 80% para barras
             double groupSpacing = (chartWidth * 0.2) / (maxPoints + 1);   // 20% para espacios
 
-            // Gap sutil entre barras del mismo grupo
-            double intraGap = (numSeries <= 1) ? 0.0 : Math.max(1.0, totalBarGroupWidth * 0.06);
+            // Gap sutil entre barras del mismo grupo (proporcional al ancho del grupo)
+            double intraGap = (numSeries <= 1) ? 0.0 : Math.max(1.0, totalBarGroupWidth * 0.05);
             double barsTotalWidth = Math.max(0.0, totalBarGroupWidth - intraGap * (numSeries - 1));
             double barWidth = (numSeries > 0) ? (barsTotalWidth / numSeries) : 0.0;             // ancho por serie dentro del grupo
 
@@ -469,7 +471,7 @@ public class Chart2DController extends Pane {
         
         // Modo multi-serie: centrar etiquetas en el centro del grupo
         if (!datasets.isEmpty()) {
-            int numSeries = Math.min(2, datasets.size());
+            int numSeries = Math.min(3, datasets.size());
             int maxPoints = 0;
             for (int s = 0; s < numSeries; s++) {
                 maxPoints = Math.max(maxPoints, datasets.get(s).size());
@@ -608,7 +610,7 @@ public class Chart2DController extends Pane {
     private void drawLegend(GraphicsContext gc, double width, double height, double chartWidth, double chartHeight) {
         int numSeries;
         if (!datasets.isEmpty()) {
-            numSeries = Math.min(2, datasets.size());
+            numSeries = Math.min(3, datasets.size());
         } else if (!dataset.isEmpty()) {
             numSeries = 1; // modo una sola serie
         } else {
