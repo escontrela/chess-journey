@@ -8,72 +8,63 @@ import java.util.*;
 
 public class DataStatsServiceImpl implements DataStatsService {
 
-  public DataStatsService.ChartSeriesResult prepareAlignedSeries(
-      List<AggregatedStats> dataset1, List<AggregatedStats> dataset2, int maxEntries) {
-
-    if ((dataset1 == null || dataset1.isEmpty()) && (dataset2 == null || dataset2.isEmpty())) {
-      return new DataStatsService.ChartSeriesResult(
-          Collections.emptyList(), Collections.emptyList());
+  @Override
+  public ChartSeriesResult prepareAlignedSeries(List<List<AggregatedStats>> datasets, int maxEntries) {
+    if (datasets == null || datasets.isEmpty()) {
+      return new ChartSeriesResult(Collections.emptyList(), Collections.emptyList());
     }
 
-    // Mapear fecha -> valor (multiplicamos por 100 para porcentaje si es necesario)
-    Map<LocalDate, Double> map1 = new HashMap<>();
-    if (dataset1 != null) {
-      for (AggregatedStats s : dataset1) {
-        if (s != null && s.getDate() != null) {
-          map1.put(s.getDate(), s.getValue() * 100.0);
+    // Normalizamos a una lista de mapas fecha -> valor*100
+    List<Map<LocalDate, Double>> maps = new ArrayList<>();
+    for (List<AggregatedStats> ds : datasets) {
+      Map<LocalDate, Double> map = new HashMap<>();
+      if (ds != null) {
+        for (AggregatedStats s : ds) {
+          if (s != null && s.getDate() != null) {
+            map.put(s.getDate(), s.getValue() * 100.0);
+          }
         }
       }
+      maps.add(map);
     }
 
-    Map<java.time.LocalDate, Double> map2 = new HashMap<>();
-    boolean hasSecond = dataset2 != null && !dataset2.isEmpty();
-    if (hasSecond) {
-      for (AggregatedStats s : dataset2) {
-        if (s != null && s.getDate() != null) {
-          map2.put(s.getDate(), s.getValue() * 100.0);
-        }
-      }
-    }
-
-    // Unir todas las fechas y ordenarlas
+    // Unimos todas las fechas
     Set<LocalDate> allDates = new TreeSet<>();
-    allDates.addAll(map1.keySet());
-    if (hasSecond) allDates.addAll(map2.keySet());
-
-    List<java.time.LocalDate> sortedDates = new ArrayList<>(allDates);
-    if (sortedDates.isEmpty()) {
-      return new DataStatsService.ChartSeriesResult(
-          Collections.emptyList(), Collections.emptyList());
+    for (Map<LocalDate, Double> map : maps) {
+      allDates.addAll(map.keySet());
     }
 
-    // Limitar a las últimas maxEntries fechas
-    int start = Math.max(0, sortedDates.size() - Math.max(1, maxEntries));
-    List<java.time.LocalDate> window = sortedDates.subList(start, sortedDates.size());
+    List<LocalDate> sortedDates = new ArrayList<>(allDates);
+    if (sortedDates.isEmpty()) {
+      return new ChartSeriesResult(Collections.emptyList(), Collections.emptyList());
+    }
+
+    int safeMax = Math.max(1, maxEntries);
+    int start = Math.max(0, sortedDates.size() - safeMax);
+    List<LocalDate> window = sortedDates.subList(start, sortedDates.size());
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
 
     List<String> labels = new ArrayList<>(window.size());
-    List<Double> series1 = new ArrayList<>(window.size());
-    List<Double> series2 = new ArrayList<>(window.size());
-
-    for (java.time.LocalDate date : window) {
-      labels.add(date.format(formatter));
-      series1.add(map1.getOrDefault(date, 0.0));
-      if (hasSecond) {
-        series2.add(map2.getOrDefault(date, 0.0));
-      }
+    for (LocalDate d : window) {
+      labels.add(d.format(formatter));
     }
 
-    List<List<Double>> series = new ArrayList<>();
-    series.add(series1);
-    if (hasSecond) series.add(series2);
+    List<List<Double>> series = new ArrayList<>(maps.size());
+    for (Map<LocalDate, Double> map : maps) {
+      List<Double> values = new ArrayList<>(window.size());
+      for (LocalDate d : window) {
+        values.add(map.getOrDefault(d, 0.0));
+      }
+      series.add(values);
+    }
 
-    return new DataStatsService.ChartSeriesResult(series, labels);
+    return new ChartSeriesResult(series, labels);
   }
 
-  public DataStatsService.ChartSeriesResult prepareAlignedSeries(
-      List<AggregatedStats> dataset1, List<AggregatedStats> dataset2) {
-    return prepareAlignedSeries(dataset1, dataset2, 31);
+  @Override
+  public ChartSeriesResult prepareAlignedSeries(List<List<AggregatedStats>> datasets) {
+    return prepareAlignedSeries(datasets, 31);
   }
+
 }
