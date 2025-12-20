@@ -48,3 +48,10 @@ system/
 ### Compiled classes ###
 *.class
 javac.*.args
+
+### Ignorar archivos de GitHub Copilot en IntelliJ IDEA ###
+/.idea/copilot.*          # archivos/directorios que empiezan por "copilot"
+/.idea/*copilot*          # cualquier archivo que contenga "copilot" en su nombre
+/.idea/**/copilot*        # también dentro de subcarpetas de .idea
+/.idea/*copilot*.xml      # concentrado en ficheros XML generados por Copilot
+

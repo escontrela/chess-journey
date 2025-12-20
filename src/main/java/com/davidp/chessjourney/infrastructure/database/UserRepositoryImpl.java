@@ -17,10 +17,7 @@ import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import javax.sql.DataSource;
-import java.time.format.DateTimeFormatter;
-import java.util.Set;
-import java.util.TreeSet;
-import java.util.Collections;
+
 
 public class UserRepositoryImpl implements UserRepository {
 
