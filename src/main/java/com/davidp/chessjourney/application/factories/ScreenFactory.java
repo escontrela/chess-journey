@@ -119,7 +119,7 @@ public class ScreenFactory {
     FxmlBundle<UserStatsController> objectFxmlBundle = loadFxml(Screens.USER_STATS.resourceName());
     var controller = objectFxmlBundle.getController();
     controller.setGetUserByIdUseCase(UseCaseFactory.createGetUserByIdUseCase());
-    controller.setGetUserStatsForLastNDaysUseCase(UseCaseFactory.createGetUserStatsForLastNDaysUseCase());
+    controller.setGetUserMetricTimeSeriesDatasetUseCase(UseCaseFactory.createGetUserMetricTimeSeriesDatasetUseCase());
     controller.setExerciseService(ApplicationServiceFactory.createExerciseService());
     controller.setDataStatsService(ApplicationServiceFactory.createDataStatsService());
     return objectFxmlBundle.getController();
