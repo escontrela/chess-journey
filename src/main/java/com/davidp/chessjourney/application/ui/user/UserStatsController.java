@@ -7,28 +7,35 @@ import com.davidp.chessjourney.application.ui.settings.InputScreenData;
 import com.davidp.chessjourney.application.ui.util.FXAnimationUtil;
 import com.davidp.chessjourney.application.ui.controls.Chart2DController;
 import com.davidp.chessjourney.application.usecases.GetUserByIdUseCase;
-import com.davidp.chessjourney.application.usecases.GetUserStatsForLastNDaysUseCase;
+import com.davidp.chessjourney.application.usecases.userstats.GetUserMetricTimeSeriesDatasetUseCase;
+import com.davidp.chessjourney.application.usecases.userstats.GetUserMetricTimeSeriesDatasetRequest;
 import com.davidp.chessjourney.domain.User;
+import com.davidp.chessjourney.domain.common.stats.TimeSeriesDataset;
+import com.davidp.chessjourney.domain.common.stats.TimeSeries;
+import com.davidp.chessjourney.domain.common.stats.TimeSeriesPoint;
+import com.davidp.chessjourney.domain.userstats.UserMetric;
+import com.davidp.chessjourney.domain.userstats.StatsAggregationLevel;
 
+import java.time.LocalDate;
 import java.util.*;
 
-import com.davidp.chessjourney.domain.common.AggregatedStats;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 
-import static com.davidp.chessjourney.application.usecases.GetUserStatsForLastNDaysUseCase.*;
-
 public class UserStatsController implements ScreenController {
 
   enum StatsExercises {
-    MEMORY_GAME("Guess Accuracy"),
-    DEFEND_MEMORY_GAME("Defend Accuracy"),
-    TACTIC_GAME("Tactics Accuracy"),
-    ALL("All Exercises");
+    MEMORY_GAME("Guess"),
+    DEFEND_MEMORY_GAME("Defend"),
+    TACTIC_GAME("Tactic"),
+    ALL("All");
 
     final String exerciseName;
 
@@ -44,14 +51,24 @@ public class UserStatsController implements ScreenController {
   }
 
   enum StatsDifficulty {
-    EASY,
-    MEDIUM,
-    HARD
-  }
+    EASY("Easy"),
+    MEDIUM("Medium"),
+    HARD("Hard");
 
-  enum StatsGranularity {
-    MONTH,
-    YEAR
+    final String displayName;
+
+    StatsDifficulty(String displayName) {
+      this.displayName = displayName;
+    }
+
+    public String getDisplayName() {
+      return displayName;
+    }
+
+    @Override
+    public String toString() {
+      return displayName;
+    }
   }
 
   @FXML private Button btClose;
@@ -72,14 +89,31 @@ public class UserStatsController implements ScreenController {
 
   @FXML private Button btOptMonth;
 
+  @FXML private Button btFilter;
+
   @FXML private ImageView imgClose;
 
   @FXML private Pane rootPane;
 
+  // New filter controls
+  @FXML private DatePicker datePickerFrom;
+  @FXML private DatePicker datePickerTo;
+  @FXML private ComboBox<StatsAggregationLevel> cbAggregation;
+  @FXML private ComboBox<StatsExercises> cbGameType;
+  @FXML private ComboBox<StatsDifficulty> cbDifficulty;
+
+  // Three chart controllers
+  @FXML private Chart2DController chartAccuracy;
+  @FXML private Chart2DController chartAvgTime;
+  @FXML private Chart2DController chartVolume;
+
+  // Legacy chart (kept for backward compatibility)
+  @FXML private Chart2DController chartUserStats;
+
   private ScreenStatus status;
 
   private GetUserByIdUseCase getUserByIdUseCase;
-  private GetUserStatsForLastNDaysUseCase getUserStatsForLastNDaysUseCase;
+  private GetUserMetricTimeSeriesDatasetUseCase getUserMetricTimeSeriesDatasetUseCase;
   private ExerciseService exerciseService;
   private DataStatsService datastatsService;
 
@@ -87,16 +121,11 @@ public class UserStatsController implements ScreenController {
 
   @FXML private Label lblPlayer;
 
-  @FXML private Chart2DController chartUserStats;
-
   UserStatsInputScreenData userStatsInputScreenData;
 
-  protected String difficulty = "easy";
-  protected String granularity = "month";
-
-  StatsExercises currentExerciseType = StatsExercises.MEMORY_GAME;
+  StatsExercises currentExerciseType = StatsExercises.ALL;
   StatsDifficulty currentDifficultyLevel = StatsDifficulty.EASY;
-  StatsGranularity currentGranularity = StatsGranularity.MONTH;
+  StatsAggregationLevel currentAggregationLevel = StatsAggregationLevel.MONTHLY;
 
   public void initialize() {
 
@@ -108,12 +137,26 @@ public class UserStatsController implements ScreenController {
     btOptAll.setUserData(StatsExercises.ALL);
 
     btOptEasy.setUserData(StatsDifficulty.EASY);
+    // Legacy: btOptionMid was incorrectly mapped to HARD in original code, kept for backward compatibility
     btOptionMid.setUserData(StatsDifficulty.HARD);
 
-    btOptYear.setUserData(StatsGranularity.YEAR);
-    btOptMonth.setUserData(StatsGranularity.MONTH);
+    // Initialize date pickers with defaults (last 30 days)
+    datePickerTo.setValue(LocalDate.now());
+    datePickerFrom.setValue(LocalDate.now().minusDays(30));
 
-    // Inicializamos estilos de botones de ejercicios (All/Tactics/Guess)
+    // Initialize aggregation level combo
+    cbAggregation.setItems(FXCollections.observableArrayList(StatsAggregationLevel.values()));
+    cbAggregation.setValue(StatsAggregationLevel.MONTHLY);
+
+    // Initialize game type combo
+    cbGameType.setItems(FXCollections.observableArrayList(StatsExercises.values()));
+    cbGameType.setValue(StatsExercises.ALL);
+
+    // Initialize difficulty combo
+    cbDifficulty.setItems(FXCollections.observableArrayList(StatsDifficulty.values()));
+    cbDifficulty.setValue(StatsDifficulty.EASY);
+
+    // Initialize button styles
     updateExerciseButtonsPressed(currentExerciseType);
   }
 
@@ -129,7 +172,7 @@ public class UserStatsController implements ScreenController {
     this.userStatsInputScreenData = userStatsInputScreenData;
 
     displayUserData(userStatsInputScreenData.getUserId());
-    displayUserStats(userStatsInputScreenData.getUserId());
+    displayAllCharts(userStatsInputScreenData.getUserId());
   }
 
   private UUID getGameTypeId(StatsExercises exerciseType) {
@@ -143,97 +186,192 @@ public class UserStatsController implements ScreenController {
   }
 
   /**
-   * Show user stats in the chart
-   *
-   * @param userId
+   * Display all three charts (Accuracy, Avg Time, Volume)
    */
-  private void displayUserStats(final Long userId) {
+  private void displayAllCharts(final Long userId) {
+    LocalDate fromDate = datePickerFrom.getValue();
+    LocalDate toDate = datePickerTo.getValue();
+    StatsAggregationLevel aggregationLevel = cbAggregation.getValue();
+    StatsExercises gameType = cbGameType.getValue();
+    StatsDifficulty difficulty = cbDifficulty.getValue();
 
-    UUID gameType = getGameTypeId(currentExerciseType);
-    UUID difficultyLevel = getDifficultyLevelId(currentDifficultyLevel);
+    // Build list of exercise type IDs based on selection
+    List<UUID> selectedExerciseTypeIds = getSelectedExerciseTypeIds(gameType);
+    UUID selectedDifficultyId = getDifficultyLevelId(difficulty);
 
-    // TODO Implement granularity handling
-    StatsGranularity granularity = currentGranularity;
+    // Update current state
+    currentExerciseType = gameType;
+    currentDifficultyLevel = difficulty;
+    currentAggregationLevel = aggregationLevel;
 
-    int lastNDays = 31;
+    // Display Accuracy chart
+    displayChart(
+        chartAccuracy,
+        "Accuracy (%)",
+        userId,
+        UserMetric.ACCURACY,
+        selectedExerciseTypeIds,
+        selectedDifficultyId,
+        fromDate,
+        toDate,
+        aggregationLevel
+    );
 
-    chartUserStats.resetDataset();
+    // Display Avg Solve Time chart
+    displayChart(
+        chartAvgTime,
+        "Avg Solve Time (s)",
+        userId,
+        UserMetric.AVG_SOLVE_TIME_SUCCESS,
+        selectedExerciseTypeIds,
+        selectedDifficultyId,
+        fromDate,
+        toDate,
+        aggregationLevel
+    );
 
-    List<List<AggregatedStats>> datasets = new ArrayList<>();
-
-
-    if (currentExerciseType == StatsExercises.ALL) {
-
-        datasets.add(
-          getUserStatsForLastNDaysUseCase.execute(
-              userId,
-              exerciseService.getMemoryGameTypeId(),
-              difficultyLevel,
-              lastNDays,
-              Granularity.DAILY));
-
-        datasets.add(
-          getUserStatsForLastNDaysUseCase.execute(
-              userId,
-              exerciseService.getDefendGameTypeId(),
-              difficultyLevel,
-              lastNDays,
-              Granularity.DAILY));
-
-        datasets.add(
-                getUserStatsForLastNDaysUseCase.execute(
-                        userId,
-                        exerciseService.getTacticGameTypeId(),
-                        difficultyLevel,
-                        lastNDays,
-                        Granularity.DAILY));
-
-    } else {
-
-        datasets.add(
-          getUserStatsForLastNDaysUseCase.execute(
-              userId, gameType, difficultyLevel, lastNDays, Granularity.DAILY));
-    }
-
-    // Homogenization and alignment of datasets
-    DataStatsService.ChartSeriesResult aligned =
-        datastatsService.prepareAlignedSeries(datasets);
-
-    List<String> dateLabels = aligned.labels();
-    List<List<Double>> seriesValues = aligned.series();
-
-    // Convertir cada serie a List<DataPoint2D> (X=index, Y=value)
-    List<List<Chart2DController.DataPoint2D>> seriesDataPoints = new ArrayList<>();
-    for (List<Double> serie : seriesValues) {
-      List<Chart2DController.DataPoint2D> points = new ArrayList<>();
-      for (int i = 0; i < serie.size(); i++) {
-        points.add(new Chart2DController.DataPoint2D(i, serie.get(i)));
-      }
-      seriesDataPoints.add(points);
-    }
-
-    // Determinar nombres de series según contexto (uno o dos series)
-    List<String> seriesNames;
-    boolean hasSecond = datasets.size() > 1;
-    if (hasSecond) {
-
-      seriesNames =
-          List.of(
-              StatsExercises.MEMORY_GAME.getExerciseName(),
-              StatsExercises.DEFEND_MEMORY_GAME.getExerciseName()
-          , StatsExercises.TACTIC_GAME.getExerciseName());
-
-    } else {
-
-      seriesNames = List.of(currentExerciseType.getExerciseName());
-    }
-
-    // Aplicar al gráfico
-    chartUserStats.setChartTitle(
-        "Accuracy on focus exercises (" + currentExerciseType.getExerciseName() + ")");
-    chartUserStats.setSeriesNames(seriesNames);
-    chartUserStats.setDatasets(seriesDataPoints, dateLabels);
+    // Display Volume chart
+    displayChart(
+        chartVolume,
+        "Training Volume",
+        userId,
+        UserMetric.TRAINING_VOLUME,
+        selectedExerciseTypeIds,
+        selectedDifficultyId,
+        fromDate,
+        toDate,
+        aggregationLevel
+    );
   }
+
+  private List<UUID> getSelectedExerciseTypeIds(StatsExercises exerciseType) {
+    if (exerciseType == StatsExercises.ALL) {
+      // Return all exercise types for multiple series
+      return List.of(
+          exerciseService.getMemoryGameTypeId(),
+          exerciseService.getDefendGameTypeId(),
+          exerciseService.getTacticGameTypeId()
+      );
+    } else {
+      UUID typeId = getGameTypeId(exerciseType);
+      return typeId != null ? List.of(typeId) : List.of();
+    }
+  }
+
+  /**
+   * Display a single chart with the given metric
+   */
+  private void displayChart(
+      Chart2DController chart,
+      String title,
+      Long userId,
+      UserMetric metric,
+      List<UUID> exerciseTypeIds,
+      UUID difficultyId,
+      LocalDate fromDate,
+      LocalDate toDate,
+      StatsAggregationLevel aggregationLevel
+  ) {
+    chart.resetDataset();
+
+    GetUserMetricTimeSeriesDatasetRequest request = new GetUserMetricTimeSeriesDatasetRequest(
+        userId,
+        metric,
+        exerciseTypeIds,
+        Optional.ofNullable(difficultyId),
+        fromDate,
+        toDate,
+        aggregationLevel
+    );
+
+    TimeSeriesDataset dataset = getUserMetricTimeSeriesDatasetUseCase.execute(request);
+
+    // Convert TimeSeriesDataset to chart data
+    ChartData chartData = convertToChartData(dataset);
+
+    chart.setChartTitle(title);
+    chart.setSeriesNames(chartData.seriesNames);
+    chart.setDatasets(chartData.dataPoints, chartData.labels);
+  }
+
+  /**
+   * Convert TimeSeriesDataset to chart-compatible data
+   */
+  private ChartData convertToChartData(TimeSeriesDataset dataset) {
+    if (dataset == null || dataset.isEmpty()) {
+      return new ChartData(List.of(), List.of(), List.of());
+    }
+
+    List<TimeSeries> seriesList = dataset.getSeries();
+    List<String> seriesNames = new ArrayList<>();
+    List<List<Chart2DController.DataPoint2D>> allDataPoints = new ArrayList<>();
+
+    // Collect all unique labels (periods) and align series
+    Set<String> allLabelsSet = new LinkedHashSet<>();
+    Map<String, Map<String, Double>> seriesDataByLabel = new LinkedHashMap<>();
+
+    for (TimeSeries series : seriesList) {
+      String seriesName = getSeriesDisplayName(series.getName());
+      seriesNames.add(seriesName);
+
+      for (TimeSeriesPoint point : series.getPoints()) {
+        String label = point.getPeriod().getLabel();
+        allLabelsSet.add(label);
+
+        seriesDataByLabel
+            .computeIfAbsent(seriesName, k -> new LinkedHashMap<>())
+            .put(label, point.getValue());
+      }
+    }
+
+    List<String> labels = new ArrayList<>(allLabelsSet);
+
+    // Create data points for each series
+    for (String seriesName : seriesNames) {
+      List<Chart2DController.DataPoint2D> points = new ArrayList<>();
+      Map<String, Double> dataByLabel = seriesDataByLabel.getOrDefault(seriesName, Map.of());
+
+      for (int i = 0; i < labels.size(); i++) {
+        String label = labels.get(i);
+        double value = dataByLabel.getOrDefault(label, 0.0);
+        points.add(new Chart2DController.DataPoint2D(i, value));
+      }
+      allDataPoints.add(points);
+    }
+
+    return new ChartData(seriesNames, allDataPoints, labels);
+  }
+
+  /**
+   * Convert series name to display name
+   */
+  private String getSeriesDisplayName(String seriesName) {
+    if (seriesName == null) return "Unknown";
+
+    // Check if it's a Type-UUID format and convert to friendly name
+    if (seriesName.startsWith("Type-")) {
+      String uuidStr = seriesName.substring(5);
+      try {
+        UUID typeId = UUID.fromString(uuidStr);
+        if (typeId.equals(exerciseService.getMemoryGameTypeId())) {
+          return StatsExercises.MEMORY_GAME.getExerciseName();
+        } else if (typeId.equals(exerciseService.getDefendGameTypeId())) {
+          return StatsExercises.DEFEND_MEMORY_GAME.getExerciseName();
+        } else if (typeId.equals(exerciseService.getTacticGameTypeId())) {
+          return StatsExercises.TACTIC_GAME.getExerciseName();
+        }
+      } catch (IllegalArgumentException e) {
+        // Not a valid UUID, return original
+      }
+    }
+    return seriesName;
+  }
+
+  private record ChartData(
+      List<String> seriesNames,
+      List<List<Chart2DController.DataPoint2D>> dataPoints,
+      List<String> labels
+  ) {}
 
   private UUID getDifficultyLevelId(StatsDifficulty currentDifficultyLevel) {
     return switch (currentDifficultyLevel) {
@@ -322,10 +460,10 @@ public class UserStatsController implements ScreenController {
     return status == ScreenStatus.INITIALIZED;
   }
 
-  // Aplica estilos a los tres botones de tipo de ejercicio según el seleccionado
+  // Apply styles to exercise type buttons based on selection
   private void updateExerciseButtonsPressed(StatsExercises selected) {
 
-      boolean allPressed = selected == StatsExercises.ALL;
+    boolean allPressed = selected == StatsExercises.ALL;
     boolean tacticsPressed = selected == StatsExercises.TACTIC_GAME;
     boolean guessPressed = selected == StatsExercises.MEMORY_GAME;
     boolean defendPressed = selected == StatsExercises.DEFEND_MEMORY_GAME;
@@ -349,60 +487,66 @@ public class UserStatsController implements ScreenController {
   void buttonAction(ActionEvent event) {
 
     if (event.getSource() == btClose) {
-
       rootPane.setVisible(false);
     }
 
-    if (event.getSource() == btOptionGuess) {
+    if (event.getSource() == btFilter) {
+      // Refresh all charts with current filter values
+      if (userStatsInputScreenData != null) {
+        displayAllCharts(userStatsInputScreenData.getUserId());
+      }
+    }
 
-      currentExerciseType = (StatsExercises) btOptionGuess.getUserData();
+    if (event.getSource() == btOptionGuess) {
+      cbGameType.setValue(StatsExercises.MEMORY_GAME);
+      currentExerciseType = StatsExercises.MEMORY_GAME;
       updateExerciseButtonsPressed(currentExerciseType);
-      displayUserStats(userStatsInputScreenData.getUserId());
+      if (userStatsInputScreenData != null) {
+        displayAllCharts(userStatsInputScreenData.getUserId());
+      }
     }
 
     if (event.getSource() == btOptionDefend) {
-
-      currentExerciseType = (StatsExercises) btOptionDefend.getUserData();
-      updateExerciseButtonsPressed(currentExerciseType); // dejar All/Tactics/Guess en estado coherente
-      displayUserStats(userStatsInputScreenData.getUserId());
+      cbGameType.setValue(StatsExercises.DEFEND_MEMORY_GAME);
+      currentExerciseType = StatsExercises.DEFEND_MEMORY_GAME;
+      updateExerciseButtonsPressed(currentExerciseType);
+      if (userStatsInputScreenData != null) {
+        displayAllCharts(userStatsInputScreenData.getUserId());
+      }
     }
 
     if (event.getSource() == btOptTactics) {
-
-      currentExerciseType = (StatsExercises) btOptTactics.getUserData();
+      cbGameType.setValue(StatsExercises.TACTIC_GAME);
+      currentExerciseType = StatsExercises.TACTIC_GAME;
       updateExerciseButtonsPressed(currentExerciseType);
-      displayUserStats(userStatsInputScreenData.getUserId());
+      if (userStatsInputScreenData != null) {
+        displayAllCharts(userStatsInputScreenData.getUserId());
+      }
     }
 
     if (event.getSource() == btOptAll) {
-
-      currentExerciseType = (StatsExercises) btOptAll.getUserData();
+      cbGameType.setValue(StatsExercises.ALL);
+      currentExerciseType = StatsExercises.ALL;
       updateExerciseButtonsPressed(currentExerciseType);
-      displayUserStats(userStatsInputScreenData.getUserId());
+      if (userStatsInputScreenData != null) {
+        displayAllCharts(userStatsInputScreenData.getUserId());
+      }
     }
 
     if (event.getSource() == btOptEasy) {
-
-      currentDifficultyLevel = (StatsDifficulty) btOptEasy.getUserData();
-      displayUserStats(userStatsInputScreenData.getUserId());
+      cbDifficulty.setValue(StatsDifficulty.EASY);
+      currentDifficultyLevel = StatsDifficulty.EASY;
+      if (userStatsInputScreenData != null) {
+        displayAllCharts(userStatsInputScreenData.getUserId());
+      }
     }
 
     if (event.getSource() == btOptionMid) {
-      currentDifficultyLevel = (StatsDifficulty) btOptionMid.getUserData();
-
-      displayUserStats(userStatsInputScreenData.getUserId());
-    }
-
-    if (event.getSource() == btOptYear) {
-
-      currentGranularity = (StatsGranularity) btOptYear.getUserData();
-      displayUserStats(userStatsInputScreenData.getUserId());
-    }
-
-    if (event.getSource() == btOptMonth) {
-
-      currentGranularity = (StatsGranularity) btOptMonth.getUserData();
-      displayUserStats(userStatsInputScreenData.getUserId());
+      cbDifficulty.setValue(StatsDifficulty.HARD);
+      currentDifficultyLevel = StatsDifficulty.HARD;
+      if (userStatsInputScreenData != null) {
+        displayAllCharts(userStatsInputScreenData.getUserId());
+      }
     }
   }
 
@@ -414,10 +558,10 @@ public class UserStatsController implements ScreenController {
     this.getUserByIdUseCase = getUserByIdUseCase;
   }
 
-  public void setGetUserStatsForLastNDaysUseCase(
-      GetUserStatsForLastNDaysUseCase getUserStatsForLastNDaysUseCase) {
+  public void setGetUserMetricTimeSeriesDatasetUseCase(
+      GetUserMetricTimeSeriesDatasetUseCase getUserMetricTimeSeriesDatasetUseCase) {
 
-    this.getUserStatsForLastNDaysUseCase = getUserStatsForLastNDaysUseCase;
+    this.getUserMetricTimeSeriesDatasetUseCase = getUserMetricTimeSeriesDatasetUseCase;
   }
 
   public void setExerciseService(ExerciseService exerciseService) {
