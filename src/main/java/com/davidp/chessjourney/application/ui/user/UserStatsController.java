@@ -137,6 +137,7 @@ public class UserStatsController implements ScreenController {
     btOptAll.setUserData(StatsExercises.ALL);
 
     btOptEasy.setUserData(StatsDifficulty.EASY);
+    // Legacy: btOptionMid was incorrectly mapped to HARD in original code, kept for backward compatibility
     btOptionMid.setUserData(StatsDifficulty.HARD);
 
     // Initialize date pickers with defaults (last 30 days)
