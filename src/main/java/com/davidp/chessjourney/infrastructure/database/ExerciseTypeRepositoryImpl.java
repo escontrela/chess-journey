@@ -90,4 +90,28 @@ public class ExerciseTypeRepositoryImpl implements ExerciseTypeRepository {
         }
         return null;
     }
+
+    @Override
+    public ExerciseType getByName(String memoryGame) {
+
+        String sql = "SELECT id, name, description FROM exercise_types WHERE name = ?";
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, memoryGame);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return new ExerciseType(
+                            UUID.fromString(rs.getString("id")),
+                            rs.getString("name"),
+                            rs.getString("description")
+                    );
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Error fetching exercise type by name", e);
+        }
+        return null;
+    }
 }

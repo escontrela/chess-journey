@@ -127,6 +127,20 @@
         <artifactId>jsoup</artifactId>
         <version>1.15.4</version>
     </dependency>
+
+    <!-- Mockito for unit tests -->
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-junit-jupiter</artifactId>
+      <version>5.5.0</version>
+      <scope>test</scope>
+    </dependency>
 </dependencies>
 
 <build>
@@ -138,6 +152,16 @@
             <configuration>
                 <source>22</source>
                 <target>22</target>
+            </configuration>
+        </plugin>
+        <!-- Configuración para tests: pasar flag a la JVM para Byte Buddy (Java 22) -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.0.0-M8</version>
+            <configuration>
+                <!-- Forzar propiedad experimental para Byte Buddy cuando usamos Java 22 -->
+                <argLine>-Dnet.bytebuddy.experimental=true</argLine>
             </configuration>
         </plugin>
         <plugin>
@@ -186,3 +210,4 @@
     </properties>
 
 </project>
+

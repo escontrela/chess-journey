@@ -3,6 +3,7 @@ package com.davidp.chessjourney.application.factories;
 import com.davidp.chessjourney.domain.QuoteRepository;
 import com.davidp.chessjourney.domain.TournamentRepository;
 import com.davidp.chessjourney.domain.UserRepository;
+import com.davidp.chessjourney.domain.UserStatsRepository;
 import com.davidp.chessjourney.domain.common.DifficultyLevelRepository;
 import com.davidp.chessjourney.domain.common.ExerciseRepository;
 import com.davidp.chessjourney.domain.common.ExerciseTypeRepository;
@@ -46,5 +47,9 @@ public class RepositoryFactory {
 
   public static TournamentRepository createTournamentRepository() {
     return new TournamentRepositoryImpl(DBHikariDataSource.getInstance().getDataSource());
+  }
+
+  public static UserStatsRepository createUserStatsRepository() {
+    return new UserStatsRepositoryImpl(DBHikariDataSource.getInstance().getDataSource());
   }
 }

@@ -8,4 +8,6 @@ public interface ExerciseTypeRepository {
     List<ExerciseType> getAll();
     ExerciseType getById(UUID id);
     ExerciseType getByType(String typeName);
+    ExerciseType getByName(String memoryGame);
+
 }

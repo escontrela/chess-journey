@@ -3,7 +3,10 @@ package com.davidp.chessjourney.application.factories;
 import com.davidp.chessjourney.application.config.AppProperties;
 import com.davidp.chessjourney.application.usecases.*;
 import com.davidp.chessjourney.application.factories.ApplicationServiceFactory;
+import com.davidp.chessjourney.application.usecases.userstats.GetUserMetricTimeSeriesDatasetUseCase;
+import com.davidp.chessjourney.application.usecases.userstats.GetUserMetricTimeSeriesDatasetUseCaseImpl;
 import com.davidp.chessjourney.domain.UserRepository;
+import com.davidp.chessjourney.domain.UserStatsRepository;
 import com.davidp.chessjourney.domain.common.*;
 import com.davidp.chessjourney.domain.games.memory.MemoryGame;
 import com.davidp.chessjourney.domain.games.tactic.TacticSuiteGameRepository;
@@ -137,5 +140,10 @@ public class UseCaseFactory {
         return new GetNextTournamentUseCaseImpl(
             ApplicationServiceFactory.createTournamentsManagementService()
         );
+    }
+
+    public static GetUserMetricTimeSeriesDatasetUseCase createGetUserMetricTimeSeriesDatasetUseCase() {
+        UserStatsRepository userRepository = RepositoryFactory.createUserStatsRepository();
+        return new GetUserMetricTimeSeriesDatasetUseCaseImpl(userRepository);
     }
 }

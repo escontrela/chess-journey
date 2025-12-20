@@ -9,11 +9,15 @@ import com.davidp.chessjourney.domain.common.UserExerciseStats;
 
 import java.sql.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
+import java.time.YearMonth;
 import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Optional;
 import java.util.UUID;
 import javax.sql.DataSource;
+
 
 public class UserRepositoryImpl implements UserRepository {
 
@@ -131,8 +135,8 @@ public class UserRepositoryImpl implements UserRepository {
   }
 
   @Override
-  public List<AggregatedStats> getSuccessRateByPeriod(long userId, UUID gameType, UUID difficultyId,
-                                                      LocalDate startDate, LocalDate endDate, String period) {
+  public List<AggregatedStats> getSuccessRateByPeriodByDay(long userId, UUID gameType, UUID difficultyId,
+                                                           LocalDate startDate, LocalDate endDate, String period) {
     String periodColumn = getPeriodColumn(period);
     List<AggregatedStats> result = new ArrayList<>();
 
@@ -167,7 +171,58 @@ public class UserRepositoryImpl implements UserRepository {
     return result;
   }
 
-  @Override
+    @Override
+    public List<AggregatedStats> getSuccessRateByPeriodByMonth(long userId, UUID gameType, UUID difficultyId, LocalDate startDate, LocalDate endDate, String period) {
+
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("startDate and endDate must not be null");
+        }
+
+        List<AggregatedStats> result = new ArrayList<>();
+        String sql = "SELECT DATE_TRUNC('month', ues.attempt_date)::date AS period_date, " +
+                "AVG((ues.successful)::int) AS success_rate " +
+                "FROM user_exercise_stats ues " +
+                "JOIN exercises e ON ues.exercise_id = e.id " +
+                "WHERE ues.user_id = ? AND e.type_id = ? AND ues.difficulty_id = ? " +
+                "AND ues.attempt_date BETWEEN ? AND ? " +
+                "GROUP BY period_date ORDER BY period_date";
+
+        Map<YearMonth, Double> statsByMonth = new HashMap<>();
+
+        try (Connection conn = dataSource.getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setLong(1, userId);
+            ps.setObject(2, gameType);
+            ps.setObject(3, difficultyId);
+            ps.setDate(4, Date.valueOf(startDate));
+            ps.setTimestamp(5, Timestamp.valueOf(endDate.plusDays(1).atStartOfDay().minusSeconds(1))); // inclusive end
+
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    LocalDate periodDate = rs.getDate("period_date").toLocalDate(); // primer día del mes
+                    YearMonth ym = YearMonth.from(periodDate);
+                    double successRate = rs.getDouble("success_rate");
+                    statsByMonth.put(ym, successRate);
+                }
+            }
+
+        } catch (Exception e) {
+            throw new RuntimeException("Error fetching success rate by month", e);
+        }
+
+        // Asegurar que devolvemos un entry por cada mes en el rango (inclusivo)
+        List<YearMonth> months = getMonthsBetween(startDate, endDate);
+        for (YearMonth ym : months) {
+            double rate = statsByMonth.getOrDefault(ym, 0.0);
+            result.add(new AggregatedStats(ym.atDay(1), rate));
+        }
+
+        return result;
+    }
+
+
+    @Override
   public List<AggregatedStats> getTotalTimeSpentByPeriod(long userId, UUID gameType, UUID difficultyId,
                                                          LocalDate startDate, LocalDate endDate, String period) {
     String periodColumn = getPeriodColumn(period);
@@ -296,4 +351,33 @@ public class UserRepositoryImpl implements UserRepository {
     
     return result;
   }
+
+
+    /**
+     * Devuelve la lista de YearMonth entre startDate y endDate (inclusive).
+     * La granularidad es por mes usando el mes de startDate y el mes de endDate.
+     */
+    public List<YearMonth> getMonthsBetween(LocalDate startDate, LocalDate endDate) {
+        if (startDate == null || endDate == null) {
+            throw new IllegalArgumentException("startDate and endDate must not be null");
+        }
+
+        YearMonth start = YearMonth.from(startDate);
+        YearMonth end = YearMonth.from(endDate);
+
+        // Si end es anterior a start, intercambiamos para siempre recorrer de menor a mayor
+        if (end.isBefore(start)) {
+            YearMonth tmp = start;
+            start = end;
+            end = tmp;
+        }
+
+        List<YearMonth> months = new ArrayList<>();
+        YearMonth current = start;
+        while (!current.isAfter(end)) {
+            months.add(current);
+            current = current.plusMonths(1);
+        }
+        return months;
+    }
 }

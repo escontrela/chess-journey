@@ -10,5 +10,12 @@ import java.util.UUID;
  */
 public interface GetUserStatsForLastNDaysUseCase {
 
-    List<AggregatedStats> execute(long userId, UUID gameType, UUID difficultyId, int days);
+    enum Granularity {
+
+        DAILY,
+        MONTHLY,
+        YEARLY
+    }
+
+    List<AggregatedStats> execute(long userId, UUID gameType, UUID difficultyId, int days, Granularity granularity);
 }
