@@ -121,7 +121,7 @@ public class UserStatsRepositoryImpl implements UserStatsRepository {
    * - Postgres date_trunc('week', ...) empieza en lunes (ISO-ish).
    * - Devolvemos ::date para tener un bucket consistente.
    */
-  private String periodExpression(UserStatsAggregationLevel level) {
+  private String periodExpression(StatsAggregationLevel level) {
     return switch (level) {
       case DAILY -> "DATE_TRUNC('day', ues.attempt_date)::date";
       case WEEKLY -> "DATE_TRUNC('week', ues.attempt_date)::date";

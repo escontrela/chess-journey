@@ -14,7 +14,7 @@ public final class UserStatsQuery {
   private final long userId;
   private final LocalDate from;
   private final LocalDate to;
-  private final UserStatsAggregationLevel userStatsAggregationLevel;
+  private final StatsAggregationLevel statsAggregationLevel;
 
   private final Optional<UUID> gameTypeId;
   private final Optional<UUID> difficultyId;
@@ -24,14 +24,14 @@ public final class UserStatsQuery {
       long userId,
       LocalDate from,
       LocalDate to,
-      UserStatsAggregationLevel userStatsAggregationLevel,
+      StatsAggregationLevel statsAggregationLevel,
       Optional<UUID> gameTypeId,
       Optional<UUID> difficultyId
   ) {
     this.userId = userId;
     this.from = from;
     this.to = to;
-    this.userStatsAggregationLevel = userStatsAggregationLevel;
+    this.statsAggregationLevel = statsAggregationLevel;
     this.gameTypeId = gameTypeId == null ? Optional.empty() : gameTypeId;
     this.difficultyId = difficultyId == null ? Optional.empty() : difficultyId;
   }
@@ -39,7 +39,7 @@ public final class UserStatsQuery {
   public long getUserId() { return userId; }
   public LocalDate getFrom() { return from; }
   public LocalDate getTo() { return to; }
-  public UserStatsAggregationLevel getAggregationLevel() { return userStatsAggregationLevel; }
+  public StatsAggregationLevel getAggregationLevel() { return statsAggregationLevel; }
 
   public Optional<UUID> getGameTypeId() { return gameTypeId; }
   public Optional<UUID> getDifficultyId() { return difficultyId; }

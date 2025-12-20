@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import com.davidp.chessjourney.domain.common.stats.*;
 import com.davidp.chessjourney.domain.userstats.StatsPoint;
 import com.davidp.chessjourney.domain.userstats.UserMetric;
-import com.davidp.chessjourney.domain.userstats.UserStatsAggregationLevel;
+import com.davidp.chessjourney.domain.userstats.StatsAggregationLevel;
 import com.davidp.chessjourney.domain.userstats.UserStatsQuery;
 
 import java.util.*;
@@ -107,7 +107,7 @@ public class GetUserMetricTimeSeriesDatasetUseCaseImpl
           Optional<UUID> difficultyId,
           LocalDate from,
           LocalDate to,
-          UserStatsAggregationLevel aggregationLevel,
+          StatsAggregationLevel aggregationLevel,
           UserMetric metric
   ) {
 
@@ -132,7 +132,7 @@ public class GetUserMetricTimeSeriesDatasetUseCaseImpl
     return series;
   }
 
-  private TimePeriod toPeriod(LocalDate periodStart, UserStatsAggregationLevel aggregationLevel) {
+  private TimePeriod toPeriod(LocalDate periodStart, StatsAggregationLevel aggregationLevel) {
     return switch (aggregationLevel) {
       case DAILY -> new DayPeriod(periodStart);
       case WEEKLY -> new WeekPeriod(periodStart);

@@ -2,7 +2,7 @@ package com.davidp.chessjourney.application.usecases.userstats;
 
 
 import com.davidp.chessjourney.domain.userstats.UserMetric;
-import com.davidp.chessjourney.domain.userstats.UserStatsAggregationLevel;
+import com.davidp.chessjourney.domain.userstats.StatsAggregationLevel;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,7 +26,7 @@ public final class GetUserMetricTimeSeriesDatasetRequest {
   private final LocalDate from;
   private final LocalDate to;
 
-  private final UserStatsAggregationLevel aggregationLevel;
+  private final StatsAggregationLevel aggregationLevel;
 
   public GetUserMetricTimeSeriesDatasetRequest(
       long userId,
@@ -35,7 +35,7 @@ public final class GetUserMetricTimeSeriesDatasetRequest {
       Optional<UUID> difficultyId,
       LocalDate from,
       LocalDate to,
-      UserStatsAggregationLevel aggregationLevel
+      StatsAggregationLevel aggregationLevel
   ) {
     this.userId = userId;
     this.metric = metric;
@@ -66,7 +66,7 @@ public final class GetUserMetricTimeSeriesDatasetRequest {
 
       return to;
   }
-  public UserStatsAggregationLevel getAggregationLevel() {
+  public StatsAggregationLevel getAggregationLevel() {
 
       return aggregationLevel;
   }
